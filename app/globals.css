@@ -72,7 +72,6 @@ button {
 
 .animate-fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
-  opacity: 0;
 }
 
 .animate-delay-300 { animation-delay: 300ms; }
