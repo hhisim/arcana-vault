@@ -1,60 +1,60 @@
-'use client'
+'use client';
 
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/chat', label: 'Chat' },
-  { href: '/library', label: 'Library' },
-  { href: '/pricing', label: 'Pricing' },
-]
+const footerLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'Chat', href: '/chat' },
+  { name: 'Library', href: '/library' },
+  { name: 'Pricing', href: '/pricing' },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-card border-t border-[rgba(255,255,255,0.06)] py-12">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="font-cinzel text-lg text-gold">Vault of Arcana</h3>
-            <p className="text-text-secondary text-sm mt-2">
-              Ancient wisdom for the modern seeker
+    <footer className="bg-[#12121A] border-t border-[rgba(255,255,255,0.06)] py-12 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+          {/* Logo Column */}
+          <div className="flex flex-col gap-4">
+            <div className="font-cinzel text-2xl text-[#C9A84C] tracking-wide">
+              Vault of Arcana
+            </div>
+            <p className="text-[#9B93AB] text-sm leading-relaxed max-w-xs">
+              Ancient wisdom for the modern seeker. Journey into the depths of sacred traditions.
             </p>
           </div>
 
-          <div>
-            <h4 className="text-text-primary text-sm font-medium mb-3">Navigation</h4>
-            <div className="flex flex-col gap-2">
-              {navLinks.map((link) => (
+          {/* Links Column */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-[#E8E0F0] font-medium uppercase tracking-wider text-xs">Navigation</h4>
+            <nav className="flex flex-col gap-2">
+              {footerLinks.map((link) => (
                 <a
-                  key={link.href}
+                  key={link.name}
                   href={link.href}
-                  className="text-text-secondary text-sm hover:text-text-primary transition-colors"
+                  className="text-[#9B93AB] hover:text-[#C9A84C] transition-colors text-sm"
                 >
-                  {link.label}
+                  {link.name}
                 </a>
               ))}
-            </div>
+            </nav>
           </div>
 
-          <div>
-            <p className="text-text-secondary text-sm">
+          {/* Credit Column */}
+          <div className="flex flex-col gap-4 md:items-end">
+            <p className="text-[#9B93AB] text-sm italic">
               Made with curiosity
             </p>
           </div>
         </div>
 
-        <div className="border-t border-[rgba(255,255,255,0.06)] mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-text-muted text-xs">
-            © 2025 Vault of Arcana
-          </p>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-[rgba(255,255,255,0.06)] flex flex-col md:flex-row justify-between items-center gap-4 text-[#9B93AB] text-xs">
+          <div>© 2025 Vault of Arcana</div>
           <div className="flex gap-6">
-            <a href="/privacy" className="text-text-muted text-xs hover:text-text-secondary transition-colors">
-              Privacy
-            </a>
-            <a href="/terms" className="text-text-muted text-xs hover:text-text-secondary transition-colors">
-              Terms
-            </a>
+            <a href="/privacy" className="hover:text-[#E8E0F0] transition-colors">Privacy</a>
+            <a href="/terms" className="hover:text-[#E8E0F0] transition-colors">Terms</a>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
