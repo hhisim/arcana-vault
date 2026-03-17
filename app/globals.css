@@ -59,10 +59,34 @@ button {
   box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
-.glow-purple {
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-600 { animation-delay: 600ms; }
+.animate-delay-900 { animation-delay: 900ms; }
+
+.hover-glow-purple:hover {
   box-shadow: 0 0 20px rgba(147,112,219,0.3);
 }
 
-.glow-gold {
+.hover-glow-gold:hover {
   box-shadow: 0 0 20px rgba(201,168,76,0.3);
+}
+
+.hover-scale:hover {
+  transform: scale(1.03);
 }

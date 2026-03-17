@@ -8,19 +8,14 @@ import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 
 export default function Home() {
-  const [loaded, setLoaded] = useState(false)
-
-  useEffect(() => {
-    setLoaded(true)
-  }, [])
-
   return (
     <>
       <section className="h-screen min-h-[700px] flex items-center justify-center relative overflow-hidden">
         <div
-          className="absolute inset-0 bg-gradient-to-br from-deep via-[#1a0f2e] to-deep animate-gradient"
+          className="absolute inset-0"
           style={{
             background: 'linear-gradient(135deg, #0A0A0F 0%, #1a0f2e 50%, #0A0A0F 100%)',
+            backgroundSize: '200% 200%',
             animation: 'gradientShift 15s ease infinite',
           }}
         />
@@ -30,100 +25,58 @@ export default function Home() {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
           }
-          .animate-gradient {
-            background-size: 200% 200%;
-            animation: gradientShift 15s ease infinite;
-          }
         `}</style>
 
-        <div
-          className={`relative z-10 max-w-4xl text-center px-6 transition-all duration-1000 ease-out ${
-            loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[-30px]'
-          }`}
-          style={{
-            transitionDelay: '0ms',
-          }}
-        >
-          <h1
-            className="font-cinzel text-5xl md:text-7xl text-text-primary tracking-wide"
-            style={{ transitionDelay: '0ms' }}
-          >
+        <div className="relative z-10 max-w-4xl text-center px-6">
+          <h1 className="font-cinzel text-5xl md:text-7xl text-text-primary tracking-wide animate-fade-in-up">
             Ancient Wisdom.
             <br />
             Infinite Dialogue.
           </h1>
 
-          <p
-            className="font-sans text-xl text-text-secondary mt-6 max-w-2xl mx-auto"
-            style={{ transitionDelay: '300ms' }}
-          >
+          <p className="font-sans text-xl text-text-secondary mt-6 max-w-2xl mx-auto animate-fade-in-up animate-delay-300">
             Consult the oracles of four sacred traditions. Tao. Tarot. Tantra. Entheogens.
           </p>
 
-          <div
-            className="flex gap-4 justify-center mt-10"
-            style={{ transitionDelay: '600ms' }}
-          >
+          <div className="flex gap-4 justify-center mt-10 animate-fade-in-up animate-delay-600">
             <a
               href="/chat"
-              className="bg-gold text-deep px-8 py-4 rounded-md font-medium hover:shadow-[0_0_20px_rgba(201,168,76,0.3)] transition-shadow duration-200"
+              className="bg-gold text-deep px-8 py-4 rounded-md font-medium hover-glow-gold transition-all duration-200"
             >
               Start for Free
             </a>
             <a
               href="/library"
-              className="border border-gold/50 text-gold px-8 py-4 rounded-md hover:bg-gold/10 transition-colors duration-200"
+              className="border border-gold/50 text-gold px-8 py-4 rounded-md hover:bg-gold/10 transition-all duration-200"
             >
               Explore Traditions
             </a>
           </div>
 
-          <div
-            className="flex gap-6 justify-center mt-12"
-            style={{ transitionDelay: '900ms' }}
-          >
-            <div className="w-10 h-10 opacity-60" title="Tao">
-              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="20" cy="20" r="18" stroke="#C9A84C" strokeWidth="1.5" />
-                <path d="M20 6C20 6 14 14 14 20C14 26 20 34 20 34" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round" />
-                <path d="M20 6C20 6 26 14 26 20C26 26 20 34 20 34" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round" />
-                <circle cx="20" cy="20" r="4" fill="#C9A84C" />
-              </svg>
+          <div className="flex gap-6 justify-center mt-12 animate-fade-in-up animate-delay-900">
+            <div className="w-10 h-10 opacity-60 text-gold" title="Tao">
+              <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="2"/><path d="M20 2 C28 2 32 10 32 20 C32 30 28 38 20 38 C12 38 8 30 8 20 C8 10 12 2 20 2 Z M20 12 C16 12 14 16 14 20 C14 24 16 28 20 28 C24 28 26 24 26 20 C26 16 24 12 20 12" fill="currentColor"/></svg>
             </div>
 
-            <div className="w-10 h-10 opacity-60" title="Tarot">
-              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="20" cy="20" r="8" stroke="#C9A84C" strokeWidth="1.5" />
-                <path d="M20 4L22 14H32L24 20L26 30L20 24L14 30L16 20L8 14H18L20 4Z" stroke="#C9A84C" strokeWidth="1.5" strokeLinejoin="round" />
-              </svg>
+            <div className="w-10 h-10 opacity-60 text-gold" title="Tarot">
+              <svg viewBox="0 0 40 40"><polygon points="20,2 24,14 38,14 28,22 32,38 20,28 8,38 12,22 2,14 16,14" fill="none" stroke="currentColor" strokeWidth="2"/><circle cx="20" cy="20" r="6" fill="currentColor"/></svg>
             </div>
 
-            <div className="w-10 h-10 opacity-60" title="Tantra">
-              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 4L32 18H26V32L20 26L14 32V18H8L20 4Z" stroke="#C9A84C" strokeWidth="1.5" strokeLinejoin="round" />
-                <path d="M20 12L26 18H22V26L20 22L18 26V18H14L20 12Z" stroke="#C9A84C" strokeWidth="1" strokeLinejoin="round" />
-              </svg>
+            <div className="w-10 h-10 opacity-60 text-gold" title="Tantra">
+              <svg viewBox="0 0 40 40"><polygon points="20,4 36,34 4,34" fill="none" stroke="currentColor" strokeWidth="2"/><polygon points="20,36 4,6 36,6" fill="none" stroke="currentColor" strokeWidth="2"/></svg>
             </div>
 
-            <div className="w-10 h-10 opacity-60" title="Entheogens">
-              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 36C20 36 8 28 8 18C8 10 14 4 20 4C26 4 32 10 32 18C32 28 20 36 20 36Z" stroke="#C9A84C" strokeWidth="1.5" />
-                <path d="M20 12C20 12 16 16 16 20C16 24 20 28 20 28" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round" />
-                <circle cx="20" cy="18" r="2" fill="#C9A84C" />
-              </svg>
+            <div className="w-10 h-10 opacity-60 text-gold" title="Entheogens">
+              <svg viewBox="0 0 40 40"><path d="M20 38 C20 38 20 20 20 20 C20 20 8 16 8 8 C8 8 20 12 20 20 C20 20 32 16 32 8 C32 8 20 12 20 20 L20 38" fill="none" stroke="currentColor" strokeWidth="2"/><circle cx="20" cy="20" r="3" fill="currentColor"/></svg>
             </div>
           </div>
         </div>
       </section>
 
       <TraditionsGrid />
-
       <HowItWorks />
-
       <Testimonials />
-
       <FinalCTA />
-
       <Footer />
     </>
   )
