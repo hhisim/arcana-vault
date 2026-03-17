@@ -47,10 +47,9 @@ export default function TraditionsGrid() {
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {traditions.map((tradition) => (
           <div
             key={tradition.name}
-            className="glass-card p-8 aspect-square flex flex-col items-center text-center hover-glow-purple hover-scale transition-all duration-300 group"
+            className="glass-card p-6 aspect-square flex flex-col items-center text-center transition-all duration-300 hover:shadow-[0_0_20px_rgba(147,112,219,0.3)] hover:scale-[1.02] cursor-pointer group"
           >
             <div className="w-16 h-16 rounded-full bg-raised flex items-center justify-center text-3xl text-gold">
               <div className="w-8 h-8">{tradition.icon}</div>
