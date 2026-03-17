@@ -9,21 +9,21 @@ export default function HowItWorks() {
       title: "Choose Your Path",
       description:
         "Select from four sacred traditions. Each oracle carries the voice of its lineage.",
-      delay: "",
+      delay: "0",
     },
     {
       number: "2",
       title: "Ask Your Question",
       description:
         "Speak or type your inquiry. Receive wisdom in the language of that tradition.",
-      delay: "animate-delay-200",
+      delay: "200",
     },
     {
       number: "3",
       title: "Deepen Your Practice",
       description:
         "Return daily. The oracle remembers your journey and guides your unfolding.",
-      delay: "animate-delay-400",
+      delay: "400",
     },
   ];
 
@@ -38,7 +38,8 @@ export default function HowItWorks() {
           {steps.map((step, index) => (
             <div
               key={index}
-              className={`animate-fade-in-up ${step.delay}`}
+              className="animate-fade-in-up"
+              style={{ animationDelay: `${step.delay}ms` }}
             >
               <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#C9A84C]/20 text-[#C9A84C] font-cinzel text-xl mb-4">
                 {step.number}
