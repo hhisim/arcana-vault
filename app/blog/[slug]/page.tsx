@@ -7,6 +7,9 @@ import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
 import { posts } from '@/lib/posts';
 
+// Workaround for potential TS types vs runtime module export differences
+const parseMatter = matter;
+
 export async function generateStaticParams() {
   return posts.map((post) => ({
     slug: post.slug,
@@ -19,10 +22,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const fileSource = await fs.readFile(filePath, 'utf8');
 
     // Robust frontmatter parsing with gray-matter
-    const { data: frontmatter, content: body } = matter(fileSource);
+    const { data: frontmatter, content: body } = parseMatter(fileSource);
 
-    const title = frontmatter.title || 'Untitled Scroll';
-    const tradition = frontmatter.tradition || 'Ancient';
+    const title = (frontmatter.title as string) || 'Untitled Scroll';
+    const tradition = (frontmatter.tradition as string) || 'Ancient';
 
     return (
       <article className="min-h-screen bg-[#0A0A0F]">
@@ -35,11 +38,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               {title}
             </h1>
             <div className="flex items-center justify-center gap-6 text-[#9B93AB] text-xs uppercase tracking-[0.2em] opacity-60">
-              <span>{frontmatter.author || 'The Oracle'}</span>
+              <span>{(frontmatter.author as string) || 'The Oracle'}</span>
               <span className="w-1 h-1 bg-[#C9A84C] rounded-full" />
-              <span>{frontmatter.publishedAt || 'Unknown Date'}</span>
+              <span>{(frontmatter.publishedAt as string) || 'Unknown Date'}</span>
               <span className="w-1 h-1 bg-[#C9A84C] rounded-full" />
-              <span>{frontmatter.readTime || '8 min'} read</span>
+              <span>{(frontmatter.readTime as string) || '8 min'} read</span>
             </div>
           </div>
         </header>
@@ -83,7 +86,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
         
         <style jsx global>{`
-          @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&display=swap');
           .font-cinzel { font-family: 'Cinzel', serif; }
           .glass-card { background: rgba(18, 18, 26, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
           
