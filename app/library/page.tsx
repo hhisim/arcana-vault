@@ -41,6 +41,11 @@ export default function LibraryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const { lang, t } = useLang();
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const filteredBooks = BOOKS.filter(book => {
     const matchesFilter = activeFilter === 'All' || book.tradition === activeFilter;
@@ -48,6 +53,8 @@ export default function LibraryPage() {
                          book.author.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  if (!mounted) return <div className="min-h-screen bg-[#0A0A0F]" />;
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0]">

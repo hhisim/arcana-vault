@@ -7,6 +7,11 @@ import { SITEDICT } from '@/lib/dictionary';
 export default function NavBar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { lang, setLang, t } = useLang();
+  const [mounted, setMounted] = useState(false);
+
+  useState(() => {
+    if (typeof window !== 'undefined') setMounted(true);
+  });
 
   const navLinks = [
     { href: '/', label: t(SITEDICT.nav.home) },
