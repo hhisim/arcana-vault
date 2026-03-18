@@ -6,7 +6,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/chat', label: 'Chat' },
   { href: '/library', label: 'Library' },
-  { href: '/correspondence-engine', label: 'Correspondences' },
+  { href: '/correspondence-engine', label: 'Correspondence Codex' },
   { href: '/forum', label: 'Agora' },
   { href: '/blog', label: 'The Scroll' },
 ]

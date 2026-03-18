@@ -201,11 +201,10 @@ export default function CorrespondenceEngine({
             <div className="max-w-3xl">
               <div className="text-xs uppercase tracking-[0.3em] text-[#9B93AB]">Vault of Arcana</div>
               <h1 className="mt-4 font-cinzel text-4xl md:text-6xl text-[#E8E0F0] tracking-wide">
-                Correspondence Engine
+                Correspondence Codex
               </h1>
               <p className="mt-4 max-w-2xl text-base md:text-lg text-[#9B93AB] leading-relaxed">
-                A resilient parser for a messy seed file, turning symbolic correspondences into cross-system maps,
-                allied resonances, and quick discovery across planets, deities, plants, letters, tarot, zodiac, and more.
+                Forged from over 30 years of distilled gnosis and esoteric study, this resilient parsing engine transforms chaotic seed data into pristine cross-system maps. By decoding the hidden relationships between form, frequency, linguistics, geometry, and archetypes, it reveals allied resonances and enables rapid, interconnected discovery across planets, deities, botanicals, sacred letters, the tarot, the zodiac, and beyond.
               </p>
             </div>
 
