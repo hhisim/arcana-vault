@@ -179,10 +179,10 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
   return (
     <div className={styles.engine}>
       <div className={styles.hero}>
-        <div className={styles.heroEyebrow}>Correspondence Engine v2</div>
-        <h1 className={styles.heroTitle}>Cross-map symbols, forces, letters, frequencies, bodies, and worlds.</h1>
+        <div className={styles.heroEyebrow}>Tekabülât Kodeksi</div>
+        <h1 className={styles.heroTitle}>Correspondence Codex</h1>
         <p className={styles.heroText}>
-          Browse by family, search in plain language, and open any result to reveal its deeper lattice of resonances.
+          The fruit of 30+ years of esoteric research, mapping the resonance between frequency, form, and universal consciousness.
         </p>
       </div>
 
