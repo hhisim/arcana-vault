@@ -1,7 +1,7 @@
 import CorrespondenceEngine from '../components/CorrespondenceEngine';
 
 export const metadata = {
-  title: 'Correspondence Engine — Vault of Arcana',
+  title: 'Correspondences — Vault of Arcana',
   description: 'A multi-dimensional correspondence engine for symbols, planets, letters, frequencies, chakras, alchemical processes, and more.',
 };
 
