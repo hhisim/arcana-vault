@@ -6,7 +6,8 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/chat', label: 'Chat' },
   { href: '/library', label: 'Library' },
-  { href: '#traditions', label: 'Traditions' },
+  { href: '/forum', label: 'Agora' },
+  { href: '/blog', label: 'The Scroll' },
 ]
 
 export default function NavBar() {
