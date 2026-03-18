@@ -37,7 +37,7 @@ export default function ChatPage() {
     }
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!inputValue.trim()) return;
 
     const userMsg: Message = {
@@ -50,27 +50,16 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, userMsg]);
     setInputValue('');
 
-    try {
-      const resp = await fetch(`http://204.168.154.237:8002/ask?q=${encodeURIComponent(inputValue)}&pack=${selectedBotId}&mode=oracle`);
-      const data = await resp.json();
-      
+    // Mock response
+    setTimeout(() => {
       const assistantMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.response || "Oracle unavailable",
+        content: `As the ${selectedBot.name}, I hear your inquiry. [Response logic based on: ${selectedBot.tradition}]`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, assistantMsg]);
-    } catch (err) {
-      console.error("Oracle fail:", err);
-      const assistantMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: "As the oracle, my connection to the vault is unstable. Please try again soon.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-    }
+    }, 1000);
   };
 
   const clearChat = () => {
