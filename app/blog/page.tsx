@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { POSTS } from '@/lib/posts';
+import { posts } from '@/lib/posts';
 
 export default function BlogPage() {
   const [filter, setFilter] = useState('all');
@@ -9,10 +9,10 @@ export default function BlogPage() {
   const categories = ['all', 'Tao', 'Tarot', 'Tantra', 'Entheogens'];
 
   const filteredPosts = filter === 'all' 
-    ? POSTS 
-    : POSTS.filter(p => p.tradition === filter);
+    ? posts 
+    : posts.filter(p => p.tradition === filter);
   
-  const featured = POSTS.find(p => p.featured) || POSTS[0];
+  const featured = posts.find(p => p.slug === 'dmt-hyperbolic-mind') || posts[0];
   const others = filteredPosts.filter(p => p.slug !== featured.slug);
 
   return (
