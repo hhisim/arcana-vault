@@ -1,0 +1,25 @@
+1. Copy these files into the real `arcana-vault` repo, preserving paths.
+2. Back up the current `app/chat/page.tsx` first.
+3. Set `ORACLE_API_BASE` in `.env.local` and in Vercel project environment variables.
+4. Run:
+
+   npm install
+   npm run build
+
+5. Deploy through the normal Git -> Vercel flow.
+
+Suggested backup commands:
+
+```bash
+cp app/chat/page.tsx app/chat/page.tsx.bak-$(date +%Y%m%d-%H%M%S)
+```
+
+Suggested verification checklist:
+
+- `/chat` loads without placeholder text
+- health status shows Online when VPS API is reachable
+- EN/TR/RU switches all labels and prompts
+- Tao/Tarot/Tantra/Plant all send live responses
+- voice reply only toggles on supported modes
+- browser mic records and transcribes
+- answer audio plays when enabled
