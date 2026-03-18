@@ -1,7 +1,7 @@
 export interface PostMeta {
   slug: string;
   title: string;
-  tradition: 'tao' | 'tarot' | 'tantra' | 'entheogens' | 'science';
+  tradition: string; // Flexible string to support 20+ traditions (e.g., 'hermetics', 'human-design')
   publishedAt: string;
   excerpt: string;
   readTime: string;
