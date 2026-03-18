@@ -19,6 +19,12 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem('arcana_lang') as UiLang;
     if (saved && ['en', 'tr', 'ru'].includes(saved)) {
       setLangState(saved);
+    } else {
+      // Auto-detection based on browser language
+      const browserLang = navigator.language.split('-')[0].toLowerCase();
+      if (browserLang === 'tr') setLangState('tr');
+      else if (browserLang === 'ru') setLangState('ru');
+      else setLangState('en');
     }
   }, []);
 

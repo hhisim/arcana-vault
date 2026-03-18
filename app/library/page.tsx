@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLang } from '@/lib/lang-context';
+import { SITEDICT } from '@/lib/dictionary';
 
 type Tradition = 'Tao' | 'Tarot' | 'Tantra' | 'Entheogens' | 'All';
 
@@ -38,6 +40,7 @@ export default function LibraryPage() {
   const [activeFilter, setActiveFilter] = useState<Tradition>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const { lang, t } = useLang();
 
   const filteredBooks = BOOKS.filter(book => {
     const matchesFilter = activeFilter === 'All' || book.tradition === activeFilter;
@@ -71,25 +74,24 @@ export default function LibraryPage() {
         </div>
         
         <div className="relative z-10 text-center px-6">
-          <h1 className="font-cinzel text-5xl md:text-7xl text-[#E8E0F0] tracking-widest drop-shadow-2xl">THE VAULT</h1>
-          <p className="text-[#9B93AB] text-xl mt-4 font-light tracking-wide">Sacred texts from four traditions</p>
+          <h1 className="font-cinzel text-5xl md:text-7xl text-[#E8E0F0] tracking-widest drop-shadow-2xl">{t(SITEDICT.hero.title)}</h1>
+          <p className="text-[#9B93AB] text-xl mt-4 font-light tracking-wide">{t(SITEDICT.hero.subtitle)}</p>
         </div>
       </section>
 
-      {/* Filter Bar */}
       <div className="sticky top-20 z-40 glass-card mx-4 lg:mx-6 -mt-8 p-4 flex flex-col md:flex-row items-center justify-between gap-4 border border-[rgba(255,255,255,0.06)] shadow-2xl">
         <div className="flex flex-wrap items-center gap-2">
-          {(['All', 'Tao', 'Tarot', 'Tantra', 'Entheogens'] as Tradition[]).map((t) => (
+          {(['All', 'Tao', 'Tarot', 'Tantra', 'Entheogens'] as Tradition[]).map((trad) => (
             <button
-              key={t}
-              onClick={() => setActiveFilter(t)}
+              key={trad}
+              onClick={() => setActiveFilter(trad)}
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeFilter === t 
+                activeFilter === trad 
                 ? 'bg-[#7B5EA7] text-white shadow-[0_0_15px_rgba(123,94,167,0.4)]' 
                 : 'text-[#9B93AB] hover:text-[#E8E0F0] bg-white/5'
               }`}
             >
-              {t}
+              {trad === 'All' ? t(SITEDICT.hero.filterAll) : trad}
             </button>
           ))}
         </div>
@@ -97,7 +99,7 @@ export default function LibraryPage() {
         <div className="w-full md:w-80 relative">
           <input 
             type="text"
-            placeholder="Search texts..."
+            placeholder={t(SITEDICT.hero.search)}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-[#0A0A0F]/50 border border-[rgba(255,255,255,0.06)] rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-[#7B5EA7]/50 transition-colors"
@@ -147,7 +149,7 @@ export default function LibraryPage() {
                           <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                         </svg>
                       )}
-                      {book.access}
+                      {book.access === 'Free' ? t(SITEDICT.library.free) : t(SITEDICT.library.adept)}
                     </span>
                   </div>
                   
@@ -159,7 +161,7 @@ export default function LibraryPage() {
                       : 'bg-[#C9A84C] hover:bg-[#B1933E] text-[#0A0A0F] shadow-[0_0_20px_rgba(201,168,76,0.2)]'
                     }`}
                   >
-                    {book.access === 'Free' ? 'Read' : 'Unlock'}
+                    {book.access === 'Free' ? t(SITEDICT.library.read) : t(SITEDICT.library.unlock)}
                   </button>
                 </div>
               </div>
