@@ -2,7 +2,6 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import React from 'react';
 import matter from 'gray-matter';
-import { notFound } from 'next/navigation';
 import { posts } from '@/lib/posts';
 import BlogContent from '@/components/BlogContent';
 
@@ -51,6 +50,18 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     );
   } catch (error) {
     console.error('Error loading blog post:', error);
-    notFound();
+    return (
+      <div className="min-h-screen bg-[#0A0A0F] flex items-center justify-center p-6 text-center">
+        <div className="max-w-md">
+          <h1 className="font-cinzel text-4xl text-[#E8E0F0] mb-6">Scroll Not Found</h1>
+          <p className="text-[#9B93AB] text-lg mb-10 italic">
+            This specific archive of knowledge is currently being transcribed or has been moved to a deeper vault.
+          </p>
+          <a href="/blog" className="inline-block px-10 py-3 bg-[#7B5EA7]/20 text-[#C9A84C] border border-[#C9A84C]/30 rounded-lg hover:bg-[#C9A84C]/10 transition-all font-bold tracking-widest uppercase text-xs">
+            Return to The Scroll
+          </a>
+        </div>
+      </div>
+    );
   }
 }
