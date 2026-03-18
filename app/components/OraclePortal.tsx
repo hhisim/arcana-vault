@@ -14,9 +14,14 @@ import {
   supportsVoiceReply,
   t,
 } from '@/lib/oracle-ui'
+import { getMenuScreen, MenuAction } from '@/lib/oracle-menu'
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+}
+
+function rootMenuFor(pack: OraclePack) {
+  return `${pack}:root`
 }
 
 export default function OraclePortal() {
@@ -30,6 +35,8 @@ export default function OraclePortal() {
   const [recording, setRecording] = useState(false)
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null)
   const [systemNotice, setSystemNotice] = useState<string | null>(null)
+  const [menuKey, setMenuKey] = useState<string>(rootMenuFor('tao'))
+  const [currentCard, setCurrentCard] = useState<string | null>(null)
 
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
@@ -40,6 +47,7 @@ export default function OraclePortal() {
   const voiceEnabledForMode = supportsVoiceReply(pack, mode)
   const starterPrompts = currentPack.starterPrompts[lang]
   const followups = nextFollowups(pack, lang)
+  const menu = useMemo(() => getMenuScreen(pack, menuKey, currentCard), [pack, menuKey, currentCard])
 
   useEffect(() => {
     if (!voiceEnabledForMode && voiceReply) {
@@ -51,6 +59,8 @@ export default function OraclePortal() {
     const nextDefault = ORACLE_CONFIG[pack].defaultMode
     const availableModes = ORACLE_CONFIG[pack].modes.map((entry) => entry.value)
     setMode((prev) => (availableModes.includes(prev) ? prev : nextDefault))
+    setMenuKey(rootMenuFor(pack))
+    setCurrentCard(null)
   }, [pack])
 
   useEffect(() => {
@@ -82,8 +92,10 @@ export default function OraclePortal() {
     return backendOnline ? t(lang, UI_COPY.online) : t(lang, UI_COPY.offline)
   }, [backendOnline, lang])
 
-  const sendPrompt = async (prompt: string) => {
+  const sendPrompt = async (prompt: string, userText?: string, overrideMode?: OracleMode) => {
     const text = prompt.trim()
+    const visibleText = (userText ?? prompt).trim()
+    const effectiveMode = overrideMode ?? mode
     if (!text || busy) return
 
     setSystemNotice(null)
@@ -92,9 +104,9 @@ export default function OraclePortal() {
     const userMessage: ChatMessage = {
       id: uid(),
       role: 'user',
-      text,
+      text: visibleText,
       pack,
-      mode,
+      mode: effectiveMode,
     }
 
     setMessages((prev) => [...prev, userMessage])
@@ -104,7 +116,7 @@ export default function OraclePortal() {
       const response = await fetch('/api/oracle/ask', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ q: text, pack, mode, target_lang: lang }),
+        body: JSON.stringify({ q: text, pack, mode: effectiveMode, target_lang: lang }),
       })
 
       if (!response.ok) {
@@ -115,7 +127,7 @@ export default function OraclePortal() {
       const data = (await response.json()) as AskResponse
       let audioUrl: string | null = null
 
-      if (voiceReply && voiceEnabledForMode) {
+      if (voiceReply && supportsVoiceReply(pack, effectiveMode)) {
         try {
           const ttsResponse = await fetch('/api/oracle/tts', {
             method: 'POST',
@@ -138,7 +150,7 @@ export default function OraclePortal() {
         text: data.answer,
         audioUrl,
         pack,
-        mode,
+        mode: effectiveMode,
       }
 
       setMessages((prev) => [...prev, oracleMessage])
@@ -154,6 +166,76 @@ export default function OraclePortal() {
       ])
     } finally {
       setBusy(false)
+    }
+  }
+
+  const cycleLanguage = () => {
+    setLang((prev) => (prev === 'en' ? 'tr' : prev === 'tr' ? 'ru' : 'en'))
+  }
+
+  const handleAction = async (button: MenuAction) => {
+    if (busy) return
+
+    switch (button.kind) {
+      case 'submenu': {
+        const next = button.nextMenu ?? rootMenuFor(pack)
+        setMenuKey(next)
+        if (next.startsWith('tarot:card:')) {
+          setCurrentCard(next.replace('tarot:card:', ''))
+        }
+        return
+      }
+      case 'back': {
+        const next = button.nextMenu ?? rootMenuFor(pack)
+        setMenuKey(next)
+        if (!next.startsWith('tarot:card:')) {
+          setCurrentCard(null)
+        }
+        return
+      }
+      case 'voice': {
+        if (!voiceEnabledForMode) {
+          setSystemNotice(t(lang, UI_COPY.voiceUnavailable))
+          return
+        }
+        setVoiceReply((prev) => !prev)
+        setSystemNotice(voiceReply ? 'Voice reply disabled.' : 'Voice reply enabled.')
+        return
+      }
+      case 'language': {
+        cycleLanguage()
+        return
+      }
+      case 'invite': {
+        const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/chat` : '/chat'
+        try {
+          await navigator.clipboard.writeText(shareUrl)
+          setSystemNotice('Chat link copied.')
+        } catch {
+          setSystemNotice(shareUrl)
+        }
+        return
+      }
+      case 'gift': {
+        setSystemNotice('Gift flow is still Telegram-native. Web gifting is the next patch.')
+        return
+      }
+      case 'plans': {
+        setSystemNotice('Plans are handled through the live subscription flow. Use the site CTA or Telegram for now.')
+        return
+      }
+      case 'switch': {
+        setSystemNotice('Choose another oracle from the left panel.')
+        return
+      }
+      case 'prompt': {
+        const nextMode = button.mode ?? mode
+        if (button.mode) {
+          setMode(button.mode)
+        }
+        await sendPrompt(button.prompt ?? t(lang, button.label), t(lang, button.displayText ?? button.label), nextMode)
+        return
+      }
     }
   }
 
@@ -336,6 +418,34 @@ export default function OraclePortal() {
             </button>
           </div>
 
+          <div className="border-b border-[rgba(255,255,255,0.06)] px-5 py-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="text-sm font-medium text-[var(--text-primary)]">{t(lang, menu.title)}</div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuKey(rootMenuFor(pack))
+                  setCurrentCard(null)
+                }}
+                className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
+              >
+                Menu
+              </button>
+            </div>
+            <div className="grid gap-2 md:grid-cols-2">
+              {menu.buttons.flat().map((button) => (
+                <button
+                  key={button.id}
+                  type="button"
+                  onClick={() => void handleAction(button)}
+                  className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-4 py-3 text-left text-sm text-[var(--text-primary)] transition hover:border-[var(--primary-purple)] hover:bg-[rgba(123,94,167,0.08)]"
+                >
+                  {t(lang, button.label)}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
             {!messages.length && (
               <div className="rounded-3xl border border-dashed border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] p-6 text-center">
@@ -374,7 +484,7 @@ export default function OraclePortal() {
                 </div>
                 <div className="whitespace-pre-wrap text-[15px] leading-7 text-[var(--text-primary)]">{message.text}</div>
                 {message.audioUrl && (
-                  <audio controls className="mt-3 w-full">
+                  <audio controls playsInline preload="metadata" className="mt-3 w-full">
                     <source src={message.audioUrl} type="audio/ogg" />
                   </audio>
                 )}

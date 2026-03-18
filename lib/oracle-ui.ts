@@ -152,7 +152,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     key: 'tantra',
     emoji: '🔥',
     title: label('Tantra Oracle', 'Tantra Kehaneti', 'Оракул Тантры'),
-    subtitle: label('Sacred energy awakening', 'Kutsal enerjinin uyanışı', 'Пробуждение священной энергии'),
+    subtitle: label('Tantra · Vedanta · Samadhi · Kundalini', 'Tantra · Vedanta · Samadhi · Kundalini', 'Тантра · Веданта · Самадхи · Кундалини'),
     onlineLabel: label('Voice', 'Ses', 'Голос'),
     defaultMode: 'oracle',
     starterPrompts: {
@@ -193,9 +193,9 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
   },
   entheogen: {
     key: 'entheogen',
-    emoji: '🌿',
-    title: label('Plant Oracle', 'Bitki Kehaneti', 'Оракул Растений'),
-    subtitle: label('Plant wisdom and transformation', 'Bitki bilgeliği ve dönüşüm', 'Мудрость растений и трансформация'),
+    emoji: '🍄',
+    title: label('Esoteric Entheogen', 'Ezoterik Entheogen', 'Эзотерический Энтеоген'),
+    subtitle: label('Entheogens · Mysticism · Shamanism · Consciousness', 'Entheogenler · Mistisizm · Şamanizm · Bilinç', 'Энтеогены · Мистицизм · Шаманизм · Сознание'),
     onlineLabel: label('Voice', 'Ses', 'Голос'),
     defaultMode: 'oracle',
     starterPrompts: {
@@ -279,9 +279,9 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
     ru: ['Предложи простую практику.', 'Объясни слой тонкого тела.', 'Сделай это более безопасным и заземлённым.'],
   },
   entheogen: {
-    en: ['Focus on integration.', 'Make it more contemplative.', 'Turn this into a concise quote.'],
-    tr: ['Entegrasyona odaklan.', 'Bunu daha tefekkürlü yap.', 'Bunu kısa bir alıntıya dönüştür.'],
-    ru: ['Сфокусируйся на интеграции.', 'Сделай это более созерцательным.', 'Преврати это в краткую цитату.'],
+    en: ['Focus on integration.', 'Compare plant, molecule, and ritual context.', 'Turn this into a concise quote.'],
+    tr: ['Entegrasyona odaklan.', 'Bitki, molekül ve ritüel bağlamını karşılaştır.', 'Bunu kısa bir alıntıya dönüştür.'],
+    ru: ['Сфокусируйся на интеграции.', 'Сравни растение, молекулу и ритуальный контекст.', 'Преврати это в краткую цитату.'],
   },
 }
 
