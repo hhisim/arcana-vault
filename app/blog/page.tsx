@@ -1,57 +1,29 @@
 'use client';
 
 import React, { useState } from 'react';
-
-const POSTS = [
-  {
-    title: "The Uncarved Block: Applying Wu Wei to Modern Decision Fatigue",
-    slug: "what-tao-te-ching-says-about-uncertainty",
-    tradition: "tao",
-    publishedAt: "2025-03-15",
-    excerpt: "In an era of relentless optimization, the ancient Taoist concept of non-action offers a radical strategy for high-stakes decision making.",
-    readTime: 8,
-    author: "The Tao Oracle",
-    featured: true
-  },
-  {
-    title: "As Above, So Below: Why Hermeticism Resonates with Silicon Valley",
-    slug: "seven-hermetic-principles-silicon-valley",
-    tradition: "philosophy",
-    publishedAt: "2025-03-12",
-    excerpt: "From systems thinking to recursive algorithms, the Seven Hermetic Principles provide a ancient framework for the digital age.",
-    readTime: 10,
-    author: "Hermetic Oracle",
-    featured: false
-  },
-  {
-    title: "Chaos Magick: Belief as a Recursive Technology",
-    slug: "chaos-magick-not-what-you-think",
-    tradition: "philosophy",
-    publishedAt: "2025-03-10",
-    excerpt: "Is it magick or just a very aggressive A/B test? Exploring the postmodern tech of belief and sigil-crafting.",
-    readTime: 9,
-    author: "Chaos Oracle",
-    featured: false
-  }
-];
+import { POSTS } from '@/lib/posts';
+import { useLang } from '@/lib/lang-context';
 
 export default function BlogPage() {
   const [filter, setFilter] = useState('all');
+  const { t } = useLang();
   
   const filteredPosts = filter === 'all' ? POSTS : POSTS.filter(p => p.tradition === filter);
-  const featured = POSTS.find(p => p.featured);
-  const others = filteredPosts.filter(p => !p.featured || filter !== 'all');
+  const featured = POSTS.find(p => p.featured) || POSTS[0];
+  const others = filteredPosts.filter(p => p.slug !== featured.slug || filter !== 'all');
+
+  const categories = ['all', 'tao', 'tarot', 'tantra', 'science', 'philosophy'];
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] pb-24">
       <header className="max-w-7xl mx-auto px-6 pt-32 pb-12">
         <h1 className="font-cinzel text-5xl md:text-6xl mb-4 tracking-tighter">THE SCROLL</h1>
-        <div className="flex gap-4 mt-8">
-          {['all', 'tao', 'philosophy'].map(t => (
+        <div className="flex gap-4 mt-8 flex-wrap">
+          {categories.map(t => (
             <button 
               key={t}
               onClick={() => setFilter(t)}
-              className={`text-xs uppercase tracking-widest px-4 py-2 border rounded transition-all ${filter === t ? 'border-[#C9A84C] text-[#C9A84C] bg-[#C9A84C]/5' : 'border-white/10 text-[#9B93AB] hover:border-white/30'}`}
+              className={`text-[10px] uppercase tracking-widest px-4 py-2 border rounded transition-all ${filter === t ? 'border-[#C9A84C] text-[#C9A84C] bg-[#C9A84C]/5' : 'border-white/10 text-[#9B93AB] hover:border-white/30'}`}
             >
               {t}
             </button>

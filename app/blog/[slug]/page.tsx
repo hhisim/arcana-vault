@@ -1,20 +1,13 @@
 'use client';
 
 import React from 'react';
-
-const MOCK_POST = {
-  title: "The Uncarved Block: Applying Wu Wei to Modern Decision Fatigue",
-  slug: "what-tao-te-ching-says-about-uncertainty",
-  tradition: "tao",
-  publishedAt: "2025-03-15",
-  excerpt: "In an era of relentless optimization, the ancient Taoist concept of non-action offers a radical strategy for high-stakes decision making.",
-  readTime: 8,
-  author: "The Tao Oracle",
-  content: "Restoring the flow of ancient wisdom into modern systems..."
-};
+import { useParams } from 'next/navigation';
+import { POSTS } from '@/lib/posts';
 
 export default function BlogPostPage() {
-  const post = MOCK_POST;
+  const params = useParams();
+  const slug = params.slug as string;
+  const post = POSTS.find(p => p.slug === slug) || POSTS[0];
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] pb-32">
@@ -39,26 +32,16 @@ export default function BlogPostPage() {
           </header>
 
           <div className="text-[#9B93AB] text-lg leading-relaxed space-y-8">
-            <p className="first-letter:text-5xl first-letter:font-cinzel first-letter:text-[#C9A84C] first-letter:mr-3 first-letter:float-left">
-              Most people quote the first chapter of the Tao Te Ching—"The Tao that can be told is not the eternal Tao"—as a mystical disclaimer. But for those navigating the high-velocity uncertainty of modern life, the Tao is less of a riddle and more of an operating system.
-            </p>
-            
-            <h3 className="text-[#E8E0F0] font-cinzel text-2xl mt-12 mb-4">The Paradox of Effort</h3>
-            <p>
-              The core of Taoist wisdom lies in *Wu Wei*, often mistranslated as "doing nothing." In reality, Wu Wei is "effortless action" or "action in alignment with the flow of the universe." Think of a world-class athlete in a state of flow; they aren't "doing nothing," but they aren't forcing the result either.
-            </p>
-            
-            <p>
-              In our current culture of "hustle" and constant optimization, we are suffering from collective decision fatigue. We attempt to carve the "Uncarved Block" (Pu) into increasingly specific shapes before we even understand the grain of the wood. When we force a product launch, a career pivot, or a personal relationship based on frantic ego-will rather than timing, we create friction.
-            </p>
-
-            <h3 className="text-[#E8E0F0] font-cinzel text-2xl mt-12 mb-4">Chapter 67: The Three Treasures</h3>
-            <p>
-              Lao Tzu speaks of three treasures: Compassion, Frugality, and Humility. In a startup context, these translate directly:
-              1. **Compassion:** Empathy for the user over the feature set.
-              2. **Frugality:** Conservation of capital and mental energy.
-              3. **Humility:** The "leading by following" mentioned in Chapter 67. The best leaders are those whose presence is barely felt, allowing the work to emerge from the team naturally.
-            </p>
+            {post.content.split('\n\n').map((para, i) => {
+              if (para.startsWith('## ')) return <h2 key={i} className="text-[#E8E0F0] font-cinzel text-3xl mt-16 mb-6 border-b border-white/5 pb-2">{para.replace('## ', '')}</h2>
+              if (para.startsWith('### ')) return <h3 key={i} className="text-[#E8E0F0] font-cinzel text-2xl mt-12 mb-4">{para.replace('### ', '')}</h3>
+              
+              return (
+                <p key={i} className={i === 0 ? "first-letter:text-5xl first-letter:font-cinzel first-letter:text-[#C9A84C] first-letter:mr-3 first-letter:float-left" : ""}>
+                  {para}
+                </p>
+              );
+            })}
           </div>
 
           <section className="mt-20 p-12 glass-card rounded-2xl border border-[#7B5EA7]/20 text-center relative overflow-hidden">
