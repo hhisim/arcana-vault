@@ -59,6 +59,7 @@ export default function NavBar() {
           >
             {t(SITEDICT.nav.cta)}
           </a>
+        </div>
 
         <button
           className="md:hidden text-[#9B93AB] hover:text-[#E8E0F0] p-1 focus:outline-none"
