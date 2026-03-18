@@ -1,41 +1,27 @@
-import { notFound } from 'next/navigation';
-import { MDXRemote } from 'next-mdx-remote/rsc';
-import { MDXComponents } from '@/components/mdx-components';
-import { posts } from '@/lib/posts';
+import { compileMDX } from 'next-mdx-remote/rsc';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { compileMDX } from 'next-mdx-remote/rsc';
+import { notFound } from 'next/navigation';
+import { MDXComponents } from '@/components/mdx-components';
+import { posts } from '@/lib/posts';
 import React from 'react';
-
-export async function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
-}
-
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = posts.find((p) => p.slug === params.slug);
-  if (!post) return { title: 'Not Found' };
-  return { title: `${post.title} | The Scroll`, description: post.excerpt };
-}
 
 async function getPostContent(slug: string) {
   try {
     const filePath = path.join(process.cwd(), 'content', 'blog', `${slug}.mdx`);
-    const source = await fs.readFile(filePath, 'utf8');
-    return source;
-  } catch (error) {
-    return null;
-  }
+    return await fs.readFile(filePath, 'utf8');
+  } catch (error) { return null; }
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = posts.find((p) => p.slug === params.slug);
   if (!post) notFound();
 
-  const content = await getPostContent(params.slug);
-  if (!content) notFound();
+  const source = await getPostContent(params.slug);
+  if (!source) notFound();
 
-  const { content: mdxContent } = await compileMDX({ 
-    source: content, 
+  const { content } = await compileMDX({ 
+    source, 
     components: MDXComponents, 
     options: { parseFrontmatter: true } 
   });
@@ -44,25 +30,29 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     <article className="min-h-screen bg-[#0A0A0F]">
       <header className="relative py-24 px-6 border-b border-[rgba(255,255,255,0.06)]">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#7B5EA7]/20 text-[#7B5EA7] text-sm mb-6 uppercase tracking-wider">
-            {post.tradition}
-          </span>
-          <h1 className="font-cinzel text-4xl md:text-6xl text-[#E8E0F0] mb-6 leading-tight">
-            {post.title}
-          </h1>
+          <span className="inline-block px-3 py-1 rounded-full bg-[#7B5EA7]/20 text-[#7B5EA7] text-sm mb-6 uppercase tracking-wider">{post.tradition}</span>
+          <h1 className="font-cinzel text-4xl md:text-6xl text-[#E8E0F0] mb-6">{post.title}</h1>
           <div className="flex items-center justify-center gap-4 text-[#9B93AB] text-sm">
             <span>{post.author}</span>
             <span>•</span>
             <span>{post.publishedAt}</span>
             <span>•</span>
-            <span>{post.readTime} read</span>
+            <span>{post.readTime}</span>
           </div>
         </div>
       </header>
 
       <div className="max-w-3xl mx-auto px-6 py-16">
-        <div className="prose prose-invert prose-lg max-w-none">
-          {mdxContent}
+        {content}
+      </div>
+
+      <div className="max-w-3xl mx-auto px-6 pb-24">
+        <div className="glass-card p-8 text-center rounded-2xl border border-[#7B5EA7]/20">
+          <h3 className="font-cinzel text-2xl text-[#E8E0F0] mb-4">Continue the Inquiry</h3>
+          <p className="text-[#9B93AB] mb-6">Deepen your understanding with the {post.tradition} Oracle</p>
+          <a href={`/chat?bot=${post.tradition}`} className="inline-flex items-center justify-center px-8 py-4 bg-[#C9A84C] text-[#0A0A0F] font-bold rounded-lg hover:scale-105 transition-all">
+            Consult the Oracle
+          </a>
         </div>
       </div>
     </article>
