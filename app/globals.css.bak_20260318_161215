@@ -35,13 +35,6 @@
 }
 
 @layer utilities {
-  .font-cinzel {
-    font-family: Georgia, 'Times New Roman', serif;
-    letter-spacing: 0.02em;
-  }
-}
-
-@layer utilities {
   .animate-fade-in-up {
     opacity: 1;
     transform: translateY(0);
