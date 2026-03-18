@@ -40,7 +40,7 @@ const traditions = [
     badgeType: 'voice',
   },
   {
-    name: 'ENTHEOGENS',
+    name: 'ESOTERIC ENTHEOGEN',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-full h-full" stroke="currentColor" strokeWidth="2">
         <path d="M24 44c0-20-10-25-15-30s-5-10 0-15c5 5 15 10 15 30"/>
