@@ -24,6 +24,58 @@ function rootMenuFor(pack: OraclePack) {
   return `${pack}:root`
 }
 
+function SignalMorphText({
+  phrases,
+  className = '',
+  intervalMs = 5200,
+  glitchMs = 160,
+}: {
+  phrases: string[]
+  className?: string
+  intervalMs?: number
+  glitchMs?: number
+}) {
+  const pool = useMemo(() => phrases.filter(Boolean), [phrases])
+  const [index, setIndex] = useState(0)
+  const [glitching, setGlitching] = useState(false)
+
+  useEffect(() => {
+    if (pool.length <= 1) return
+    const timer = window.setInterval(() => {
+      setGlitching(true)
+      window.setTimeout(() => {
+        setIndex((prev) => (prev + 1) % pool.length)
+        setGlitching(false)
+      }, glitchMs)
+    }, intervalMs)
+    return () => window.clearInterval(timer)
+  }, [pool.length, intervalMs, glitchMs])
+
+  const text = pool[index] ?? ''
+
+  return (
+    <span className={`voa-signal ${glitching ? 'is-glitching' : ''} ${className}`}>
+      <span className="voa-signal__main">{text}</span>
+      <span className="voa-signal__layer voa-signal__layer--a" aria-hidden="true">
+        {text}
+      </span>
+      <span className="voa-signal__layer voa-signal__layer--b" aria-hidden="true">
+        {text}
+      </span>
+    </span>
+  )
+}
+
+function packSignalPhrases(pack: OraclePack, lang: UiLang, modeLabel: string, statusLabel: string) {
+  const base = ORACLE_CONFIG[pack]
+  const shared: Record<UiLang, string[]> = {
+    en: [base.subtitle.en, `${modeLabel} · ${statusLabel}`, 'Living transmission. Curated response.'],
+    tr: [base.subtitle.tr, `${modeLabel} · ${statusLabel}`, 'Canlı aktarım. Küratörlü yanıt.'],
+    ru: [base.subtitle.ru, `${modeLabel} · ${statusLabel}`, 'Живая передача. Кураторский ответ.'],
+  }
+  return shared[lang]
+}
+
 export default function OraclePortal() {
   const [lang, setLang] = useState<UiLang>('en')
   const [pack, setPack] = useState<OraclePack>('tao')
@@ -37,6 +89,7 @@ export default function OraclePortal() {
   const [systemNotice, setSystemNotice] = useState<string | null>(null)
   const [menuKey, setMenuKey] = useState<string>(rootMenuFor('tao'))
   const [currentCard, setCurrentCard] = useState<string | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
@@ -61,6 +114,7 @@ export default function OraclePortal() {
     setMode((prev) => (availableModes.includes(prev) ? prev : nextDefault))
     setMenuKey(rootMenuFor(pack))
     setCurrentCard(null)
+    setMenuOpen(false)
   }, [pack])
 
   useEffect(() => {
@@ -91,6 +145,9 @@ export default function OraclePortal() {
     if (backendOnline === null) return '…'
     return backendOnline ? t(lang, UI_COPY.online) : t(lang, UI_COPY.offline)
   }, [backendOnline, lang])
+
+  const effectiveFollowups = messages.length ? followups : starterPrompts
+  const packPhrases = packSignalPhrases(pack, lang, currentMode?.label[lang] ?? '', statusLabel)
 
   const sendPrompt = async (prompt: string, userText?: string, overrideMode?: OracleMode) => {
     const text = prompt.trim()
@@ -138,9 +195,11 @@ export default function OraclePortal() {
             const blob = await ttsResponse.blob()
             audioUrl = URL.createObjectURL(blob)
             void new Audio(audioUrl).play().catch(() => undefined)
+          } else {
+            setSystemNotice('Voice reply unavailable for this response.')
           }
         } catch {
-          // keep text response even if TTS fails
+          setSystemNotice('Voice reply unavailable for this response.')
         }
       }
 
@@ -183,6 +242,7 @@ export default function OraclePortal() {
         if (next.startsWith('tarot:card:')) {
           setCurrentCard(next.replace('tarot:card:', ''))
         }
+        setMenuOpen(true)
         return
       }
       case 'back': {
@@ -191,6 +251,7 @@ export default function OraclePortal() {
         if (!next.startsWith('tarot:card:')) {
           setCurrentCard(null)
         }
+        setMenuOpen(true)
         return
       }
       case 'voice': {
@@ -233,6 +294,7 @@ export default function OraclePortal() {
         if (button.mode) {
           setMode(button.mode)
         }
+        setMenuOpen(false)
         await sendPrompt(button.prompt ?? t(lang, button.label), t(lang, button.displayText ?? button.label), nextMode)
         return
       }
@@ -279,7 +341,7 @@ export default function OraclePortal() {
           setSystemNotice(null)
           if (transcript) {
             setInput(transcript)
-            await sendPrompt(transcript)
+            await sendPrompt(transcript, transcript)
           }
         } catch (error) {
           setSystemNotice(error instanceof Error ? error.message : t(lang, UI_COPY.failed))
@@ -296,9 +358,9 @@ export default function OraclePortal() {
   }
 
   return (
-    <section className="min-h-[calc(100vh-5rem)] bg-deep px-4 py-8 md:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
-        <aside className="glass-card h-fit p-5">
+    <section className="min-h-[calc(100vh-5rem)] bg-deep px-3 py-6 md:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <aside className="order-2 glass-card h-fit p-4 lg:order-1 lg:sticky lg:top-24">
           <div className="mb-5">
             <h1 className="font-cinzel text-2xl text-[var(--primary-gold)]">{t(lang, UI_COPY.title)}</h1>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">{t(lang, UI_COPY.subtitle)}</p>
@@ -329,19 +391,19 @@ export default function OraclePortal() {
                   key={item}
                   type="button"
                   onClick={() => setPack(item)}
-                  className={`w-full rounded-2xl border p-4 text-left transition ${
+                  className={`voa-oracle-card w-full rounded-2xl border p-4 text-left transition ${
                     pack === item
-                      ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] shadow-[0_0_30px_rgba(123,94,167,0.18)]'
+                      ? 'is-active border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] shadow-[0_0_30px_rgba(123,94,167,0.18)]'
                       : 'border-[rgba(255,255,255,0.06)] bg-[var(--bg-card)] hover:border-[rgba(201,168,76,0.35)]'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-start justify-between gap-4">
                     <div>
-                      <div className="font-cinzel text-lg text-[var(--text-primary)]">
+                      <div className="font-cinzel text-xl text-[var(--text-primary)]">
                         <span className="mr-2">{config.emoji}</span>
                         {config.title[lang]}
                       </div>
-                      <p className="mt-1 text-sm text-[var(--text-secondary)]">{config.subtitle[lang]}</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">{config.subtitle[lang]}</p>
                     </div>
                     <span className="rounded-full border border-[rgba(255,255,255,0.08)] px-2.5 py-1 text-xs text-[var(--text-secondary)]">
                       {config.onlineLabel[lang]}
@@ -399,85 +461,136 @@ export default function OraclePortal() {
           </div>
         </aside>
 
-        <div className="glass-card flex min-h-[72vh] flex-col overflow-hidden">
-          <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] px-5 py-4">
-            <div>
-              <div className="font-cinzel text-xl text-[var(--text-primary)]">
-                {currentPack.emoji} {currentPack.title[lang]}
+        <div className="order-1 glass-card flex min-h-[76vh] flex-col overflow-hidden lg:order-2">
+          <div className="border-b border-[rgba(255,255,255,0.06)] px-4 py-4 md:px-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="font-cinzel text-xl text-[var(--text-primary)] md:text-2xl">
+                  <SignalMorphText phrases={[`${currentPack.emoji} ${currentPack.title[lang]}`]} />
+                </div>
+                <div className="mt-1 text-sm text-[var(--text-secondary)]">
+                  <SignalMorphText phrases={packPhrases} className="max-w-[38rem]" />
+                </div>
               </div>
-              <div className="text-sm text-[var(--text-secondary)]">
-                {currentMode?.label[lang]} · {statusLabel}
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setMessages([])}
-              className="rounded-full border border-[rgba(255,255,255,0.08)] px-4 py-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
-            >
-              {t(lang, UI_COPY.clear)}
-            </button>
-          </div>
-
-          <div className="border-b border-[rgba(255,255,255,0.06)] px-5 py-4">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <div className="text-sm font-medium text-[var(--text-primary)]">{t(lang, menu.title)}</div>
-              <button
-                type="button"
-                onClick={() => {
-                  setMenuKey(rootMenuFor(pack))
-                  setCurrentCard(null)
-                }}
-                className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
-              >
-                Menu
-              </button>
-            </div>
-            <div className="grid gap-2 md:grid-cols-2">
-              {menu.buttons.flat().map((button) => (
+              <div className="flex flex-wrap items-center justify-end gap-2">
                 <button
-                  key={button.id}
                   type="button"
-                  onClick={() => void handleAction(button)}
-                  className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-4 py-3 text-left text-sm text-[var(--text-primary)] transition hover:border-[var(--primary-purple)] hover:bg-[rgba(123,94,167,0.08)]"
+                  onClick={() => setMenuOpen((prev) => !prev)}
+                  className="rounded-full border border-[rgba(255,255,255,0.08)] px-4 py-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
                 >
-                  {t(lang, button.label)}
+                  {menuOpen ? 'Hide Menu' : 'Menu'}
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={() => setMessages([])}
+                  className="rounded-full border border-[rgba(255,255,255,0.08)] px-4 py-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
+                >
+                  {t(lang, UI_COPY.clear)}
+                </button>
+              </div>
             </div>
           </div>
 
-          <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
+          <div className="sticky top-0 z-20 border-b border-[rgba(255,255,255,0.06)] bg-[linear-gradient(180deg,rgba(10,10,15,0.98),rgba(10,10,15,0.92))] px-4 py-4 backdrop-blur md:px-5">
+            {systemNotice && <div className="mb-3 text-sm text-[var(--text-secondary)]">{systemNotice}</div>}
+
+            <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] p-3 shadow-[0_18px_60px_rgba(0,0,0,0.28)]">
+              <textarea
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                placeholder={t(lang, UI_COPY.placeholder)}
+                rows={2}
+                className="min-h-[88px] w-full resize-none rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] px-4 py-4 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)] focus:border-[rgba(201,168,76,0.35)]"
+              />
+              <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-wrap gap-2">
+                  {effectiveFollowups.slice(0, 4).map((prompt) => (
+                    <button
+                      key={prompt}
+                      type="button"
+                      onClick={() => void sendPrompt(prompt)}
+                      className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-2 text-sm text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)] hover:text-[var(--text-primary)]"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-3 md:min-w-[250px] md:justify-end">
+                  <button
+                    type="button"
+                    onClick={() => void toggleRecording()}
+                    className={`rounded-2xl border px-4 py-3 text-sm transition md:min-w-[112px] ${
+                      recording
+                        ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.18)] text-[var(--text-primary)]'
+                        : 'border-[rgba(255,255,255,0.08)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    }`}
+                  >
+                    {recording ? (lang === 'en' ? 'Stop' : lang === 'tr' ? 'Durdur' : 'Стоп') : t(lang, UI_COPY.record)}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!input.trim() || busy}
+                    onClick={() => void sendPrompt(input)}
+                    className="rounded-2xl bg-[var(--primary-gold)] px-5 py-3 text-sm font-medium text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 md:min-w-[112px]"
+                  >
+                    {t(lang, UI_COPY.send)}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {menuOpen && (
+            <div className="border-b border-[rgba(255,255,255,0.06)] px-4 py-4 md:px-5">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="text-sm font-medium text-[var(--text-primary)]">{t(lang, menu.title)}</div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuKey(rootMenuFor(pack))
+                    setCurrentCard(null)
+                  }}
+                  className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
+                >
+                  Reset
+                </button>
+              </div>
+              <div className="grid gap-2 md:grid-cols-2">
+                {menu.buttons.flat().map((button) => (
+                  <button
+                    key={button.id}
+                    type="button"
+                    onClick={() => void handleAction(button)}
+                    className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-4 py-3 text-left text-sm text-[var(--text-primary)] transition hover:border-[var(--primary-purple)] hover:bg-[rgba(123,94,167,0.08)]"
+                  >
+                    {t(lang, button.label)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-5 md:px-5">
             {!messages.length && (
               <div className="rounded-3xl border border-dashed border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] p-6 text-center">
                 <p className="text-[var(--text-secondary)]">{t(lang, UI_COPY.emptyState)}</p>
-                <div className="mt-6 text-left">
-                  <div className="mb-2 text-sm font-medium text-[var(--text-primary)]">{t(lang, UI_COPY.starter)}</div>
-                  <div className="flex flex-wrap gap-2">
-                    {starterPrompts.map((prompt) => (
-                      <button
-                        key={prompt}
-                        type="button"
-                        onClick={() => void sendPrompt(prompt)}
-                        className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-2 text-sm text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)] hover:text-[var(--text-primary)]"
-                      >
-                        {prompt}
-                      </button>
-                    ))}
-                  </div>
+                <div className="mt-5 text-sm text-[var(--text-secondary)]">
+                  {lang === 'en' ? 'Begin above. The conversation space now opens first.' : lang === 'tr' ? 'Yukarıdan başlayın. Sohbet alanı artık önce açılıyor.' : 'Начните сверху. Пространство диалога теперь открывается первым.'}
                 </div>
               </div>
             )}
 
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div
                 key={message.id}
-                className={`max-w-3xl rounded-3xl border p-4 ${
+                className={`voa-message voa-message--${message.role} max-w-3xl rounded-3xl border p-4 ${
                   message.role === 'user'
                     ? 'ml-auto border-[rgba(201,168,76,0.28)] bg-[rgba(201,168,76,0.08)]'
                     : message.role === 'oracle'
                       ? 'border-[rgba(123,94,167,0.28)] bg-[rgba(123,94,167,0.08)]'
                       : 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)]'
                 }`}
+                style={{ animationDelay: `${Math.min(index * 30, 180)}ms` }}
               >
                 <div className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-secondary)]">
                   {message.role === 'user' ? 'You' : message.role === 'oracle' ? currentPack.title[lang] : 'System'}
@@ -492,71 +605,99 @@ export default function OraclePortal() {
             ))}
 
             {busy && (
-              <div className="max-w-xl rounded-3xl border border-[rgba(123,94,167,0.28)] bg-[rgba(123,94,167,0.08)] p-4 text-[var(--text-secondary)]">
+              <div className="voa-message voa-message--busy max-w-xl rounded-3xl border border-[rgba(123,94,167,0.28)] bg-[rgba(123,94,167,0.08)] p-4 text-[var(--text-secondary)]">
                 {t(lang, UI_COPY.thinking)}
               </div>
             )}
           </div>
-
-          <div className="border-t border-[rgba(255,255,255,0.06)] px-5 py-4">
-            {systemNotice && <div className="mb-3 text-sm text-[var(--text-secondary)]">{systemNotice}</div>}
-
-            {!!messages.length && (
-              <div className="mb-4">
-                <div className="mb-2 text-sm font-medium text-[var(--text-primary)]">{t(lang, UI_COPY.followups)}</div>
-                <div className="flex flex-wrap gap-2">
-                  {followups.map((prompt) => (
-                    <button
-                      key={prompt}
-                      type="button"
-                      onClick={() => void sendPrompt(prompt)}
-                      className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-2 text-sm text-[var(--text-secondary)] transition hover:border-[var(--primary-gold)] hover:text-[var(--text-primary)]"
-                    >
-                      {prompt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <form
-              className="flex flex-col gap-3 md:flex-row"
-              onSubmit={(event) => {
-                event.preventDefault()
-                void sendPrompt(input)
-              }}
-            >
-              <textarea
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                rows={3}
-                placeholder={t(lang, UI_COPY.typeHere)}
-                className="min-h-[96px] flex-1 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--primary-purple)]"
-              />
-              <div className="flex gap-3 md:w-[220px] md:flex-col">
-                <button
-                  type="button"
-                  onClick={() => void toggleRecording()}
-                  className={`flex-1 rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                    recording
-                      ? 'bg-[rgba(123,94,167,0.22)] text-[var(--text-primary)]'
-                      : 'border border-[rgba(255,255,255,0.08)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                  }`}
-                >
-                  {recording ? t(lang, UI_COPY.stop) : t(lang, UI_COPY.record)}
-                </button>
-                <button
-                  type="submit"
-                  disabled={busy || !input.trim()}
-                  className="flex-1 rounded-2xl bg-[var(--primary-gold)] px-4 py-3 text-sm font-semibold text-[#0A0A0F] transition hover:shadow-[0_0_20px_rgba(201,168,76,0.35)] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {t(lang, UI_COPY.send)}
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .voa-oracle-card.is-active {
+          position: relative;
+          overflow: hidden;
+        }
+        .voa-oracle-card.is-active::after {
+          content: '';
+          position: absolute;
+          inset: -30% auto auto -20%;
+          width: 45%;
+          height: 160%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+          transform: rotate(18deg);
+          animation: voaShimmer 5.8s linear infinite;
+          pointer-events: none;
+        }
+        .voa-message {
+          opacity: 0;
+          transform: translateY(8px);
+          animation: voaMessageIn 320ms ease forwards;
+        }
+        .voa-signal {
+          position: relative;
+          display: inline-block;
+          line-height: 1.15;
+        }
+        .voa-signal__main {
+          position: relative;
+          z-index: 3;
+          transition: opacity 180ms ease, filter 180ms ease;
+        }
+        .voa-signal__layer {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          pointer-events: none;
+          z-index: 2;
+        }
+        .voa-signal.is-glitching .voa-signal__main {
+          animation: voaSignalMain 160ms steps(2, end);
+        }
+        .voa-signal.is-glitching .voa-signal__layer--a {
+          opacity: 0.18;
+          color: var(--primary-gold);
+          animation: voaSignalA 160ms steps(2, end);
+        }
+        .voa-signal.is-glitching .voa-signal__layer--b {
+          opacity: 0.14;
+          color: #a78bfa;
+          animation: voaSignalB 160ms steps(2, end);
+        }
+        @keyframes voaShimmer {
+          from { transform: translateX(-180%) rotate(18deg); }
+          to { transform: translateX(420%) rotate(18deg); }
+        }
+        @keyframes voaMessageIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes voaSignalMain {
+          0% { transform: translate(0,0); filter: blur(0); opacity: 1; }
+          35% { transform: translate(-1px,0); filter: blur(0.2px); }
+          65% { transform: translate(1px,-1px); opacity: 0.7; }
+          100% { transform: translate(0,0); filter: blur(0); opacity: 1; }
+        }
+        @keyframes voaSignalA {
+          0% { transform: translate(0,0); clip-path: inset(0 0 0 0); }
+          50% { transform: translate(-2px,0); clip-path: inset(12% 0 48% 0); }
+          100% { transform: translate(0,0); clip-path: inset(0 0 0 0); }
+        }
+        @keyframes voaSignalB {
+          0% { transform: translate(0,0); clip-path: inset(0 0 0 0); }
+          50% { transform: translate(2px,1px); clip-path: inset(56% 0 10% 0); }
+          100% { transform: translate(0,0); clip-path: inset(0 0 0 0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .voa-oracle-card.is-active::after,
+          .voa-message,
+          .voa-signal.is-glitching .voa-signal__main,
+          .voa-signal.is-glitching .voa-signal__layer--a,
+          .voa-signal.is-glitching .voa-signal__layer--b {
+            animation: none !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }
