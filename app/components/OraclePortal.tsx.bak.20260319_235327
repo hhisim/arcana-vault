@@ -124,7 +124,7 @@ export default function OraclePortal() {
   }, [pack])
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, busy])
 
   useEffect(() => {
@@ -172,7 +172,7 @@ export default function OraclePortal() {
       mode: effectiveMode,
     }
 
-    setMessages((prev) => [userMessage, ...prev])
+    setMessages((prev) => [...prev, userMessage])
     setInput('')
 
     try {
@@ -218,16 +218,16 @@ export default function OraclePortal() {
         mode: effectiveMode,
       }
 
-      setMessages((prev) => [oracleMessage, ...prev])
+      setMessages((prev) => [...prev, oracleMessage])
     } catch (error) {
       const detail = error instanceof Error ? error.message : t(lang, UI_COPY.failed)
       setMessages((prev) => [
+        ...prev,
         {
           id: uid(),
           role: 'system',
           text: detail,
         },
-        ...prev,
       ])
     } finally {
       setBusy(false)
@@ -541,7 +541,6 @@ export default function OraclePortal() {
 
           <div className="border-b border-[rgba(255,255,255,0.06)] px-4 py-4 md:px-5">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <div className="absolute -mt-6 text-[11px] uppercase tracking-[0.24em] text-[var(--text-secondary)]">{lang === 'en' ? 'Tradition-specific module tree' : lang === 'tr' ? 'Gelenek-özel modül ağacı' : 'Дерево модулей по традиции'}</div>
                 <div className="text-sm font-medium text-[var(--text-primary)]">{t(lang, menu.title)}</div>
                 <button
                   type="button"
@@ -571,7 +570,7 @@ export default function OraclePortal() {
           <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-5 md:px-5">
             {!messages.length && (
               <div className="rounded-3xl border border-dashed border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] p-6 text-center">
-                <p className="text-[var(--text-secondary)]">{lang === 'en' ? 'Choose a tradition, open its module tree, and begin from the top.' : lang === 'tr' ? 'Bir gelenek seç, modül ağacını aç ve yukarıdan başla.' : 'Выберите традицию, откройте дерево модулей и начните сверху.'}</p>
+                <p className="text-[var(--text-secondary)]">{t(lang, UI_COPY.emptyState)}</p>
                 <div className="mt-5 text-sm text-[var(--text-secondary)]">
                   {lang === 'en' ? 'Begin above. The conversation space now opens first.' : lang === 'tr' ? 'Yukarıdan başlayın. Sohbet alanı artık önce açılıyor.' : 'Начните сверху. Пространство диалога теперь открывается первым.'}
                 </div>

@@ -237,7 +237,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '🌌',
     title: label('Dreamwalker', 'Rüya Gezgini', 'Путник Снов'),
     subtitle: label('Lucid Dreaming · Dream Yoga · Astral · Remote Viewing', 'Bilinçli Rüya · Rüya Yogası · Astral · Uzak Görüş', 'Осознанные сны · Йога сна · Астрал · Дистанционное видение'),
-    onlineLabel: label('Archive Live', 'Arşiv Canlı', 'Архив онлайн'),
+    onlineLabel: label('Beta', 'Beta', 'Бета'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['How do I start lucid dreaming safely?', 'Explain dream yoga in a grounded way.', 'What is the difference between astral projection and lucid dreaming?', 'Help me interpret a recurring dream symbol.'],
