@@ -1,4 +1,3 @@
-
 export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker'
 export type UiLang = 'en' | 'tr' | 'ru'
 
@@ -97,7 +96,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '☯️',
     title: label('Tao Oracle', 'Tao Kehaneti', 'Оракул Дао'),
     subtitle: label('Flow with the uncarved block', 'Yontulmamış blok gibi ak', 'Следуй потоку неразделанного блока'),
-    onlineLabel: label('Soon', 'Yakında', 'Скоро'),
+    onlineLabel: label('Classic', 'Klasik', 'Классик'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['What does the Tao say about patience?', 'Why do obstacles appear?', 'How should I approach a difficult decision?', 'Share wisdom for today.'],
@@ -117,7 +116,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     title: label('Tarot Oracle', 'Tarot Kehaneti', 'Оракул Таро'),
     subtitle: label('The archetypal journey', 'Arketipsel yolculuk', 'Архетипическое путешествие'),
     onlineLabel: label('Text + Voice', 'Metin + Ses', 'Текст + Голос'),
-    defaultMode: 'oracle',
+    defaultMode: 'reading',
     starterPrompts: {
       en: ['Draw a card for my current situation.', 'Interpret The High Priestess for me.', 'Give me a shadow reading.', 'Compare Marseille and Rider-Waite on The Fool.'],
       tr: ['Şu anki durumum için bir kart çek.', 'Başrahibe kartını yorumla.', 'Bana bir gölge okuması ver.', 'Deli kartında Marsilya ile Rider-Waite farkını karşılaştır.'],
@@ -144,10 +143,10 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
   tantra: {
     key: 'tantra',
     emoji: '🔥',
-    title: label('Tantra Oracle', 'Tantra Kehaneti', 'Оракул Тантры'),
+    title: label('Shakti Oracle', 'Shakti Kehaneti', 'Оракул Шакти'),
     subtitle: label('Tantra · Vedanta · Samadhi · Kundalini', 'Tantra · Vedanta · Samadhi · Kundalini', 'Тантра · Веданта · Самадхи · Кундалини'),
-    onlineLabel: label('Soon', 'Yakında', 'Скоро'),
-    defaultMode: 'oracle',
+    onlineLabel: label('Text + Voice', 'Metin + Ses', 'Текст + Голос'),
+    defaultMode: 'dharana',
     starterPrompts: {
       en: ['Give me a dharana for today.', 'Explain kundalini safely and clearly.', 'Teach me about Shiva and Shakti.', 'Offer one practice for surrender.'],
       tr: ['Bugün için bana bir dharana ver.', 'Kundaliniyi güvenli ve açık şekilde açıkla.', 'Bana Şiva ve Şaktiyi öğret.', 'Teslimiyet için bir pratik öner.'],
@@ -172,10 +171,10 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
   entheogen: {
     key: 'entheogen',
     emoji: '🍄',
-    title: label('Esoteric Entheogen', 'Ezoterik Entheogen', 'Эзотерический Энтеоген'),
+    title: label('Entheogen Oracle', 'Entheogen Kehaneti', 'Энтеоген Оракул'),
     subtitle: label('Entheogens · Mysticism · Shamanism · Consciousness', 'Entheogenler · Mistisizm · Şamanizm · Bilinç', 'Энтеогены · Мистицизм · Шаманизм · Сознание'),
-    onlineLabel: label('Soon', 'Yakında', 'Скоро'),
-    defaultMode: 'oracle',
+    onlineLabel: label('Text Only', 'Sadece Metin', 'Текст'),
+    defaultMode: 'guide',
     starterPrompts: {
       en: ['What can plant wisdom teach about fear?', 'Offer a reflection on ego dissolution.', 'Speak about integration after a profound experience.', 'Give a short contemplative quote.'],
       tr: ['Bitki bilgeliği korku hakkında ne öğretebilir?', 'Ego çözülmesi üzerine bir düşünce sun.', 'Derin bir deneyimden sonra entegrasyon hakkında konuş.', 'Kısa bir tefekkür alıntısı ver.'],
@@ -204,8 +203,8 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '🌙',
     title: label('Sufi Mystic', 'Sufi Mistiği', 'Суфийский Мистик'),
     subtitle: label('Sufism · Dhikr · Heart Knowledge · Poetry', 'Tasavvuf · Zikir · Kalp Bilgisi · Şiir', 'Суфизм · Зикр · Знание сердца · Поэзия'),
-    onlineLabel: label('Soon', 'Yakında', 'Скоро'),
-    defaultMode: 'oracle',
+    onlineLabel: label('Text Only', 'Sadece Metin', 'Текст'),
+    defaultMode: 'maqam',
     starterPrompts: {
       en: ['What is the difference between maqam and hal in Sufism?', 'Compare the Naqshbandi, Mevlevi, Chishti, Qadiri, and Shadhili paths.', 'How do fana and baqa differ from ordinary ego-loss talk?', 'Explain Sufi symbolism of the Beloved, wine, the reed flute, and the moth.'],
       tr: ['Sufizmde makam ile hal arasındaki fark nedir?', 'Nakşibendi, Mevlevi, Çişti, Kadiri ve Şazeli yollarını karşılaştır.', 'Fena ve beka sıradan ego kaybı söyleminden nasıl ayrılır?', 'Mahbub, şarap, ney ve pervane sembollerini açıkla.'],
@@ -230,13 +229,12 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
     ],
   },
-
   dreamwalker: {
     key: 'dreamwalker',
     emoji: '🌌',
     title: label('Dreamwalker', 'Rüya Gezgini', 'Путник Снов'),
-    subtitle: label('Placeholder · Dream archive still populating', 'Yer tutucu · Rüya arşivi hâlâ doluyor', 'Заглушка · Архив снов всё ещё наполняется'),
-    onlineLabel: label('Soon', 'Yakında', 'Скоро'),
+    subtitle: label('Dream archive populating', 'Rüya arşivi doluyor', 'Архив снов наполняется'),
+    onlineLabel: label('Placeholder', 'Yer Tutucu', 'Заглушка'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['Dreamwalker is still populating.', 'This tradition is a placeholder for now.', 'The lucid dreaming archive is still being seeded.', 'It will be rebuilt properly in the next pass.'],
