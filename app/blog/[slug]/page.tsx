@@ -15,10 +15,28 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   try {
-    const filePath = path.join(process.cwd(), 'content', 'blog', `${params.slug}.mdx`);
+    const slug = params.slug;
+    const baseDir = path.join(process.cwd(), 'content', 'blog');
+    
+    // Load main content (English default)
+    const filePath = path.join(baseDir, `${slug}.mdx`);
     const fileSource = await fs.readFile(filePath, 'utf8');
-
     const { data: frontmatter, content: body } = matter(fileSource);
+
+    // Load translations if they exist
+    const translations: { tr?: string; ru?: string } = {};
+    
+    try {
+      const trPath = path.join(baseDir, `${slug}.tr.mdx`);
+      const trSource = await fs.readFile(trPath, 'utf8');
+      translations.tr = matter(trSource).content;
+    } catch (e) {}
+
+    try {
+      const ruPath = path.join(baseDir, `${slug}.ru.mdx`);
+      const ruSource = await fs.readFile(ruPath, 'utf8');
+      translations.ru = matter(ruSource).content;
+    } catch (e) {}
 
     const title = (frontmatter.title as string) || 'Untitled Scroll';
     const tradition = (frontmatter.tradition as string) || 'Ancient';
@@ -44,7 +62,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </header>
 
         {/* Content & Logic (Client Component) */}
-        <BlogContent body={body} tradition={tradition} />
+        <BlogContent body={body} tradition={tradition} translations={translations} />
         
       </article>
     );
