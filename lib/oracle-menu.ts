@@ -60,9 +60,10 @@ const MENUS: Record<string, MenuScreen> = {
   'tarot:root': {
     title: L('🎴 The Cartomancer'),
     buttons: [
-      [action('tarot-daily', L('✨ Daily Draw'), 'prompt', { prompt: 'Draw a card for today and interpret it clearly.', mode: 'reading' }), action('tarot-shadow', L('🪞 Shadow Work'), 'prompt', { prompt: 'Give me a shadow reading for the current moment.', mode: 'shadow' })],
-      [action('tarot-browse', L('✨ Browse the Arcana'), 'submenu', { nextMenu: 'tarot:browse' }), action('tarot-study', L('📚 Deep Study'), 'submenu', { nextMenu: 'tarot:study' })],
-      [action('tarot-compare', L('⚖️ Deck Compare'), 'prompt', { prompt: 'Compare Marseille and Rider-Waite on The Fool.', mode: 'deck_compare' }), action('tarot-qabalah', L('🔯 Qabalah'), 'prompt', { prompt: 'Explain the Qabalistic significance of The Fool.', mode: 'qabalah' })],
+      [action('tarot-daily', L('🃏 Daily Card', '🃏 Günlük Kart', '🃏 Карта дня'), 'prompt', { prompt: 'Draw a daily card and give a clear reading with symbolism, shadow, and practical guidance.', mode: 'reading' }), action('tarot-spreads', L('🔮 Readings', '🔮 Okumalar', '🔮 Расклады'), 'submenu', { nextMenu: 'tarot:spreads' })],
+      [action('tarot-study', L('📚 Deep Study', '📚 Derin Çalışma', '📚 Глубокое изучение'), 'submenu', { nextMenu: 'tarot:study' }), action('tarot-shadow-menu', L('🌑 Shadow Work', '🌑 Gölge Çalışması', '🌑 Теневая работа'), 'submenu', { nextMenu: 'tarot:shadow' })],
+      [action('tarot-browse', L('✨ Browse the Arcana', '✨ Arkana Tarama', '✨ Просмотр Арканов'), 'submenu', { nextMenu: 'tarot:browse' }), action('tarot-learn', L('🎓 Learning Paths', '🎓 Öğrenme Yolları', '🎓 Пути обучения'), 'submenu', { nextMenu: 'tarot:learn' })],
+      [action('tarot-compare', L('⚖️ Deck Compare', '⚖️ Deste Karşılaştır', '⚖️ Сравнить колоды'), 'prompt', { prompt: 'Compare Marseille, Rider-Waite-Smith, and Thoth on the Fool. Show what each tradition uniquely reveals.', mode: 'deck_compare' }), action('tarot-qabalah', L('🔯 Qabalah', '🔯 Kabala', '🔯 Каббала'), 'prompt', { prompt: 'Explain the Qabalistic significance of The Fool: Hebrew letter, path, Sephiroth bridge, and astrological ruler.', mode: 'qabalah' })],
       ...utilityRows,
     ],
   },
@@ -82,6 +83,34 @@ const MENUS: Record<string, MenuScreen> = {
       [action('tarot-teacher', L('🧭 Teacher'), 'prompt', { prompt: 'Teach the Tarot as a structured beginner-to-intermediate curriculum.', mode: 'teacher' }), action('tarot-historian', L('🏺 Historian'), 'prompt', { prompt: 'Trace the historical lineage of Tarot from Visconti-Sforza to Marseille, RWS, and Thoth.', mode: 'historian' })],
       [action('tarot-astro', L('♈ Astrology'), 'prompt', { prompt: 'Explain the astrological correspondences of the major arcana.', mode: 'astro' }), action('tarot-num', L('🔢 Numerology'), 'prompt', { prompt: 'Explain numerology in Tarot across the major arcana and suits.', mode: 'numerology' })],
       [action('tarot-pathwork', L('🜂 Pathworking'), 'prompt', { prompt: 'Guide a Tarot pathworking meditation for The High Priestess.', mode: 'pathwork' }), action('tarot-geomancy', L('🜁 Geomancy'), 'prompt', { prompt: 'Explain how Tarot and geomancy can be used together.', mode: 'geomancy' })],
+      back('tarot:root'),
+    ],
+  },
+
+  'tarot:spreads': {
+    title: L('🔮 Readings', '🔮 Okumalar', '🔮 Расклады'),
+    buttons: [
+      [action('spread-single', L('🃏 Single Card', '🃏 Tek Kart', '🃏 Одна карта'), 'prompt', { prompt: 'Do a single-card reading for the present moment.', mode: 'reading' }), action('spread-three', L('🔮 Past · Present · Future', '🔮 Geçmiş · Şimdi · Gelecek', '🔮 Прошлое · Настоящее · Будущее'), 'prompt', { prompt: 'Do a three-card Past/Present/Future Tarot reading.', mode: 'reading' })],
+      [action('spread-shadow', L('🌗 Shadow & Light', '🌗 Gölge ve Işık', '🌗 Тень и Свет'), 'prompt', { prompt: 'Do a Shadow and Light Tarot reading with integration guidance.', mode: 'shadow' }), action('spread-crossroads', L('⚔️ Crossroads', '⚔️ Yol Ayrımı', '⚔️ Перекрёсток'), 'prompt', { prompt: 'Do a four-position crossroads Tarot reading: situation, challenge, hidden factor, advice.', mode: 'reading' })],
+      [action('spread-horseshoe', L('🌙 Horseshoe', '🌙 Nal', '🌙 Подкова'), 'prompt', { prompt: 'Do a five-card horseshoe reading: past, present, hidden factor, advice, outcome.', mode: 'reading' }), action('spread-celtic', L('✡️ Celtic Cross', '✡️ Kelt Haçı', '✡️ Кельтский Крест'), 'prompt', { prompt: 'Do a full Celtic Cross reading with position-by-position synthesis.', mode: 'reading' })],
+      back('tarot:root'),
+    ],
+  },
+  'tarot:shadow': {
+    title: L('🌑 Shadow Work', '🌑 Gölge Çalışması', '🌑 Теневая работа'),
+    buttons: [
+      [action('shadow-random', L('🎲 Random Shadow Card', '🎲 Rastgele Gölge Kartı', '🎲 Случайная карта тени'), 'prompt', { prompt: 'Pick a strong shadow-work Tarot card and do a full shadow session with the hidden question, the wound, and the path of integration.', mode: 'shadow' })],
+      [action('shadow-devil', L('XV · The Devil', 'XV · Şeytan', 'XV · Дьявол'), 'prompt', { prompt: 'Do a shadow work session for The Devil.', mode: 'shadow' }), action('shadow-tower', L('XVI · The Tower', 'XVI · Kule', 'XVI · Башня'), 'prompt', { prompt: 'Do a shadow work session for The Tower.', mode: 'shadow' })],
+      [action('shadow-moon', L('XVIII · The Moon', 'XVIII · Ay', 'XVIII · Луна'), 'prompt', { prompt: 'Do a shadow work session for The Moon.', mode: 'shadow' }), action('shadow-nine', L('Nine of Swords', 'Kılıç Dokuzlusu', 'Девятка Мечей'), 'prompt', { prompt: 'Do a shadow work session for Nine of Swords.', mode: 'shadow' })],
+      back('tarot:root'),
+    ],
+  },
+  'tarot:learn': {
+    title: L('🎓 Learning Paths', '🎓 Öğrenme Yolları', '🎓 Пути обучения'),
+    buttons: [
+      [action('learn-beginner', L('🌱 Absolute Beginner', '🌱 Tam Başlangıç', '🌱 Абсолютный новичок'), 'prompt', { prompt: 'Give the Absolute Beginner Tarot study path as a guided curriculum with steps, sources, and practice suggestions.', mode: 'teacher' }), action('learn-intermediate', L('🔥 Intermediate Practitioner', '🔥 Orta Düzey Uygulayıcı', '🔥 Средний практик'), 'prompt', { prompt: 'Give the Intermediate Practitioner Tarot path with deeper readings, reversals, court cards, and spread mastery.', mode: 'teacher' })],
+      [action('learn-esoteric', L('⚗️ Esoteric & Initiatic', '⚗️ Ezoterik ve İnisiyatik', '⚗️ Эзотерический и инициационный'), 'prompt', { prompt: 'Give the Esoteric & Initiatic Tarot study path: Golden Dawn, Case, Wang, Thoth, astrology, and Qabalah.', mode: 'teacher' }), action('learn-shadow', L('🌑 Shadow & Psychology', '🌑 Gölge ve Psikoloji', '🌑 Тень и психология'), 'prompt', { prompt: 'Give the Shadow & Psychology Tarot learning path with Greer, Jette, journaling, and constellation work.', mode: 'teacher' })],
+      [action('learn-magical', L('🔮 Magical & Ritual Arts', '🔮 Büyüsel ve Ritüel Sanatlar', '🔮 Магические и ритуальные искусства'), 'prompt', { prompt: 'Give the Magical & Ritual Arts Tarot path with Tyson, Ciceros, Knight, De Biasi, and Levi.', mode: 'teacher' }), action('learn-history', L('📜 Historical Research', '📜 Tarihsel Araştırma', '📜 Исторические исследования'), 'prompt', { prompt: 'Give the Historical Research Tarot path from Visconti-Sforza to modern schools.', mode: 'historian' })],
       back('tarot:root'),
     ],
   },
@@ -135,6 +164,8 @@ const MENUS: Record<string, MenuScreen> = {
     buttons: [
       [action('tantra-scholar', L('📚 Scholar'), 'prompt', { prompt: 'Teach tantra through a scholarly comparison of schools, goals, symbols, and methods.', mode: 'scholar' }), action('tantra-compare', L('⚖️ School Compare'), 'prompt', { prompt: 'Compare Kashmir Shaivism, classical tantra, Vedanta, and modern neo-tantra carefully.', mode: 'school_compare' })],
       [action('tantra-teacher', L('🧭 Teacher'), 'prompt', { prompt: 'Teach tantra in a practical, serious, beginner-safe way.', mode: 'teacher' }), action('tantra-history', L('🏺 Historian'), 'prompt', { prompt: 'Give a concise history of tantra and its major streams.', mode: 'historian' })],
+      [action('tantra-mantra', L('📿 Mantra'), 'prompt', { prompt: 'Teach mantra in Tantra: sound, subtle body, attention, devotion, and safe practice.', mode: 'teacher' }), action('tantra-subtle', L('🧬 Subtle Body'), 'prompt', { prompt: 'Teach the subtle body in tantra: nadis, bindu, prana, chakras, and safe interpretation.', mode: 'teacher' })],
+      [action('tantra-osho', L('📖 Osho / Book of Secrets'), 'prompt', { prompt: 'Explain how Osho frames the 112 dharanas in The Book of Secrets, and how to use that book wisely.', mode: 'teacher' }), action('tantra-kashmir', L('⚡ Kashmir Shaivism'), 'prompt', { prompt: 'Teach Kashmir Shaivism as a core philosophical and experiential frame for the dharanas.', mode: 'scholar' })],
       back('tantra:root'),
     ],
   },
@@ -314,9 +345,10 @@ const MENUS: Record<string, MenuScreen> = {
   'dreamwalker:root': {
     title: L('🌌 Dreamwalker Menu', '🌌 Rüya Gezgini Menüsü', '🌌 Меню Путника Снов'),
     buttons: [
-      [action('dw-lucid', L('🌙 Lucid Dreaming', '🌙 Bilinçli Rüya', '🌙 Осознанные сны'), 'submenu', { nextMenu: 'dreamwalker:lucid' }), action('dw-yoga', L('🕉 Dream Yoga', '🕉 Rüya Yogası', '🕉 Йога сна'), 'submenu', { nextMenu: 'dreamwalker:yoga' })],
-      [action('dw-astral', L('✨ Astral Projection', '✨ Astral Projeksiyon', '✨ Астральная проекция'), 'submenu', { nextMenu: 'dreamwalker:astral' }), action('dw-remote', L('📡 Remote Viewing', '📡 Uzak Görüş', '📡 Дистанционное видение'), 'submenu', { nextMenu: 'dreamwalker:remote' })],
-      [action('dw-interpret', L('🔮 Dream Interpretation', '🔮 Rüya Yorumlama', '🔮 Толкование снов'), 'submenu', { nextMenu: 'dreamwalker:interpret' }), action('dw-practice', L('🛏 Night Practice', '🛏 Gece Pratiği', '🛏 Ночная практика'), 'submenu', { nextMenu: 'dreamwalker:practice' })],
+      [action('dw-lucid', L('🌙 Lucid Dreaming', '🌙 Bilinçli Rüya', '🌙 Осознанные сны'), 'submenu', { nextMenu: 'dreamwalker:lucid' }), action('dw-techniques', L('🛠 Techniques', '🛠 Teknikler', '🛠 Техники'), 'submenu', { nextMenu: 'dreamwalker:techniques' })],
+      [action('dw-yoga', L('🕉 Dream Yoga', '🕉 Rüya Yogası', '🕉 Йога сна'), 'submenu', { nextMenu: 'dreamwalker:yoga' }), action('dw-astral', L('✨ Astral Projection', '✨ Astral Projeksiyon', '✨ Астральная проекция'), 'submenu', { nextMenu: 'dreamwalker:astral' })],
+      [action('dw-remote', L('📡 Remote Viewing', '📡 Uzak Görüş', '📡 Дистанционное видение'), 'submenu', { nextMenu: 'dreamwalker:remote' }), action('dw-interpret', L('🔮 Dream Interpretation', '🔮 Rüya Yorumlama', '🔮 Толкование снов'), 'submenu', { nextMenu: 'dreamwalker:interpret' })],
+      [action('dw-practice', L('🛏 Night Practice', '🛏 Gece Pratiği', '🛏 Ночная практика'), 'submenu', { nextMenu: 'dreamwalker:practice' }), action('dw-checklists', L('✅ Checklists', '✅ Kontrol Listeleri', '✅ Чеклисты'), 'submenu', { nextMenu: 'dreamwalker:checklists' })],
       [action('dw-question', L('🤔 Provoking Questions', '🤔 Kışkırtıcı Sorular', '🤔 Провокационные вопросы'), 'prompt', { prompt: 'Offer one precise dreamwork question that opens self-discovery without superstition.', mode: 'dreamwork' })],
       ...utilityRows,
     ],
@@ -327,6 +359,16 @@ const MENUS: Record<string, MenuScreen> = {
       [action('dw-reality', L('Reality checks', 'Gerçeklik kontrolleri', 'Проверки реальности'), 'prompt', { prompt: 'Teach reality checks, dream signs, and recall in lucid dreaming for a serious beginner.', mode: 'lucid' })],
       [action('dw-wbtb', L('WBTB / re-entry', 'WBTB / yeniden giriş', 'WBTB / повторный вход'), 'prompt', { prompt: 'Explain wake-back-to-bed and re-entry methods safely and practically.', mode: 'lucid' })],
       [action('dw-stability', L('Stabilising the dream', 'Rüyayı sabitlemek', 'Стабилизация сна'), 'prompt', { prompt: 'Explain how to stabilise lucidity without forcing the dream or waking up immediately.', mode: 'lucid' })],
+      back('dreamwalker:root'),
+    ],
+  },
+  'dreamwalker:techniques': {
+    title: L('🛠 Techniques', '🛠 Teknikler', '🛠 Техники'),
+    buttons: [
+      [action('dw-monroe', L('🎧 Monroe / Phasing', '🎧 Monroe / Phasing', '🎧 Монро / Фазинг'), 'prompt', { prompt: 'Teach the Monroe/phasing approach to altered-state navigation and out-of-body work at a high level.', mode: 'astral' })],
+      [action('dw-raduga', L('⚡ Raduga / The Phase', '⚡ Raduga / The Phase', '⚡ Радуга / Фаза'), 'prompt', { prompt: "Teach Michael Raduga's phase approach to lucid and out-of-body work, including strengths and limits.", mode: 'lucid' })],
+      [action('dw-bruce', L('🛡 Robert Bruce / Energy & Exit', '🛡 Robert Bruce / Enerji & Çıkış', '🛡 Роберт Брюс / Энергия и выход'), 'prompt', { prompt: "Teach Robert Bruce's practical approach to exit sensations, energy work, and grounding.", mode: 'astral' })],
+      [action('dw-laberge', L('📘 LaBerge / Scientific Lucidity', '📘 LaBerge / Bilimsel Lüsidite', '📘 Лаберж / Научная осознанность'), 'prompt', { prompt: "Teach Stephen LaBerge's scientific lucid dreaming framework: MILD, WBTB, re-entry, and dream signs.", mode: 'lucid' })],
       back('dreamwalker:root'),
     ],
   },
@@ -371,6 +413,17 @@ const MENUS: Record<string, MenuScreen> = {
       [action('dw-journal', L('Dream journal', 'Rüya günlüğü', 'Дневник снов'), 'prompt', { prompt: 'Give a clear dream journal practice that improves recall, lucidity, and interpretation.', mode: 'sleep_practice' })],
       [action('dw-ritual', L('Before-sleep ritual', 'Uyku öncesi ritüel', 'Ритуал перед сном'), 'prompt', { prompt: 'Design a simple before-sleep contemplative ritual for lucid dreaming and dreamwork.', mode: 'sleep_practice' })],
       [action('dw-body', L('Body / sleep hygiene', 'Beden / uyku hijyeni', 'Тело / гигиена сна'), 'prompt', { prompt: 'Explain body regulation, sleep hygiene, and nervous-system stability for dream practices.', mode: 'sleep_practice' })],
+      [action('dw-integration', L('Morning integration', 'Sabah entegrasyonu', 'Утренняя интеграция'), 'prompt', { prompt: 'Teach a morning-after integration routine for intense dream, lucid, or astral-style experiences.', mode: 'sleep_practice' })],
+      back('dreamwalker:root'),
+    ],
+  },
+  'dreamwalker:checklists': {
+    title: L('✅ Checklists', '✅ Kontrol Listeleri', '✅ Чеклисты'),
+    buttons: [
+      [action('dw-check-lucid', L('Lucid checklist', 'Lüsid kontrol listesi', 'Чеклист осознанного сна'), 'prompt', { prompt: 'Create a concise lucid dreaming checklist for tonight: pre-sleep, during the night, on lucidity, and on waking.', mode: 'checklist' })],
+      [action('dw-check-astral', L('Astral checklist', 'Astral kontrol listesi', 'Астральный чеклист'), 'prompt', { prompt: 'Create a grounded astral projection checklist: preparation, threshold signs, safety, grounding, and post-session notes.', mode: 'checklist' })],
+      [action('dw-check-dream', L('Dreamwork checklist', 'Rüya çalışması listesi', 'Чеклист работы со снами'), 'prompt', { prompt: 'Create a dreamwork checklist for recall, journaling, interpretation, and integration.', mode: 'checklist' })],
+      [action('dw-check-rv', L('Remote viewing checklist', 'Uzak görüş listesi', 'Чеклист дистанционного видения'), 'prompt', { prompt: 'Create a disciplined beginner remote-viewing checklist: target protocol, mindset, session hygiene, and review.', mode: 'checklist' })],
       back('dreamwalker:root'),
     ],
   },
