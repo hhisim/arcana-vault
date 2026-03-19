@@ -1,0 +1,13 @@
+{
+  "nav.about": "About",
+  "chat.invite": "Invite a friend",
+  "chat.gift": "Gift access",
+  "chat.voiceStyle": "Voice style",
+  "chat.menuReset": "Reset",
+  "chat.hideEarlier": "Hide earlier",
+  "chat.showEarlier": "Show {count} earlier",
+  "chat.live": "Live",
+  "chat.archiveLive": "Archive live",
+  "chat.placeholderTag": "Archive populating",
+  "chat.deeper": "Go deeper"
+}

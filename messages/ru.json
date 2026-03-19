@@ -1,0 +1,13 @@
+{
+  "nav.about": "О проекте",
+  "chat.invite": "Пригласить друга",
+  "chat.gift": "Подарить доступ",
+  "chat.voiceStyle": "Стиль голоса",
+  "chat.menuReset": "Сбросить",
+  "chat.hideEarlier": "Скрыть ранние",
+  "chat.showEarlier": "Показать ещё {count}",
+  "chat.live": "Онлайн",
+  "chat.archiveLive": "Архив онлайн",
+  "chat.placeholderTag": "Архив пополняется",
+  "chat.deeper": "Углубиться"
+}
