@@ -120,7 +120,7 @@ export default function OraclePortal() {
     setMode((prev) => (availableModes.includes(prev) ? prev : nextDefault))
     setMenuKey(rootMenuFor(pack))
     setCurrentCard(null)
-    setMenuOpen(false)
+    setMenuOpen(true)
   }, [pack])
 
   useEffect(() => {
