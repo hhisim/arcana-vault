@@ -101,6 +101,12 @@ export default function OraclePortal() {
   const starterPrompts = currentPack.starterPrompts[lang]
   const followups = nextFollowups(pack, lang)
   const menu = useMemo(() => getMenuScreen(pack, menuKey, currentCard), [pack, menuKey, currentCard])
+  useEffect(() => {
+    if (typeof navigator === 'undefined') return
+    const browserLang = (navigator.language || '').toLowerCase()
+    if (browserLang.startsWith('tr')) setLang('tr')
+    else if (browserLang.startsWith('ru')) setLang('ru')
+  }, [])
 
   useEffect(() => {
     if (!voiceEnabledForMode && voiceReply) {

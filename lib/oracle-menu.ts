@@ -310,6 +310,70 @@ const MENUS: Record<string, MenuScreen> = {
       [action('q5', L('When is silence truth, and when is it avoidance?'), 'prompt', { prompt: 'When is silence truth, and when is it avoidance?', mode: 'oracle' })],
       back('sufi:root'),
     ]},
+
+  'dreamwalker:root': {
+    title: L('🌌 Dreamwalker Menu', '🌌 Rüya Gezgini Menüsü', '🌌 Меню Путника Снов'),
+    buttons: [
+      [action('dw-lucid', L('🌙 Lucid Dreaming', '🌙 Bilinçli Rüya', '🌙 Осознанные сны'), 'submenu', { nextMenu: 'dreamwalker:lucid' }), action('dw-yoga', L('🕉 Dream Yoga', '🕉 Rüya Yogası', '🕉 Йога сна'), 'submenu', { nextMenu: 'dreamwalker:yoga' })],
+      [action('dw-astral', L('✨ Astral Projection', '✨ Astral Projeksiyon', '✨ Астральная проекция'), 'submenu', { nextMenu: 'dreamwalker:astral' }), action('dw-remote', L('📡 Remote Viewing', '📡 Uzak Görüş', '📡 Дистанционное видение'), 'submenu', { nextMenu: 'dreamwalker:remote' })],
+      [action('dw-interpret', L('🔮 Dream Interpretation', '🔮 Rüya Yorumlama', '🔮 Толкование снов'), 'submenu', { nextMenu: 'dreamwalker:interpret' }), action('dw-practice', L('🛏 Night Practice', '🛏 Gece Pratiği', '🛏 Ночная практика'), 'submenu', { nextMenu: 'dreamwalker:practice' })],
+      [action('dw-question', L('🤔 Provoking Questions', '🤔 Kışkırtıcı Sorular', '🤔 Провокационные вопросы'), 'prompt', { prompt: 'Offer one precise dreamwork question that opens self-discovery without superstition.', mode: 'dreamwork' })],
+      ...utilityRows,
+    ],
+  },
+  'dreamwalker:lucid': {
+    title: L('🌙 Lucid Dreaming', '🌙 Bilinçli Rüya', '🌙 Осознанные сны'),
+    buttons: [
+      [action('dw-reality', L('Reality checks', 'Gerçeklik kontrolleri', 'Проверки реальности'), 'prompt', { prompt: 'Teach reality checks, dream signs, and recall in lucid dreaming for a serious beginner.', mode: 'lucid' })],
+      [action('dw-wbtb', L('WBTB / re-entry', 'WBTB / yeniden giriş', 'WBTB / повторный вход'), 'prompt', { prompt: 'Explain wake-back-to-bed and re-entry methods safely and practically.', mode: 'lucid' })],
+      [action('dw-stability', L('Stabilising the dream', 'Rüyayı sabitlemek', 'Стабилизация сна'), 'prompt', { prompt: 'Explain how to stabilise lucidity without forcing the dream or waking up immediately.', mode: 'lucid' })],
+      back('dreamwalker:root'),
+    ],
+  },
+  'dreamwalker:yoga': {
+    title: L('🕉 Dream Yoga', '🕉 Rüya Yogası', '🕉 Йога сна'),
+    buttons: [
+      [action('dw-view', L('View and purpose', 'Bakış ve amaç', 'Взгляд и цель'), 'prompt', { prompt: 'Explain dream yoga as a spiritual discipline rather than a thrill-seeking lucid dream technique.', mode: 'dream_yoga' })],
+      [action('dw-sleep', L('Sleep awareness', 'Uyku farkındalığı', 'Осознанность во сне'), 'prompt', { prompt: 'Teach the continuity of awareness through sleep and dream in dream yoga, carefully and accessibly.', mode: 'dream_yoga' })],
+      [action('dw-compare', L('Compare traditions', 'Gelenekleri karşılaştır', 'Сравнить традиции'), 'prompt', { prompt: 'Compare dream yoga, lucid dreaming, and contemplative night practice without collapsing them into one thing.', mode: 'school_compare' })],
+      back('dreamwalker:root'),
+    ],
+  },
+  'dreamwalker:astral': {
+    title: L('✨ Astral Projection', '✨ Astral Projeksiyon', '✨ Астральная проекция'),
+    buttons: [
+      [action('dw-exit', L('Exit sensations', 'Çıkış hisleri', 'Ощущения выхода'), 'prompt', { prompt: 'Explain the reported exit sensations around astral projection and how to interpret them cautiously.', mode: 'astral' })],
+      [action('dw-safety', L('Safety and grounding', 'Güvenlik ve topraklanma', 'Безопасность и заземление'), 'prompt', { prompt: 'Give grounded safety and emotional stabilisation guidance for astral projection experimentation.', mode: 'astral' })],
+      [action('dw-vs-lucid', L('Astral vs lucid', 'Astral ve bilinçli rüya', 'Астрал и осознанный сон'), 'prompt', { prompt: 'Compare astral projection and lucid dreaming as experiences, practices, and interpretations.', mode: 'school_compare' })],
+      back('dreamwalker:root'),
+    ],
+  },
+  'dreamwalker:remote': {
+    title: L('📡 Remote Viewing', '📡 Uzak Görüş', '📡 Дистанционное видение'),
+    buttons: [
+      [action('dw-ideogram', L('Basic protocol', 'Temel protokol', 'Базовый протокол'), 'prompt', { prompt: 'Explain remote viewing at a high level: protocol, signal line, noise, and disciplined perception.', mode: 'remote_viewing' })],
+      [action('dw-ethics', L('Ethics and limits', 'Etik ve sınırlar', 'Этика и пределы'), 'prompt', { prompt: 'Explain the ethics, limits, and pitfalls of remote viewing claims and practice.', mode: 'remote_viewing' })],
+      back('dreamwalker:root'),
+    ],
+  },
+  'dreamwalker:interpret': {
+    title: L('🔮 Dream Interpretation', '🔮 Rüya Yorumlama', '🔮 Толкование снов'),
+    buttons: [
+      [action('dw-symbol', L('Symbols and patterns', 'Semboller ve kalıplar', 'Символы и паттерны'), 'prompt', { prompt: 'Teach dream interpretation through patterns, emotional charge, symbols, and context rather than simplistic one-to-one dictionaries.', mode: 'interpretation' })],
+      [action('dw-nightmare', L('Nightmares', 'Kâbuslar', 'Кошмары'), 'prompt', { prompt: 'Explain how to work with nightmares as messages, stress expressions, or shadow material without superstition.', mode: 'interpretation' })],
+      [action('dw-recurring', L('Recurring dreams', 'Tekrarlayan rüyalar', 'Повторяющиеся сны'), 'prompt', { prompt: 'Explain recurring dreams and how to investigate them psychologically and symbolically.', mode: 'interpretation' })],
+      back('dreamwalker:root'),
+    ],
+  },
+  'dreamwalker:practice': {
+    title: L('🛏 Night Practice', '🛏 Gece Pratiği', '🛏 Ночная практика'),
+    buttons: [
+      [action('dw-journal', L('Dream journal', 'Rüya günlüğü', 'Дневник снов'), 'prompt', { prompt: 'Give a clear dream journal practice that improves recall, lucidity, and interpretation.', mode: 'sleep_practice' })],
+      [action('dw-ritual', L('Before-sleep ritual', 'Uyku öncesi ritüel', 'Ритуал перед сном'), 'prompt', { prompt: 'Design a simple before-sleep contemplative ritual for lucid dreaming and dreamwork.', mode: 'sleep_practice' })],
+      [action('dw-body', L('Body / sleep hygiene', 'Beden / uyku hijyeni', 'Тело / гигиена сна'), 'prompt', { prompt: 'Explain body regulation, sleep hygiene, and nervous-system stability for dream practices.', mode: 'sleep_practice' })],
+      back('dreamwalker:root'),
+    ],
+  },
 }
 
 export function getMenuScreen(pack: OraclePack, menuKey?: string, _currentCard?: string | null): MenuScreen {

@@ -1,5 +1,5 @@
 
-export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi'
+export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker'
 export type UiLang = 'en' | 'tr' | 'ru'
 
 export type OracleMode =
@@ -42,6 +42,12 @@ export type OracleMode =
   | 'saint'
   | 'adab'
   | 'dreamwork'
+  | 'lucid'
+  | 'dream_yoga'
+  | 'astral'
+  | 'remote_viewing'
+  | 'interpretation'
+  | 'sleep_practice'
 
 export type MessageRole = 'user' | 'oracle' | 'system'
 
@@ -224,14 +230,45 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
     ],
   },
+
+  dreamwalker: {
+    key: 'dreamwalker',
+    emoji: '🌌',
+    title: label('Dreamwalker', 'Rüya Gezgini', 'Путник Снов'),
+    subtitle: label('Lucid Dreaming · Dream Yoga · Astral · Remote Viewing', 'Bilinçli Rüya · Rüya Yogası · Astral · Uzak Görüş', 'Осознанные сны · Йога сна · Астрал · Дистанционное видение'),
+    onlineLabel: label('Voice', 'Ses', 'Голос'),
+    defaultMode: 'oracle',
+    starterPrompts: {
+      en: ['How do I start lucid dreaming safely?', 'Explain dream yoga in a grounded way.', 'What is the difference between astral projection and lucid dreaming?', 'Help me interpret a recurring dream symbol.'],
+      tr: ['Bilinçli rüyaya güvenli şekilde nasıl başlarım?', 'Rüya yogasını sağlam bir dille açıkla.', 'Astral projeksiyon ile bilinçli rüya arasındaki fark nedir?', 'Tekrarlayan bir rüya sembolünü yorumlamama yardım et.'],
+      ru: ['Как безопасно начать практику осознанных снов?', 'Объясни йогу сна приземлённо и ясно.', 'В чём разница между астральной проекцией и осознанным сном?', 'Помоги истолковать повторяющийся символ сна.'],
+    },
+    modes: [
+      { value: 'oracle', label: label('Oracle', 'Kehanet', 'Оракул'), voiceEnabled: true },
+      { value: 'seeker', label: label('Seeker', 'Arayıcı', 'Искатель'), voiceEnabled: true },
+      { value: 'reading', label: label('Reading', 'Okuma', 'Чтение'), voiceEnabled: true },
+      { value: 'quote', label: label('Quote', 'Alıntı', 'Цитата'), voiceEnabled: true },
+      { value: 'lucid', label: label('Lucid Dreaming', 'Bilinçli Rüya', 'Осознанные сны'), voiceEnabled: false },
+      { value: 'dream_yoga', label: label('Dream Yoga', 'Rüya Yogası', 'Йога сна'), voiceEnabled: false },
+      { value: 'astral', label: label('Astral', 'Astral', 'Астрал'), voiceEnabled: false },
+      { value: 'remote_viewing', label: label('Remote Viewing', 'Uzak Görüş', 'Дистанционное видение'), voiceEnabled: false },
+      { value: 'interpretation', label: label('Interpretation', 'Yorumlama', 'Толкование'), voiceEnabled: false },
+      { value: 'sleep_practice', label: label('Practice', 'Pratik', 'Практика'), voiceEnabled: false },
+      { value: 'teacher', label: label('Teacher', 'Öğretmen', 'Учитель'), voiceEnabled: false },
+      { value: 'historian', label: label('Historian', 'Tarihçi', 'Историк'), voiceEnabled: false },
+      { value: 'school_compare', label: label('School Compare', 'Okul Karşılaştır', 'Сравнить школы'), voiceEnabled: false },
+      { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
+    ],
+  },
 }
+
 
 export const UI_COPY = {
   title: label('Select Oracle', 'Kehaneti Seç', 'Выберите Оракула'),
   subtitle: label(
-    'Speak or type your question. The live VPS oracle now powers this portal.',
-    'Sorunu konuş ya da yaz. Bu portal artık canlı VPS kahiniyle çalışıyor.',
-    'Говорите или печатайте вопрос. Этот портал теперь работает на живом VPS-оракуле.'
+    'Speak or type your question. Curated archives and living oracle packs power this portal.',
+    'Sorunu konuş ya da yaz. Bu portalı küratörlü arşivler ve yaşayan kahin paketleri güçlendiriyor.',
+    'Говорите или печатайте вопрос. Этот портал питается кураторскими архивами и живыми пакетами оракулов.'
   ),
   language: label('Language', 'Dil', 'Язык'),
   mode: label('Mode', 'Mod', 'Режим'),
@@ -278,7 +315,13 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
     tr: ['Günlük bir tefekkür ver.', 'Yolları karşılaştır.', 'Bunu daha pratik ve kalp merkezli yap.'],
     ru: ['Дай ежедневное созерцание.', 'Сравни линии передачи.', 'Сделай это более практичным и сердечным.'],
   },
+  dreamwalker: {
+    en: ['Give me one lucid-dream practice for tonight.', 'Interpret this as dream symbolism, not omen literalism.', 'Compare dream yoga, astral projection, and remote viewing.'],
+    tr: ['Bu gece için bir bilinçli rüya pratiği ver.', 'Bunu kehanet değil rüya sembolizmi olarak yorumla.', 'Rüya yogası, astral projeksiyon ve uzak görüşü karşılaştır.'],
+    ru: ['Дай одну практику осознанного сна на эту ночь.', 'Истолкуй это как символику сна, а не буквальное знамение.', 'Сравни йогу сна, астральную проекцию и дистанционное видение.'],
+  },
 }
+
 
 export function t(lang: UiLang, value: Record<UiLang, string>): string {
   return value[lang] ?? value.en
