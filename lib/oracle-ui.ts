@@ -96,7 +96,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '☯️',
     title: label('Tao Oracle', 'Tao Kehaneti', 'Оракул Дао'),
     subtitle: label('Flow with the uncarved block', 'Yontulmamış blok gibi ak', 'Следуй потоку неразделанного блока'),
-    onlineLabel: label('LIVE ACCESS', 'CANLI ERİŞİM', 'ЖИВОЙ ДОСТУП'),
+    onlineLabel: label('LIVE NOW', 'CANLI ERİŞİM', 'ЖИВОЙ ДОСТУП'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['What does the Tao say about patience?', 'Why do obstacles appear?', 'How should I approach a difficult decision?', 'Share wisdom for today.'],

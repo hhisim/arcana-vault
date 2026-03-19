@@ -488,7 +488,7 @@ export default function OraclePortal() {
                   onClick={() => setMenuOpen((prev) => !prev)}
                   className="rounded-full border border-[rgba(255,255,255,0.08)] px-4 py-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
                 >
-                  {menuOpen ? (lang === 'en' ? 'Hide Buttons' : lang === 'tr' ? 'Butonları Gizle' : 'Скрыть кнопки') : (lang === 'en' ? 'Show Buttons' : lang === 'tr' ? 'Butonları Göster' : 'Показать кнопки')}
+                  {menuOpen ? (lang === 'en' ? 'CLOSE MENU' : lang === 'tr' ? 'Butonları Gizle' : 'Скрыть кнопки') : (lang === 'en' ? 'OPEN MENU' : lang === 'tr' ? 'Butonları Göster' : 'Показать кнопки')}
                 </button>
                 <button
                   type="button"
