@@ -89,7 +89,7 @@ export default function OraclePortal() {
   const [systemNotice, setSystemNotice] = useState<string | null>(null)
   const [menuKey, setMenuKey] = useState<string>(rootMenuFor('tao'))
   const [currentCard, setCurrentCard] = useState<string | null>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(true)
 
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
@@ -157,6 +157,10 @@ export default function OraclePortal() {
 
   const sendPrompt = async (prompt: string, userText?: string, overrideMode?: OracleMode) => {
     const text = prompt.trim()
+    if (pack === 'dreamwalker') {
+      setMessages((prev) => [...prev, { id: uid(), role: 'system', text: lang === 'en' ? 'Dreamwalker is still populating. This tradition is a placeholder for now.' : lang === 'tr' ? 'Dreamwalker hâlâ hazırlanıyor. Şimdilik yer tutucu durumda.' : 'Dreamwalker всё ещё наполняется. Пока это режим-заглушка.' }])
+      return
+    }
     const visibleText = (userText ?? prompt).trim()
     const effectiveMode = overrideMode ?? mode
     if (!text || busy) return
@@ -284,11 +288,11 @@ export default function OraclePortal() {
         return
       }
       case 'gift': {
-        setSystemNotice('Gift flow is still Telegram-native. Web gifting is the next patch.')
+        setSystemNotice(lang === 'en' ? 'Gift flow is still Telegram-native for now.' : lang === 'tr' ? 'Hediye akışı şimdilik yalnızca Telegram tarafında.' : 'Подарочный режим пока работает только в Telegram.')
         return
       }
       case 'plans': {
-        setSystemNotice('Plans are handled through the live subscription flow. Use the site CTA or Telegram for now.')
+        setSystemNotice(lang === 'en' ? 'Plans are being moved to a website-native flow. Telegram billing still exists in the meantime.' : lang === 'tr' ? 'Planlar website tabanlı akışa taşınıyor. Bu sırada Telegram faturalaması hâlâ aktif.' : 'Планы переносятся в веб-интерфейс. Пока биллинг ещё работает через Telegram.')
         return
       }
       case 'switch': {
@@ -300,7 +304,7 @@ export default function OraclePortal() {
         if (button.mode) {
           setMode(button.mode)
         }
-        setMenuOpen(false)
+        setMenuOpen(true)
         await sendPrompt(button.prompt ?? t(lang, button.label), t(lang, button.displayText ?? button.label), nextMode)
         return
       }
@@ -484,7 +488,7 @@ export default function OraclePortal() {
                   onClick={() => setMenuOpen((prev) => !prev)}
                   className="rounded-full border border-[rgba(255,255,255,0.08)] px-4 py-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
                 >
-                  {menuOpen ? 'Hide Menu' : 'Menu'}
+                  {menuOpen ? (lang === 'en' ? 'Hide Buttons' : lang === 'tr' ? 'Butonları Gizle' : 'Скрыть кнопки') : (lang === 'en' ? 'Show Buttons' : lang === 'tr' ? 'Butonları Göster' : 'Показать кнопки')}
                 </button>
                 <button
                   type="button"
