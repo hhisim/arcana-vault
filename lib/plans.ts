@@ -1,5 +1,5 @@
 export type PlanId = 'guest' | 'free' | 'seeker' | 'full'
-export type TraditionId = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'spiritual_sovereign'
+export type TraditionId = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker'
 
 export type PlanConfig = {
   id: PlanId
@@ -11,7 +11,7 @@ export type PlanConfig = {
   stripePriceId?: string
 }
 
-export const TRADITIONS: TraditionId[] = ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker', 'spiritual_sovereign']
+export const TRADITIONS: TraditionId[] = ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker']
 
 export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
   guest: {

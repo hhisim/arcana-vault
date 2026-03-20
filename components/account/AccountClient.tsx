@@ -13,7 +13,6 @@ const labels: Record<TraditionId, string> = {
   entheogen: 'Esoteric Entheogen',
   sufi: 'Sufi Mystic',
   dreamwalker: 'Dreamwalker',
-  spiritual_sovereign: 'Spiritual Sovereignty',
 }
 
 export default function AccountClient() {

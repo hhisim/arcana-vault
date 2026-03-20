@@ -1,5 +1,5 @@
 
-export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'spiritual_sovereign' 
+export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' 
 export type UiLang = 'en' | 'tr' | 'ru'
 
 export type OracleMode =
@@ -271,37 +271,6 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
     ],
   },
-
-  spiritual_sovereign: {
-    key: 'spiritual_sovereign',
-    emoji: '⚡',
-    title: label('Spiritual Sovereignty', 'Manevi Egemenlik', 'Духовный Суверенитет'),
-    subtitle: label('Sanctuary · Autonomy · Sacred Law · Gnosis', 'H sanctuary · Özerklik · Kutsal Hukuk · Gnosis', 'Санктуарий · Автономия · Священный Закон · Гнозис'),
-    onlineLabel: label('Live', 'Canlı', 'Онлайн'),
-    defaultMode: 'oracle',
-    starterPrompts: {
-      en: ['What does spiritual sovereignty mean in practice?', 'How do I discern my own authority in spiritual matters?', 'Teach me about sacred law and conscience.', 'What is the relationship between autonomy and surrender?'],
-      tr: ['Manevi egemenlik pratikte ne anlama gelir?', 'Manevi konularda kendi otoritemi nasıl belirlerim?', 'Bana kutsal hukuk ve vicdan hakkında öğret.', 'Özerklik ve teslimiyet arasındaki ilişki nedir?'],
-      ru: ['Что духовный суверенитет означает на практике?', 'Как мне различить собственный авторитет в духовных делах?', 'Научи меня священному закону и совести.', 'Каково отношение между автономией и сдачей?'],
-    },
-    modes: [
-      { value: 'oracle', label: label('Oracle', 'Kehanet', 'Оракул'), voiceEnabled: true },
-      { value: 'seeker', label: label('Seeker', 'Arayıcı', 'Искатель'), voiceEnabled: true },
-      { value: 'reading', label: label('Reading', 'Okuma', 'Чтение'), voiceEnabled: true },
-      { value: 'quote', label: label('Quote', 'Alıntı', 'Цитата'), voiceEnabled: true },
-      { value: 'guide', label: label('Guide', 'Rehber', 'Проводник'), voiceEnabled: true },
-      { value: 'correspondence', label: label('Correspondence', 'Korespondans', 'Соответствия'), voiceEnabled: true },
-      { value: 'blessing', label: label('Blessing', 'Bereket', 'Благословение'), voiceEnabled: true },
-      { value: 'affirmation', label: label('Affirmation', 'Tekit', 'Аффирмация'), voiceEnabled: true },
-      { value: 'recitation', label: label('Recitation', 'Tilavet', 'Чтение'), voiceEnabled: false },
-      { value: 'philosophy', label: label('Philosophy', 'Felsefe', 'Философия'), voiceEnabled: false },
-      { value: 'theurgy', label: label('Theurgy', 'Theourgia', 'Теургия'), voiceEnabled: false },
-      { value: 'magick', label: label('Magick', 'Büyü', 'Магия'), voiceEnabled: false },
-      { value: 'symbology', label: label('Symbology', 'Sembololoji', 'Симвология'), voiceEnabled: false },
-      { value: 'teacher', label: label('Teacher', 'Ögretmen', 'Учитель'), voiceEnabled: false },
-      { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
-    ],
-  },
 }
 
 
@@ -361,11 +330,6 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
     en: ['Give me one lucid-dream practice for tonight.', 'Interpret this as dream symbolism, not omen literalism.', 'Compare dream yoga, astral projection, and remote viewing.'],
     tr: ['Bu gece için bir bilinçli rüya pratiği ver.', 'Bunu kehanet değil rüya sembolizmi olarak yorumla.', 'Rüya yogası, astral projeksiyon ve uzak görüş karşılaştır.'],
     ru: ['Дай одну практику осознанного сна на эту ночь.', 'Истолкуй это как символику сна, а не буквальное знамение.', 'Сравни йогу сна, астральную проекцию и дистанционное видение.'],
-  },
-  spiritual_sovereign: {
-    en: ['Give me a daily sovereignty practice.', 'Teach me the Kybalion principle behind this.', 'Make this practical for today.'],
-    tr: ['Günlük bir egemenlik pratiği ver.', 'Bunun arkasındaki Kybalion ilkesini öğret.', 'Bunu bugün için pratik hale getir.'],
-    ru: ['Дай практику духовного суверенитета на каждый день.', 'Преподай принцип Кибalion, стоящий за этим.', 'Сделай это практичным для сегодня.'],
   },
 
 
