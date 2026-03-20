@@ -69,7 +69,7 @@ function suitRows(suit: keyof typeof TAROT_SUITS) {
 }
 
 function learnRows() {
-  const rows = Object.entries(learnPaths).map(([key, value]) => [action(`tarot:learn:${key}`, L(value.label), 'prompt', { prompt: value.prompt, mode: value.mode, afterMenu: `tarot:learn:${key}:follow`, description: L(value.label) })])
+  const rows = Object.entries(learnPaths).map(([key, value]) => [action(`tarot:learn:${key}`, L(value.label), 'prompt', { prompt: value.prompt, mode: value.mode, afterMenu: `tarot:learn:${key}:follow` })])
   rows.push(back('tarot:root'))
   return rows
 }
@@ -80,11 +80,11 @@ function makeMenu(pack: OraclePack, key: string): MenuScreen {
     return {
       title: L(`🎴 ${card}`),
       buttons: [
-        [action(`tarot-meaning:${card}`, L('📖 Card Meaning'), 'prompt', { prompt: `Complete practical meaning of ${card} for Tarot readings. Upright meaning, reversed meaning, what it indicates in love, career, and spiritual growth. Clear and useful for a working reader.`, mode: 'teacher', afterMenu: `tarot:card:${card}`, description: L('Upright, reversed, love, career, spirit') })],
-        [action(`tarot-decks:${card}`, L('🗃 RWS · Thoth · Marseille'), 'prompt', { prompt: `Compare ${card} across Rider-Waite-Smith, Thoth, and Marseille. Give clear practical differences for a working reader.`, mode: 'deck_compare', afterMenu: `tarot:card:${card}`, description: L('Cross-system comparison for deeper card literacy') })],
-        [action(`tarot-qabalah:${card}`, L('⚗️ Qabalistic Analysis'), 'prompt', { prompt: `Give a full Qabalistic analysis of ${card}: Hebrew letter, Tree of Life path, Sephiroth, rulers, and initiatic meaning.`, mode: 'qabalah', afterMenu: `tarot:card:${card}`, description: L('Hebrew letter, path on the Tree, initiatic meaning') }), action(`tarot-astro:${card}`, L('🌟 Astrology of this Card'), 'prompt', { prompt: `Give the astrological correspondences of ${card}, including ruler, decan if relevant, and how it reads in practice.`, mode: 'astro', afterMenu: `tarot:card:${card}`, description: L('Planet, sign, decan - and how it reads') })],
-        [action(`tarot-shadow:${card}`, L('🌑 Shadow Work'), 'prompt', { prompt: `Do shadow work with ${card}: the hidden wound, the protective pattern, the invitation, and one journal exercise.`, mode: 'shadow', afterMenu: `tarot:card:${card}`, description: L('Wound, defence, invitation, journal prompt') }), action(`tarot-pathwork:${card}`, L('🧘 Pathworking'), 'prompt', { prompt: `Guide a pathworking for ${card}: threshold, landscape, encounter, gift, return. Use second person and keep it grounded.`, mode: 'pathwork', afterMenu: `tarot:card:${card}`, description: L('Guided meditation into the card\'s landscape') })],
-        [action(`tarot-talisman:${card}`, L('🔮 Talisman & Magic'), 'prompt', { prompt: `Explain practical magical and talismanic uses of ${card}. Include correspondences, cautions, and simple ritual applications.`, mode: 'talisman', afterMenu: `tarot:card:${card}`, description: L('Correspondences, cautions, ritual uses') }), action(`tarot-teach:${card}`, L('👩‍🏫 Teach Me This Card'), 'prompt', { prompt: `Teach ${card} as if I am a serious practitioner. Include symbolism, upright vs reversed, practical reading use, and one spread example.`, mode: 'teacher', afterMenu: `tarot:card:${card}`, description: L('Full card education for a serious reader') })],
+        [action(`tarot-meaning:${card}`, L('📖 Card Meaning'), 'prompt', { prompt: `Complete practical meaning of ${card} for Tarot readings. Upright meaning, reversed meaning, what it indicates in love, career, and spiritual growth. Clear and useful for a working reader.`, mode: 'teacher', afterMenu: `tarot:card:${card}` })],
+        [action(`tarot-decks:${card}`, L('🗃 RWS · Thoth · Marseille'), 'prompt', { prompt: `Compare ${card} across Rider-Waite-Smith, Thoth, and Marseille. Give clear practical differences for a working reader.`, mode: 'deck_compare', afterMenu: `tarot:card:${card}` })],
+        [action(`tarot-qabalah:${card}`, L('⚗️ Qabalistic Analysis'), 'prompt', { prompt: `Give a full Qabalistic analysis of ${card}: Hebrew letter, Tree of Life path, Sephiroth, rulers, and initiatic meaning.`, mode: 'qabalah', afterMenu: `tarot:card:${card}` }), action(`tarot-astro:${card}`, L('🌟 Astrology of this Card'), 'prompt', { prompt: `Give the astrological correspondences of ${card}, including ruler, decan if relevant, and how it reads in practice.`, mode: 'astro', afterMenu: `tarot:card:${card}` })],
+        [action(`tarot-shadow:${card}`, L('🌑 Shadow Work'), 'prompt', { prompt: `Do shadow work with ${card}: the hidden wound, the protective pattern, the invitation, and one journal exercise.`, mode: 'shadow', afterMenu: `tarot:card:${card}` }), action(`tarot-pathwork:${card}`, L('🧘 Pathworking'), 'prompt', { prompt: `Guide a pathworking for ${card}: threshold, landscape, encounter, gift, return. Use second person and keep it grounded.`, mode: 'pathwork', afterMenu: `tarot:card:${card}` })],
+        [action(`tarot-talisman:${card}`, L('🔮 Talisman & Magic'), 'prompt', { prompt: `Explain practical magical and talismanic uses of ${card}. Include correspondences, cautions, and simple ritual applications.`, mode: 'talisman', afterMenu: `tarot:card:${card}` }), action(`tarot-teach:${card}`, L('👩‍🏫 Teach Me This Card'), 'prompt', { prompt: `Teach ${card} as if I am a serious practitioner. Include symbolism, upright vs reversed, practical reading use, and one spread example.`, mode: 'teacher', afterMenu: `tarot:card:${card}` })],
         back('tarot:browse'),
       ],
     }
@@ -96,43 +96,43 @@ const MENUS: Record<string, MenuScreen> = {
   'tao:root': {
     title: L('☯ Tao Oracle Menu'),
     buttons: [
-      [action('tao-patience', L('What does the Tao say about patience?'), 'prompt', { prompt: 'What does the Tao say about patience?', mode: 'oracle', description: L('Flow, yielding, and the rhythm of natural timing') }), action('tao-obstacles', L('Why do obstacles appear?'), 'prompt', { prompt: 'Why do obstacles appear?', mode: 'oracle', description: L('The Taoist view on resistance, softness, and the teaching of barriers') })],
-      [action('tao-decision', L('How should I approach a difficult decision?'), 'prompt', { prompt: 'How should I approach a difficult decision?', mode: 'seeker', description: L('Wu wei, non-attachment, and the path of least resistance') }), action('tao-daily', L('Share wisdom for today.'), 'prompt', { prompt: 'Share one concise Taoist teaching for today with one practical application.', mode: 'quote', description: L('A single teaching distilled for today\'s living') })],
+      [action('tao-patience', L('What does the Tao say about patience?'), 'prompt', { prompt: 'What does the Tao say about patience?', mode: 'oracle' }), action('tao-obstacles', L('Why do obstacles appear?'), 'prompt', { prompt: 'Why do obstacles appear?', mode: 'oracle' })],
+      [action('tao-decision', L('How should I approach a difficult decision?'), 'prompt', { prompt: 'How should I approach a difficult decision?', mode: 'seeker' }), action('tao-daily', L('Share wisdom for today.'), 'prompt', { prompt: 'Share one concise Taoist teaching for today with one practical application.', mode: 'quote' })],
     ],
   },
   'tarot:root': {
     title: L('🎴 The Cartomancer'),
     buttons: [
-      [action('tarot-daily', L('🃏 Daily Card'), 'prompt', { prompt: '__SPECIAL_DAILY_CARD__', mode: 'reading', afterMenu: 'tarot:reading-followups', description: L('One card, one day - a focused lens for today') }), action('tarot-spreads', L('🔮 Readings'), 'submenu', { nextMenu: 'tarot:spreads', description: L('Single card to full Celtic Cross - choose your depth') })],
-      [action('tarot-study', L('📚 Deep Study'), 'submenu', { nextMenu: 'tarot:study', description: L('Qabalah, astrology, numerology, history, and more') }), action('tarot-shadow-menu', L('🌑 Shadow Work'), 'submenu', { nextMenu: 'tarot:shadow', description: L('Work with the cards that mirror what is hidden') })],
-      [action('tarot-browse', L('✨ Browse Arcana'), 'submenu', { nextMenu: 'tarot:browse', description: L('Explore any card in the deck') }), action('tarot-learn', L('🎓 Learning Paths'), 'submenu', { nextMenu: 'tarot:learn', description: L('Structured curricula from beginner to initiate') })],
-      [action('tarot-commands', L('🧰 Command Deck'), 'submenu', { nextMenu: 'tarot:commands', description: L('Specialist modes: pathworking, geomancy, history') })],
+      [action('tarot-daily', L('🃏 Daily Card'), 'prompt', { prompt: '__SPECIAL_DAILY_CARD__', mode: 'reading', afterMenu: 'tarot:reading-followups' }), action('tarot-spreads', L('🔮 Readings'), 'submenu', { nextMenu: 'tarot:spreads' })],
+      [action('tarot-study', L('📚 Deep Study'), 'submenu', { nextMenu: 'tarot:study' }), action('tarot-shadow-menu', L('🌑 Shadow Work'), 'submenu', { nextMenu: 'tarot:shadow' })],
+      [action('tarot-browse', L('✨ Browse Arcana'), 'submenu', { nextMenu: 'tarot:browse' }), action('tarot-learn', L('🎓 Learning Paths'), 'submenu', { nextMenu: 'tarot:learn' })],
+      [action('tarot-commands', L('🧰 Command Deck'), 'submenu', { nextMenu: 'tarot:commands' })],
     ],
   },
   'tarot:spreads': {
     title: L('🔮 Readings'),
     buttons: [
-      [action('spread:single', L('🃏 Single Card'), 'prompt', { prompt: '__SPECIAL_SPREAD_single__', mode: 'reading', afterMenu: 'tarot:reading-followups', description: L('One focused card - a direct answer') }), action('spread:three', L('🔮 Past · Present · Future'), 'prompt', { prompt: '__SPECIAL_SPREAD_three__', mode: 'reading', afterMenu: 'tarot:reading-followups', description: L('Three-card timeline for clarity and direction') })],
-      [action('spread:shadow', L('🌗 Shadow & Light'), 'prompt', { prompt: '__SPECIAL_SPREAD_shadow__', mode: 'shadow', afterMenu: 'tarot:reading-followups', description: L('What illuminates and what hides - integration path') }), action('spread:crossroads', L('⚔️ Crossroads'), 'prompt', { prompt: '__SPECIAL_SPREAD_crossroads__', mode: 'reading', afterMenu: 'tarot:reading-followups', description: L('Four-card decision matrix: situation, challenge, hidden, advice') })],
-      [action('spread:horseshoe', L('🌙 Horseshoe (7)'), 'prompt', { prompt: '__SPECIAL_SPREAD_horseshoe__', mode: 'reading', afterMenu: 'tarot:reading-followups', description: L('Seven-card deep reading with hidden influences') }), action('spread:celtic', L('✡️ Celtic Cross (10)'), 'prompt', { prompt: '__SPECIAL_SPREAD_celtic__', mode: 'reading', afterMenu: 'tarot:reading-followups', description: L('The full ten-card reading - no stone left unturned') })],
+      [action('spread:single', L('🃏 Single Card'), 'prompt', { prompt: '__SPECIAL_SPREAD_single__', mode: 'reading', afterMenu: 'tarot:reading-followups' }), action('spread:three', L('🔮 Past · Present · Future'), 'prompt', { prompt: '__SPECIAL_SPREAD_three__', mode: 'reading', afterMenu: 'tarot:reading-followups' })],
+      [action('spread:shadow', L('🌗 Shadow & Light'), 'prompt', { prompt: '__SPECIAL_SPREAD_shadow__', mode: 'shadow', afterMenu: 'tarot:reading-followups' }), action('spread:crossroads', L('⚔️ Crossroads'), 'prompt', { prompt: '__SPECIAL_SPREAD_crossroads__', mode: 'reading', afterMenu: 'tarot:reading-followups' })],
+      [action('spread:horseshoe', L('🌙 Horseshoe (7)'), 'prompt', { prompt: '__SPECIAL_SPREAD_horseshoe__', mode: 'reading', afterMenu: 'tarot:reading-followups' }), action('spread:celtic', L('✡️ Celtic Cross (10)'), 'prompt', { prompt: '__SPECIAL_SPREAD_celtic__', mode: 'reading', afterMenu: 'tarot:reading-followups' })],
       back('tarot:root'),
     ],
   },
   'tarot:reading-followups': {
     title: L('🔁 Go deeper'),
     buttons: [
-      [action('rf-clarify', L('🃏 Pull a clarifier'), 'prompt', { prompt: 'Pull one clarifier card for the last Tarot spread and explain what it resolves or intensifies.', mode: 'reading', description: L('Add precision to any vague area of the reading') }), action('rf-positions', L('📍 Explain the positions'), 'prompt', { prompt: 'Explain the spread positions and how they interact in the last Tarot reading.', mode: 'teacher', description: L('Understand the architecture of the spread') })],
-      [action('rf-symbols', L('🔍 Clarify the symbolism'), 'prompt', { prompt: 'Clarify the symbolism and repeated motifs in the last Tarot reading.', mode: 'teacher', description: L('Read between the lines of card imagery') }), action('rf-shadow', L('🌑 Read it in shadow mode'), 'prompt', { prompt: 'Re-read the last Tarot spread in shadow mode. What hidden dynamic is present?', mode: 'shadow', description: L('Surface what is operating beneath awareness') })],
-      [action('rf-practical', L('🧭 Practical next step'), 'prompt', { prompt: 'Give a practical next step and one ritual or journaling action from the last Tarot reading.', mode: 'seeker', description: L('Ground the reading into action') }), action('rf-lovecareer', L('💞 Love / Career / Spiritual'), 'prompt', { prompt: 'Translate the last Tarot reading into love, career, and spiritual-development meanings.', mode: 'teacher', description: L('Map the reading across life domains') })],
+      [action('rf-clarify', L('🃏 Pull a clarifier'), 'prompt', { prompt: 'Pull one clarifier card for the last Tarot spread and explain what it resolves or intensifies.', mode: 'reading' }), action('rf-positions', L('📍 Explain the positions'), 'prompt', { prompt: 'Explain the spread positions and how they interact in the last Tarot reading.', mode: 'teacher' })],
+      [action('rf-symbols', L('🔍 Clarify the symbolism'), 'prompt', { prompt: 'Clarify the symbolism and repeated motifs in the last Tarot reading.', mode: 'teacher' }), action('rf-shadow', L('🌑 Read it in shadow mode'), 'prompt', { prompt: 'Re-read the last Tarot spread in shadow mode. What hidden dynamic is present?', mode: 'shadow' })],
+      [action('rf-practical', L('🧭 Practical next step'), 'prompt', { prompt: 'Give a practical next step and one ritual or journaling action from the last Tarot reading.', mode: 'seeker' }), action('rf-lovecareer', L('💞 Love / Career / Spiritual'), 'prompt', { prompt: 'Translate the last Tarot reading into love, career, and spiritual-development meanings.', mode: 'teacher' })],
       back('tarot:spreads'),
     ],
   },
   'tarot:browse': {
     title: L('✨ Browse the Arcana'),
     buttons: [
-      [action('tarot-majors', L('✨ Major Arcana (22)'), 'submenu', { nextMenu: 'tarot:majors', description: L('The 22 archetypal keys - Major Arcana cards') })],
-      [action('tarot-cups', L('🌊 Cups (14)'), 'submenu', { nextMenu: 'tarot:suit:Cups', description: L('Water suit - emotions, relationships, soul') }), action('tarot-pents', L('🌿 Pentacles (14)'), 'submenu', { nextMenu: 'tarot:suit:Pentacles', description: L('Earth suit - work, money, manifestation') })],
-      [action('tarot-swords', L('💨 Swords (14)'), 'submenu', { nextMenu: 'tarot:suit:Swords', description: L('Air suit - mind, conflict, truth') }), action('tarot-wands', L('🔥 Wands (14)'), 'submenu', { nextMenu: 'tarot:suit:Wands', description: L('Fire suit - passion, creativity, action') })],
+      [action('tarot-majors', L('✨ Major Arcana (22)'), 'submenu', { nextMenu: 'tarot:majors' })],
+      [action('tarot-cups', L('🌊 Cups (14)'), 'submenu', { nextMenu: 'tarot:suit:Cups' }), action('tarot-pents', L('🌿 Pentacles (14)'), 'submenu', { nextMenu: 'tarot:suit:Pentacles' })],
+      [action('tarot-swords', L('💨 Swords (14)'), 'submenu', { nextMenu: 'tarot:suit:Swords' }), action('tarot-wands', L('🔥 Wands (14)'), 'submenu', { nextMenu: 'tarot:suit:Wands' })],
       back('tarot:root'),
     ],
   },
@@ -140,120 +140,31 @@ const MENUS: Record<string, MenuScreen> = {
   'tarot:study': {
     title: L('📚 Deep Study'),
     buttons: [
-      [action('tarot-qabalah-study', L('⚗️ Qabalah & Tree of Life'), 'submenu', { nextMenu: 'tarot:study:qabalah', description: L('Tree of Life paths, sephiroth, Hebrew letters, initiatic layers') }), action('tarot-astro-study', L('🌟 Astrology Correspondences'), 'submenu', { nextMenu: 'tarot:study:astro', description: L('Signs, planets, decans, and how they map to the cards') })],
-      [action('tarot-num-study', L('🔢 Numerology & Number Keys'), 'submenu', { nextMenu: 'tarot:study:numerology', description: L('Number symbolism from Ace to 10 across all suits') }), action('tarot-deck-study', L('🗃️ Deck Comparison'), 'submenu', { nextMenu: 'tarot:study:decks', description: L('Three major lineages and what each brings to a reading') })],
-      [action('tarot-school-study', L('🏛️ Reading Schools'), 'submenu', { nextMenu: 'tarot:study:schools', description: L('Different traditions and how they shape interpretation') }), action('tarot-history-study', L('📜 History & Origins'), 'submenu', { nextMenu: 'tarot:study:history', description: L('Visconti-Sforza to modern decks — what is known vs speculated') })],
-      [action('tarot-talisman-study', L('🔮 Magic & Talismans'), 'submenu', { nextMenu: 'tarot:study:talisman', description: L('Ritual use, sigils, timing, correspondences, and cautions') }), action('tarot-geomancy-study', L('🌿 Geomancy & Tarot'), 'submenu', { nextMenu: 'tarot:study:geomancy', description: L('Earth-based figures, planetary attributions, combined divination') })],
-      [action('tarot-pathwork-study', L('🧘 Pathworking'), 'submenu', { nextMenu: 'tarot:study:pathwork', description: L('Guided visionary practice using the Major Arcana') }), action('tarot-practitioner', L('🧭 Practitioner Meaning'), 'submenu', { nextMenu: 'tarot:study:practitioner', description: L('How working readers actually read — not textbook definitions') })],
+      [action('tarot-qabalah-study', L('⚗️ Qabalah & Tree of Life'), 'prompt', { prompt: 'Teach Tarot through Qabalah and the Tree of Life in a structured way for a practitioner.', mode: 'qabalah' }), action('tarot-astro-study', L('🌟 Astrology Correspondences'), 'prompt', { prompt: 'Teach Tarot through astrology and decans in a structured way for a practitioner.', mode: 'astro' })],
+      [action('tarot-num-study', L('🔢 Numerology & Number Keys'), 'prompt', { prompt: 'Teach Tarot numerology across the major and minor arcana with examples.', mode: 'numerology' }), action('tarot-deck-study', L('🗃️ Deck Comparison'), 'prompt', { prompt: 'Compare Marseille, Rider-Waite-Smith, and Thoth as systems and reading cultures.', mode: 'deck_compare' })],
+      [action('tarot-school-study', L('🏛️ Reading Schools'), 'prompt', { prompt: 'Compare traditional/divinatory, esoteric/initatic, psychological/intuitive, and Marseille schools of Tarot reading.', mode: 'school_compare' }), action('tarot-history-study', L('📜 History & Origins'), 'prompt', { prompt: 'Trace the history and origins of Tarot carefully, separating myth from evidence.', mode: 'historian' })],
+      [action('tarot-talisman-study', L('🔮 Magic & Talismans'), 'prompt', { prompt: 'Teach practical Tarot magic and talismanic work with clear caution and real correspondences.', mode: 'talisman' }), action('tarot-geomancy-study', L('🌿 Geomancy & Tarot'), 'prompt', { prompt: 'Teach how Tarot and geomancy can be used together, including figures, courts, and practical combinations.', mode: 'geomancy' })],
+      [action('tarot-pathwork-study', L('🧘 Pathworking'), 'prompt', { prompt: 'Teach Tarot pathworking as a practice: preparation, entering, meeting, return, integration.', mode: 'pathwork' }), action('tarot-practitioner', L('🧭 Practitioner Meaning'), 'prompt', { prompt: 'Give the practitioner’s Tarot meaning method: upright, reversed, timing, question context, and practical use in readings.', mode: 'teacher' })],
       back('tarot:root'),
     ],
   },
   'tarot:shadow': {
     title: L('🌑 Shadow Work'),
     buttons: [
-      [action('shadow-devil', L('XV · The Devil'), 'prompt', { prompt: 'Do a shadow-work session with The Devil.', mode: 'shadow', description: L('Bondage, addiction, shadow self — the chains you keep') }), action('shadow-tower', L('XVI · The Tower'), 'prompt', { prompt: 'Do a shadow-work session with The Tower.', mode: 'shadow', description: L('Sudden upheaval — revelation or destruction?') })],
-      [action('shadow-moon', L('XVIII · The Moon'), 'prompt', { prompt: 'Do a shadow-work session with The Moon.', mode: 'shadow', description: L('Illusion, fear, the unseen — what hides in darkness') }), action('shadow-nine', L('IX · Nine of Swords'), 'prompt', { prompt: 'Do a shadow-work session with Nine of Swords.', mode: 'shadow', description: L('Anxiety, nightmare, mental anguish — the 3am spiral') })],
-      [action('shadow-random', L('🎲 Random Shadow Card'), 'prompt', { prompt: 'Pick a strong shadow-work Tarot card and do a full session with wound, defensive pattern, and integration path.', mode: 'shadow', description: L('Let the deck choose — confront what you avoid') })],
+      [action('shadow-devil', L('XV · The Devil'), 'prompt', { prompt: 'Do a shadow-work session with The Devil.', mode: 'shadow' }), action('shadow-tower', L('XVI · The Tower'), 'prompt', { prompt: 'Do a shadow-work session with The Tower.', mode: 'shadow' })],
+      [action('shadow-moon', L('XVIII · The Moon'), 'prompt', { prompt: 'Do a shadow-work session with The Moon.', mode: 'shadow' }), action('shadow-nine', L('Nine of Swords'), 'prompt', { prompt: 'Do a shadow-work session with Nine of Swords.', mode: 'shadow' })],
+      [action('shadow-random', L('🎲 Random Shadow Card'), 'prompt', { prompt: 'Pick a strong shadow-work Tarot card and do a full session with wound, defensive pattern, and integration path.', mode: 'shadow' })],
       back('tarot:root'),
-    ],
-  },
-  'tarot:study:qabalah': {
-    title: L('⚗️ Qabalah & Tree of Life'),
-    buttons: [
-      [action('qabalah-overview', L('📖 Tree of Life Overview'), 'prompt', { prompt: 'Give a complete overview of the Tree of Life for a Tarot practitioner: the sephiroth, paths, and how they map to the 78 cards.', mode: 'qabalah' }), action('qabalah-paths', L('🛤️ The 22 Paths'), 'prompt', { prompt: 'Teach the 22 paths of the Tree of Life and how each Major Arcana card corresponds to a path.', mode: 'qabalah' })],
-      [action('qabalah-sephiroth', L('⚡ Sephiroth Deep Dive'), 'prompt', { prompt: 'Teach the 10 sephiroth in depth: their names, symbolism, associated cards, and what each means as a spiritual archetype.', mode: 'qabalah' }), action('qabalah-hebrew', L('🔤 Hebrew Letters'), 'prompt', { prompt: 'Teach the Hebrew letters assigned to the Major Arcana paths: their sound, meaning, and how they deepen card interpretation.', mode: 'qabalah' })],
-      [action('qabalah-four-worlds', L('🌍 Four Worlds'), 'prompt', { prompt: 'Teach the four Kabbalistic worlds (Atziluth, Briah, Yetzirah, Assiah) and how Tarot cards operate differently in each.', mode: 'qabalah' }), action('qabalah-reading', L('🧭 Qabalistic Reading'), 'prompt', { prompt: 'Teach how to do a Qabalistic Tarot reading: spreads, tetragrammaton analysis, and how to interpret the four worlds.', mode: 'qabalah' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:astro': {
-    title: L('🌟 Astrology & Tarot'),
-    buttons: [
-      [action('astro-signs', L('♈♉♊♋♌♍♐♑♒♓ Planet & Signs'), 'prompt', { prompt: 'Teach planetary and zodiac correspondences for all 78 Tarot cards with practical reading examples.', mode: 'astro' }), action('astro-decans', L('🎯 The 36 Decans'), 'prompt', { prompt: 'Teach the 36 tarot decans across three zodiac signs each, including the minor arcana connections.', mode: 'astro' })],
-      [action('astro-planets', L('🪐 Planetary Rulerships'), 'prompt', { prompt: 'Teach which planets rule which cards, including traditional and modern rulerships, and how to use planetary timing in readings.', mode: 'astro' }), action('astro-elements', L('🔥�🌊🪶 Elements & Modalities'), 'prompt', { prompt: 'Teach elements (fire earth air water) and modalities (cardinal fixed mutable) across the four suits and how they shape card meaning.', mode: 'astro' })],
-      [action('astro-houses', L('🏠 Astrological Houses'), 'prompt', { prompt: 'Teach the 12 astrological houses and how to map them to Tarot cards in a horoscope-style reading.', mode: 'astro' }), action('astro-reading', L('🧭 Astrological Reading'), 'prompt', { prompt: 'Teach how to do an astrologically-informed Tarot reading: sign placement, house mapping, aspect thinking.', mode: 'astro' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:numerology': {
-    title: L('🔢 Numerology & Tarot'),
-    buttons: [
-      [action('num-one-ten', L('🔢 Numbers 1–10'), 'prompt', { prompt: 'Teach numerology 1 through 10 across all four suits with card examples: what each number means and how it shapes the card.', mode: 'numerology' }), action('num-majors', L('✨ Number Archetypes'), 'prompt', { prompt: 'Teach the number archetypes in the Major Arcana: how 0 through 21 express themselves symbolically.', mode: 'numerology' })],
-      [action('num-gematria', L('📐 Gematria'), 'prompt', { prompt: 'Teach Hebrew gematria and how it applies to Tarot card names and keywords for deeper symbolic analysis.', mode: 'numerology' }), action('num-sequences', L('🔗 Number Sequences'), 'prompt', { prompt: 'Teach how number sequences and numerical patterns appear in spreads and what they indicate in readings.', mode: 'numerology' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:decks': {
-    title: L('🗃️ Deck Comparison'),
-    buttons: [
-      [action('deck-rws', L('🎨 Rider-Waite-Smith'), 'prompt', { prompt: 'Deep dive into the Rider-Waite-Smith tradition: Pamela Colman Smith, A.E. Waite, symbolism, and why it became the standard.', mode: 'deck_compare' }), action('deck-thoth', L('🌙 Aleister Crowley Thoth'), 'prompt', { prompt: 'Deep dive into the Thoth deck: Crowley, Harris, Egyptian alchemy, and how it differs from RWS in symbolism and reading style.', mode: 'deck_compare' })],
-      [action('deck-marseille', L('🌊 Marseille Tarot'), 'prompt', { prompt: 'Deep dive into the Marseille tradition: Conver, Jean Noblet, Dodal, and how it differs from Waite-based decks in both imagery and reading method.', mode: 'deck_compare' }), action('deck-other', L('🎴 Other Notable Decks'), 'prompt', { prompt: 'Survey other important decks: Visconti-Sforza, Golden Dawn, Lenormand, and what makes each lineage distinct.', mode: 'deck_compare' })],
-      [action('deck-combining', L('🧭 Combining Decks in Reading'), 'prompt', { prompt: 'Teach how to use multiple decks in a single reading or practice: when each deck serves best, how to blend their perspectives.', mode: 'deck_compare' }), action('deck-reading', L('📖 Reading Style by Deck'), 'prompt', { prompt: 'Teach how reading style changes depending on the deck: Marseille card-counting, RWS imagery focus, Thoth intuition, Lenormand grid.', mode: 'deck_compare' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:schools': {
-    title: L('🏛️ Reading Schools'),
-    buttons: [
-      [action('school-traditional', L('📜 Traditional/Divinatory'), 'prompt', { prompt: 'Teach the traditional divinatory schools: keywords, sentence structure, how to read without intuition, and the heritage of cartomancy.', mode: 'school_compare' }), action('school-esoteric', L('⚗️ Esoteric/Initatic'), 'prompt', { prompt: 'Teach the esoteric and initiatic schools: Golden Dawn, Crowley, Waite, and how symbolic layers work beneath surface meanings.', mode: 'school_compare' })],
-      [action('school-psychological', L('🧠 Psychological/Jungian'), 'prompt', { prompt: 'Teach the psychological and Jungian approach to Tarot: archetypes, shadow, collective unconscious, and how to read without projecting.', mode: 'school_compare' }), action('school-marseille', L('🌊 Marseille School'), 'prompt', { prompt: 'Teach the Marseille reading school: card values, number spreads, pip divination, and how French cartomancers actually read.', mode: 'school_compare' })],
-      [action('school-combining', L('🧭 Combining Schools'), 'prompt', { prompt: 'Teach how to blend multiple schools fluidly: when to use keywords, when to follow symbolism, when to go psychological.', mode: 'school_compare' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:history': {
-    title: L('📜 History & Origins'),
-    buttons: [
-      [action('history-visconti', L('🗺️ Visconti-Sforza'), 'prompt', { prompt: 'Trace the Visconti-Sforza deck: when it was made, who for, what we know vs speculate, and why it matters.', mode: 'historian' }), action('history-marseille', L('🌊 Origins of Marseille'), 'prompt', { prompt: 'Trace the Marseille deck lineage from early woodblock prints through the 1760 Conver print — what is documented.', mode: 'historian' })],
-      [action('history-goldendown', L('🔮 Golden Dawn'), 'prompt', { prompt: 'Trace the Golden Dawn\'s role in transforming Tarot from game to occult tool, including the emergence of the Major Arcana naming we use today.', mode: 'historian' }), action('history-waite', L('📖 Waite & Rider'), 'prompt', { prompt: 'Trace the creation of the Rider-Waite deck: Waite\'s goals, Smith\'s illustrations, and how it reshaped Tarot\'s visual language.', mode: 'historian' })],
-      [action('history-crowley', L('🌙 Crowley & Thoth'), 'prompt', { prompt: 'Trace the creation of the Thoth deck: Crowley\'s role, Frieda Harris\'s art, and how Crowley\'s occult system differs from Waite\'s.', mode: 'historian' }), action('history-modern', L('⚡ Modern Tarot'), 'prompt', { prompt: 'Trace modern Tarot from 1960s counterculture through today\'s explosion: what drove its growth and what the landscape looks like.', mode: 'historian' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:talisman': {
-    title: L('🔮 Magic & Talismans'),
-    buttons: [
-      [action('talisman-corre', L('🔗 Correspondences'), 'prompt', { prompt: 'Teach complete Tarot correspondences for magical work: planets, signs, elements, Hebrew letters, and how to build a correspondence grid.', mode: 'talisman' }), action('talisman-timing', L('⏱️ Electional Timing'), 'prompt', { prompt: 'Teach astrological timing for Tarot rituals: how to pick electional moments when a card\'s energy is strongest.', mode: 'talisman' })],
-      [action('talisman-ritual', L('🕯️ Ritual Use'), 'prompt', { prompt: 'Teach how to use Tarot cards in ritual: altar布置, candlelight, card selection as focal point, and how to frame the reading as ritual act.', mode: 'talisman' }), action('talisman-sigils', L('✍️ Sigil & Seal Making'), 'prompt', { prompt: 'Teach how to extract sigils and seals from Tarot cards for talismanic work, including encoding and charging.', mode: 'talisman' })],
-      [action('talisman-cautions', L('⚠️ Cautions & Ethics'), 'prompt', { prompt: 'Teach magical cautions specific to Tarot work: what can go wrong, ethical boundaries, and how to work responsibly.', mode: 'talisman' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:geomancy': {
-    title: L('🌿 Geomancy & Tarot'),
-    buttons: [
-      [action('geom-figures', L('🔮 The 16 Figures'), 'prompt', { prompt: 'Teach all 16 geomantic figures: their names, elements, ruling planets, and what each represents.', mode: 'geomancy' }), action('geom-mothers', L('👩 Four Mothers'), 'prompt', { prompt: 'Teach the four mother figures in geomancy and how they relate to elements, planets, and Tarot suit correspondences.', mode: 'geomancy' })],
-      [action('geom-houses', L('🏠 Houses & Points'), 'prompt', { prompt: 'Teach geomantic houses and the planetary points: how to construct a geomantic chart and what each house rules.', mode: 'geomancy' }), action('geom-reading', L('🧭 Geomantic Reading Method'), 'prompt', { prompt: 'Teach the step-by-step method for doing a geomantic reading: figure generation, interpretation, and how to combine with Tarot.', mode: 'geomancy' })],
-      [action('geom-tarot', L('🔗 Combined Practice'), 'prompt', { prompt: 'Teach how to weave Tarot and geomancy together: when to use geomancy to clarify a Tarot card and vice versa.', mode: 'geomancy' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:pathwork': {
-    title: L('🧘 Pathworking'),
-    buttons: [
-      [action('pw-preparation', L('🕯️ Preparation'), 'prompt', { prompt: 'Teach pathworking preparation: ritual setting, breathwork, how to enter a meditative state before journeying.', mode: 'pathwork' }), action('pw-threshold', L('🚪 Entering the Threshold'), 'prompt', { prompt: 'Teach how to enter the path: crossing the threshold, the first sensations, how to recognize genuine pathworking vs imagination.', mode: 'pathwork' })],
-      [action('pw-lands', L('🌅 The Inner Landscape'), 'prompt', { prompt: 'Teach what the inner landscape of a pathworking feels like: symbolic geography, weather, beings, and what different elements mean.', mode: 'pathwork' }), action('pw-encounter', L('👁️ Meeting the Card'), 'prompt', { prompt: 'Teach how to encounter the card archetype directly: meeting the figure, receiving the teaching, what authentic contact looks like.', mode: 'pathwork' })],
-      [action('pw-return', L('🔄 Return & Integration'), 'prompt', { prompt: 'Teach the return journey and integration: how to close the pathworking, ground the experience, and journal what was received.', mode: 'pathwork' })],
-      back('tarot:study'),
-    ],
-  },
-  'tarot:study:practitioner': {
-    title: L('🧭 Practitioner Meaning Method'),
-    buttons: [
-      [action('prac-upright', L('⬆️ Upright Meaning'), 'prompt', { prompt: 'Teach how to construct a precise upright card meaning: the difference between textbook definitions and what actually matters in a live reading.', mode: 'teacher' }), action('prac-reversed', L('⬇️ Reversed Meaning'), 'prompt', { prompt: 'Teach how to interpret reversals: blocked energy, inner version, not-as-extreme, and when reversal does and does not apply.', mode: 'teacher' })],
-      [action('prac-timing', L('⏱️ Timing'), 'prompt', { prompt: 'Teach Tarot timing techniques: planetary hours, season-based, card cycle timing, and how to give time frames that are actually useful.', mode: 'teacher' }), action('prac-spreads', L('🃏 Spread Architecture'), 'prompt', { prompt: 'Teach how to design and read spreads: position meaning, card interaction, and how to layer multiple cards in a single position.', mode: 'teacher' })],
-      [action('prac-question', L('❓ Question Framing'), 'prompt', { prompt: 'Teach how to work with the querent\'s question: how to reframe vague questions, what makes a question readable vs unanswerable.', mode: 'teacher' }), action('prac-reading', L('📖 The Full Reading'), 'prompt', { prompt: 'Teach the full arc of a live reading: opening, reading, synthesis, closing, and what separates a good reader from a great one.', mode: 'teacher' })],
-      back('tarot:study'),
     ],
   },
   'tarot:learn': { title: L('🎓 Learning Paths'), buttons: learnRows() },
   'tarot:commands': {
     title: L('🧰 Command Deck'),
     buttons: [
-      [action('cmd-reading', L('Reading · Full reading'), 'prompt', { prompt: '__SPECIAL_SPREAD_celtic__', mode: 'reading', afterMenu: 'tarot:reading-followups', description: L('Full ten-card Celtic Cross on your question') }), action('cmd-learn', L('Learn · Study path'), 'submenu', { nextMenu: 'tarot:learn', description: L('Structured paths from beginner to initiate') })],
-      [action('cmd-geomancy', L('Geomancy · Tarot & figures'), 'prompt', { prompt: 'Teach geomancy and Tarot together with examples and practical use.', mode: 'geomancy', description: L('Earth-based divination paired with the cards') }), action('cmd-pathwork', L('Pathwork · Guided vision'), 'prompt', { prompt: 'Guide a Tarot pathworking meditation for the current situation.', mode: 'pathwork', description: L('Guided visionary journey using the card as a threshold') })],
-      [action('cmd-history', L('History · Origins'), 'prompt', { prompt: 'Teach the history and origins of Tarot carefully and critically.', mode: 'historian', description: L('From Visconti-Sforza to the modern deck') }), action('cmd-school', L('Schools · Reading schools'), 'prompt', { prompt: 'Compare the main Tarot reading schools with examples.', mode: 'school_compare', description: L('Traditional, esoteric, psychological, and Marseille traditions') })],
-      [action('cmd-constellation', L('Constellation · Birth & soul cards'), 'prompt', { prompt: 'Teach Tarot constellations, birth cards, soul cards, and how to work with them.', mode: 'teacher', description: L('Card patterns that reveal character and life themes') }), action('cmd-journal', L('Journal · Tarot journaling'), 'prompt', { prompt: 'Give a Tarot journaling framework for serious daily practice.', mode: 'teacher', description: L('Structured writing practice to deepen card literacy') })],
+      [action('cmd-reading', L('Reading · Full reading'), 'prompt', { prompt: '__SPECIAL_SPREAD_celtic__', mode: 'reading', afterMenu: 'tarot:reading-followups' }), action('cmd-learn', L('Learn · Study path'), 'submenu', { nextMenu: 'tarot:learn' })],
+      [action('cmd-geomancy', L('Geomancy · Tarot & figures'), 'prompt', { prompt: 'Teach geomancy and Tarot together with examples and practical use.', mode: 'geomancy' }), action('cmd-pathwork', L('Pathwork · Guided vision'), 'prompt', { prompt: 'Guide a Tarot pathworking meditation for the current situation.', mode: 'pathwork' })],
+      [action('cmd-history', L('History · Origins'), 'prompt', { prompt: 'Teach the history and origins of Tarot carefully and critically.', mode: 'historian' }), action('cmd-school', L('Schools · Reading schools'), 'prompt', { prompt: 'Compare the main Tarot reading schools with examples.', mode: 'school_compare' })],
+      [action('cmd-constellation', L('Constellation · Birth & soul cards'), 'prompt', { prompt: 'Teach Tarot constellations, birth cards, soul cards, and how to work with them.', mode: 'teacher' }), action('cmd-journal', L('Journal · Tarot journaling'), 'prompt', { prompt: 'Give a Tarot journaling framework for serious daily practice.', mode: 'teacher' })],
       back('tarot:root'),
     ],
   },
@@ -295,145 +206,135 @@ const MENUS: Record<string, MenuScreen> = {
       [action('entheo-ethnobotany', L('🌿 Ethnobotany'), 'prompt', { prompt: 'Teach entheogens ethnobotanically: lineage, plant context, cultural setting, and caution.', mode: 'ethnobotany' }), action('entheo-safety', L('⚠️ Harm Reduction'), 'prompt', { prompt: 'Give a harm-reduction guide for entheogenic work with set, setting, contraindications, and integration.', mode: 'harm_reduction' })],
       [action('entheo-entities', L('👁 Entities'), 'prompt', { prompt: 'Discuss entity encounters carefully across symbolic, psychological, phenomenological, and occult frames.', mode: 'entity' }), action('entheo-correspond', L('🕸 Correspondence'), 'prompt', { prompt: 'Map plants, molecules, correspondences, and visionary signatures across the archive.', mode: 'correspondence' })],
   ] },
-  
-  // ─── SUFI ─────────────────────────────────────────────────────────────────
   'sufi:root': {
-    title: L('🌙 Sufi Mystic'),
+    title: L('🌙 Sufi Mystic', '🌙 Sufi Mistik', '🌙 Суфийский Мистик'),
     buttons: [
-      [action('sufi-rumi', L('🫀 Rumi'), 'submenu', { nextMenu: 'sufi:rumi' }), action('sufi-lineages', L('🧭 Paths & Lineages'), 'submenu', { nextMenu: 'sufi:tariqa' })],
-      [action('sufi-maqam', L('🪜 Stations & States'), 'submenu', { nextMenu: 'sufi:maqam' }), action('sufi-dhikr', L('🕯 Dhikr & Adab'), 'submenu', { nextMenu: 'sufi:dhikr' })],
-      [action('sufi-study', L('📚 Deep Study'), 'submenu', { nextMenu: 'sufi:study' }), action('sufi-poetry', L('📜 Poetry & Symbols'), 'submenu', { nextMenu: 'sufi:poetry' })],
-      [action('sufi-masters', L('👳 Masters & Saints'), 'submenu', { nextMenu: 'sufi:masters' }), action('sufi-ibnarabi', L('⚡ Ibn Arabi & Wahdat al-Wujud'), 'submenu', { nextMenu: 'sufi:ibnarabi' })],
-    ],
+      [action('sufi-contemplation', L('🕯️ Contemplation', '🕯️ Tefekkür', '🕯️ Созерцание'), 'prompt', { mode: 'contemplation', prompt: 'Give me a daily Sufi contemplation from the path of love.' }), action('sufi-lineages', L('🧭 Lineages', '🧭 Yollar', '🧭 Линии передачи'), 'submenu', { nextMenu: 'sufi:lineages' })],
+      [action('sufi-rumi', L('🫀 Rumi & Shams', '🫀 Mevlana Rumi ve Şems', '🫀 Руми и Шамс'), 'submenu', { nextMenu: 'sufi:rumi' }), action('sufi-metaphysics', L('⚡ Metaphysics', '⚡ Metafizik', '⚡ Метафизика'), 'submenu', { nextMenu: 'sufi:meta' })],
+      [action('sufi-practices', L('📿 Practices', '📿 Pratikler', '📿 Практики'), 'submenu', { nextMenu: 'sufi:practices' }), action('sufi-poetry', L('📜 Poetry', '📜 Şiir', '📜 Поэзия'), 'submenu', { nextMenu: 'sufi:poetry' })]
+    ]
   },
-  'sufi:study': {
-    title: L('📚 Sufi Deep Study'),
+  'sufi:lineages': {
+    title: L('🧭 Sufi Lineages', '🧭 Sufi Yolları', '🧭 Суфийские Линии'),
     buttons: [
-      [action('sufi-metaphysics', L('🌿 Metaphysics of Love'), 'prompt', { prompt: 'Teach the Sufi metaphysics of love: al-hubb, ishqq, divine love and how it differs from romantic love.', mode: 'metaphysics' }), action('sufi-fana', L('🔥 Fana & Baqa'), 'prompt', { prompt: 'Teach fana (annihilation) and baqa (abiding in God): the stages, how they differ from ego-death, and what each requires.', mode: 'metaphysics' })],
-      [action('sufi-prophets', L('🕉️ The Prophet & Saints'), 'prompt', { prompt: 'Teach the Sufi relationship to the Prophet Muhammad, the awliya (saints), and how spiritual authority is transmitted.', mode: 'historian' }), action('sufi-ghazali', L('📖 Al-Ghazali'), 'prompt', { prompt: 'Teach Al-Ghazali: his spiritual crisis, the Ihya, and why he matters for every serious spiritual seeker.', mode: 'historian' })],
-      [action('sufi-waheed', L('💎 Wahdat al-Wujud'), 'prompt', { prompt: 'Teach wahdat al-wujud (Unity of Being) clearly: what it means, what it does not mean, and why Ibn Arabi remains controversial.', mode: 'metaphysics' }), action('sufi-scripture', L('📜 Quran & Hadith Inner Sense'), 'prompt', { prompt: 'Teach how Sufis read the Quran and Hadith: batin (inner) vs zahir (outer), and how it differs from legal hermeneutics.', mode: 'historian' })],
-      [action('sufi-music', L('🎵 Sufi Music & Sama'), 'prompt', { prompt: 'Teach sama (Sufi music and whirling) as spiritual practice: the mechanics, the risks, and the openings it is meant to produce.', mode: 'dhikr' })],
-      back('sufi:root'),
-    ],
+      [action('shadhili', L('🌿 Shadhiliya', '🌿 Şazeliyye', '🌿 Шазилия'), 'prompt', { mode: 'historian', prompt: 'Teach me about the Shadhili path, its emphasis on gratitude, and its key masters like Imam al-Shadhili and Ibn Ata Allah.' }), action('naqshbandi', L('💎 Naqshbandiya', '💎 Nakşibendiyye', '💎 Накшбандия'), 'prompt', { mode: 'historian', prompt: 'Teach me about the Naqshbandi path, the silent dhikr, and its emphasis on companionship (sohbet).' })],
+      [action('chishti', L('🎵 Chishtiya', '🎵 Çeştiyye', '🎵 Чиштия'), 'prompt', { mode: 'historian', prompt: 'Teach me about the Chishti path, its use of music (sama), and the message of Hazrat Inayat Khan.' }), action('mevlevi', L('🌀 Mevleviya', '🌀 Mevleviyye', '🌀 Мевлевия'), 'prompt', { mode: 'historian', prompt: 'Teach me about the Mevlevi path, the Whirling Dervishes, and the legacy of Rumi.' })],
+      back('sufi:root')
+    ]
   },
   'sufi:rumi': {
-    title: L('🫀 Rumi Deep Dive'),
+    title: L('🫀 Rumi & Shams', '🫀 Rumi & Şems', '🫀 Руми и Шамс'),
     buttons: [
-      [action('rumi-life', L('📖 Life & Meeting Shams'), 'prompt', { prompt: 'Teach the life of Rumi: his meeting with Shams, his transformation, and the historical context of Konya.', mode: 'historian' }), action('rumi-masnavi', L('📚 The Masnavi'), 'prompt', { prompt: 'Teach the Masnavi: its structure, key stories, and why it is considered the greatest spiritual poem ever written.', mode: 'historian' })],
-      [action('rumi-love', L('💞 The Theology of Love'), 'prompt', { prompt: 'Teach Rumi\'s theology of love: why love is the only valid approach to God, and how it differs from rational theology.', mode: 'poetry' }), action('rumi-whirling', L('🌀 The Practice of Whirling'), 'prompt', { prompt: 'Teach the mechanics and spirituality of sama whirling: the body, the breath, the turning, and how it leads to fana.', mode: 'dhikr' })],
-      back('sufi:root'),
-    ],
+      [action('masnavi', L('📚 The Masnavi', '📚 Mesnevi', '📚 Маснави'), 'prompt', { mode: 'poetry', prompt: 'Recite and explain a key passage from the Masnavi about the longing of the soul.' }), action('shams', L('🔥 Shams Tabrizi', '🔥 Şems-i Tebrizi', '🔥 Шамс Табризи'), 'prompt', { mode: 'historian', prompt: 'Tell me about the meeting of Rumi and Shams and the transformation of the scholar into the lover.' })],
+      [action('divan', L('🎼 Divan-e Shams', '🎼 Divan-ı Kebir', '🎼 Диван Шамса'), 'prompt', { mode: 'poetry', prompt: 'Share a ghazal from the Divan-e Kabir that captures the intoxication of divine love.' }), action('life', L('📖 Life in Konya', '📖 Konya’daki Hayatı', '📖 Жизнь в Конье'), 'prompt', { mode: 'historian', prompt: 'Tell me about Rumi’s life in Konya, the cultural context of his time, and his enduring legacy.' })],
+      back('sufi:root')
+    ]
+  },
+  'sufi:meta': {
+    title: L('⚡ Sufi Metaphysics', '⚡ Metafizik', '⚡ Метафизика'),
+    buttons: [
+      [action('ibn-arabi', L('🌊 Ibn Arabi', '🌊 İbn Arabi', '🌊 Ибн Араби'), 'prompt', { mode: 'metaphysics', prompt: 'Explain the Unity of Being (Wahdat al-Wujud) transition from multiplicity to oneness.' }), action('ghazali', L('📖 Al-Ghazali', '📖 İmam Gazali', '📖 Аль-Газали'), 'prompt', { mode: 'historian', prompt: 'Teach me Al-Ghazali’s synthesis of law, theology, and Sufism in the Ihya.' })],
+      [action('unity', L('💎 Tawhid', '💎 Tevhid', '💎 Таухид'), 'prompt', { mode: 'metaphysics', prompt: 'Explain the Sufi understanding of Divine Agency (Unity of Actions) in daily life.' }), action('love', L('❤️ Metaphysics of Love', '❤️ Aşkın Metafiziği', '❤️ Метафизика Любви'), 'prompt', { mode: 'metaphysics', prompt: 'Explain al-hubb and ishqq in Sufi cosmology and why love is the governing principle of the universe.' })],
+      back('sufi:root')
+    ]
+  },
+  'sufi:practices': {
+    title: L('📿 Sufi Practices', '📿 Pratikler', '📿 Практики'),
+    buttons: [
+      [action('dhikr', L('📿 Dhikr Instruction', '📿 Zikir Eğitimi', '📿 Инструкция зикра'), 'prompt', { mode: 'contemplation', prompt: 'Guide me in a simple dhikr practice (remembrance) for centering the heart.' }), action('muraqaba', L('🧘 Muraqaba', '🧘 Murakabe', '🧘 Муракаба'), 'prompt', { mode: 'contemplation', prompt: 'Teach me the practice of Sufi meditation (muraqaba) and heart-watching.' })],
+      [action('adab', L('✨ Adab & Courtesy', '✨ Edep ve Nezaket', '✨ Адаб'), 'prompt', { mode: 'contemplation', prompt: 'Explain the spiritual importance of Adab (etiquette) on the path to the Beloved.' }), action('daily', L('🛎️ Daily Record', '🛎️ Günlük Kayıt', '🛎️ Ежедневная запись'), 'prompt', { mode: 'contemplation', prompt: 'Teach me how to maintain a spiritual diary and account for my soul (muhasaba) each day.' })],
+      back('sufi:root')
+    ]
   },
   'sufi:poetry': {
-    title: L('📜 Poetry & Symbols'),
+    title: L('📜 Sufi Poetry', '📜 Şiir', '📜 Поэзия'),
     buttons: [
-      [action('poetry-beloved', L('🌹 The Beloved'), 'prompt', { prompt: 'Teach the Sufi symbol of the Beloved: what it represents, how it operates in ghazal poetry, and what it asks of the reader.', mode: 'poetry' }), action('poetry-wine', L('🍷 Wine & Tavern'), 'prompt', { prompt: 'Teach the Sufi symbols of wine and the tavern: why they appear everywhere, what they actually mean, and how to read them correctly.', mode: 'poetry' })],
-      [action('poetry-flute', L('🎶 The Reed Flute'), 'prompt', { prompt: 'Teach the Sufi symbolism of the reed flute (nay): separation from the source, the sound of longing, and what the hollow reed represents.', mode: 'poetry' }), action('poetry-moth', L('🕯️ The Moth'), 'prompt', { prompt: 'Teach the Sufi symbol of the moth: the classic image of surrendering to the flame, and why it recurs across all traditions.', mode: 'poetry' })],
-      [action('poetry-mirror', L('🪞 The Mirror & Polish'), 'prompt', { prompt: 'Teach the Sufi symbol of the mirror and polishing it: self-purification, the reflection of the divine, and the work of tazkiya.', mode: 'poetry' }), action('poetry-journey', L('🌬 The Journey Archetype'), 'prompt', { prompt: 'Teach the Sufi journey archetype: stages from self to Source, the waymarks, and what gets left behind at each stage.', mode: 'poetry' })],
-      back('sufi:root'),
-    ],
+      [action('hafiz', L('🍷 Hafiz of Shiraz', '🍷 Hafız-ı Şirazi', '🍷 Хафиз Ширази'), 'prompt', { mode: 'poetry', prompt: 'Share the wisdom of Hafiz regarding the tavern of ruin and the wine of love.' }), action('attar', L('🕊️ Fariduddin Attar', '🕊️ Ferüdüddin Attar', '🕊️ Фаридуддин Аттар'), 'prompt', { mode: 'poetry', prompt: 'Teach me the lessons from the Conference of the Birds and the seven valleys of the quest.' })],
+      [action('rabia', L('❤️ Rabia al-Adawiyya', '❤️ Rabia el-Adeviyye', '❤️ Рабия аль-Адавия'), 'prompt', { mode: 'poetry', prompt: 'Tell me about the pure love of Rabia and her refusal to worship out of fear of hell or hope for heaven.' }), action('symbols', L('🏺 Symbolism Guide', '🏺 Sembolizm Rehberi', '🏺 Гид по символам'), 'prompt', { mode: 'poetry', prompt: 'Explain common Sufi symbols: wine, tavern, cupbearer, beloved, locks of hair, and nightingales.' })],
+      back('sufi:root')
+    ]
   },
-  'sufi:dhikr': {
-    title: L('🕯 Dhikr & Adab'),
-    buttons: [
-      [action('dhikr-what', L('🔔 What is Dhikr'), 'prompt', { prompt: 'Teach dhikr: its Quranic basis, its many forms (vocal, mental, physical), and how the practice actually transforms the practitioner.', mode: 'dhikr' }), action('dhikr-forms', L('🎯 Forms of Dhikr'), 'prompt', { prompt: 'Teach the different forms across tariqas: lafdhi (vocal), khafi (silent), qalbi (heart-focused), and how to identify each.', mode: 'dhikr' })],
-      [action('dhikr-adab', L('✨ Adab (Sacred Etiquette)'), 'prompt', { prompt: 'Teach adab in Sufism: why propriety, beauty, and courtesy are not merely social rules but spiritual technologies.', mode: 'adab' }), action('dhikr-daily', L('🛎️ Daily Dhikr Practice'), 'prompt', { prompt: 'Design a daily dhikr practice for a beginner: forms, durations, intentions, and what to expect in the first months.', mode: 'dhikr' })],
-      back('sufi:root'),
-    ],
-  },
-  'sufi:maqam': {
-    title: L('🪜 Stations & States'),
-    buttons: [
-      [action('maqam-what', L('📖 Maqam vs Hal'), 'prompt', { prompt: 'Teach the difference between maqam (station — earned) and hal (state — given) in Sufi psychology, and why this distinction matters.', mode: 'maqam' }), action('maqam-stations', L('🛤️ Major Stations'), 'prompt', { prompt: 'Teach the major Sufi maqamat: tawba, wara, faqr, sidq, tawakkul, rida, and how they interrelate.', mode: 'maqam' })],
-      [action('maqam-states', L('🌊 Major States (Hal)'), 'prompt', { prompt: 'Teach the major Sufi hals: the ecstasies, the trials, the darkness, the lights, and why they cannot be manufactured by will.', mode: 'maqam' }), action('maqam-guide', L('⚡ The Spiritual导师'), 'prompt', { prompt: 'Teach the role of the murshid or shaykh: why initiation and guidance are considered indispensable in Sufi practice.', mode: 'maqam' })],
-      back('sufi:root'),
-    ],
-  },
-  'sufi:tariqa': {
-    title: L('🧭 Paths & Lineages'),
-    buttons: [
-      [action('tariqa-naksh', L('🌙 Naqshbandi'), 'prompt', { prompt: 'Teach the Naqshbandi path: its emphasis on silent dhikr (dhikr khafi), its quietist political stance, and its famous practitioners.', mode: 'tariqa' }), action('tariqa-mevlevi', L('🌀 Mevlevi (Whirling)'), 'prompt', { prompt: 'Teach the Mevlevi order: the whirling sema, Rumi\'s lineage, and the transformation of poetry into embodied practice.', mode: 'tariqa' })],
-      [action('tariqa-chishti', L('🎵 Chishti'), 'prompt', { prompt: 'Teach the Chishti order: its musical dhikr, its spread from India, and its great saints including Nizamuddin Auliya.', mode: 'tariqa' }), action('tariqa-qadiri', L('🔥 Qadiri'), 'prompt', { prompt: 'Teach the Qadiri order: its founder Abdul Qadir Jilani, its spread, and its distinctive emphasis on spiritual struggle.', mode: 'tariqa' })],
-      [action('tariqa-shazili', L('💠 Shadhili'), 'prompt', { prompt: 'Teach the Shadhili order: its founder al-Shadhili, the Burhaniya emphasis, and how it combines warmth with precision.', mode: 'tariqa' }), action('tariqa-choose', L('🧭 Choosing a Path'), 'prompt', { prompt: 'Guide someone on how to choose a tariqa: questions to ask, signs of authenticity, and how teachers are vetted.', mode: 'tariqa' })],
-      back('sufi:root'),
-    ],
-  },
-  'sufi:masters': {
-    title: L('👳 Masters & Saints'),
-    buttons: [
-      [action('master-rabia', L('🌹 Rabia al-Adawiyya'), 'prompt', { prompt: 'Teach Rabia al-Adawiyya: her love of God without fear, her radical equality before the divine, and her place as a foundational Sufi woman.', mode: 'saint' }), action('master-hallaj', L('⚡ Mansur al-Hallaj'), 'prompt', { prompt: 'Teach Mansur al-Hallaj: his Ana al-Haqq declaration, his trial, his execution, and why he remains the most controversial Sufi martyr.', mode: 'saint' })],
-      [action('master-ghazali2', L('📖 Al-Ghazali'), 'prompt', { prompt: 'Teach Al-Ghazali\'s spiritual crisis and his recovery: the Ihya as a guide to inner Islamic life.', mode: 'historian' }), action('master-ibnarabi2', L('⚡ Ibn Arabi'), 'prompt', { prompt: 'Teach Ibn Arabi: his extraordinary vision of unity, the Fusus al-Hikam, and why he is simultaneously revered and feared.', mode: 'saint' })],
-      back('sufi:root'),
-    ],
-  },
-  'sufi:ibnarabi': {
-    title: L('⚡ Ibn Arabi & Wahdat al-Wujud'),
-    buttons: [
-      [action('ia-life', L('📖 Life & Context'), 'prompt', { prompt: 'Teach the life of Ibn Arabi: his visions, his teachers, his controversial relationship with power, and how he became the greatest Islamic philosopher.', mode: 'historian' }), action('ia-fusus', L('📚 The Fusus al-Hikam'), 'prompt', { prompt: 'Teach the Fusus al-Hikam: Ibn Arabi\'s masterwork on the perfect human and how divine wisdom is embodied in each prophet.', mode: 'metaphysics' })],
-      [action('ia-wahdat', L('💎 Wahdat al-Wujud'), 'prompt', { prompt: 'Teach wahdat al-wujud: the doctrine of Unity of Being, its implications, its criticisms from within Islam, and how to approach it respectfully.', mode: 'metaphysics' }), action('ia-controversy', L('⚠️ Controversy & Reception'), 'prompt', { prompt: 'Teach why Ibn Arabi is controversial: accusations of pantheism, heretical declarations, and how different traditions receive him.', mode: 'historian' })],
-      back('sufi:root'),
-    ],
-  },
-  // ─── DREAMWALKER ─────────────────────────────────────────────────────────
   'dreamwalker:root': {
-    title: L('🌌 Dreamwalker'),
+    title: L('🌌 Dreamwalker', '🌌 Rüya Gezgini', '🌌 Сноходец'),
     buttons: [
-      [action('dw-lucid', L('🌙 Lucid Dreaming'), 'submenu', { nextMenu: 'dreamwalker:lucid', description: L('Recall, WBTB, reality checks, stabilization — the grounded method') }), action('dw-techniques', L('🛠 Techniques'), 'submenu', { nextMenu: 'dreamwalker:techniques', description: L('Compare Monroe, Raduga, Bruce, LaBerge, and others') })],
-      [action('dw-yoga', L('🕉 Dream Yoga'), 'submenu', { nextMenu: 'dreamwalker:dream_yoga', description: L('Continuity of awareness, Tibetan lucid practice, Norbu, Wangyal') }), action('dw-astral', L('✨ Astral Projection'), 'submenu', { nextMenu: 'dreamwalker:astral', description: L('Threshold, navigation, ethics, and distinguishing it from lucid dreaming') })],
-      [action('dw-remote', L('📡 Remote Viewing'), 'submenu', { nextMenu: 'dreamwalker:remote_viewing', description: L('Targ, Swann, McMoneagle — controlled remote perception') }), action('dw-interpret', L('🔮 Interpretation'), 'submenu', { nextMenu: 'dreamwalker:interpretation', description: L('Jungian, symbolic, recurring, and precognitive dream work') })],
-      [action('dw-practice', L('🛏 Tonight\'s Practice'), 'prompt', { prompt: "Design tonight's night-practice routine for dream recall, lucidity, and integration.", mode: 'sleep_practice' }), action('dw-check', L('✅ Checklists'), 'prompt', { prompt: "Create a checklist for lucid dreaming, dreamwork, or astral practice based on the user's goal.", mode: 'checklist' })],
-    ],
+      [action('induction', L('🌙 Induction', '🌙 İndüksiyon', '🌙 Индукция'), 'prompt', { mode: 'contemplation', prompt: 'Give me a specific technique to trigger lucidity tonight.' }), action('interpretation', L('🔮 Interpretation', '🔮 Rüya Yorumu', '🔮 Толкование'), 'submenu', { nextMenu: 'dream:interpretation' })],
+      [action('astral', L('✨ Astral / OBIE', '✨ Astral / OBIE', '✨ Астрал'), 'submenu', { nextMenu: 'dream:astral' }), action('yoga', L('🕉 Dream Yoga', '🕉 Rüya Yogası', '🕉 Йога сна'), 'prompt', { mode: 'contemplation', prompt: 'Teach me the fundamentals of Tibetan Dream Yoga.' })],
+      [action('daily', L('🛠️ Daily Work', '🛠️ Günlük Çalışma', '🛠️ Работа'), 'submenu', { nextMenu: 'dream:daily' }), action('rv', L('📡 Remote Viewing', '📡 Uzaktan Görüş', '📡 Удаленное видение'), 'submenu', { nextMenu: 'dream:remote' })],
+      [action('symbols', L('👁️ Symbols', '👁️ Sembolizm', '👁️ Символика'), 'submenu', { nextMenu: 'dream:symbols' }), ...back('dreamwalker:root')]
+    ]
   },
-  'dreamwalker:lucid': {
-    title: L('🌙 Lucid Dreaming'),
+  'dream:symbols': {
+    title: L('👁️ Symbols', '👁️ Sembolizm', '👁️ Символика'),
     buttons: [
-      [action('luc-recall', L('📖 Recall Foundation'), 'prompt', { prompt: 'Teach dream recall: dream journals, MILD technique, pre-sleep intention setting, and why most dreams are forgotten within minutes.', mode: 'lucid' }), action('luc-wbtb', L('⏰ WBTB Protocol'), 'prompt', { prompt: 'Teach WBTB (Wake-Back-To-Bed): timing, duration, entry methods, and how to use it without destroying sleep quality.', mode: 'lucid' })],
-      [action('luc-rc', L('🔍 Reality Checks'), 'prompt', { prompt: 'Teach reality checks done correctly: how to develop the habit that actually carries into dreams, not just waking life.', mode: 'lucid' }), action('luc-stabilize', L('⚓ Stabilization'), 'prompt', { prompt: 'Teach how to stabilize a lucid dream: grounding techniques, spinning, shouting, and preventing the common causes of ejection.', mode: 'lucid' })],
-      [action('luc-ethics', L('⚠️ Ethics & Psychological Limits'), 'prompt', { prompt: 'Teach the ethics and psychology of lucid dreaming: what to explore, what to avoid, and how to distinguish it from unhealthy dissociation.', mode: 'lucid' })],
-      back('dreamwalker:root'),
-    ],
+      [action('archetypes', L('🎭 Archetypes', '🎭 Arketipler', '🎭 Архетипы'), 'prompt', { mode: 'contemplation', prompt: 'Explain the common archetypes encountered in the dream state and how to engage them.' }), action('animals', L('🐾 Animal Guides', '🐾 Hayvanlar', '🐾 Тотемы'), 'prompt', { mode: 'contemplation', prompt: 'How do I interpret animal appearances in dreams?' })],
+      [action('elements', L('🔥 Elements', '🔥 Elementler', '🔥 Элементы'), 'prompt', { mode: 'contemplation', prompt: 'What does the presence of elements indicate in the dream landscape?' }), ...back('dreamwalker:root')]
+    ]
   },
-  'dreamwalker:techniques': {
-    title: L('🛠 Techniques Compared'),
+  'dream:astral': {
+    title: L('✨ Astral Projection', '✨ Astral Projeksiyon', '✨ Астральная Проекция'),
     buttons: [
-      [action('tech-mild', L('🎯 MILD (LaBerge)'), 'prompt', { prompt: 'Teach MILD (Mnemonic Induction of Lucid Dreams): its origins, the technique precisely, and why it works for some people and not others.', mode: 'lucid' }), action('tech-wild', L('🌊 WILD / SSW'), 'prompt', { prompt: 'Teach WILD (Wake Initiation of Lucid Dreams) and Sensing Status Wax: the entry, the body-paralysis phase, and how to survive it.', mode: 'lucid' })],
-      [action('tech-monroe', L('🚀 Monroe Hemi-Sync'), 'prompt', { prompt: 'Teach Robert Monroe\'s Hemi-Sync technique: the binaural beat frequencies, the Levels 1-3 model, and how it enables out-of-body entry.', mode: 'lucid' }), action('tech-raduga', L('🌑 Raduga Method'), 'prompt', { prompt: 'Teach the Raduga (LEEPS) method: the Russian school of conscious sleep, micro-awakenings, and WBTB variations.', mode: 'lucid' })],
-      [action('tech-combining', L('🧭 Combining & Personal Protocol'), 'prompt', { prompt: 'Teach how to combine lucid dreaming techniques: when to layer them, how to adapt to failure modes, and building a personal protocol.', mode: 'lucid' })],
-      back('dreamwalker:root'),
-    ],
+      [action('separation', L('⚡ Separation', '⚡ Ayrılma', '⚡ Разделение'), 'prompt', { mode: 'contemplation', prompt: 'Guide me through the vibrational stage and different separation techniques.' }), action('realms', L('🌍 Realms', '🌍 Alemler', '🌍 Миры'), 'prompt', { mode: 'historian', prompt: 'Describe the different layers or realms of the astral plane.' })],
+      [action('cord', L('🔗 The Silver Cord', '🔗 Gümüş Kordon', '🔗 Серебряный шнур'), 'prompt', { mode: 'historian', prompt: 'Explain the concept of the silver cord and returned mechanics.' }), ...back('dreamwalker:root')]
+    ]
   },
-  'dreamwalker:dream_yoga': {
-    title: L('🕉 Dream Yoga'),
+  'dream:daily': {
+    title: L('🛠️ Daily Work', '🛠️ Günlük Çalışma', '🛠️ Работа'),
     buttons: [
-      [action('dy-origin', L('📖 Origin & Purpose'), 'prompt', { prompt: 'Teach dream yoga\'s origin in the Tibetan Buddhist tradition: its purpose is liberation through awareness in all sleep states.', mode: 'dream_yoga' }), action('dy-norbu', L('🌬 Norbu Chen'), 'prompt', { prompt: 'Teach Norbu Chen\'s dream yoga: the four yogas of the bardo, the practice of PHWA (pho wa), and lucid clear light.', mode: 'dream_yoga' })],
-      [action('dy-wangyal', L('🪷 Tenzin Wangyal'), 'prompt', { prompt: 'Teach Tenzin Wangyal\'s Western-facing dream yoga: the three kayas, working with space, and the difference between Tibetan and Western approaches.', mode: 'dream_yoga' }), action('dy-bardo', L('🌑 Bardos of Sleep'), 'prompt', { prompt: 'Teach the bardo of sleep and dreaming: what opportunities exist there, and what experienced practitioners actually report.', mode: 'dream_yoga' })],
-      [action('dy-clearlight', L('💠 Clear Light Practice'), 'prompt', { prompt: 'Teach the clear light of sleep: how dream yoga practitioners work with it, and why it is not the same as visualization.', mode: 'dream_yoga' })],
-      back('dreamwalker:root'),
-    ],
+      [action('reality', L('✅ Reality Checks', '✅ Kontroller', '✅ Проверки'), 'prompt', { mode: 'contemplation', prompt: 'Give me a list of the most effective reality checks.' }), action('journal', L('📓 Journaling', '📓 Günlük Tutma', '📓 Дневник'), 'prompt', { mode: 'contemplation', prompt: 'Teach me how to optimize my dream journal for maximum recall.' })],
+      [action('incubation', L('🥚 Incubation', '🥚 İnkübasyon', '🥚 Инкубация'), 'prompt', { mode: 'contemplation', prompt: 'How do I incubate a specific dream or ask for guidance before sleep?' }), ...back('dreamwalker:root')]
+    ]
   },
-  'dreamwalker:astral': {
-    title: L('✨ Astral Projection'),
+  'dream:remote': {
+    title: L('📡 Remote Viewing', '📡 Uzaktan Görüş', '📡 Удаленное видение'),
     buttons: [
-      [action('ap-threshold', L('🚪 The Threshold Experience'), 'prompt', { prompt: 'Teach the threshold experience of astral projection: vibrations, paralysis, sounds — and how to recognize a genuine exit vs vivid imagination.', mode: 'astral' }), action('ap-navigation', L('🧭 Navigation'), 'prompt', { prompt: 'Teach how to navigate the astral plane: using intention, portals, the silver cord, and what experienced projectors report about astral geography.', mode: 'astral' })],
-      [action('ap-reality', L('🌍 Astral vs Lucid Dream'), 'prompt', { prompt: 'Teach how to distinguish genuine astral projection from lucid dreaming: criteria, evidence, and the most credible accounts.', mode: 'astral' }), action('ap-ethics', L('⚠️ Ethics & Cautions'), 'prompt', { prompt: 'Teach the ethics and psychological cautions of astral projection: what it does and does not do, and why it is not a substitute for waking work.', mode: 'astral' })],
-      back('dreamwalker:root'),
-    ],
+      [action('targ', L('🔮 Targ & Price', '🔮 Targ ve Price', '🔮 Тарг и Прайс'), 'prompt', { mode: 'remote_viewing', prompt: 'Teach Russell Targ and Pat Price SRI work.' }), action('mcmoneagle', L('📡 Joe McMoneagle', '📡 Joe McMoneagle', '📡 Джо Макмонигл'), 'prompt', { mode: 'remote_viewing', prompt: 'Teach Joe McMoneagle years of work, Stargate Results.' })],
+      [action('protocols', L('🛎️ RV Protocol', '🛎️ RV Protokolü', '📡 Протоколы'), 'prompt', { mode: 'remote_viewing', prompt: 'Teach standard remote viewing protocol.' }), ...back('dreamwalker:root')]
+    ]
   },
-  'dreamwalker:remote_viewing': {
-    title: L('📡 Remote Viewing'),
+  'dream:interpretation': {
+    title: L('🔮 Interpretation', '🔮 Rüya Yorumu', '🔮 Толкование'),
     buttons: [
-      [action('rv-targ', L('🔮 Targ & Pat Price'), 'prompt', { prompt: 'Teach Russell Targ and Pat Price\'s work at SRI: how remote viewing was discovered, the protocols, and the evidence base.', mode: 'remote_viewing' }), action('rv-swann', L('👁 Dale Swann'), 'prompt', { prompt: 'Teach Dale Swann\'s remote viewing career: his most documented targets, the controversy, and what his work actually demonstrates.', mode: 'remote_viewing' })],
-      [action('rv-mcmoneagle', L('📡 Joe McMoneagle'), 'prompt', { prompt: 'Teach Joe McMoneagle\'s remote viewing: his decades of work, the Stargate Project results, and his post-program analytical framework.', mode: 'remote_viewing' }), action('rv-protocols', L('🛎️ The RV Protocol'), 'prompt', { prompt: 'Teach the standard remote viewing protocol: target identification, channel, analytical overlay, and why the methodology was designed the way it was.', mode: 'remote_viewing' })],
-      [action('rv-practice', L('🧘 Beginning RV Practice'), 'prompt', { prompt: 'Guide a beginner through a simple remote viewing exercise: selecting a target, entering the correct mental state, recording impressions without analytical overlay.', mode: 'remote_viewing' })],
-      back('dreamwalker:root'),
-    ],
-  },
-  'dreamwalker:interpretation': {
-    title: L('🔮 Dream Interpretation'),
-    buttons: [
-      [action('int-jung', L('🧠 Jungian Lens'), 'prompt', { prompt: 'Teach Jungian dream interpretation: complexes, archetypes, compensation, and why Jung insisted dreams always speak in symbolic language.', mode: 'interpretation' }), action('int-symbolic', L('🔣 Symbolic vs Literal'), 'prompt', { prompt: 'Teach when to read a dream symbolically and when to take it practically: the difference between archetypal imagery and literal guidance.', mode: 'interpretation' })],
-      [action('int-recurring', L('🔄 Recurring Dreams'), 'prompt', { prompt: 'Teach recurring dreams: why the psyche uses them, what they signal, and how to work with them therapeutically vs divination-style.', mode: 'interpretation' }), action('int-nightmare', L('⚠️ Nightmares & Shadow'), 'prompt', { prompt: 'Teach nightmare work: when nightmares are psychological signal, when they are spiritual doorway, and how to work with each safely.', mode: 'interpretation' })],
-      back('dreamwalker:root'),
-    ],
-  },
+      [action('jung', L('🧠 Jungian Lens', '🧠 Jung Yaklaşımı', '🧠 Метод Юнга'), 'prompt', { mode: 'interpretation', prompt: 'Teach Jungian dream interpretation: complexes, archetypes.' }), action('nightmare', L('⚠️ Nightmares', '⚠️ Kabuslar', '⚠️ Кошмары'), 'prompt', { mode: 'interpretation', prompt: 'Teach nightmare transformation and shadow work.' })],
+      back('dreamwalker:root')
+    ]
+  }
+}
+
+export function getMenuScreen(pack: OraclePack, key: string): MenuScreen {
+  if (key.startsWith('tarot:suit:')) return { title: L(`✨ ${key.replace('tarot:suit:','')} `), buttons: suitRows(key.replace('tarot:suit:','') as keyof typeof TAROT_SUITS) }
+  if (key.startsWith('tantra:grp:')) {
+    const gk = key.replace('tantra:grp:','') as keyof typeof DHARANA_GROUPS
+    const g = (DHARANA_GROUPS as any)[gk]
+    const nums = g?.techniques || []
+    const rows: MenuAction[][] = []
+    for (let i=0;i<nums.length;i+=2){
+      const pair = nums.slice(i,i+2)
+      rows.push(pair.map((num:number)=> action(`tantra:dharana:${num}`, L(`${num}. ${(ALL_DHARANAS as any)[num].name}`), 'prompt', { prompt: `Transmit dharana ${num}: '${(ALL_DHARANAS as any)[num].name}'. Seed: ${(ALL_DHARANAS as any)[num].desc} Give the actual technique, practice steps, inner landscape, and application.`, mode:'dharana', afterMenu:`tantra:dharanafollow:${num}` })))
+    }
+    rows.push(back('tantra:dharanas'))
+    return { title: L(g?.label || 'Dharana Group'), buttons: rows }
+  }
+  if (key.startsWith('tantra:dharanafollow:')) {
+    const num = Number(key.replace('tantra:dharanafollow:',''))
+    const d = (ALL_DHARANAS as any)[num]
+    return {
+      title: L(`🧘 Dharana ${num}: ${d?.name || ''}`),
+      buttons: [
+        [action(`tantra:${num}:practice`, L('🧘 Practice Guide'), 'prompt', { prompt: `Step-by-step practice for dharana ${num}: '${d?.name}'.`, mode:'dharana' }), action(`tantra:${num}:scholar`, L('📖 Scholar'), 'prompt', { prompt: `Scholar commentary on dharana ${num}: '${d?.name}'.`, mode:'scholar' })],
+        [action(`tantra:${num}:experience`, L('🌌 Experience'), 'prompt', { prompt: `Inner phenomenology and experience of dharana ${num}: '${d?.name}'.`, mode:'dharana' }), action(`tantra:${num}:kashmir`, L('📜 Kashmir'), 'prompt', { prompt: `Kashmir Shaivism lens on dharana ${num}: '${d?.name}'.`, mode:'scholar' })],
+        [action(`tantra:${num}:devotion`, L('🌹 Devotion'), 'prompt', { prompt: `Devotional approach to dharana ${num}: '${d?.name}'.`, mode:'surrender' }), action(`tantra:${num}:journal`, L('📓 Journal'), 'prompt', { prompt: `Five journaling inquiries for dharana ${num}: '${d?.name}'.`, mode:'surrender' })],
+        [action(`tantra:${num}:advanced`, L('⚡ Advanced'), 'prompt', { prompt: `Advanced territory and cautions of dharana ${num}: '${d?.name}'.`, mode:'dharana' })],
+        back(`tantra:grp:${d?.group || 'breath'}`),
+      ],
+    }
+  }
+  if (key.startsWith('tarot:learn:') && key.endsWith(':follow')) {
+    const base = key.replace(':follow','').split(':').pop() || 'beginner'
+    return { title: L('🔁 Continue this path'), buttons: [
+      [action(`learn-${base}-steps`, L('📚 Break down the steps'), 'prompt', { prompt: `Break down the ${base} Tarot learning path into steps with reading order and exercises.`, mode:'teacher' }), action(`learn-${base}-sources`, L('📖 Key sources'), 'prompt', { prompt: `List the key sources and why they matter in the ${base} Tarot learning path.`, mode:'teacher' })],
+      [action(`learn-${base}-practice`, L('🃏 Weekly practice plan'), 'prompt', { prompt: `Create a weekly practice plan for the ${base} Tarot learning path.`, mode:'teacher' }), action(`learn-${base}-next`, L('🧭 What next?'), 'prompt', { prompt: `What should a practitioner do next after the ${base} Tarot learning path?`, mode:'teacher' })],
+      back('tarot:learn')
+    ]}
+  }
+  return makeMenu(pack, key)
 }

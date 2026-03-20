@@ -1,54 +1,16 @@
-
 export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'voice'
 export type UiLang = 'en' | 'tr' | 'ru'
 
 export type OracleMode =
-  | 'oracle'
-  | 'seeker'
-  | 'scholar'
-  | 'quote'
-  | 'reading'
-  | 'teacher'
-  | 'historian'
-  | 'deck_compare'
-  | 'qabalah'
-  | 'shadow'
-  | 'pathwork'
-  | 'astro'
-  | 'numerology'
-  | 'talisman'
-  | 'geomancy'
-  | 'school_compare'
-  | 'dharana'
-  | 'chakra'
-  | 'kundalini'
-  | 'shiva_shakti'
-  | 'vedanta'
-  | 'surrender'
-  | 'transpersonal'
-  | 'shamanic'
-  | 'ethnobotany'
-  | 'pharmacology'
-  | 'harm_reduction'
-  | 'entity'
-  | 'guide'
-  | 'philosophy'
-  | 'correspondence'
-  | 'tariqa'
-  | 'maqam'
-  | 'dhikr'
-  | 'poetry'
-  | 'metaphysics'
-  | 'saint'
-  | 'adab'
-  | 'dreamwork'
-  | 'lucid'
-  | 'dream_yoga'
-  | 'astral'
-  | 'remote_viewing'
-  | 'interpretation'
-  | 'sleep_practice'
-  | 'checklist'
+  | 'oracle' | 'seeker' | 'scholar' | 'quote' | 'reading' | 'teacher' 
+  | 'historian' | 'metaphysics' | 'contemplation' | 'dhikr' | 'maqam' | 'adab'
+  | 'poetry' | 'tariqa' | 'saint' | 'lucid' | 'astral' | 'dream_yoga' 
+  | 'interpretation' | 'remote_viewing' | 'sleep_practice' | 'checklist'
+  | 'qabalah' | 'astro' | 'shadow' | 'pathwork' | 'talisman' | 'deck_compare'
+  | 'school_compare' | 'numerology' | 'geomancy' | 'dharana' | 'shiva_shakti'
+  | 'vedanta' | 'chakra' | 'kundalini' | 'surrender' | 'transpersonal' 
+  | 'shamanic' | 'ethnobotany' | 'harm_reduction' | 'entity' | 'correspondence'
+  | 'blessing' | 'affirmation' | 'recitation' | 'pharmacology' | 'guide' | 'philosophy' | 'dreamwork'
 
 export type MessageRole = 'user' | 'oracle' | 'system'
 
@@ -231,7 +193,6 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
     ],
   },
-
   dreamwalker: {
     key: 'dreamwalker',
     emoji: '🌌',
@@ -307,7 +268,7 @@ export const UI_COPY = {
   record: label('Record', 'Kaydet', 'Записать'),
   transcribing: label('Transcribing voice…', 'Ses yazıya çevriliyor…', 'Голос расшифровывается…'),
   failed: label('The oracle could not be reached.', 'Kehanete ulaşılamadı.', 'Не удалось связаться с оракулом.'),
-  browserMicUnsupported: label('This browser does not support microphone recording.', 'Bu tarayıcı mikrofon kaydını desteklemiyor.', 'Этот браузер не поддерживает запись с микрофона.'),
+  browserMicUnsupported: label('This browser does not support microphone recording.', 'Bu tarayıcı mikroфон kaydını desteklemiyor.', 'Этот браузер не поддерживает запись с микрофона.'),
   emptyState: label('Choose a tradition and begin your inquiry.', 'Bir gelenek seç ve sorgunu başlat.', 'Выберите традицию и начните свой вопрос.'),
   answerLanguage: label('Answer language', 'Yanıt dili', 'Язык ответа'),
 }
@@ -348,8 +309,7 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
     tr: ['Bir kutsama daha söyle.', 'Farklı bir teyit ver.', 'Başka bir pasaj oku.', 'Bunu yavaşça ve vurgulu söyle.'],
     ru: ['Произнеси другое благословение.', 'Дай мне другое утверждение.', 'Прочти другой отрывок.', 'Скажи это медленно и с ударением.'],
   },
-
-
+};
 
 export function t(lang: UiLang, value: Record<UiLang, string>): string {
   return value[lang] ?? value.en
