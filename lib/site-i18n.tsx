@@ -8,21 +8,20 @@ import ru from '@/messages/ru.json'
 export type SiteLang = 'en' | 'tr' | 'ru'
 const dictionaries = { en, tr, ru } as const
 
-type Localized = string | { en: string; tr: string; ru: string; }
-
 type I18nCtx = {
   lang: SiteLang
   setLang: (lang: SiteLang) => void
-  t: (key: Localized, fallback?: string) => string
+  t: (key: string, fallback?: string) => string
+  tArray: (key: string) => string[]
+  tObj: (key: string) => Record<string, string>
 }
 
 const Ctx = createContext<I18nCtx>({
   lang: 'en',
   setLang: () => {},
-  t: (key, fallback) => {
-    if (typeof key === 'string') return fallback ?? key
-    return key.en ?? fallback ?? ''
-  },
+  t: (key, fallback) => fallback ?? key,
+  tArray: (key) => [],
+  tObj: (key) => ({}),
 })
 
 export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
@@ -47,10 +46,23 @@ export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
     lang,
     setLang,
     t: (key, fallback) => {
-      if (typeof key === 'object' && key !== null) {
-        return (key as any)[lang] ?? (key as any).en ?? fallback ?? ''
+      const dict = dictionaries[lang] as Record<string, unknown>
+      const val = dict[key]
+      if (typeof val === 'string') return val
+      if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+        return (val as Record<string, string>)[lang] ?? (val as Record<string, string>).en ?? fallback ?? key
       }
-      return (dictionaries[lang] as Record<string, string>)[key] ?? fallback ?? key
+      return fallback ?? key
+    },
+    tArray: (key) => {
+      const dict = dictionaries[lang] as Record<string, unknown>
+      const val = dict[key]
+      return Array.isArray(val) ? val as string[] : []
+    },
+    tObj: (key) => {
+      const dict = dictionaries[lang] as Record<string, unknown>
+      const val = dict[key]
+      return typeof val === 'object' && val !== null && !Array.isArray(val) ? val as Record<string, string> : {}
     },
   }), [lang])
 
