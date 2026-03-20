@@ -41,5 +41,11 @@
   "plans.seeker": "Arayıcı",
   "plans.full": "Tam Erişim",
   "status.live": "Canlı",
-  "status.locked": "Kilitli"
+  "status.locked": "Kilitli",
+  "blog.return": "Parşömene Dön",
+  "blog.scroll": "Parşömen",
+  "blog.readMore": "Devamını oku",
+  "blog.featured": "Öne Çıkan Yazı",
+  "blog.all": "Tümü",
+  "blog.read": "dk okuma"
 }

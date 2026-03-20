@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import GlitchCycleText from './components/GlitchCycleText';
+import { useSiteI18n } from '@/lib/site-i18n';
 
 const gateways = [
   {
@@ -59,6 +62,13 @@ const useCases = [
 ];
 
 export default function HomePage() {
+  const { t, lang } = useSiteI18n();
+  const cta = { en: 'Begin Your Journey', tr: 'Yolculuğa Başla', ru: 'Начать путешествие' }[lang];
+  const explore = { en: 'Explore the Traditions', tr: 'Gelenekleri Keşfet', ru: 'Исследовать традиции' }[lang];
+  const startText = { en: 'Start with four living gateways. Expand into a growing constellation of twenty-plus traditions, practices, archives, agents, and intelligences.', tr: 'Dört yaşayan geçit ile başlayın. Yirmi artı gelenek, pratik, arşiv, ajan ve zekayı büyüyen bir yıldız takımadasına genişletin.', ru: 'Начните с четырёх живых вратарей. Расширьтесь в растущее созвездие из более чем двадцати традиций, практик, архивов, агентов и интеллектов.' }[lang];
+  const openPortal = { en: 'Open the Portal', tr: 'Portala Gir', ru: 'Открыть портал' }[lang];
+  const enterLibrary = { en: 'Enter the Library', tr: 'Kütüphaneye Gir', ru: 'Войти в библиотеку' }[lang];
+  const beginText = { en: 'Begin with four traditions. Grow into a world of correspondences, archives, agents, and awakening.', tr: 'Dört gelenekle başlayın. Yazışmalar, arşivler, ajanlar ve uyanış dünyasına büyüyün.', ru: 'Начните с четырёх традиций. Перерастите в мир соответствий, архивов, агентов и пробуждения.' }[lang];
   return (
     <div className="bg-deep text-text-primary">
       <section className="relative overflow-hidden border-b border-white/5 bg-[radial-gradient(circle_at_top,_rgba(123,94,167,0.25),_transparent_45%),linear-gradient(180deg,#090912_0%,#090912_100%)]">
@@ -82,14 +92,14 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/chat" className="rounded-xl bg-gold px-6 py-3 text-sm font-medium text-black transition hover:opacity-90">
-                Begin Your Journey
+                {cta}
               </Link>
               <Link href="#gateways" className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-text-primary transition hover:bg-white/10">
-                Explore the Traditions
+                {explore}
               </Link>
             </div>
             <p className="mt-5 text-sm text-text-secondary">
-              Start with four living gateways. Expand into a growing constellation of twenty-plus traditions, practices, archives, agents, and intelligences.
+              {startText}
             </p>
           </div>
         </div>
@@ -286,14 +296,14 @@ export default function HomePage() {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link href="/chat" className="rounded-xl bg-gold px-6 py-3 text-sm font-medium text-black transition hover:opacity-90">
-              Open the Portal
+              {openPortal}
             </Link>
             <Link href="/library" className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-text-primary transition hover:bg-white/10">
-              Enter the Library
+              {enterLibrary}
             </Link>
           </div>
           <p className="mt-5 text-sm text-text-secondary">
-            Begin with four traditions. Grow into a world of correspondences, archives, agents, and awakening.
+            {beginText}
           </p>
         </div>
       </section>

@@ -41,5 +41,11 @@
   "plans.seeker": "Seeker",
   "plans.full": "All Access",
   "status.live": "Live",
-  "status.locked": "Locked"
+  "status.locked": "Locked",
+  "blog.return": "Return to The Scroll",
+  "blog.scroll": "The Scroll",
+  "blog.readMore": "Read more",
+  "blog.featured": "Featured Scroll",
+  "blog.all": "All",
+  "blog.read": "min read"
 }

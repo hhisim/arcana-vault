@@ -50,7 +50,10 @@ export default function PricingPage() {
           return (
             <div key={plan} className="glass-card p-6 flex flex-col gap-4">
               <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">{cfg.name}</div>
-              <div className="font-serif text-3xl text-[var(--text-primary)]">{cfg.name}</div>
+              <div className="flex items-baseline gap-1">
+                <span className="font-serif text-3xl text-[var(--text-primary)]">{cfg.priceMonthly ? `$${cfg.priceMonthly}` : 'Free'}</span>
+                {cfg.priceMonthly && <span className="text-[var(--text-secondary)] text-sm">/month</span>}
+              </div>
               <div className="text-[var(--text-secondary)] leading-7">{cfg.description}</div>
               <div className="text-sm text-[var(--text-primary)]">{cfg.slots === 'all' ? 'All traditions' : `${cfg.slots} tradition slot${Number(cfg.slots) > 1 ? 's' : ''}`}</div>
               <div className="text-sm text-[var(--text-primary)]">Daily: {cfg.dailyLimit === 'unlimited' ? 'Unlimited' : cfg.dailyLimit}</div>

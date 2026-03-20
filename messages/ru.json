@@ -41,5 +41,11 @@
   "plans.seeker": "Искатель",
   "plans.full": "Полный доступ",
   "status.live": "Активно",
-  "status.locked": "Закрыто"
+  "status.locked": "Закрыто",
+  "blog.return": "Вернуться к Свитку",
+  "blog.scroll": "Свиток",
+  "blog.readMore": "Читать далее",
+  "blog.featured": "Избранный свиток",
+  "blog.all": "Все",
+  "blog.read": "мин чтения"
 }

@@ -4,6 +4,7 @@ import React from 'react';
 import matter from 'gray-matter';
 import { posts } from '@/lib/posts';
 import BlogContent from '@/components/BlogContent';
+import BlogReturnButton from '@/components/BlogReturnButton';
 
 export const dynamic = 'force-static';
 
@@ -75,9 +76,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <p className="text-[#9B93AB] text-lg mb-10 italic">
             This specific archive of knowledge is currently being transcribed or has been moved to a deeper vault.
           </p>
-          <a href="/blog" className="inline-block px-10 py-3 bg-[#7B5EA7]/20 text-[#C9A84C] border border-[#C9A84C]/30 rounded-lg hover:bg-[#C9A84C]/10 transition-all font-bold tracking-widest uppercase text-xs">
-            Return to The Scroll
-          </a>
+          <BlogReturnButton />
         </div>
       </div>
     );
