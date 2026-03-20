@@ -355,6 +355,7 @@ export default function OraclePortal() {
                   <span className={`${badgeClass} text-[10px]`}>{config.onlineLabel[lang]}</span>
                   <div className="pr-12">
                     <div className="font-cinzel text-[1.4rem] leading-none text-text-primary"><span className="mr-1 text-sm">{config.emoji}</span>{config.title[lang]}</div>
+                    <div className="mt-1.5 text-[10px] leading-tight text-[var(--text-secondary)] line-clamp-2">{config.subtitle[lang]}</div>
                   </div>
                 </button>
               )
