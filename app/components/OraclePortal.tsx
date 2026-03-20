@@ -24,6 +24,7 @@ const uid = () => `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
 const rootMenuFor = (pack: OraclePack) => `${pack}:root`
 const randomPick = <T,>(arr: T[], count = 1) => [...arr].sort(() => Math.random() - 0.5).slice(0, count)
 const orient = (card: string) => (Math.random() < 0.32 ? `${card} (reversed)` : `${card} (upright)`)
+const FOLLOWUP_LIMIT = 1850
 
 const SPREADS: Record<string, { label: string; positions: string[] }> = {
   single: { label: 'Single Card', positions: ['The Card'] },
@@ -51,10 +52,34 @@ function buildDailyCardPrompt() {
   }
 }
 
+function compactContext(ctx?: ContextState | null) {
+  if (!ctx) return ''
+  const q = ctx.userVisible.replace(/\s+/g, ' ').trim().slice(0, 220)
+  const a = ctx.answer.replace(/\s+/g, ' ').trim().slice(0, 760)
+  return `Previous ${q ? `question: ${q}. ` : ''}Previous oracle answer: ${a}`.trim()
+}
+
 function normalizeError(input?: string | null) {
   const raw = String(input || '').trim()
   if (!raw) return 'The oracle is in meditation. Return shortly.'
-  if (/oracle unavailable/i.test(raw) || /fetch failed/i.test(raw) || /could not be reached/i.test(raw)) return 'The oracle is in meditation. Return shortly.'
+
+  try {
+    const parsed = JSON.parse(raw)
+    const detail = parsed?.detail
+    if (typeof detail === 'string') {
+      if (/string_too_long/i.test(detail) || /at most 2000 characters/i.test(detail)) return 'That follow-up carried too much context. Choose a narrower next step.'
+      if (/oracle unavailable|fetch failed|could not be reached/i.test(detail)) return 'The oracle is in meditation. Return shortly.'
+      return detail
+    }
+    if (Array.isArray(detail) && detail[0]?.msg) {
+      const msg = String(detail[0].msg)
+      if (/at most 2000 characters/i.test(msg) || /string_too_long/i.test(detail[0]?.type || '')) return 'That follow-up carried too much context. Choose a narrower next step.'
+      return msg
+    }
+  } catch {}
+
+  if (/string_too_long|at most 2000 characters/i.test(raw)) return 'That follow-up carried too much context. Choose a narrower next step.'
+  if (/oracle unavailable|fetch failed|could not be reached/i.test(raw)) return 'The oracle is in meditation. Return shortly.'
   return raw
 }
 
@@ -78,13 +103,7 @@ function AudioBubble({ src }: { src: string }) {
   }, [src])
 
   return (
-    <audio
-      ref={ref}
-      controls
-      playsInline
-      preload="metadata"
-      className="mt-4 w-full rounded-full bg-[rgba(255,255,255,0.04)]"
-    >
+    <audio ref={ref} controls playsInline preload="metadata" className="mt-4 w-full rounded-full bg-[rgba(255,255,255,0.04)]">
       <source src={src} type="audio/ogg" />
     </audio>
   )
@@ -106,12 +125,6 @@ function OracleMarkdown({ text }: { text: string }) {
         em: ({ ...props }) => <em className="italic text-[var(--primary-gold)]" {...props} />,
         hr: () => <div className="my-4 h-px bg-white/10" />,
         blockquote: ({ ...props }) => <blockquote className="my-4 border-l-2 border-[var(--primary-purple)]/60 pl-4 italic text-[var(--text-secondary)]" {...props} />,
-        code: ({ inline, className, children, ...props }: any) =>
-          inline ? (
-            <code className="rounded bg-white/5 px-1.5 py-0.5 text-[0.92em] text-[var(--primary-gold)]" {...props}>{children}</code>
-          ) : (
-            <pre className="my-4 overflow-x-auto rounded-2xl border border-white/6 bg-black/30 p-4 text-sm text-[var(--text-primary)]"><code className={className} {...props}>{children}</code></pre>
-          ),
       }}
     >
       {text}
@@ -138,7 +151,6 @@ export default function OraclePortal() {
   const chunksRef = useRef<BlobPart[]>([])
 
   const currentPack = ORACLE_CONFIG[pack]
-  const currentMode = getModeConfig(pack, mode)
   const voiceEnabledForMode = supportsVoiceReply(pack, mode)
   const menu = useMemo(() => getMenuScreen(pack, menuKey), [pack, menuKey])
   const visibleMessages = showOlder ? messages : messages.slice(0, 3)
@@ -183,22 +195,21 @@ export default function OraclePortal() {
 
   const contextualizePrompt = (rawPrompt: string) => {
     const ctx = lastContext[pack]
-    const needsContext = /clarify|follow-up|follow up|go deeper|translate|re-read|decode|practical next step|compare|use the archive|read it/i.test(rawPrompt) ||
-      menuKey.includes('follow') || menuKey.includes('deeper')
+    const needsContext = /clarify|follow-up|follow up|go deeper|translate|re-read|decode|practical next step|compare|read it|lens|continue/i.test(rawPrompt) || menuKey.includes('follow') || menuKey.includes('study:') || menuKey.includes('card:')
+    if (!needsContext || !ctx) return rawPrompt
 
-    if (!needsContext) return rawPrompt
-    if (!ctx) {
-      setSystemNotice(lang === 'tr' ? 'Önce ana okumayı başlat.' : lang === 'ru' ? 'Сначала получите основное чтение.' : 'Begin with a main reading first.')
-      return null
-    }
-    return `Use this prior ${pack} context:\n${ctx.userVisible}\n\nPrevious oracle answer:\n${ctx.answer}\n\nFollow-up request:\n${rawPrompt}`
+    const compact = compactContext(ctx)
+    const base = `Use this prior ${pack} context only as grounding, not as something to repeat verbatim. ${compact}\n\nFollow-up request: ${rawPrompt}`
+    return base.length > FOLLOWUP_LIMIT ? base.slice(0, FOLLOWUP_LIMIT) : base
   }
 
   const sendPrompt = async (prompt: string, userText?: string, overrideMode?: OracleMode, afterMenu?: string) => {
-    const trimmed = prompt.trim()
+    let trimmed = prompt.trim()
     const visibleText = (userText ?? prompt).trim()
     const effectiveMode = overrideMode ?? mode
     if (!trimmed || busy) return
+    if (trimmed.length > FOLLOWUP_LIMIT) trimmed = trimmed.slice(0, FOLLOWUP_LIMIT)
+
     setBusy(true)
     setSystemNotice(null)
     setMessages((prev) => [{ id: uid(), role: 'user', text: visibleText, pack, mode: effectiveMode }, ...prev])
@@ -230,8 +241,7 @@ export default function OraclePortal() {
       setMessages((prev) => [oracleMessage, ...prev])
       setLastContext((prev) => ({ ...prev, [pack]: { userVisible: visibleText, prompt: trimmed, answer: data.answer } }))
     } catch (error: any) {
-      const friendly = normalizeError(error?.message || '')
-      setMessages((prev) => [{ id: uid(), role: 'system', text: friendly }, ...prev])
+      setMessages((prev) => [{ id: uid(), role: 'system', text: normalizeError(error?.message || '') }, ...prev])
     } finally {
       setBusy(false)
     }
@@ -258,6 +268,7 @@ export default function OraclePortal() {
 
     let prompt = button.prompt ?? t(lang, button.label)
     let userVisible = t(lang, button.displayText ?? button.label)
+    let nextMenu = button.afterMenu
 
     if (prompt === '__SPECIAL_DAILY_CARD__') {
       const built = buildDailyCardPrompt()
@@ -273,16 +284,14 @@ export default function OraclePortal() {
       const ids = Object.keys(tantra.ALL_DHARANAS)
       const num = Number(ids[Math.floor(Math.random() * ids.length)])
       const d = (tantra.ALL_DHARANAS as any)[num]
-      prompt = `Transmit dharana ${num}: '${d.name}'. Seed: ${d.desc}. Give the actual technique, practice steps, inner landscape, and one application for today.`
+      prompt = `Transmit dharana ${num}: '${d.name}'. Seed: ${d.desc}. Give the actual technique, practice steps, inner landscape, likely obstacles, and one application for today.`
       userVisible = `Today's technique\n- Dharana ${num}: ${d.name}`
-      button.afterMenu = `tantra:dharanafollow:${num}`
+      nextMenu = `tantra:dharanafollow:${num}`
     } else {
-      const withContext = contextualizePrompt(prompt)
-      if (!withContext) return
-      prompt = withContext
+      prompt = contextualizePrompt(prompt)
     }
 
-    await sendPrompt(prompt, userVisible, button.mode, button.afterMenu)
+    await sendPrompt(prompt, userVisible, button.mode, nextMenu)
   }
 
   const toggleRecording = async () => {
@@ -322,178 +331,115 @@ export default function OraclePortal() {
     }
   }
 
-  const onComposerKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      await sendPrompt(input)
-    }
-  }
-
   return (
     <section className="h-[calc(100vh-4.5rem)] overflow-hidden bg-deep px-3 py-5 md:px-5 lg:px-8">
-      <div className="mx-auto grid h-full max-w-7xl gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="glass-card voa-scrollbar order-2 h-full overflow-y-auto p-4 lg:order-1">
+      <div className="mx-auto grid h-full max-w-[1600px] gap-6 lg:grid-cols-[260px_minmax(0,1fr)_300px]">
+        {/* LEFT: Oracle pack selector */}
+        <aside className="glass-card voa-scrollbar order-1 hidden h-full overflow-y-auto p-4 lg:block">
           <div className="mb-5">
-            <h1 className="font-cinzel text-2xl text-[var(--primary-gold)]">{t(lang, UI_COPY.title)}</h1>
+            <h1 className="font-cinzel text-xl text-[var(--primary-gold)]">{t(lang, UI_COPY.title)}</h1>
             <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{t(lang, UI_COPY.subtitle)}</p>
           </div>
-
-          <div className="mb-5 flex flex-wrap gap-2">
+          <div className="mb-4 flex flex-wrap gap-2">
             {(['en', 'tr', 'ru'] as UiLang[]).map((v) => (
-              <button key={v} type="button" onClick={() => setLang(v)} className={`rounded-full border px-3 py-1.5 text-sm transition ${lang === v ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/10 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>
-                {v.toUpperCase()}
-              </button>
+              <button key={v} type="button" onClick={() => setLang(v)} className={`rounded-full border px-2 py-1 text-xs transition ${lang === v ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/10 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{v.toUpperCase()}</button>
             ))}
           </div>
-
-          <div className="space-y-3">
+          <div className="space-y-2">
             {(Object.keys(ORACLE_CONFIG) as OraclePack[]).map((item) => {
               const config = ORACLE_CONFIG[item]
               const active = pack === item
               const badgeClass = item === 'dreamwalker' ? 'oracle-badge-archive' : 'oracle-badge-live'
               return (
-                <button key={item} type="button" onClick={() => setPack(item)} className={`oracle-card relative w-full rounded-2xl border p-4 text-left ${active ? 'is-active animate-sheen border-[var(--primary-purple)]' : 'border-[var(--border-subtle)]'}`}>
-                  <span className={badgeClass}>{config.onlineLabel[lang]}</span>
-                  <div className="pr-16">
-                    <div className="font-cinzel text-[1.85rem] leading-none text-text-primary"><span className="mr-2 text-lg">{config.emoji}</span>{config.title[lang]}</div>
-                    <p className="mt-2 text-sm leading-7 text-[var(--text-secondary)]">{config.subtitle[lang]}</p>
+                <button key={item} type="button" onClick={() => setPack(item)} className={`oracle-card relative w-full rounded-xl border p-3 text-left ${active ? 'is-active animate-sheen border-[var(--primary-purple)]' : 'border-[var(--border-subtle)]'}`}>
+                  <span className={`${badgeClass} text-[10px]`}>{config.onlineLabel[lang]}</span>
+                  <div className="pr-12">
+                    <div className="font-cinzel text-[1.4rem] leading-none text-text-primary"><span className="mr-1 text-sm">{config.emoji}</span>{config.title[lang]}</div>
                   </div>
                 </button>
               )
             })}
           </div>
-
-          <div className="mt-6 border-t border-white/6 pt-5">
-            <div className="mb-2 text-sm font-medium text-text-primary">{t(lang, UI_COPY.mode)}</div>
-            <div className="flex flex-wrap gap-2">
+          <div className="mt-5 border-t border-white/6 pt-4">
+            <div className="mb-2 text-xs font-medium text-text-primary">{t(lang, UI_COPY.mode)}</div>
+            <div className="flex flex-col gap-1">
               {currentPack.modes.map((entry) => (
-                <button key={entry.value} type="button" onClick={() => setMode(entry.value)} className={`rounded-full border px-3 py-1.5 text-xs transition ${mode === entry.value ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/10 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>
-                  {entry.label[lang]}
-                </button>
+                <button key={entry.value} type="button" onClick={() => setMode(entry.value)} className={`rounded-lg border px-3 py-1.5 text-xs text-left transition ${mode === entry.value ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{entry.label[lang]}</button>
               ))}
-            </div>
-
-            <div className="mt-5 grid gap-3 rounded-2xl border border-white/6 bg-[var(--bg-raised)] p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-sm font-medium text-text-primary">{t(lang, UI_COPY.answerLanguage)}</div>
-                  <div className="text-xs text-[var(--text-secondary)]">{lang.toUpperCase()}</div>
-                </div>
-                <div className="text-sm text-[var(--text-secondary)]">{statusLabel}</div>
-              </div>
-
-              <label className={`flex items-center justify-between gap-3 rounded-xl border px-3 py-3 ${voiceEnabledForMode ? 'border-white/8' : 'border-white/5 opacity-60'}`}>
-                <div>
-                  <div className="text-sm font-medium text-text-primary">{t(lang, UI_COPY.voiceReply)}</div>
-                  <div className="text-xs text-[var(--text-secondary)]">{voiceEnabledForMode ? t(lang, UI_COPY.voiceAvailable) : t(lang, UI_COPY.voiceUnavailable)}</div>
-                </div>
-                <input type="checkbox" className="h-4 w-4 accent-[var(--primary-gold)]" checked={voiceReply && voiceEnabledForMode} disabled={!voiceEnabledForMode} onChange={(e) => setVoiceReply(e.target.checked)} />
-              </label>
-
-              <div className="rounded-xl border border-white/8 px-3 py-3">
-                <div className="text-sm font-medium text-text-primary">Voice style</div>
-                <div className="mt-2 grid grid-cols-2 gap-2">
-                  <button type="button" onClick={() => setVoiceStyle('female')} className={`rounded-xl border px-3 py-2 text-sm transition ${voiceStyle === 'female' ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>Female</button>
-                  <button type="button" onClick={() => setVoiceStyle('male')} className={`rounded-xl border px-3 py-2 text-sm transition ${voiceStyle === 'male' ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>Male</button>
-                </div>
-              </div>
             </div>
           </div>
         </aside>
 
-        <div className="glass-card order-1 flex h-full min-h-0 flex-col overflow-hidden lg:order-2">
-          <div className="border-b border-white/6 px-5 py-4">
+        {/* MIDDLE: Chat area */}
+        <div className="glass-card order-2 flex h-full min-h-0 flex-col overflow-hidden">
+          <div className="border-b border-white/6 px-4 py-3">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="font-cinzel text-3xl text-text-primary"><span className="mr-2 text-lg">{currentPack.emoji}</span>{currentPack.title[lang]}</div>
-                <div className="mt-1 text-sm text-[var(--text-secondary)]">{currentPack.subtitle[lang]}</div>
+                <div className="font-cinzel text-2xl text-text-primary"><span className="mr-2 text-lg">{currentPack.emoji}</span>{currentPack.title[lang]}</div>
+                <div className="mt-0.5 text-xs text-[var(--text-secondary)]">{currentPack.subtitle[lang]}</div>
               </div>
-              <button type="button" onClick={() => { setMessages([]); setLastContext({}); }} className="rounded-full border border-white/8 px-4 py-2 text-sm text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
+              <button type="button" onClick={() => { setMessages([]); setLastContext({}); }} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
             </div>
           </div>
 
-          <div className="border-b border-white/6 px-4 py-4 md:px-5">
-            <div className="glass-card rounded-[24px] border border-white/6 p-4">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={onComposerKeyDown}
-                placeholder={t(lang, UI_COPY.placeholder)}
-                rows={3}
-                className="min-h-[92px] w-full resize-none rounded-[20px] border border-white/8 bg-[rgba(255,255,255,0.02)] px-5 py-4 text-base text-text-primary outline-none placeholder:text-[var(--text-secondary)]"
-              />
-              <div className="mt-4 flex flex-wrap gap-2">
-                {currentPack.starterPrompts[lang].map((prompt) => (
-                  <button key={prompt} type="button" onClick={() => sendPrompt(prompt, prompt)} className="rounded-full border border-white/8 px-3 py-1.5 text-sm text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{prompt}</button>
-                ))}
+          <div className="border-b border-white/6 px-4 py-3">
+            <div className="glass-card rounded-2xl border border-white/6 p-3">
+              <textarea value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void sendPrompt(input) } }} placeholder={t(lang, UI_COPY.placeholder)} rows={2} className="min-h-[72px] w-full resize-none rounded-[16px] border border-white/8 bg-[rgba(255,255,255,0.02)] px-4 py-3 text-sm text-text-primary outline-none placeholder:text-[var(--text-secondary)]" />
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {currentPack.starterPrompts[lang].map((prompt) => (<button key={prompt} type="button" onClick={() => sendPrompt(prompt, prompt)} className="rounded-full border border-white/8 px-2 py-1 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{prompt}</button>))}
               </div>
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <div className="min-h-[24px] text-sm text-[var(--text-secondary)]">
-                  {busy ? <span className="inline-flex items-center gap-2"><span className="voa-dots text-[var(--primary-gold)]"><span>•</span><span>•</span><span>•</span></span><span>Oracle is reading the threads…</span></span> : systemNotice ? <span className="italic text-[var(--primary-gold)]/85">{systemNotice}</span> : null}
-                </div>
-                <div className="flex items-center gap-3">
-                  <button type="button" onClick={toggleRecording} className={`rounded-2xl border px-6 py-3 text-sm transition ${recording ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{recording ? 'Stop' : t(lang, UI_COPY.record)}</button>
-                  <button type="button" disabled={busy || !input.trim()} onClick={() => sendPrompt(input)} className="rounded-2xl bg-[var(--primary-gold)] px-8 py-3 text-sm text-black transition hover:brightness-105 disabled:opacity-50">{t(lang, UI_COPY.send)}</button>
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <div className="min-h-[20px] text-xs text-[var(--text-secondary)]">{busy ? <span className="inline-flex items-center gap-1.5"><span className="voa-dots text-[var(--primary-gold)]"><span>•</span><span>•</span><span>•</span></span><span>Oracle is reading…</span></span> : systemNotice ? <span className="italic text-[var(--primary-gold)]/85">{systemNotice}</span> : null}</div>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={toggleRecording} className={`rounded-xl border px-4 py-2 text-xs transition ${recording ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{recording ? 'Stop' : t(lang, UI_COPY.record)}</button>
+                  <button type="button" disabled={busy || !input.trim()} onClick={() => sendPrompt(input)} className="rounded-xl bg-[var(--primary-gold)] px-6 py-2 text-sm text-black transition hover:brightness-105 disabled:opacity-50">{t(lang, UI_COPY.send)}</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-b border-white/6 px-4 py-4 md:px-5">
-            <div className="mb-3 flex items-center justify-between gap-4">
-              <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">{t(lang, menu.title)}</div>
-              {messages.length > 3 && (
-                <button type="button" onClick={() => setShowOlder((v) => !v)} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">
-                  {showOlder ? 'Collapse history' : `Show full history (${hiddenCount})`}
-                </button>
-              )}
-            </div>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {menu.buttons.flat().map((button) => (
-                <button key={button.id} type="button" onClick={() => handleAction(button)} className="deep-button rounded-2xl">
-                  <span className="text-sm text-text-primary">{t(lang, button.label).replace(/^\//, '')}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="voa-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4 md:px-5">
+          <div className="voa-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4">
             {visibleMessages.length === 0 ? (
-              <div className="glass-card rounded-[28px] border border-dashed border-white/10 px-6 py-10 text-center text-[var(--text-secondary)]">
-                <div className="text-lg text-text-primary">{t(lang, UI_COPY.emptyState)}</div>
-                <div className="mt-2">Begin above. The conversation space now opens first.</div>
+              <div className="flex h-full items-center justify-center">
+                <div className="glass-card rounded-2xl border border-dashed border-white/10 px-8 py-12 text-center text-[var(--text-secondary)]">
+                  <div className="text-lg text-text-primary">{t(lang, UI_COPY.emptyState)}</div>
+                  <div className="mt-2 text-sm">Begin above. The conversation space now opens first.</div>
+                </div>
               </div>
             ) : (
-              <div className="space-y-5">
-                {visibleMessages.map((message) => {
-                  if (message.role === 'user') {
-                    return (
-                      <div key={message.id} className="user-bubble ml-auto max-w-3xl p-5">
-                        <div className="mb-2 text-xs uppercase tracking-[0.2em] text-[var(--primary-gold)]">You</div>
-                        <div className="text-text-primary whitespace-pre-wrap">{message.text}</div>
-                      </div>
-                    )
-                  }
-                  if (message.role === 'system') {
-                    return (
-                      <div key={message.id} className="oracle-bubble max-w-3xl p-5">
-                        <div className="mb-2 text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">System</div>
-                        <div className="italic text-[#E05C5C]">{normalizeError(message.text)}</div>
-                      </div>
-                    )
-                  }
-                  return (
-                    <div key={message.id} className="oracle-bubble max-w-4xl p-5">
-                      <div className="mb-2 text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">{currentPack.title[lang]}</div>
-                      <OracleMarkdown text={message.text} />
-                      {message.audioUrl ? <AudioBubble src={message.audioUrl} /> : null}
-                    </div>
-                  )
-                })}
+              <div className="space-y-4">
+                {visibleMessages.map((message) => message.role === 'user' ? (
+                  <div key={message.id} className="user-bubble ml-auto max-w-[85%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--primary-gold)]">You</div><div className="whitespace-pre-wrap text-sm text-text-primary">{message.text}</div></div>
+                ) : message.role === 'system' ? (
+                  <div key={message.id} className="oracle-bubble max-w-[85%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">System</div><div className="italic text-sm text-[#E05C5C]">{normalizeError(message.text)}</div></div>
+                ) : (
+                  <div key={message.id} className="oracle-bubble max-w-[90%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">{currentPack.title[lang]}</div><OracleMarkdown text={message.text} />{message.audioUrl ? <AudioBubble src={message.audioUrl} /> : null}</div>
+                ))}
               </div>
             )}
           </div>
         </div>
+
+        {/* RIGHT: Menu panel */}
+        <aside className="glass-card order-3 voa-scrollbar hidden h-full overflow-y-auto p-4 lg:block">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">{t(lang, menu.title)}</div>
+            {messages.length > 3 && (
+              <button type="button" onClick={() => setShowOlder((v) => !v)} className="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{showOlder ? 'Collapse' : `History (${hiddenCount})`}</button>
+            )}
+          </div>
+          <div className="space-y-2">
+            {menu.buttons.flat().map((button) => (
+              <button key={button.id} type="button" onClick={() => handleAction(button)} className={`group flex w-full items-start gap-2 rounded-xl border px-3 py-3 text-left transition ${button.kind === 'submenu' || button.kind === 'back' ? 'border-[var(--primary-purple)]/30 bg-[rgba(123,94,167,0.06)] hover:border-[var(--primary-purple)]/60 hover:bg-[rgba(123,94,167,0.12)]' : 'border-white/8 bg-[rgba(255,255,255,0.015)] hover:border-[var(--primary-purple)]/35 hover:bg-[rgba(123,94,167,0.08)] hover:shadow-[0_0_12px_rgba(123,94,167,0.12)]'}`}>
+                <div className="mt-0.5 flex-shrink-0 text-xs text-[var(--primary-gold)]">{button.kind === 'submenu' ? '▶' : button.kind === 'back' ? '◀' : '◆'}</div>
+                <div>
+                  <div className="text-xs font-medium leading-snug text-text-primary">{t(lang, button.label).replace(/^\//, '')}</div>
+                  {button.description ? <div className="mt-0.5 text-[10px] leading-relaxed text-[var(--text-secondary)]">{t(lang, button.description)}</div> : null}
+                </div>
+              </button>
+            ))}
+          </div>
+        </aside>
       </div>
     </section>
   )
