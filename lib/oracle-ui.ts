@@ -1,16 +1,56 @@
-export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'voice'
+
+export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' 
 export type UiLang = 'en' | 'tr' | 'ru'
 
 export type OracleMode =
-  | 'oracle' | 'seeker' | 'scholar' | 'quote' | 'reading' | 'teacher' 
-  | 'historian' | 'metaphysics' | 'contemplation' | 'dhikr' | 'maqam' | 'adab'
-  | 'poetry' | 'tariqa' | 'saint' | 'lucid' | 'astral' | 'dream_yoga' 
-  | 'interpretation' | 'remote_viewing' | 'sleep_practice' | 'checklist'
-  | 'qabalah' | 'astro' | 'shadow' | 'pathwork' | 'talisman' | 'deck_compare'
-  | 'school_compare' | 'numerology' | 'geomancy' | 'dharana' | 'shiva_shakti'
-  | 'vedanta' | 'chakra' | 'kundalini' | 'surrender' | 'transpersonal' 
-  | 'shamanic' | 'ethnobotany' | 'harm_reduction' | 'entity' | 'correspondence'
-  | 'blessing' | 'affirmation' | 'recitation' | 'pharmacology' | 'guide' | 'philosophy' | 'dreamwork'
+  | 'oracle'
+  | 'seeker'
+  | 'scholar'
+  | 'quote'
+  | 'reading'
+  | 'contemplation'
+  | 'practice'
+  | 'teacher'
+  | 'historian'
+  | 'deck_compare'
+  | 'qabalah'
+  | 'shadow'
+  | 'pathwork'
+  | 'astro'
+  | 'numerology'
+  | 'talisman'
+  | 'geomancy'
+  | 'school_compare'
+  | 'dharana'
+  | 'chakra'
+  | 'kundalini'
+  | 'shiva_shakti'
+  | 'vedanta'
+  | 'surrender'
+  | 'transpersonal'
+  | 'shamanic'
+  | 'ethnobotany'
+  | 'pharmacology'
+  | 'harm_reduction'
+  | 'entity'
+  | 'guide'
+  | 'philosophy'
+  | 'correspondence'
+  | 'tariqa'
+  | 'maqam'
+  | 'dhikr'
+  | 'poetry'
+  | 'metaphysics'
+  | 'saint'
+  | 'adab'
+  | 'dreamwork'
+  | 'lucid'
+  | 'dream_yoga'
+  | 'astral'
+  | 'remote_viewing'
+  | 'interpretation'
+  | 'sleep_practice'
+  | 'checklist'
 
 export type MessageRole = 'user' | 'oracle' | 'system'
 
@@ -193,6 +233,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
     ],
   },
+
   dreamwalker: {
     key: 'dreamwalker',
     emoji: '🌌',
@@ -224,26 +265,6 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
     ],
   },
-  voice: {
-    key: 'voice',
-    emoji: '🎙️',
-    title: label('Voice Oracle', 'Ses Kehaneti', 'Голосовой Оракул'),
-    subtitle: label('Speak to the sacred — voice-only transmission', 'Kutsalın sesine konuş — yalnızca ses aktarımı', 'Говори с сакральным — передача только голосом'),
-    onlineLabel: label('Live', 'Canlı', 'Онлайн'),
-    defaultMode: 'oracle',
-    starterPrompts: {
-      en: ['Say a grounding affirmation.', 'Give me a daily oracle in voice only.', 'Speak a blessing for my day.', 'Recite a sacred text passage.'],
-      tr: ['Yerleştirici bir teyit ver.', 'Bana yalnızca ses olarak günlük bir kahin ver.', 'Günüm için bir kutsama söyle.', 'Kutsal bir metin pasajı oku.'],
-      ru: ['Произнеси заземляющее утверждение.', 'Дай мне ежедневный оракул только голосом.', 'Произнеси благословение на день.', 'Прочти отрывок из священного текста.'],
-    },
-    modes: [
-      { value: 'oracle', label: label('Oracle', 'Kehanet', 'Оракул'), voiceEnabled: true },
-      { value: 'blessing', label: label('Blessing', 'Kutsama', 'Благословение'), voiceEnabled: true },
-      { value: 'affirmation', label: label('Affirmation', 'Teyit', 'Утверждение'), voiceEnabled: true },
-      { value: 'recitation', label: label('Recitation', 'Tilavet', 'Чтение'), voiceEnabled: true },
-      { value: 'contemplation', label: label('Contemplation', 'Tefekkür', 'Созерцание'), voiceEnabled: true },
-    ],
-  },
 }
 
 
@@ -268,7 +289,7 @@ export const UI_COPY = {
   record: label('Record', 'Kaydet', 'Записать'),
   transcribing: label('Transcribing voice…', 'Ses yazıya çevriliyor…', 'Голос расшифровывается…'),
   failed: label('The oracle could not be reached.', 'Kehanete ulaşılamadı.', 'Не удалось связаться с оракулом.'),
-  browserMicUnsupported: label('This browser does not support microphone recording.', 'Bu tarayıcı mikroфон kaydını desteklemiyor.', 'Этот браузер не поддерживает запись с микрофона.'),
+  browserMicUnsupported: label('This browser does not support microphone recording.', 'Bu tarayıcı mikrofon kaydını desteklemiyor.', 'Этот браузер не поддерживает запись с микрофона.'),
   emptyState: label('Choose a tradition and begin your inquiry.', 'Bir gelenek seç ve sorgunu başlat.', 'Выберите традицию и начните свой вопрос.'),
   answerLanguage: label('Answer language', 'Yanıt dili', 'Язык ответа'),
 }
@@ -304,12 +325,10 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
     tr: ['Bu gece için bir bilinçli rüya pratiği ver.', 'Bunu kehanet değil rüya sembolizmi olarak yorumla.', 'Rüya yogası, astral projeksiyon ve uzak görüş karşılaştır.'],
     ru: ['Дай одну практику осознанного сна на эту ночь.', 'Истолкуй это как символику сна, а не буквальное знамение.', 'Сравни йогу сна, астральную проекцию и дистанционное видение.'],
   },
-  voice: {
-    en: ['Speak another blessing.', 'Give me a different affirmation.', 'Recite another passage.', 'Say this slowly and with emphasis.'],
-    tr: ['Bir kutsama daha söyle.', 'Farklı bir teyit ver.', 'Başka bir pasaj oku.', 'Bunu yavaşça ve vurgulu söyle.'],
-    ru: ['Произнеси другое благословение.', 'Дай мне другое утверждение.', 'Прочти другой отрывок.', 'Скажи это медленно и с ударением.'],
-  },
+
+
 };
+
 
 export function t(lang: UiLang, value: Record<UiLang, string>): string {
   return value[lang] ?? value.en

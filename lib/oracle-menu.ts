@@ -1,4 +1,3 @@
-
 import type { OracleMode, OraclePack, UiLang } from '@/lib/oracle-ui'
 import { DHARANA_GROUPS, ALL_DHARANAS, TANTRA_PRACTICES, CHAKRAS } from '@/lib/tantra-data'
 
@@ -94,19 +93,18 @@ function makeMenu(pack: OraclePack, key: string): MenuScreen {
 
 const MENUS: Record<string, MenuScreen> = {
   'tao:root': {
-    title: L('☯ Tao Oracle Menu'),
+    title: L('☯ Tao Oracle Menu', '☯ Tao Kehaneti Menüsü', '☯ Дао Меню Оракула'),
     buttons: [
-      [action('tao-patience', L('What does the Tao say about patience?'), 'prompt', { prompt: 'What does the Tao say about patience?', mode: 'oracle' }), action('tao-obstacles', L('Why do obstacles appear?'), 'prompt', { prompt: 'Why do obstacles appear?', mode: 'oracle' })],
-      [action('tao-decision', L('How should I approach a difficult decision?'), 'prompt', { prompt: 'How should I approach a difficult decision?', mode: 'seeker' }), action('tao-daily', L('Share wisdom for today.'), 'prompt', { prompt: 'Share one concise Taoist teaching for today with one practical application.', mode: 'quote' })],
+      [action('tao-daily', L('🕯️ Daily Path', '🕯️ Günlük Yol', '🕯️ Ежедневно'), 'prompt', { prompt: 'Offer a daily contemplation based on the Tao Te Ching.', mode: 'contemplation' }), action('tao-patience', L('⚖️ Patience', '⚖️ Sabır', '⚖️ Терпение'), 'prompt', { prompt: 'What does the Tao say about patience and letting things unfold in their own time?', mode: 'contemplation' })],
+      [action('tao-obstacles', L('🌊 Obstacles', '🌊 Engeller', '🌊 Препятствия'), 'prompt', { prompt: 'Why do obstacles appear on the path? Teach the meaning of difficulty through a Taoist lens.', mode: 'contemplation' }), action('tao-decision', L('🧭 Decision-Making', '🧭 Karar Verme', '🧭 Принятие решений'), 'prompt', { prompt: 'How should I approach a difficult decision without forcing the outcome?', mode: 'contemplation' })],
     ],
   },
   'tarot:root': {
-    title: L('🎴 The Cartomancer'),
+    title: L('🎴 The Cartomancer', '🎴 Kartomansi Portalı', '🎴 Картомант'),
     buttons: [
-      [action('tarot-daily', L('🃏 Daily Card'), 'prompt', { prompt: '__SPECIAL_DAILY_CARD__', mode: 'reading', afterMenu: 'tarot:reading-followups' }), action('tarot-spreads', L('🔮 Readings'), 'submenu', { nextMenu: 'tarot:spreads' })],
-      [action('tarot-study', L('📚 Deep Study'), 'submenu', { nextMenu: 'tarot:study' }), action('tarot-shadow-menu', L('🌑 Shadow Work'), 'submenu', { nextMenu: 'tarot:shadow' })],
-      [action('tarot-browse', L('✨ Browse Arcana'), 'submenu', { nextMenu: 'tarot:browse' }), action('tarot-learn', L('🎓 Learning Paths'), 'submenu', { nextMenu: 'tarot:learn' })],
-      [action('tarot-commands', L('🧰 Command Deck'), 'submenu', { nextMenu: 'tarot:commands' })],
+      [action('tarot-daily', L('🃏 Daily Card', '🃏 Günlük Kart', '🃏 Карта дня'), 'prompt', { prompt: '__SPECIAL_DAILY_CARD__', mode: 'reading', afterMenu: 'tarot:reading-followups' }), action('tarot-spreads', L('🔮 Readings', '🔮 Readings', '🔮 Расклады'), 'submenu', { nextMenu: 'tarot:spreads' })],
+      [action('tarot-study', L('📚 Deep Study', '📚 Derin Eğitim', '📚 Обучение'), 'submenu', { nextMenu: 'tarot:study' }), action('tarot-shadow-menu', L('🌑 Shadow Work', '🌑 Gölge Çalışması', '🌑 Работа с тенью'), 'submenu', { nextMenu: 'tarot:shadow' })],
+      [action('tarot-browse', L('✨ Browse Arcana', '✨ Arkanaya Göz At', '✨ Арканы'), 'submenu', { nextMenu: 'tarot:browse' }), action('tarot-learn', L('🎓 Learning Paths', '🎓 Öğrenme Yolları', '🎓 Пути обучения'), 'submenu', { nextMenu: 'tarot:learn' })],
     ],
   },
   'tarot:spreads': {
@@ -153,7 +151,7 @@ const MENUS: Record<string, MenuScreen> = {
     buttons: [
       [action('shadow-devil', L('XV · The Devil'), 'prompt', { prompt: 'Do a shadow-work session with The Devil.', mode: 'shadow' }), action('shadow-tower', L('XVI · The Tower'), 'prompt', { prompt: 'Do a shadow-work session with The Tower.', mode: 'shadow' })],
       [action('shadow-moon', L('XVIII · The Moon'), 'prompt', { prompt: 'Do a shadow-work session with The Moon.', mode: 'shadow' }), action('shadow-nine', L('Nine of Swords'), 'prompt', { prompt: 'Do a shadow-work session with Nine of Swords.', mode: 'shadow' })],
-      [action('shadow-random', L('🎲 Random Shadow Card'), 'prompt', { prompt: 'Pick a strong shadow-work Tarot card and do a full session with wound, defensive pattern, and integration path.', mode: 'shadow' })],
+      [action('shadow-random', L('🎲 Random Shadow Card'), 'prompt', { prompt: 'Pick a shadow-work Tarot card and do a full session with wound, defensive pattern, and integration path.', mode: 'shadow' })],
       back('tarot:root'),
     ],
   },
@@ -169,11 +167,11 @@ const MENUS: Record<string, MenuScreen> = {
     ],
   },
   'tantra:root': {
-    title: L('🔥 Shakti Oracle'),
+    title: L('🕉️ Tantra Oracle', '🕉️ Tantrik Kehanet', '🕉️ Тантра Оракул'),
     buttons: [
-      [action('tantra-daily', L('🔥 Daily Technique'), 'prompt', { prompt: '__SPECIAL_DHARANA_daily__', mode: 'dharana', afterMenu: 'tantra:dharana-follow' }), action('tantra-practices', L('🧘 Practice Path'), 'submenu', { nextMenu: 'tantra:practices' })],
-      [action('tantra-dharanas', L('✨ 112 Dharanas'), 'submenu', { nextMenu: 'tantra:dharanas' }), action('tantra-study', L('📚 Deep Study'), 'submenu', { nextMenu: 'tantra:study' })],
-      [action('tantra-chakras', L('🌸 Chakra Map'), 'submenu', { nextMenu: 'tantra:chakras' }), action('tantra-kundalini', L('⚡ Kundalini'), 'submenu', { nextMenu: 'tantra:kundalini' })],
+      [action('tantra-daily', L('🔥 Daily Technique', '🔥 Günlük Teknik', '🔥 Ежедневная практика'), 'prompt', { prompt: '__SPECIAL_DHARANA_daily__', mode: 'dharana', afterMenu: 'tantra:dharana-follow' }), action('tantra-practices', L('🧘 Practice Path', '🧘 Uygulama Yolu', '🧘 Путь практики'), 'submenu', { nextMenu: 'tantra:practices' })],
+      [action('tantra-dharanas', L('✨ 112 Dharanas', '✨ 112 Dharana', '✨ 112 Дхаран'), 'submenu', { nextMenu: 'tantra:dharanas' }), action('tantra-study', L('📚 Deep Study', '📚 Derin Eğitim', '📚 Обучение'), 'submenu', { nextMenu: 'tantra:study' })],
+      [action('tantra-chakras', L('🌸 Chakra Map', '🌸 Çakra Haritası', '🌸 Карта чакр'), 'submenu', { nextMenu: 'tantra:chakras' }), action('tantra-kundalini', L('⚡ Kundalini', '⚡ Kundalini', '⚡ Кундалини'), 'submenu', { nextMenu: 'tantra:kundalini' })],
     ],
   },
   'tantra:practices': { title: L('🧘 Practice Paths'), buttons: [
@@ -201,17 +199,20 @@ const MENUS: Record<string, MenuScreen> = {
       [action('kundalini-rising', L('🔥 Rising Process'), 'prompt', { prompt: 'Explain the process of rising energy and how practitioners can distinguish symbolism from physiology and stress.', mode: 'kundalini' }), action('kundalini-integration', L('🫀 Integration'), 'prompt', { prompt: 'Teach integration after intense energetic openings: grounding, diet, rest, journaling, and humility.', mode: 'kundalini' })],
       back('tantra:root')
   ] },
-  'entheogen:root': { title: L('🍄 Esoteric Entheogen'), buttons: [
-      [action('entheo-maps', L('🧠 Maps of Consciousness'), 'prompt', { prompt: 'Compare Grof, Wilber, Tart, and Lilly on entheogenic states.', mode: 'transpersonal' }), action('entheo-shamanism', L('🪶 Shamanism'), 'prompt', { prompt: 'Teach entheogens in relation to shamanic technologies and cautions.', mode: 'shamanic' })],
-      [action('entheo-ethnobotany', L('🌿 Ethnobotany'), 'prompt', { prompt: 'Teach entheogens ethnobotanically: lineage, plant context, cultural setting, and caution.', mode: 'ethnobotany' }), action('entheo-safety', L('⚠️ Harm Reduction'), 'prompt', { prompt: 'Give a harm-reduction guide for entheogenic work with set, setting, contraindications, and integration.', mode: 'harm_reduction' })],
-      [action('entheo-entities', L('👁 Entities'), 'prompt', { prompt: 'Discuss entity encounters carefully across symbolic, psychological, phenomenological, and occult frames.', mode: 'entity' }), action('entheo-correspond', L('🕸 Correspondence'), 'prompt', { prompt: 'Map plants, molecules, correspondences, and visionary signatures across the archive.', mode: 'correspondence' })],
-  ] },
+  'entheogen:root': {
+    title: L('🍄 Esoteric Entheogen', '🍄 Ezoterik Enteojen', '🍄 Эзотерический Энтеоген'),
+    buttons: [
+      [action('entheo-maps', L('🧠 Maps of Consciousness', '🧠 Bilinç Haritaları', '🧠 Карты сознания'), 'prompt', { prompt: 'Compare Grof, Wilber, Tart, and Lilly on entheogenic states.', mode: 'transpersonal' }), action('entheo-shamanism', L('🪶 Shamanism', '🪶 Şamanizm', '🪶 Шаманизм'), 'prompt', { prompt: 'Teach entheogens in relation to shamanic technologies and cautions.', mode: 'shamanic' })],
+      [action('entheo-integration', L('✨ Integration', '✨ Entegrasyon', '✨ Интеграция'), 'prompt', { mode: 'practice', prompt: 'Offer a daily integration practice for entheogenic experiences.' }), action('entheo-safety', L('⚠️ Harm Reduction', '⚠️ Zarar Azaltma', '⚠️ Снижение вреда'), 'prompt', { prompt: 'Give a harm-reduction guide for entheogenic work with set, setting, contraindications, and integration.', mode: 'harm_reduction' })],
+      [action('entheo-entities', L('👁 Entities', '👁 Varlıklar', '👁 Сущности'), 'prompt', { prompt: 'Discuss entity encounters carefully across symbolic, psychological, phenomenological, and occult frames.', mode: 'entity' }), action('entheo-mythology', L('🕯️ Mythology', '🕯️ Mitoloji', '🕯️ Мифология'), 'prompt', { mode: 'metaphysics', prompt: 'What is the metaphysics behind plant intelligence and ritual context?' })],
+    ],
+  },
   'sufi:root': {
     title: L('🌙 Sufi Mystic', '🌙 Sufi Mistik', '🌙 Суфийский Мистик'),
     buttons: [
       [action('sufi-contemplation', L('🕯️ Contemplation', '🕯️ Tefekkür', '🕯️ Созерцание'), 'prompt', { mode: 'contemplation', prompt: 'Give me a daily Sufi contemplation from the path of love.' }), action('sufi-lineages', L('🧭 Lineages', '🧭 Yollar', '🧭 Линии передачи'), 'submenu', { nextMenu: 'sufi:lineages' })],
       [action('sufi-rumi', L('🫀 Rumi & Shams', '🫀 Mevlana Rumi ve Şems', '🫀 Руми и Шамс'), 'submenu', { nextMenu: 'sufi:rumi' }), action('sufi-metaphysics', L('⚡ Metaphysics', '⚡ Metafizik', '⚡ Метафизика'), 'submenu', { nextMenu: 'sufi:meta' })],
-      [action('sufi-practices', L('📿 Practices', '📿 Pratikler', '📿 Практики'), 'submenu', { nextMenu: 'sufi:practices' }), action('sufi-poetry', L('📜 Poetry', '📜 Şiir', '📜 Поэзия'), 'submenu', { nextMenu: 'sufi:poetry' })]
+      [action('sufi-practices', L('📿 Practices', '📿 Pratikler', '📿 Практики'), 'submenu', { nextMenu: 'sufi:practices' }), action('sufi-poetry', L('📜 Poetry', '📜 Şiir', '📜 Поэзия'), 'submenu', { nextMenu: 'sufi:poetry' })],
     ]
   },
   'sufi:lineages': {
@@ -260,7 +261,7 @@ const MENUS: Record<string, MenuScreen> = {
       [action('induction', L('🌙 Induction', '🌙 İndüksiyon', '🌙 Индукция'), 'prompt', { mode: 'contemplation', prompt: 'Give me a specific technique to trigger lucidity tonight.' }), action('interpretation', L('🔮 Interpretation', '🔮 Rüya Yorumu', '🔮 Толкование'), 'submenu', { nextMenu: 'dream:interpretation' })],
       [action('astral', L('✨ Astral / OBIE', '✨ Astral / OBIE', '✨ Астрал'), 'submenu', { nextMenu: 'dream:astral' }), action('yoga', L('🕉 Dream Yoga', '🕉 Rüya Yogası', '🕉 Йога сна'), 'prompt', { mode: 'contemplation', prompt: 'Teach me the fundamentals of Tibetan Dream Yoga.' })],
       [action('daily', L('🛠️ Daily Work', '🛠️ Günlük Çalışma', '🛠️ Работа'), 'submenu', { nextMenu: 'dream:daily' }), action('rv', L('📡 Remote Viewing', '📡 Uzaktan Görüş', '📡 Удаленное видение'), 'submenu', { nextMenu: 'dream:remote' })],
-      [action('symbols', L('👁️ Symbols', '👁️ Sembolizm', '👁️ Символика'), 'submenu', { nextMenu: 'dream:symbols' }), ...back('dreamwalker:root')]
+      back('root')
     ]
   },
   'dream:symbols': {
