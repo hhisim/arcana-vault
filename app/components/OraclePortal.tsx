@@ -20,56 +20,102 @@ import { getMenuScreen, MenuAction, TAROT_ALL_CARDS } from '@/lib/oracle-menu'
 type VoiceStyle = 'female' | 'male'
 type ContextState = { userVisible: string; prompt: string; answer: string }
 
-function uid() { return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}` }
+const uid = () => `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
 const rootMenuFor = (pack: OraclePack) => `${pack}:root`
-const randomPick = <T,>(arr: T[], count = 1) => [...arr].sort(() => Math.random()-0.5).slice(0, count)
-function orient(card:string){ return Math.random() < 0.32 ? `${card} (reversed)` : `${card} (upright)` }
+const randomPick = <T,>(arr: T[], count = 1) => [...arr].sort(() => Math.random() - 0.5).slice(0, count)
+const orient = (card: string) => (Math.random() < 0.32 ? `${card} (reversed)` : `${card} (upright)`)
 
-const SPREADS: Record<string,{label:string; positions:string[]}> = {
-  single: { label:'Single Card', positions:['The Card'] },
-  three: { label:'Past · Present · Future', positions:['Past influence','Present condition','Likely unfolding'] },
-  shadow: { label:'Shadow & Light', positions:['The Light','The Shadow','Path of Integration'] },
-  crossroads: { label:'Crossroads', positions:['Situation','Challenge','Hidden factor','Advice'] },
-  horseshoe: { label:'Horseshoe', positions:['Past influence','Present circumstances','Hidden influences / obstacle','Querent attitude','External influences','Advice','Likely outcome'] },
-  celtic: { label:'Celtic Cross', positions:['The present','The challenge','Foundation','Recent past','Conscious aim','Near future','Self','Environment','Hopes / fears','Outcome'] },
+const SPREADS: Record<string, { label: string; positions: string[] }> = {
+  single: { label: 'Single Card', positions: ['The Card'] },
+  three: { label: 'Past · Present · Future', positions: ['Past influence', 'Present condition', 'Likely unfolding'] },
+  shadow: { label: 'Shadow & Light', positions: ['The Light', 'The Shadow', 'Path of Integration'] },
+  crossroads: { label: 'Crossroads', positions: ['Situation', 'Challenge', 'Hidden factor', 'Advice'] },
+  horseshoe: { label: 'Horseshoe', positions: ['Past influence', 'Present circumstances', 'Hidden influences / obstacle', 'Querent attitude', 'External influences', 'Advice', 'Likely outcome'] },
+  celtic: { label: 'Celtic Cross', positions: ['The present', 'The challenge', 'Foundation', 'Recent past', 'Conscious aim', 'Near future', 'Self', 'Environment', 'Hopes / fears', 'Outcome'] },
 }
 
-function buildTarotSpreadPrompt(key:string) {
+function buildTarotSpreadPrompt(key: string) {
   const spread = SPREADS[key] || SPREADS.single
   const drawn = randomPick(TAROT_ALL_CARDS as unknown as string[], spread.positions.length).map(orient)
   const lines = spread.positions.map((p, i) => `- ${p}: ${drawn[i]}`)
-  const userVisible = `${spread.label}\n` + lines.join('\n')
-  const prompt = `You are The Cartomancer. The querent drew a ${spread.label} spread.\n${lines.join('\n')}\n\nInterpret this as an actual Tarot spread reading. Name the spread first. Read position by position using the exact drawn cards and their orientations. Then synthesize the whole reading. Stay intimate, concrete, and personal. Avoid generic archetypal filler. End with one practical next step.`
+  const userVisible = `${spread.label}\n${lines.join('\n')}`
+  const prompt = `You are The Cartomancer. The querent drew a ${spread.label} spread.\n${lines.join('\n')}\n\nInterpret this as an actual Tarot spread reading. Name the spread first. Read position by position using the exact drawn cards and their orientations. Then synthesize the whole reading. Be intimate, clear, and useful. Avoid generic archetypal filler. End with one practical next step.`
   return { prompt, userVisible }
 }
 
 function buildDailyCardPrompt() {
-  const card = orient((randomPick(TAROT_ALL_CARDS as unknown as string[], 1)[0]))
+  const card = orient(randomPick(TAROT_ALL_CARDS as unknown as string[], 1)[0])
   return {
-    prompt: `You are The Cartomancer. Today's card is ${card}. Give a daily card reading that is intimate, personal, and specific. Name the actual card clearly, explain upright or reversed meaning, how it may show up today, one caution, and one concrete step. Do not use generic archetype monologues.`,
+    prompt: `You are The Cartomancer. Today's card is ${card}. Give a daily card reading that names the actual card clearly, explains upright or reversed meaning, how it may show up today, one caution, and one concrete step. Avoid generic archetype monologues.`,
     userVisible: `Daily card draw\n- ${card}`,
   }
 }
 
+function normalizeError(input?: string | null) {
+  const raw = String(input || '').trim()
+  if (!raw) return 'The oracle is in meditation. Return shortly.'
+  if (/oracle unavailable/i.test(raw) || /fetch failed/i.test(raw) || /could not be reached/i.test(raw)) return 'The oracle is in meditation. Return shortly.'
+  return raw
+}
+
 function AudioBubble({ src }: { src: string }) {
   const ref = useRef<HTMLAudioElement | null>(null)
-  const lastSrcRef = useRef<string | null>(null)
+  const lastAutoPlayedRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!src || lastSrcRef.current === src) return
-    lastSrcRef.current = src
+    if (!src || lastAutoPlayedRef.current === src) return
+    lastAutoPlayedRef.current = src
     const el = ref.current
     if (!el) return
-    const play = async () => {
-      try { await el.play() } catch {}
+    const attempt = async () => {
+      try {
+        el.pause()
+        el.currentTime = 0
+        await el.play()
+      } catch {}
     }
-    void play()
+    void attempt()
   }, [src])
 
   return (
-    <audio ref={ref} controls playsInline preload="metadata" className="voa-audio mt-3 w-full">
+    <audio
+      ref={ref}
+      controls
+      playsInline
+      preload="metadata"
+      className="mt-4 w-full rounded-full bg-[rgba(255,255,255,0.04)]"
+    >
       <source src={src} type="audio/ogg" />
     </audio>
+  )
+}
+
+function OracleMarkdown({ text }: { text: string }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        h1: ({ ...props }) => <h1 className="mb-3 font-cinzel text-2xl text-text-primary" {...props} />,
+        h2: ({ ...props }) => <h2 className="mb-3 mt-5 font-cinzel text-xl text-text-primary" {...props} />,
+        h3: ({ ...props }) => <h3 className="mb-2 mt-4 font-cinzel text-lg text-text-primary" {...props} />,
+        p: ({ ...props }) => <p className="mb-3 leading-7 text-[var(--text-primary)]/92" {...props} />,
+        ul: ({ ...props }) => <ul className="mb-3 list-disc space-y-1 pl-5 text-[var(--text-primary)]/92" {...props} />,
+        ol: ({ ...props }) => <ol className="mb-3 list-decimal space-y-1 pl-5 text-[var(--text-primary)]/92" {...props} />,
+        li: ({ ...props }) => <li className="leading-7" {...props} />,
+        strong: ({ ...props }) => <strong className="font-semibold text-text-primary" {...props} />,
+        em: ({ ...props }) => <em className="italic text-[var(--primary-gold)]" {...props} />,
+        hr: () => <div className="my-4 h-px bg-white/10" />,
+        blockquote: ({ ...props }) => <blockquote className="my-4 border-l-2 border-[var(--primary-purple)]/60 pl-4 italic text-[var(--text-secondary)]" {...props} />,
+        code: ({ inline, className, children, ...props }: any) =>
+          inline ? (
+            <code className="rounded bg-white/5 px-1.5 py-0.5 text-[0.92em] text-[var(--primary-gold)]" {...props}>{children}</code>
+          ) : (
+            <pre className="my-4 overflow-x-auto rounded-2xl border border-white/6 bg-black/30 p-4 text-sm text-[var(--text-primary)]"><code className={className} {...props}>{children}</code></pre>
+          ),
+      }}
+    >
+      {text}
+    </ReactMarkdown>
   )
 }
 
@@ -78,6 +124,7 @@ export default function OraclePortal() {
   const [pack, setPack] = useState<OraclePack>('tao')
   const [mode, setMode] = useState<OracleMode>(ORACLE_CONFIG.tao.defaultMode)
   const [voiceReply, setVoiceReply] = useState(true)
+  const [voiceStyle, setVoiceStyle] = useState<VoiceStyle>('female')
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [busy, setBusy] = useState(false)
@@ -86,7 +133,6 @@ export default function OraclePortal() {
   const [systemNotice, setSystemNotice] = useState<string | null>(null)
   const [menuKey, setMenuKey] = useState<string>(rootMenuFor('tao'))
   const [showOlder, setShowOlder] = useState(false)
-  const [voiceStyle, setVoiceStyle] = useState<VoiceStyle>('female')
   const [lastContext, setLastContext] = useState<Partial<Record<OraclePack, ContextState>>>({})
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
@@ -115,83 +161,118 @@ export default function OraclePortal() {
   useEffect(() => {
     let alive = true
     const ping = async () => {
-      try { const res = await fetch('/api/oracle/health', { cache:'no-store' }); if(alive) setBackendOnline(res.ok) }
-      catch { if(alive) setBackendOnline(false) }
+      try {
+        const res = await fetch('/api/oracle/health', { cache: 'no-store' })
+        if (alive) setBackendOnline(res.ok)
+      } catch {
+        if (alive) setBackendOnline(false)
+      }
     }
-    void ping(); const timer = window.setInterval(ping, 30000)
-    return () => { alive = false; window.clearInterval(timer) }
+    void ping()
+    const timer = window.setInterval(ping, 30000)
+    return () => {
+      alive = false
+      window.clearInterval(timer)
+    }
   }, [])
 
-  const statusLabel = useMemo(() => backendOnline === null ? '…' : backendOnline ? t(lang, UI_COPY.online) : t(lang, UI_COPY.offline), [backendOnline, lang])
+  const statusLabel = useMemo(() => {
+    if (backendOnline === null) return '…'
+    return backendOnline ? t(lang, UI_COPY.online) : t(lang, UI_COPY.offline)
+  }, [backendOnline, lang])
 
   const contextualizePrompt = (rawPrompt: string) => {
     const ctx = lastContext[pack]
-    const needsContext = /last\s|previous|follow-up|follow up|use the archive|go deeper|clarify|translate this|re-read|re-read|decode|practical next step/i.test(rawPrompt) ||
+    const needsContext = /clarify|follow-up|follow up|go deeper|translate|re-read|decode|practical next step|compare|use the archive|read it/i.test(rawPrompt) ||
       menuKey.includes('follow') || menuKey.includes('deeper')
 
     if (!needsContext) return rawPrompt
     if (!ctx) {
-      setSystemNotice(lang === 'tr' ? 'Önce bir ana okuma veya yanıt oluştur.' : lang === 'ru' ? 'Сначала сделайте основное чтение.' : 'Do a main reading first so follow-ups have context.')
+      setSystemNotice(lang === 'tr' ? 'Önce ana okumayı başlat.' : lang === 'ru' ? 'Сначала получите основное чтение.' : 'Begin with a main reading first.')
       return null
     }
     return `Use this prior ${pack} context:\n${ctx.userVisible}\n\nPrevious oracle answer:\n${ctx.answer}\n\nFollow-up request:\n${rawPrompt}`
   }
 
   const sendPrompt = async (prompt: string, userText?: string, overrideMode?: OracleMode, afterMenu?: string) => {
-    const text = prompt.trim(); const visibleText = (userText ?? prompt).trim(); const effectiveMode = overrideMode ?? mode
-    if (!text || busy) return
-    setBusy(true); setSystemNotice(null)
-    setMessages(prev => [{ id: uid(), role: 'user', text: visibleText, pack, mode: effectiveMode }, ...prev])
+    const trimmed = prompt.trim()
+    const visibleText = (userText ?? prompt).trim()
+    const effectiveMode = overrideMode ?? mode
+    if (!trimmed || busy) return
+    setBusy(true)
+    setSystemNotice(null)
+    setMessages((prev) => [{ id: uid(), role: 'user', text: visibleText, pack, mode: effectiveMode }, ...prev])
     setInput('')
     if (afterMenu) setMenuKey(afterMenu)
+
     try {
-      const response = await fetch('/api/oracle/ask', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ q:text, pack, mode:effectiveMode, target_lang: lang }) })
-      if (!response.ok) throw new Error(await response.text())
-      const data = await response.json() as AskResponse
-      const oracleMessage: ChatMessage = { id: uid(), role:'oracle', text:data.answer, pack, mode:effectiveMode }
+      const response = await fetch('/api/oracle/ask', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ q: trimmed, pack, mode: effectiveMode, target_lang: lang }),
+      })
+      const rawText = await response.text()
+      if (!response.ok) throw new Error(rawText)
+      const data = JSON.parse(rawText) as AskResponse
+      const oracleMessage: ChatMessage = { id: uid(), role: 'oracle', text: data.answer, pack, mode: effectiveMode }
       if (voiceReply && voiceEnabledForMode) {
         try {
-          const tts = await fetch('/api/oracle/tts', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ text:data.answer, lang, voice: voiceStyle }) })
+          const tts = await fetch('/api/oracle/tts', {
+            method: 'POST', headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ text: data.answer, lang, voice: voiceStyle }),
+          })
           if (tts.ok) {
-            const blob = await tts.blob(); oracleMessage.audioUrl = URL.createObjectURL(blob)
+            const blob = await tts.blob()
+            oracleMessage.audioUrl = URL.createObjectURL(blob)
           }
         } catch {}
       }
-      setMessages(prev => [oracleMessage, ...prev])
-      setLastContext(prev => ({ ...prev, [pack]: { userVisible: visibleText, prompt: text, answer: data.answer } }))
-    } catch (error:any) {
-      setMessages(prev => [{ id: uid(), role:'system', text: error?.message || t(lang, UI_COPY.failed) }, ...prev])
-    } finally { setBusy(false) }
+      setMessages((prev) => [oracleMessage, ...prev])
+      setLastContext((prev) => ({ ...prev, [pack]: { userVisible: visibleText, prompt: trimmed, answer: data.answer } }))
+    } catch (error: any) {
+      const friendly = normalizeError(error?.message || '')
+      setMessages((prev) => [{ id: uid(), role: 'system', text: friendly }, ...prev])
+    } finally {
+      setBusy(false)
+    }
   }
 
   const handleAction = async (button: MenuAction) => {
     if (busy) return
-    if (button.kind === 'submenu' || button.kind === 'back') { setMenuKey(button.nextMenu ?? rootMenuFor(pack)); return }
+    if (button.kind === 'submenu' || button.kind === 'back') {
+      setMenuKey(button.nextMenu ?? rootMenuFor(pack))
+      return
+    }
     if (button.kind === 'invite') {
       const url = typeof window !== 'undefined' ? `${window.location.origin}/chat` : '/chat'
-      await navigator.clipboard.writeText(url).catch(()=>{})
-      setSystemNotice(lang==='tr' ? 'Davet bağlantısı kopyalandı.' : lang==='ru' ? 'Ссылка-приглашение скопирована.' : 'Invite link copied.')
+      await navigator.clipboard.writeText(url).catch(() => {})
+      setSystemNotice(lang === 'tr' ? 'Davet bağlantısı kopyalandı.' : lang === 'ru' ? 'Ссылка-приглашение скопирована.' : 'Invite link copied.')
       return
     }
     if (button.kind === 'gift') {
       const subject = encodeURIComponent('Vault of Arcana invitation')
-      const body = encodeURIComponent('Enter the Vault: ' + (typeof window !== 'undefined' ? `${window.location.origin}/chat` : '/chat'))
+      const body = encodeURIComponent(`Enter the Vault: ${typeof window !== 'undefined' ? `${window.location.origin}/chat` : '/chat'}`)
       window.location.href = `mailto:?subject=${subject}&body=${body}`
       return
     }
+
     let prompt = button.prompt ?? t(lang, button.label)
     let userVisible = t(lang, button.displayText ?? button.label)
+
     if (prompt === '__SPECIAL_DAILY_CARD__') {
-      const built = buildDailyCardPrompt(); prompt = built.prompt; userVisible = built.userVisible
+      const built = buildDailyCardPrompt()
+      prompt = built.prompt
+      userVisible = built.userVisible
     } else if (prompt.startsWith('__SPECIAL_SPREAD_')) {
-      const key = prompt.replace('__SPECIAL_SPREAD_', '').replace('__','')
+      const key = prompt.replace('__SPECIAL_SPREAD_', '').replace('__', '')
       const built = buildTarotSpreadPrompt(key)
-      prompt = built.prompt; userVisible = built.userVisible
+      prompt = built.prompt
+      userVisible = built.userVisible
     } else if (prompt === '__SPECIAL_DHARANA_daily__') {
-      const ids = Object.keys((await import('@/lib/tantra-data')).ALL_DHARANAS)
+      const tantra = await import('@/lib/tantra-data')
+      const ids = Object.keys(tantra.ALL_DHARANAS)
       const num = Number(ids[Math.floor(Math.random() * ids.length)])
-      const mod = await import('@/lib/tantra-data')
-      const d = (mod.ALL_DHARANAS as any)[num]
+      const d = (tantra.ALL_DHARANAS as any)[num]
       prompt = `Transmit dharana ${num}: '${d.name}'. Seed: ${d.desc}. Give the actual technique, practice steps, inner landscape, and one application for today.`
       userVisible = `Today's technique\n- Dharana ${num}: ${d.name}`
       button.afterMenu = `tantra:dharanafollow:${num}`
@@ -200,96 +281,220 @@ export default function OraclePortal() {
       if (!withContext) return
       prompt = withContext
     }
+
     await sendPrompt(prompt, userVisible, button.mode, button.afterMenu)
   }
 
   const toggleRecording = async () => {
-    if (recording) { recorderRef.current?.stop(); setRecording(false); return }
-    if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) { setSystemNotice(t(lang, UI_COPY.browserMicUnsupported)); return }
+    if (recording) {
+      recorderRef.current?.stop()
+      setRecording(false)
+      return
+    }
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+      setSystemNotice(t(lang, UI_COPY.browserMicUnsupported))
+      return
+    }
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio:true })
-      const rec = new MediaRecorder(stream); chunksRef.current = []
-      rec.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data) }
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const rec = new MediaRecorder(stream)
+      chunksRef.current = []
+      rec.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data) }
       rec.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type:'audio/ogg' }); stream.getTracks().forEach(t=>t.stop())
+        const blob = new Blob(chunksRef.current, { type: 'audio/ogg' })
+        stream.getTracks().forEach((track) => track.stop())
         try {
-          const form = new FormData(); form.set('file', new File([blob], 'voice.ogg', { type:'audio/ogg' }))
-          const res = await fetch('/api/oracle/stt', { method:'POST', body: form })
+          const form = new FormData()
+          form.set('file', new File([blob], 'voice.ogg', { type: 'audio/ogg' }))
+          const res = await fetch('/api/oracle/stt', { method: 'POST', body: form })
           const payload = await res.json() as { text?: string }
-          const transcript = String(payload.text || '').trim(); if (transcript) await sendPrompt(transcript, transcript)
-        } catch (e:any) { setSystemNotice(e?.message || t(lang, UI_COPY.failed)) }
+          const transcript = String(payload.text || '').trim()
+          if (transcript) await sendPrompt(transcript, transcript)
+        } catch (e: any) {
+          setSystemNotice(normalizeError(e?.message))
+        }
       }
-      recorderRef.current = rec; rec.start(); setRecording(true)
-    } catch (e:any) { setSystemNotice(e?.message || t(lang, UI_COPY.browserMicUnsupported)) }
+      recorderRef.current = rec
+      rec.start()
+      setRecording(true)
+    } catch (e: any) {
+      setSystemNotice(normalizeError(e?.message || t(lang, UI_COPY.browserMicUnsupported)))
+    }
+  }
+
+  const onComposerKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      await sendPrompt(input)
+    }
   }
 
   return (
-    <section className="h-[calc(100vh-5rem)] overflow-hidden bg-deep px-3 py-6 md:px-6 lg:px-8">
+    <section className="h-[calc(100vh-4.5rem)] overflow-hidden bg-deep px-3 py-5 md:px-5 lg:px-8">
       <div className="mx-auto grid h-full max-w-7xl gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="glass-card voa-scroll-dark order-2 h-full overflow-y-auto p-4 lg:order-1 lg:sticky lg:top-24">
+        <aside className="glass-card voa-scrollbar order-2 h-full overflow-y-auto p-4 lg:order-1">
           <div className="mb-5">
             <h1 className="font-cinzel text-2xl text-[var(--primary-gold)]">{t(lang, UI_COPY.title)}</h1>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">{t(lang, UI_COPY.subtitle)}</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{t(lang, UI_COPY.subtitle)}</p>
           </div>
+
           <div className="mb-5 flex flex-wrap gap-2">
-            {(['en','tr','ru'] as UiLang[]).map(v => <button key={v} type="button" onClick={()=>setLang(v)} className={`rounded-full border px-3 py-1.5 text-sm ${lang===v ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-[var(--text-primary)]':'border-[rgba(255,255,255,0.08)] text-[var(--text-secondary)]'}`}>{v.toUpperCase()}</button>)}
-          </div>
-          <div className="space-y-3">
-            {(Object.keys(ORACLE_CONFIG) as OraclePack[]).map(item => {
-              const config = ORACLE_CONFIG[item]
-              const active = pack===item
-              return <button key={item} type="button" onClick={()=>setPack(item)} className={`oracle-card ${active ? 'is-active border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)]' : 'border-[rgba(255,255,255,0.06)] bg-[var(--bg-card)]'} relative w-full overflow-hidden rounded-2xl border p-4 text-left`}>
-                <div className="relative z-[2] flex items-start justify-between gap-4"><div><div className="font-cinzel text-xl text-[var(--text-primary)]"><span className="mr-2">{config.emoji}</span>{config.title[lang]}</div><p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">{config.subtitle[lang]}</p></div><span className="rounded-full border border-[rgba(255,255,255,0.08)] px-2.5 py-1 text-xs text-[var(--text-secondary)]">{config.onlineLabel[lang]}</span></div>
+            {(['en', 'tr', 'ru'] as UiLang[]).map((v) => (
+              <button key={v} type="button" onClick={() => setLang(v)} className={`rounded-full border px-3 py-1.5 text-sm transition ${lang === v ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/10 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>
+                {v.toUpperCase()}
               </button>
+            ))}
+          </div>
+
+          <div className="space-y-3">
+            {(Object.keys(ORACLE_CONFIG) as OraclePack[]).map((item) => {
+              const config = ORACLE_CONFIG[item]
+              const active = pack === item
+              const badgeClass = item === 'dreamwalker' ? 'oracle-badge-archive' : 'oracle-badge-live'
+              return (
+                <button key={item} type="button" onClick={() => setPack(item)} className={`oracle-card relative w-full rounded-2xl border p-4 text-left ${active ? 'is-active animate-sheen border-[var(--primary-purple)]' : 'border-[var(--border-subtle)]'}`}>
+                  <span className={badgeClass}>{config.onlineLabel[lang]}</span>
+                  <div className="pr-16">
+                    <div className="font-cinzel text-[1.85rem] leading-none text-text-primary"><span className="mr-2 text-lg">{config.emoji}</span>{config.title[lang]}</div>
+                    <p className="mt-2 text-sm leading-7 text-[var(--text-secondary)]">{config.subtitle[lang]}</p>
+                  </div>
+                </button>
+              )
             })}
           </div>
-          <div className="mt-6 border-t border-[rgba(255,255,255,0.06)] pt-5">
-            <div className="mb-2 text-sm font-medium text-[var(--text-primary)]">{t(lang, UI_COPY.mode)}</div>
-            <div className="flex flex-wrap gap-2">{currentPack.modes.map(entry => <button key={entry.value} type="button" onClick={()=>setMode(entry.value)} className={`rounded-full border px-3 py-1.5 text-xs ${mode===entry.value ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-[var(--text-primary)]':'border-[rgba(255,255,255,0.08)] text-[var(--text-secondary)]'}`}>{entry.label[lang]}</button>)}</div>
-            <div className="mt-5 grid gap-3 rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[var(--bg-raised)] p-4">
-              <div className="flex items-center justify-between gap-4"><div><div className="text-sm font-medium text-[var(--text-primary)]">{t(lang, UI_COPY.answerLanguage)}</div><div className="text-xs text-[var(--text-secondary)]">{lang.toUpperCase()}</div></div><div className="text-sm text-[var(--text-secondary)]">{statusLabel}</div></div>
-              <div className="grid gap-3 md:grid-cols-2">
-                <label className={`flex items-center justify-between gap-4 rounded-xl border px-3 py-2 ${voiceEnabledForMode ? 'border-[rgba(255,255,255,0.08)]':'border-[rgba(255,255,255,0.04)] opacity-60'}`}><div><div className="text-sm font-medium text-[var(--text-primary)]">{t(lang, UI_COPY.voiceReply)}</div><div className="text-xs text-[var(--text-secondary)]">{voiceEnabledForMode ? t(lang, UI_COPY.voiceAvailable): t(lang, UI_COPY.voiceUnavailable)}</div></div><input type="checkbox" className="h-4 w-4 accent-[var(--primary-gold)]" checked={voiceReply && voiceEnabledForMode} disabled={!voiceEnabledForMode} onChange={e=>setVoiceReply(e.target.checked)} /></label>
-                <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] px-3 py-2"><div className="text-sm font-medium text-[var(--text-primary)]">Voice style</div><div className="mt-2 grid grid-cols-2 rounded-full border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-1"><button type="button" onClick={()=>setVoiceStyle('female')} className={`rounded-full px-3 py-1.5 text-xs transition ${voiceStyle==='female' ? 'bg-[rgba(201,168,76,0.16)] text-[var(--text-primary)] shadow-[0_0_0_1px_rgba(201,168,76,0.25)_inset]' : 'text-[var(--text-secondary)]'}`}>Female</button><button type="button" onClick={()=>setVoiceStyle('male')} className={`rounded-full px-3 py-1.5 text-xs transition ${voiceStyle==='male' ? 'bg-[rgba(123,94,167,0.18)] text-[var(--text-primary)] shadow-[0_0_0_1px_rgba(123,94,167,0.25)_inset]' : 'text-[var(--text-secondary)]'}`}>Male</button></div></div>
+
+          <div className="mt-6 border-t border-white/6 pt-5">
+            <div className="mb-2 text-sm font-medium text-text-primary">{t(lang, UI_COPY.mode)}</div>
+            <div className="flex flex-wrap gap-2">
+              {currentPack.modes.map((entry) => (
+                <button key={entry.value} type="button" onClick={() => setMode(entry.value)} className={`rounded-full border px-3 py-1.5 text-xs transition ${mode === entry.value ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/10 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>
+                  {entry.label[lang]}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-5 grid gap-3 rounded-2xl border border-white/6 bg-[var(--bg-raised)] p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-sm font-medium text-text-primary">{t(lang, UI_COPY.answerLanguage)}</div>
+                  <div className="text-xs text-[var(--text-secondary)]">{lang.toUpperCase()}</div>
+                </div>
+                <div className="text-sm text-[var(--text-secondary)]">{statusLabel}</div>
               </div>
-              <div className="flex gap-2"><button type="button" onClick={()=>handleAction({id:'invite',label:{en:'Invite a Friend',tr:'Arkadaş Davet Et',ru:'Пригласить друга'},kind:'invite'} as any)} className="rounded-xl border border-[rgba(255,255,255,0.08)] px-3 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">Invite</button><button type="button" onClick={()=>handleAction({id:'gift',label:{en:'Gift Access',tr:'Erişim Hediye Et',ru:'Подарить доступ'},kind:'gift'} as any)} className="rounded-xl border border-[rgba(255,255,255,0.08)] px-3 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">Gift</button></div>
+
+              <label className={`flex items-center justify-between gap-3 rounded-xl border px-3 py-3 ${voiceEnabledForMode ? 'border-white/8' : 'border-white/5 opacity-60'}`}>
+                <div>
+                  <div className="text-sm font-medium text-text-primary">{t(lang, UI_COPY.voiceReply)}</div>
+                  <div className="text-xs text-[var(--text-secondary)]">{voiceEnabledForMode ? t(lang, UI_COPY.voiceAvailable) : t(lang, UI_COPY.voiceUnavailable)}</div>
+                </div>
+                <input type="checkbox" className="h-4 w-4 accent-[var(--primary-gold)]" checked={voiceReply && voiceEnabledForMode} disabled={!voiceEnabledForMode} onChange={(e) => setVoiceReply(e.target.checked)} />
+              </label>
+
+              <div className="rounded-xl border border-white/8 px-3 py-3">
+                <div className="text-sm font-medium text-text-primary">Voice style</div>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <button type="button" onClick={() => setVoiceStyle('female')} className={`rounded-xl border px-3 py-2 text-sm transition ${voiceStyle === 'female' ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>Female</button>
+                  <button type="button" onClick={() => setVoiceStyle('male')} className={`rounded-xl border px-3 py-2 text-sm transition ${voiceStyle === 'male' ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>Male</button>
+                </div>
+              </div>
             </div>
           </div>
         </aside>
+
         <div className="glass-card order-1 flex h-full min-h-0 flex-col overflow-hidden lg:order-2">
-          <div className="border-b border-[rgba(255,255,255,0.06)] px-4 py-4 md:px-5"><div className="flex items-start justify-between gap-4"><div><div className="font-cinzel text-xl text-[var(--text-primary)] md:text-2xl">{currentPack.emoji} {currentPack.title[lang]}</div><div className="mt-1 text-sm text-[var(--text-secondary)]">{currentPack.subtitle[lang]}</div></div><div className="flex items-center gap-3">{busy && <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-3 py-1.5 text-xs text-[var(--text-secondary)]"><span className="voa-signal" /> Processing</div>}<button type="button" onClick={()=>setMessages([])} className="rounded-full border border-[rgba(255,255,255,0.08)] px-4 py-2 text-sm text-[var(--text-secondary)]">{t(lang, UI_COPY.clear)}</button></div></div></div>
-          <div className="border-b border-[rgba(255,255,255,0.06)] bg-[linear-gradient(180deg,rgba(10,10,15,0.98),rgba(10,10,15,0.92))] px-4 py-4 md:px-5">
-            {systemNotice && <div className="mb-3 text-sm text-[var(--text-secondary)]">{systemNotice}</div>}
-            <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] p-3 shadow-[0_18px_60px_rgba(0,0,0,0.28)]">
-              <textarea value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); void sendPrompt(input) }}} placeholder={t(lang, UI_COPY.placeholder)} rows={2} className="min-h-[88px] w-full resize-none rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] px-4 py-4 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]" />
-              <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"><div className="flex flex-wrap gap-2">{currentPack.starterPrompts[lang].slice(0,4).map(prompt => <button key={prompt} type="button" onClick={()=>void sendPrompt(prompt)} className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-2 text-sm text-[var(--text-secondary)]">{prompt}</button>)}</div><div className="flex gap-3 md:min-w-[250px] md:justify-end"><button type="button" onClick={()=>void toggleRecording()} className={`rounded-2xl border px-4 py-3 text-sm ${recording ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.18)] text-[var(--text-primary)]':'border-[rgba(255,255,255,0.08)] text-[var(--text-secondary)]'}`}>{recording ? (lang==='tr'?'Durdur':lang==='ru'?'Стоп':'Stop') : t(lang, UI_COPY.record)}</button><button type="button" disabled={!input.trim() || busy} onClick={()=>void sendPrompt(input)} className="rounded-2xl bg-[var(--primary-gold)] px-5 py-3 text-sm font-medium text-black disabled:opacity-50">{t(lang, UI_COPY.send)}</button></div></div>
+          <div className="border-b border-white/6 px-5 py-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="font-cinzel text-3xl text-text-primary"><span className="mr-2 text-lg">{currentPack.emoji}</span>{currentPack.title[lang]}</div>
+                <div className="mt-1 text-sm text-[var(--text-secondary)]">{currentPack.subtitle[lang]}</div>
+              </div>
+              <button type="button" onClick={() => { setMessages([]); setLastContext({}); }} className="rounded-full border border-white/8 px-4 py-2 text-sm text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
             </div>
           </div>
-          <div className="border-b border-[rgba(255,255,255,0.06)] px-4 py-4 md:px-5">
-            <div className="mb-3 flex items-center justify-between gap-3"><div className="text-sm font-medium text-[var(--text-primary)]">{t(lang, menu.title)}</div><button type="button" onClick={()=>setMenuKey(rootMenuFor(pack))} className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-[var(--text-secondary)]">Reset</button></div>
-            <div className="grid gap-2 md:grid-cols-2">{menu.buttons.flat().map(button => <button key={button.id} type="button" onClick={()=>void handleAction(button)} className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-4 py-3 text-left text-sm text-[var(--text-primary)] hover:border-[var(--primary-purple)]">{t(lang, button.label)}</button>)}</div>
+
+          <div className="border-b border-white/6 px-4 py-4 md:px-5">
+            <div className="glass-card rounded-[24px] border border-white/6 p-4">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={onComposerKeyDown}
+                placeholder={t(lang, UI_COPY.placeholder)}
+                rows={3}
+                className="min-h-[92px] w-full resize-none rounded-[20px] border border-white/8 bg-[rgba(255,255,255,0.02)] px-5 py-4 text-base text-text-primary outline-none placeholder:text-[var(--text-secondary)]"
+              />
+              <div className="mt-4 flex flex-wrap gap-2">
+                {currentPack.starterPrompts[lang].map((prompt) => (
+                  <button key={prompt} type="button" onClick={() => sendPrompt(prompt, prompt)} className="rounded-full border border-white/8 px-3 py-1.5 text-sm text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{prompt}</button>
+                ))}
+              </div>
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <div className="min-h-[24px] text-sm text-[var(--text-secondary)]">
+                  {busy ? <span className="inline-flex items-center gap-2"><span className="voa-dots text-[var(--primary-gold)]"><span>•</span><span>•</span><span>•</span></span><span>Oracle is reading the threads…</span></span> : systemNotice ? <span className="italic text-[var(--primary-gold)]/85">{systemNotice}</span> : null}
+                </div>
+                <div className="flex items-center gap-3">
+                  <button type="button" onClick={toggleRecording} className={`rounded-2xl border px-6 py-3 text-sm transition ${recording ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{recording ? 'Stop' : t(lang, UI_COPY.record)}</button>
+                  <button type="button" disabled={busy || !input.trim()} onClick={() => sendPrompt(input)} className="rounded-2xl bg-[var(--primary-gold)] px-8 py-3 text-sm text-black transition hover:brightness-105 disabled:opacity-50">{t(lang, UI_COPY.send)}</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="voa-scroll-dark min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-5">
-            {messages.length > 3 && <div className="mb-4 text-center"><button type="button" onClick={()=>setShowOlder(v=>!v)} className="rounded-full border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-[var(--text-secondary)]">{showOlder ? (lang==='tr'?'Geçmişi daralt':lang==='ru'?'Свернуть историю':'Collapse history') : (lang==='tr'?`Tüm geçmişi göster (${messages.length})`:lang==='ru'?`Показать историю (${messages.length})`:`Show full history (${messages.length})`)}</button></div>}
-            {!messages.length && <div className="rounded-3xl border border-dashed border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] p-6 text-center text-[var(--text-secondary)]">Choose a tradition and begin above.</div>}
-            {visibleMessages.map((message) => <div key={message.id} className={`mb-4 max-w-3xl rounded-3xl border p-4 ${message.role==='user' ? 'ml-auto border-[rgba(201,168,76,0.28)] bg-[rgba(201,168,76,0.08)]' : message.role==='oracle' ? 'border-[rgba(123,94,167,0.28)] bg-[rgba(123,94,167,0.08)]' : 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)]'}`}><div className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-secondary)]">{message.role==='user'?'You':message.role==='oracle'?currentPack.title[lang]:'System'}</div>{message.role==='user' ? <div className="whitespace-pre-wrap text-[15px] leading-7 text-[var(--text-primary)]">{message.text}</div> : <div className="prose prose-invert max-w-none prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-primary)] prose-strong:text-[var(--text-primary)] prose-li:text-[var(--text-primary)] prose-blockquote:text-[var(--text-primary)] prose-code:text-[var(--primary-gold)]"><ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown></div>}{message.audioUrl && <AudioBubble src={message.audioUrl} />}</div>)}
-            {busy && <div className="inline-flex items-center gap-3 rounded-3xl border border-[rgba(123,94,167,0.28)] bg-[rgba(123,94,167,0.08)] px-4 py-3 text-[var(--text-secondary)]"><span className="voa-signal" /> {t(lang, UI_COPY.thinking)}</div>}
+
+          <div className="border-b border-white/6 px-4 py-4 md:px-5">
+            <div className="mb-3 flex items-center justify-between gap-4">
+              <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">{t(lang, menu.title)}</div>
+              {messages.length > 3 && (
+                <button type="button" onClick={() => setShowOlder((v) => !v)} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">
+                  {showOlder ? 'Collapse history' : `Show full history (${hiddenCount})`}
+                </button>
+              )}
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {menu.buttons.flat().map((button) => (
+                <button key={button.id} type="button" onClick={() => handleAction(button)} className="deep-button rounded-2xl">
+                  <span className="text-sm text-text-primary">{t(lang, button.label).replace(/^\//, '')}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="voa-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4 md:px-5">
+            {visibleMessages.length === 0 ? (
+              <div className="glass-card rounded-[28px] border border-dashed border-white/10 px-6 py-10 text-center text-[var(--text-secondary)]">
+                <div className="text-lg text-text-primary">{t(lang, UI_COPY.emptyState)}</div>
+                <div className="mt-2">Begin above. The conversation space now opens first.</div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                {visibleMessages.map((message) => {
+                  if (message.role === 'user') {
+                    return (
+                      <div key={message.id} className="user-bubble ml-auto max-w-3xl p-5">
+                        <div className="mb-2 text-xs uppercase tracking-[0.2em] text-[var(--primary-gold)]">You</div>
+                        <div className="text-text-primary whitespace-pre-wrap">{message.text}</div>
+                      </div>
+                    )
+                  }
+                  if (message.role === 'system') {
+                    return (
+                      <div key={message.id} className="oracle-bubble max-w-3xl p-5">
+                        <div className="mb-2 text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">System</div>
+                        <div className="italic text-[#E05C5C]">{normalizeError(message.text)}</div>
+                      </div>
+                    )
+                  }
+                  return (
+                    <div key={message.id} className="oracle-bubble max-w-4xl p-5">
+                      <div className="mb-2 text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">{currentPack.title[lang]}</div>
+                      <OracleMarkdown text={message.text} />
+                      {message.audioUrl ? <AudioBubble src={message.audioUrl} /> : null}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <style jsx global>{`
-        .voa-scroll-dark{scrollbar-width:thin; scrollbar-color: rgba(123,94,167,0.45) rgba(255,255,255,0.02);} 
-        .voa-scroll-dark::-webkit-scrollbar{width:8px;height:8px}
-        .voa-scroll-dark::-webkit-scrollbar-track{background:rgba(255,255,255,0.03); border-radius:999px}
-        .voa-scroll-dark::-webkit-scrollbar-thumb{background:linear-gradient(180deg, rgba(123,94,167,0.55), rgba(201,168,76,0.38)); border-radius:999px; border:1px solid rgba(10,10,15,0.2)}
-        .voa-scroll-dark::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg, rgba(123,94,167,0.75), rgba(201,168,76,0.5))}
-        .oracle-card::before{content:''; position:absolute; inset:-30% auto auto -140%; width:60%; height:160%; transform:rotate(18deg); background:linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); opacity:0; transition:transform .7s ease, opacity .7s ease}
-        .oracle-card.is-active::before{opacity:1; animation:voa-sheen 4.4s ease-in-out infinite}
-        @keyframes voa-sheen{0%{transform:translateX(-18%) rotate(18deg)} 55%{transform:translateX(235%) rotate(18deg)} 100%{transform:translateX(235%) rotate(18deg)}}
-        .voa-signal{display:inline-block; width:10px; height:10px; border-radius:999px; background:linear-gradient(135deg, rgba(201,168,76,0.95), rgba(123,94,167,0.95)); box-shadow:0 0 0 0 rgba(201,168,76,0.35); animation:voa-pulse 1.4s ease-in-out infinite}
-        @keyframes voa-pulse{0%{transform:scale(.95); box-shadow:0 0 0 0 rgba(201,168,76,0.35)}70%{transform:scale(1); box-shadow:0 0 0 8px rgba(201,168,76,0)}100%{transform:scale(.95); box-shadow:0 0 0 0 rgba(201,168,76,0)}}
-        .voa-audio{accent-color: var(--primary-gold); filter:saturate(.95)}
-      `}</style>
     </section>
   )
 }

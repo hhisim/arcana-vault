@@ -13,62 +13,102 @@
   --text-secondary: #9B93AB;
 }
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-  body {
-    background-color: var(--bg-deep);
-    color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
-  }
+.glass-card {
+  background: linear-gradient(180deg, rgba(18,18,26,0.94), rgba(12,12,20,0.92));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 18px 48px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
+  backdrop-filter: blur(14px);
 }
 
-@layer components {
-  .glass-card {
-    background: rgba(18, 18, 26, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-  }
+.font-cinzel { font-family: Georgia, 'Times New Roman', serif; }
+.bg-deep { background: var(--bg-deep); }
+.text-text-primary { color: var(--text-primary); }
+.text-text-secondary { color: var(--text-secondary); }
+
+@keyframes sheen {
+  0% { transform: translateX(-120%) skewX(-15deg); }
+  100% { transform: translateX(220%) skewX(-15deg); }
 }
 
-@layer utilities {
-  .font-cinzel {
-    font-family: Georgia, 'Times New Roman', serif;
-    letter-spacing: 0.02em;
-  }
+.animate-sheen { position: relative; overflow: hidden; }
+.animate-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 42%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: sheen 3.4s ease-in-out infinite;
 }
 
-@layer utilities {
-  .animate-fade-in-up {
-    opacity: 1;
-    transform: translateY(0);
-    animation: fadeInUp 0.8s ease-out;
-  }
+@keyframes voaPulse {
+  0%, 100% { opacity: 0.25; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-1px); }
+}
+.voa-dots span { animation: voaPulse 1s ease-in-out infinite; display:inline-block; }
+.voa-dots span:nth-child(2){ animation-delay: .12s; }
+.voa-dots span:nth-child(3){ animation-delay: .24s; }
 
-  .animate-delay-200 { animation-delay: 0.2s; }
-  .animate-delay-400 { animation-delay: 0.4s; }
-
-  .hover-glow-purple:hover {
-    box-shadow: 0 0 20px rgba(147,112,219,0.3);
-  }
-  .hover-glow-gold:hover {
-    box-shadow: 0 0 20px rgba(201,168,76,0.4);
-  }
-  .hover-scale:hover {
-    transform: scale(1.05);
-  }
+.voa-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(123,94,167,0.35) rgba(255,255,255,0.03);
+}
+.voa-scrollbar::-webkit-scrollbar { width: 10px; height: 10px; }
+.voa-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 999px; }
+.voa-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(123,94,167,0.45), rgba(201,168,76,0.35));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.voa-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(123,94,167,0.65), rgba(201,168,76,0.5));
+  background-clip: padding-box;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.oracle-card {
+  transition: all .3s ease-out;
+}
+.oracle-card:hover {
+  background: #1A1A28;
+  border-color: rgba(123,94,167,0.3);
+}
+.oracle-card.is-active {
+  border-left: 2px solid #7B5EA7;
+  background: rgba(123,94,167,0.10);
+  box-shadow: 0 0 20px rgba(147,112,219,0.2);
+}
+
+.oracle-badge-live {
+  position:absolute; top:.75rem; right:.75rem;
+  background:#2D5A4A; color:#E8E0F0; font-size:.72rem; line-height:1;
+  padding:.35rem .55rem; border-radius:999px;
+}
+.oracle-badge-archive {
+  position:absolute; top:.75rem; right:.75rem;
+  background:#2A2A36; color:#9B93AB; font-size:.72rem; line-height:1;
+  padding:.35rem .55rem; border-radius:999px;
+}
+
+.oracle-bubble {
+  background: linear-gradient(180deg, rgba(18,18,26,0.98), rgba(14,14,24,0.95));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-left: 2px solid #7B5EA7;
+  border-radius: 1rem 1rem 1rem .4rem;
+}
+.user-bubble {
+  background: rgba(201,168,76,0.2);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 1rem 1rem .4rem 1rem;
+}
+.deep-button {
+  @apply glass-card p-4 text-left transition-all duration-300;
+}
+.deep-button:hover {
+  box-shadow: 0 0 20px rgba(147,112,219,0.2);
+  border-color: rgba(123,94,167,0.3);
+  background: #1A1A28;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-sheen::after, .voa-dots span { animation:none !important; }
 }
