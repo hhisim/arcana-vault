@@ -9,6 +9,7 @@ export type PlanConfig = {
   dailyLimit: number | 'unlimited'
   guestTotalLimit?: number
   stripePriceId?: string
+  priceMonthly?: number
 }
 
 export const TRADITIONS: TraditionId[] = ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker']
@@ -35,6 +36,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
     description: 'Choose three traditions and unlock deeper practice.',
     slots: 3,
     dailyLimit: 60,
+    priceMonthly: 8,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SEEKER_MONTHLY,
   },
   adept: {
@@ -43,6 +45,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
     description: 'Four traditions and unlimited daily questions.',
     slots: 4,
     dailyLimit: 'unlimited',
+    priceMonthly: 19,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ADEPT_MONTHLY,
   },
   full: {
@@ -51,6 +54,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
     description: 'Unlock every tradition and the deepest daily flow.',
     slots: 'all',
     dailyLimit: 'unlimited',
+    priceMonthly: 29,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_MAGISTER_MONTHLY,
   },
 }

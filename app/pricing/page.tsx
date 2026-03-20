@@ -43,7 +43,7 @@ export default function PricingPage() {
         <p className="text-[var(--text-secondary)] leading-8">{t('pricing.subtitle')}</p>
         <p className="text-[var(--primary-gold)] mt-4">{t('pricing.note')}</p>
       </div>
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {plans.map((plan) => {
           const cfg = PLAN_CONFIG[plan]
           const isCurrent = auth.plan === plan
