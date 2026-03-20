@@ -345,6 +345,33 @@ export default function OraclePortal() {
               <button key={v} type="button" onClick={() => setLang(v)} className={`rounded-full border px-2 py-1 text-xs transition ${lang === v ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/10 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{v.toUpperCase()}</button>
             ))}
           </div>
+          {/* Voice Controls */}
+          <div className="mb-4 rounded-xl border border-white/8 bg-[rgba(255,255,255,0.02)] p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-xs font-medium text-text-primary">🎙️ Voice</span>
+              <button
+                type="button"
+                onClick={() => setVoiceReply(!voiceReply)}
+                className={`rounded-full border px-2 py-0.5 text-[10px] transition ${voiceReply ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)]'}`}
+              >
+                {voiceReply ? 'ON' : 'OFF'}
+              </button>
+            </div>
+            {voiceReply && (
+              <div className="mt-2 flex gap-1">
+                {(['female', 'male'] as VoiceStyle[]).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    onClick={() => setVoiceStyle(v)}
+                    className={`flex-1 rounded-lg border px-2 py-1 text-xs capitalize transition ${voiceStyle === v ? 'border-[var(--primary-purple)] bg-[rgba(123,94,167,0.14)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30'}`}
+                  >
+                    {v === 'female' ? '♀ Female' : '♂ Male'}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="space-y-2">
             {(Object.keys(ORACLE_CONFIG) as OraclePack[]).map((item) => {
               const config = ORACLE_CONFIG[item]
