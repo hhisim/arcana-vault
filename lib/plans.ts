@@ -1,4 +1,4 @@
-export type PlanId = 'guest' | 'free' | 'seeker' | 'full'
+export type PlanId = 'guest' | 'free' | 'seeker' | 'adept' | 'full'
 export type TraditionId = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker'
 
 export type PlanConfig = {
@@ -35,15 +35,23 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
     description: 'Choose three traditions and unlock deeper practice.',
     slots: 3,
     dailyLimit: 60,
-    stripePriceId: process.env.STRIPE_PRICE_SEEKER_MONTHLY,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SEEKER_MONTHLY,
+  },
+  adept: {
+    id: 'adept',
+    name: 'Adept',
+    description: 'Four traditions and unlimited daily questions.',
+    slots: 4,
+    dailyLimit: 'unlimited',
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ADEPT_MONTHLY,
   },
   full: {
     id: 'full',
-    name: 'All Access',
+    name: 'Magister',
     description: 'Unlock every tradition and the deepest daily flow.',
     slots: 'all',
     dailyLimit: 'unlimited',
-    stripePriceId: process.env.STRIPE_PRICE_FULL_MONTHLY,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_MAGISTER_MONTHLY,
   },
 }
 

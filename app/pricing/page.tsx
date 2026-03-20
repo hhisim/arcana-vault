@@ -34,7 +34,7 @@ export default function PricingPage() {
     if (data?.url) window.location.href = data.url
   }
 
-  const plans: PlanId[] = ['free', 'seeker', 'full']
+  const plans: PlanId[] = ['free', 'seeker', 'adept', 'full']
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
