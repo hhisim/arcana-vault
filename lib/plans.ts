@@ -86,6 +86,7 @@ export function canAccessTradition(plan: PlanId, selected: TraditionId[], tradit
 export function planFromPriceId(priceId?: string | null): PlanId | null {
   if (!priceId) return null
   if (priceId === process.env.STRIPE_PRICE_SEEKER_MONTHLY) return 'seeker'
-  if (priceId === process.env.STRIPE_PRICE_FULL_MONTHLY) return 'full'
+  if (priceId === process.env.STRIPE_PRICE_ADEPT_MONTHLY) return 'adept'
+  if (priceId === process.env.STRIPE_PRICE_MAGISTER_MONTHLY) return 'full'
   return null
 }
