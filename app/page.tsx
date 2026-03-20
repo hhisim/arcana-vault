@@ -204,6 +204,35 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-white/5 bg-[linear-gradient(180deg,#090912_0%,#0b0b12_100%)]">
+        <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">
+          <div className="mb-8 max-w-3xl">
+            <p className="mb-4 text-xs uppercase tracking-[0.45em] text-gold">Core Principle</p>
+            <h2 className="font-serif text-4xl text-text-primary md:text-5xl">Spiritual Sovereignty</h2>
+          </div>
+          <div className="rounded-3xl border border-white/8 bg-card/70 p-8 md:p-12">
+            <p className="text-lg leading-8 text-text-secondary">
+              Vault of Arcana offers profound and transformative esoteric knowledge, and with depth comes responsibility. Many sacred traditions contain truths that can be easily misunderstood, misapplied, or romanticized, especially when approached without grounding, discernment, or inner stability.
+            </p>
+            <p className="mt-6 text-lg leading-8 text-text-secondary">
+              What is symbolic can be taken as literal. What is meant as a mirror can be mistaken for an external authority. What is meant to awaken the self can, if distorted, lead the seeker away from it. All is self.
+            </p>
+            <p className="mt-6 text-lg leading-8 text-text-secondary">
+              When ideas, entities, symbols, or thoughtforms are placed above and beyond the sovereignty of one's own being, they can become burdensome forces rather than guides. In this way, spiritual work without foundation can create imbalance, dependency, inflation, confusion, or fragmentation.
+            </p>
+            <p className="mt-6 text-lg leading-8 text-text-primary font-medium">
+              The path of wisdom is not escape. It is not self-abandonment. It is not devotion to forces that eclipse the integrity of the soul. The golden rule, the north star, and the inner compass must always remain the complete sovereignty of the self.
+            </p>
+            <p className="mt-6 text-lg leading-8 text-text-secondary">
+              A seeker should build a strong foundation before pursuing higher states, deeper mysteries, or more powerful currents of initiation. When sovereignty is established and continually maintained, one may grow in a balanced way, integrate the wisdom of the ancestors, and engage the unseen without losing oneself within it.
+            </p>
+            <p className="mt-6 text-lg leading-8 text-text-secondary">
+              Vault of Arcana is offered in that spirit: not as a replacement for inner authority, but as a tool to deepen it.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="border-b border-white/5 bg-[linear-gradient(180deg,#0b0b12_0%,#090912_100%)]">
         <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">
           <div className="grid gap-10 lg:grid-cols-2">
