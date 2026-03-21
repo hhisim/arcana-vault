@@ -55,5 +55,16 @@
   "blog.readMore": "Devamını oku",
   "blog.featured": "Öne Çıkan Yazı",
   "blog.all": "Tümü",
-  "blog.read": "dk okuma"
+  "blog.read": "dk okuma",
+  "footer.vault_of_arcana": "Vault of Arcana",
+  "footer.tagline": "Nadir arşivler, özenle seçilmiş veri setleri, sembolik zeka ve Hakan Hısım ile PRIME'ın gelişen işbirliğinden oluşan yaşayan bir gizem okulu.",
+  "footer.explore": "Keşfet",
+  "footer.vision": "Vizyon",
+  "footer.vision_text": "Dört yaşayan geçitle başlayın. Geleneklerin, ajanların, yazışmaların, arşivlerin ve insan-AI diyaloğunun daha büyük bir takımyıldızına dönüşün.",
+  "footer.copyright": "Vault of Arcana · Nadir bilgelik, yaşayan diyalog.",
+  "chat.meter.unlimited": "Sınırsız",
+  "plans.free.desc": "Oracle'ı keşfetmek için mükemmel. 1 gelenek ve 5 günlük soru dahildir.",
+  "plans.seeker.desc": "Ciddi arayıcı için. 2 gelenek ve 20 günlük soru dahildir.",
+  "plans.adept.desc": "Adanmış uygulayıcı için. Tüm 4 gelenek ve sınırsız sorular.",
+  "plans.full.desc": "Maksimum derinlik ve erişim. Tüm gelenekler, sınırsız sorular, öncelikli destek."
 }
