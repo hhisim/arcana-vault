@@ -14,6 +14,21 @@ export type PlanConfig = {
 
 export const TRADITIONS: TraditionId[] = ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker']
 
+// New V2 env vars (set on Vercel) > hardcoded fallback > old env vars
+const SEEKER_PRICE = (
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_SEEKER_MONTHLY_V2 ||
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_SEEKER_MONTHLY ||
+  'price_1TDTmxD1VUXAFjstn6XPIrDF'
+)
+const ADEPT_PRICE = (
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_ADEPT_MONTHLY ||
+  'price_1TD7A7D1VUXAFjstg9k5UVsC'
+)
+const MAGISTER_PRICE = (
+  process.env.NEXT_PUBLIC_STRIPE_PRICE_MAGISTER_MONTHLY ||
+  'price_1TDTnND1VUXAFjstnXm6tYCN'
+)
+
 export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
   guest: {
     id: 'guest',
@@ -37,8 +52,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
     slots: 3,
     dailyLimit: 60,
     priceMonthly: 8,
-    // Primary: env var. Fallback: hardcoded new price ID ($8/mo created in Stripe)
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SEEKER_MONTHLY ?? 'price_1TDTmxD1VUXAFjstn6XPIrDF',
+    stripePriceId: SEEKER_PRICE,
   },
   adept: {
     id: 'adept',
@@ -47,7 +61,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
     slots: 4,
     dailyLimit: 'unlimited',
     priceMonthly: 19,
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ADEPT_MONTHLY ?? 'price_1TD7A7D1VUXAFjstg9k5UVsC',
+    stripePriceId: ADEPT_PRICE,
   },
   full: {
     id: 'full',
@@ -56,8 +70,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
     slots: 'all',
     dailyLimit: 'unlimited',
     priceMonthly: 29,
-    // Primary: env var. Fallback: hardcoded new price ID ($29/mo created in Stripe)
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_MAGISTER_MONTHLY ?? 'price_1TDTnND1VUXAFjstnXm6tYCN',
+    stripePriceId: MAGISTER_PRICE,
   },
 }
 
@@ -87,14 +100,14 @@ export function canAccessTradition(plan: PlanId, selected: TraditionId[], tradit
 
 export function planFromPriceId(priceId?: string | null): PlanId | null {
   if (!priceId) return null
-  // New price IDs (authoritative)
+  // Current price IDs
   if (priceId === 'price_1TDTmxD1VUXAFjstn6XPIrDF') return 'seeker'
   if (priceId === 'price_1TD7A7D1VUXAFjstg9k5UVsC') return 'adept'
   if (priceId === 'price_1TDTnND1VUXAFjstnXm6tYCN') return 'full'
-  // Legacy price IDs (for existing subscriptions)
+  // Legacy price IDs (existing subscriptions)
   if (priceId === 'price_1T8LZgD1VUXAFjstbnN0UuZL') return 'seeker'
   if (priceId === 'price_1TD79pD1VUXAFjstVPfDqYjr') return 'full'
-  // Server-side env vars fallback
+  // Server-side env vars
   if (priceId === process.env.STRIPE_PRICE_SEEKER_MONTHLY) return 'seeker'
   if (priceId === process.env.STRIPE_PRICE_ADEPT_MONTHLY) return 'adept'
   if (priceId === process.env.STRIPE_PRICE_MAGISTER_MONTHLY) return 'full'
