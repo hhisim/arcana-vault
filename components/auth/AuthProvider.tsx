@@ -42,7 +42,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = async () => {
     try {
-      const res = await fetch('/api/account/me', { cache: 'no-store' })
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), 6000)
+      const res = await fetch('/api/account/me', { cache: 'no-store', signal: controller.signal })
+      clearTimeout(timer)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       setState((prev) => ({
         ...prev,

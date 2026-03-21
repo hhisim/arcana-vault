@@ -25,9 +25,12 @@ function MembershipContent() {
   useEffect(() => {
     if (params.get('checkout') === 'success') {
       setCheckedOut(true)
+      // Refresh auth state multiple times — Stripe webhook may take a few seconds
       auth.refresh()
+      const timer = setTimeout(() => auth.refresh(), 3000)
+      return () => clearTimeout(timer)
     }
-  }, [])
+  }, [params, auth])
 
   if (!auth.isAuthenticated) {
     return (
