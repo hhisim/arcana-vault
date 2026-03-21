@@ -6,12 +6,15 @@ import tr from '@/messages/tr.json'
 import ru from '@/messages/ru.json'
 
 export type SiteLang = 'en' | 'tr' | 'ru'
+export type GlobalLang = SiteLang // for compatibility
+export type GlobalMessages = Record<string, string>
+
 const dictionaries = { en, tr, ru } as const
 
 type I18nCtx = {
   lang: SiteLang
   setLang: (lang: SiteLang) => void
-  t: (key: string, fallback?: string) => string
+  t: (keyOrObj: any, fallback?: string) => string
   tArray: (key: string) => string[]
   tObj: (key: string) => Record<string, string>
 }
@@ -23,6 +26,22 @@ const Ctx = createContext<I18nCtx>({
   tArray: (key) => [],
   tObj: (key) => ({}),
 })
+
+export function normalizeLang(value?: string | null): GlobalLang {
+  const raw = String(value || '').toLowerCase()
+  if (raw.startsWith('tr')) return 'tr' as GlobalLang
+  if (raw.startsWith('ru')) return 'ru' as GlobalLang
+  return 'en' as GlobalLang
+}
+
+export function detectBrowserLang(): GlobalLang {
+  if (typeof navigator === 'undefined') return 'en'
+  return normalizeLang(navigator.language)
+}
+
+export function tm(messages: Record<GlobalLang, GlobalMessages>, lang: GlobalLang, key: string, fallback?: string): string {
+  return messages[lang]?.[key] ?? messages.en?.[key] ?? fallback ?? key
+}
 
 export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<SiteLang>('en')
@@ -45,14 +64,18 @@ export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<I18nCtx>(() => ({
     lang,
     setLang,
-    t: (key, fallback) => {
+    t: (keyOrObj, fallback) => {
+      if (typeof keyOrObj === 'object' && keyOrObj !== null) {
+        const obj = keyOrObj as Record<string, string>
+        return obj[lang] ?? obj.en ?? fallback ?? ''
+      }
       const dict = dictionaries[lang] as Record<string, unknown>
-      const val = dict[key]
+      const val = dict[keyOrObj as string]
       if (typeof val === 'string') return val
       if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
-        return (val as Record<string, string>)[lang] ?? (val as Record<string, string>).en ?? fallback ?? key
+        return (val as Record<string, string>)[lang] ?? (val as Record<string, string>).en ?? fallback ?? keyOrObj as string
       }
-      return fallback ?? key
+      return fallback ?? keyOrObj as string
     },
     tArray: (key) => {
       const dict = dictionaries[lang] as Record<string, unknown>
