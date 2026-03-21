@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ensureProfile, getCurrentUserLite } from '@/lib/account'
 import { getStripe } from '@/lib/stripe'
 
+// Force Node.js runtime — Edge runtime can't reliably reach Stripe
+export const runtime = 'nodejs'
+
 function getSiteUrl(req: NextRequest) {
   return process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin
 }

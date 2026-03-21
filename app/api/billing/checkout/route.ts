@@ -4,6 +4,9 @@ import { PLAN_CONFIG, PlanId } from '@/lib/plans'
 import { getAdminSupabase } from '@/lib/supabase/admin'
 import { getStripe } from '@/lib/stripe'
 
+// Force Node.js runtime — Edge runtime can't reliably reach Stripe
+export const runtime = 'nodejs'
+
 function getSiteUrl(req: NextRequest) {
   return process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin
 }
@@ -40,7 +43,7 @@ export async function POST(req: NextRequest) {
             plan,
             configExists: !!cfg,
             stripePriceId: cfg?.stripePriceId ?? 'undefined',
-            hint: 'NEXT_PUBLIC_STRIPE_PRICE_*_MONTHLY env vars must be set at BUILD TIME on Vercel, not just runtime.',
+            hint: 'NEXT_PUBLIC_STRIPE_PRICE_*_MONTHLY env vars must be set at BUILD TIME on Vercel.',
           },
         },
         { status: 400 }
@@ -84,7 +87,7 @@ export async function POST(req: NextRequest) {
     const stack = err instanceof Error ? err.stack?.split('\n').slice(0, 3).join(' | ') : undefined
     console.error(`[checkout] ERROR (${Date.now() - startTime}ms):`, message)
     return NextResponse.json(
-      { detail: `Checkout error: ${message}`, debug: { stack } },
+      { detail: `Checkout error: ${message}`, debug: { stack, elapsed: Date.now() - startTime } },
       { status: 500 }
     )
   }
