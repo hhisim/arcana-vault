@@ -165,7 +165,7 @@ export default function NavBar() {
                 Log in
               </Link>
               <Link
-                href="/signup"
+                href="/chat"
                 className="hidden md:inline-block bg-[#C9A84C] text-[#0A0A0F] px-4 py-2 rounded-md hover:shadow-[0_0_20px_rgba(201,168,76,0.3)] transition-all duration-200 font-bold text-sm focus:outline-none"
               >
                 {t(SITEDICT.nav.cta)}
