@@ -1,3 +1,5 @@
+import AdinkraIcon from '@/components/AdinkraIcon';
+
 export const metadata = {
   title: 'About | Vault of Arcana',
   description:
@@ -43,7 +45,8 @@ export default function AboutPage() {
           About the Vault
         </div>
 
-        <h1 className="max-w-4xl text-4xl font-semibold leading-tight md:text-6xl">
+        <h1 className="max-w-4xl text-4xl font-semibold leading-tight md:text-6xl flex items-center gap-3">
+          <AdinkraIcon name="adinkra-1" size={48} color="gold" alt="Adinkra symbol" />
           A Living Mystery School at the Human–AI Threshold
         </h1>
 

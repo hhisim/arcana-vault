@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useSiteI18n } from '@/lib/site-i18n';
 import { posts } from '@/lib/posts';
 import { postsI18n } from '@/lib/posts-i18n';
+import AdinkraIcon from '@/components/AdinkraIcon';
 
 const CATEGORY_KEYS = ['all', 'tao', 'tarot', 'tantra', 'entheogens', 'alchemy', 'hermetics', 'philosophy', 'yoga', 'sufism', 'gnosticism', 'dreamwalker', 'science', 'linguistics'] as const;
 
@@ -94,7 +95,10 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] pb-24">
       <header className="max-w-7xl mx-auto px-6 pt-32 pb-12">
-        <h1 className="font-cinzel text-5xl md:text-6xl mb-4 tracking-tighter text-[#E8E0F0]">{title}</h1>
+        <h1 className="font-cinzel text-5xl md:text-6xl mb-4 tracking-tighter text-[#E8E0F0] flex items-center gap-3">
+          <AdinkraIcon name="adinkra-1" size={36} color="gold" alt="Adinkra symbol" />
+          {title}
+        </h1>
 
         {/* Filter Tabs */}
         <div className="flex gap-4 mt-8 flex-wrap">
