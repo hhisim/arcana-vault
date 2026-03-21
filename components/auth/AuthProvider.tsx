@@ -14,6 +14,13 @@ export type AuthState = {
   usageLimit: number | 'unlimited'
   usageRemaining: number | 'unlimited'
   guestTotalRemaining: number
+  // Trial
+  isTrial: boolean
+  trialEndsAt: string | null
+  trialDaysRemaining: number | null
+  promoSource: string | null
+  // Test mode
+  isTestMode: boolean
 }
 
 type Ctx = AuthState & {
@@ -31,6 +38,11 @@ const defaultState: Ctx = {
   usageLimit: 3,
   usageRemaining: 3,
   guestTotalRemaining: 3,
+  isTrial: false,
+  trialEndsAt: null,
+  trialDaysRemaining: null,
+  promoSource: null,
+  isTestMode: false,
   refresh: async () => {},
   logout: async () => {},
 }
@@ -39,16 +51,12 @@ const AuthCtx = createContext<Ctx>(defaultState)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<Ctx>(defaultState)
-
-  // Debounce timer: prevents multiple rapid refreshes during auth transitions
   const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const refreshInFlight = useRef(false)
 
   const refresh = async () => {
-    // If a refresh is already running, skip
     if (refreshInFlight.current) return
     refreshInFlight.current = true
-
     try {
       const controller = new AbortController()
       const timer = setTimeout(() => controller.abort(), 6000)
@@ -67,6 +75,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         usageLimit: data.usageLimit ?? 3,
         usageRemaining: data.usageRemaining ?? 0,
         guestTotalRemaining: data.guestTotalRemaining ?? 0,
+        isTrial: data.isTrial ?? false,
+        trialEndsAt: data.trialEndsAt ?? null,
+        trialDaysRemaining: data.trialDaysRemaining ?? null,
+        promoSource: data.promoSource ?? null,
+        isTestMode: data.isTestMode ?? false,
       }))
     } catch {
       setState((prev) => ({ ...prev, loading: false }))
@@ -75,32 +88,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  /**
-   * Debounced refresh: waits 500ms before actually refreshing.
-   * If another auth state change fires within that window, the timer resets.
-   * This prevents the rapid-fire refresh calls that happen during signUp → checkout.
-   */
   const debouncedRefresh = () => {
     if (refreshTimer.current) clearTimeout(refreshTimer.current)
-    refreshTimer.current = setTimeout(() => {
-      void refresh()
-    }, 500)
+    refreshTimer.current = setTimeout(() => void refresh(), 500)
   }
 
   useEffect(() => {
     let mounted = true
     const supabase = getBrowserSupabase()
 
-    // Initial refresh (no debounce)
-    void refresh()
+    // ── Test mode: ?testmode=arcana sets cookie, ?testmode=off clears ──
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const tm = params.get('testmode')
+      if (tm === 'arcana') {
+        document.cookie = 'voa_test_mode=arcana; path=/; max-age=86400; samesite=lax'
+        // Clean the URL
+        params.delete('testmode')
+        const clean = params.toString()
+        window.history.replaceState({}, '', window.location.pathname + (clean ? '?' + clean : ''))
+      } else if (tm === 'off') {
+        document.cookie = 'voa_test_mode=; path=/; max-age=0'
+        params.delete('testmode')
+        const clean = params.toString()
+        window.history.replaceState({}, '', window.location.pathname + (clean ? '?' + clean : ''))
+      }
+    }
 
+    void refresh()
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (!mounted) return
-      console.log('[AuthProvider] onAuthStateChange:', event)
-      // Debounce to avoid race conditions during signup → checkout flow
       debouncedRefresh()
     })
-
     return () => {
       mounted = false
       sub.subscription.unsubscribe()
