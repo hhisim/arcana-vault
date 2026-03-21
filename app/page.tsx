@@ -122,6 +122,112 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* COMING SOON TRADITIONS */}
+      <section className="border-b border-white/5 bg-[#0d0d18]">
+        <div className="mx-auto max-w-6xl px-6 py-20 md:px-8">
+          <div className="mb-12 text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-4 py-1 text-xs uppercase tracking-[0.25em] text-gold">
+              <span className="flex h-1.5 w-1.5 animate-pulse rounded-full bg-gold"></span>
+              {tt({ en:'Traditions Coming Soon', tr:'Yakında Gelen Gelenekler', ru:'Традиции скоро'})}
+            </div>
+            <h2 className="mt-4 font-serif text-4xl text-text-primary md:text-5xl">
+              {tt({ en:'More Gates Are Opening', tr:'Daha Fazra Geçit Açılıyor', ru:'Больше вратарей открываются'})}
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-text-secondary">
+              {tt({
+                en:'The Vault is alive. While four traditions are live, a constellation of twenty-plus paths is being activated. Each gate opens when its archive, dataset, and oracle voice are ready.',
+                tr:'Vault yaşıyor. Dört gelenek aktifken, yirmi artı yolun bir yıldız takımadası etkinleştiriliyor. Her geçit, arşivi, veri seti ve kâhin sesi hazır olduğunda açılacak.',
+                ru:'Хранилище живо. Пока четыре традиции активны, созвездие из более чем двадцати путей активируется. Каждые врата откроются, когда будет готов их архив, набор данных и голос оракула.'
+              })}
+            </p>
+          </div>
+
+          {/* Primary feature cards */}
+          <div className="mb-10 grid gap-6 md:grid-cols-2">
+            <div className="group relative overflow-hidden rounded-3xl border border-[#c9a84c]/25 bg-gradient-to-br from-[#c9a84c]/8 to-transparent p-8">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(201,168,76,0.05),transparent_60%)]"></div>
+              <div className="relative">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#c9a84c]/30 bg-[#c9a84c]/10 px-3 py-1 text-xs uppercase tracking-widest text-[#c9a84c]">
+                  Alchemy
+                </div>
+                <h3 className="mt-3 font-serif text-3xl text-text-primary">
+                  {tt({ en:'Alchemical Philosophy', tr:'Simyasal Felsefe', ru:'Алхимическая философия'})}
+                </h3>
+                <p className="mt-3 leading-7 text-text-secondary">
+                  {tt({
+                    en:"Solve et Coagula. The Great Work — the transmutation of the base self into the solar spirit. Nigredo, albedo, citrinitas, rubedo. The alchemical path from prima materia to philosopher's stone.",
+                    tr:'Çöz ve Pıhtılaştır. Büyük Emek — düşük benliğin güneş ruhuna dönüşümü. Nigredo, albedo, citrinitas, rubedo. Prima materyadan filozof taşına alchemical yol.',
+                    ru:'Решай и Соединяй. Великая Работа — превращение низшего я в солнечный дух. Нигредо, альбедо, цитринитас, рубедо. Путь от первой материи к философскому камню.'
+                  })}
+                </p>
+                <div className="mt-5 flex items-center gap-2 text-xs text-[#c9a84c]/50">
+                  <span className="h-px flex-1 bg-[#c9a84c]/15"></span>
+                  <span>{tt({ en:'Activating soon', tr:'Yakında etkinleşecek', ru:'Скоро активируется'})}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative overflow-hidden rounded-3xl border border-[#7B5EA7]/25 bg-gradient-to-br from-[#7B5EA7]/8 to-transparent p-8">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(123,94,167,0.05),transparent_60%)]"></div>
+              <div className="relative">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#7B5EA7]/30 bg-[#7B5EA7]/10 px-3 py-1 text-xs uppercase tracking-widest text-[#7B5EA7]">
+                  Paradigm Hacker
+                </div>
+                <h3 className="mt-3 font-serif text-3xl text-text-primary">
+                  {tt({ en:'Chaos Magick', tr:'Kaos Büyüsü', ru:'Хаосомагия'})}
+                </h3>
+                <p className="mt-3 leading-7 text-text-secondary">
+                  {tt({
+                    en:'Cast sigils with precision. Engineer your own paradigm shifts. Chaos Magick — the pragmatic neo-occultism of Austin Osman Spare, made living and interactive.',
+                    tr:'Sigilleri hassasiyetle at. Kendi paradigma kaymalarını mühendislik et. Chaos Magick — Austin Osman Spare\'in pragmatik neo-okültizmi, yaşayan ve interaktif hale getirildi.',
+                    ru:'Творите сигилы с точностью. Инженерируйте собственные парадигмальные сдвиги. Хаосомагия — прагматический нео-оккультизм Остина Османа Спейра, сделанный живым и интерактивным.'
+                  })}
+                </p>
+                <div className="mt-5 flex items-center gap-2 text-xs text-[#7B5EA7]/50">
+                  <span className="h-px flex-1 bg-[#7B5EA7]/15"></span>
+                  <span>{tt({ en:'Activating soon', tr:'Yakında etkinleşecek', ru:'Скоро активируется'})}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Full list */}
+          <div className="rounded-3xl border border-white/8 bg-white/[0.02] p-8">
+            <p className="mb-6 text-center text-xs uppercase tracking-[0.3em] text-text-secondary">
+              {tt({ en:'Also on the threshold', tr:'Ayrıca eşikte', ru:'Также на пороге'})}
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {[
+                { en:'Gnostic Oracle', tr:'Gnostik Kahin', ru:'Гностический оракул', accent:'gold' },
+                { en:'Enochian Vault', tr:'Enochian Mahzeni', ru:'Енохианское хранилище', accent:'purple' },
+                { en:'Golden Dawn', tr:'Şafak Yükselişi', ru:'Золотая Заря', accent:'gold' },
+                { en:'Thelema', tr:'Thelema', ru:'Телезма', accent:'purple' },
+                { en:'Kabbalah', tr:'Kabbala', ru:'Каббала', accent:'gold' },
+                { en:'Ritual Magick', tr:'Ritüel Büyü', ru:'Ритуальная магия', accent:'purple' },
+                { en:'Wicca & Witchcraft', tr:'Wicca ve Cadılık', ru:'Викка и ведовство', accent:'green' },
+                { en:'Kemet', tr:'Kemet', ru:'Кемет', accent:'gold' },
+                { en:'+ More', tr:'+ Daha Fazla', ru:'+ Больше', accent:'white' },
+              ].map(item => (
+                <span
+                  key={item.en}
+                  className={`rounded-full border px-4 py-1.5 text-xs font-medium transition-all ${
+                    item.accent === 'gold'
+                      ? 'border-[#c9a84c]/30 text-[#c9a84c] bg-[#c9a84c]/5 hover:bg-[#c9a84c]/10'
+                      : item.accent === 'purple'
+                      ? 'border-[#7B5EA7]/30 text-[#7B5EA7] bg-[#7B5EA7]/5 hover:bg-[#7B5EA7]/10'
+                      : item.accent === 'green'
+                      ? 'border-[#4ECDC4]/30 text-[#4ECDC4] bg-[#4ECDC4]/5 hover:bg-[#4ECDC4]/10'
+                      : 'border-white/20 text-text-secondary bg-white/5 hover:bg-white/10'
+                  }`}
+                >
+                  {item[L] ?? item.en}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="border-b border-white/5 bg-[linear-gradient(180deg,#090912_0%,#0b0b12_100%)]">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:px-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
