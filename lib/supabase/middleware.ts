@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export function updateSession(request: NextRequest) {
+export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request })
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -26,6 +26,6 @@ export function updateSession(request: NextRequest) {
     },
   })
 
-  void supabase.auth.getUser()
+  await supabase.auth.getUser()
   return response
 }
