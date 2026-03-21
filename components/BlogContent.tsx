@@ -146,21 +146,30 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
     <h4 className="font-cinzel text-xl md:text-2xl mt-8 mb-3 text-[#4ECDC4] uppercase tracking-wider" {...props} />
   )
 
-  const ParagraphComponent = ({ node, ...props }: any) => (
-    <p className="mb-6 text-[17px] leading-8 text-[#B8B0CC] group" {...props} />
-  )
+  const ParagraphComponent = ({ node, ...props }: any) => {
+    // If inside a blockquote, render gold text
+    const isInsideBlockquote = node?.parent?.tagName === 'BLOCKQUOTE'
+    return (
+      <p
+        className={`mb-6 text-[17px] leading-8 group ${isInsideBlockquote ? 'text-[#C9A84C] italic' : 'text-[#B8B0CC]'}`}
+        {...props}
+      />
+    )
+  }
 
-  const StrongComponent = ({ node, ...props }: any) => (
-    <strong className="text-[#E8E0F0] font-semibold text-[18px]" {...props} />
-  )
+  const StrongComponent = ({ node, ...props }: any) => {
+    const inBlockquote = node?.parent?.tagName === 'BLOCKQUOTE'
+    return <strong className={`font-semibold ${inBlockquote ? 'text-[#C9A84C]' : 'text-[#E8E0F0] text-[18px]'}`} {...props} />
+  }
 
-  const EmComponent = ({ node, ...props }: any) => (
-    <em className="text-[#9B7BC9] italic" {...props} />
-  )
+  const EmComponent = ({ node, ...props }: any) => {
+    const inBlockquote = node?.parent?.tagName === 'BLOCKQUOTE'
+    return <em className={`italic ${inBlockquote ? 'text-[#C9A84C]' : 'text-[#9B7BC9]'}`} {...props} />
+  }
 
   const BlockquoteComponent = ({ node, ...props }: any) => (
     <blockquote
-      className="my-8 pl-6 border-l-4 border-gradient-to-b from-[#C9A84C] via-[#7B5EA7] to-[#4ECDC4] bg-gradient-to-r from-[rgba(201,168,76,0.06)] to-transparent py-4 pr-4 rounded-r-xl"
+      className="my-8 pl-6 border-l-4 border-gradient-to-b from-[#C9A84C] via-[#7B5EA7] to-[#4ECDC4] bg-gradient-to-r from-[rgba(201,168,76,0.06)] to-transparent py-4 pr-4 rounded-r-xl text-[#C9A84C]"
       {...props}
     />
   )
