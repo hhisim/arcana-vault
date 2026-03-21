@@ -5,7 +5,7 @@ import { useSiteI18n } from '@/lib/site-i18n';
 import { posts } from '@/lib/posts';
 import { postsI18n } from '@/lib/posts-i18n';
 
-const CATEGORY_KEYS = ['all', 'tao', 'tarot', 'tantra', 'entheogens', 'alchemy', 'hermetics', 'philosophy', 'yoga', 'sufism', 'gnosticism', 'dreamwalker', 'science'] as const;
+const CATEGORY_KEYS = ['all', 'tao', 'tarot', 'tantra', 'entheogens', 'alchemy', 'hermetics', 'philosophy', 'yoga', 'sufism', 'gnosticism', 'dreamwalker', 'science', 'linguistics'] as const;
 
 export default function BlogPage() {
   const { t, lang } = useSiteI18n();
@@ -26,6 +26,7 @@ export default function BlogPage() {
       gnosticism: { en: 'Gnosticism', tr: 'Gnostik', ru: 'Гностицизм' },
       dreamwalker: { en: 'Dreamwalker', tr: 'Rüya Gezgini', ru: 'Сновидец' },
       science: { en: 'Science', tr: 'Bilim', ru: 'Наука' },
+      linguistics: { en: 'Linguistics', tr: 'Dilbilim', ru: 'Лингвистика' },
     };
     return labels[key]?.[lang] ?? labels[key]?.en ?? key;
   };

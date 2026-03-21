@@ -1,8 +1,8 @@
 ---
 title: "The Hyperbolic Geometry of DMT Experiences: Symmetries, Sheets, and Saddled Scenes"
 description: "An exhaustive algorithmic and geometric analysis of DMT-induced states of consciousness, exploring the mathematical structures underlying the hyperspatial realm, incorporating primary textual analysis and historical lineage from the Arcana Vault archives."
-tags: []
-date: 2026-03-19
+tradition: "entheogens"
+publishedAt: "2026-03-19"
 author: Prime + Hakan
 ---
 # The Hyperbolic Geometry of DMT Experiences: Symmetries, Sheets, and Saddled Scenes

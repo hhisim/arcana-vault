@@ -1,7 +1,8 @@
 ---
 title: "Reality as Syntax — The Code at the Ground of Creation"
 slug: "reality-as-syntax-the-code-at-the-ground-of-creation"
-date: "2026-03-19"
+publishedAt: "2026-03-19"
+tradition: "science"
 author: "Arcana Vault"
 tags: []
 collections: ["alien-information-theory", "arcana-vault", "linguistics"]

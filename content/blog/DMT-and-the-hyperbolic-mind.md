@@ -1,7 +1,8 @@
 ---
 title: "DMT and the Hyperbolic Mind: A Treatise on the Geometry of Hyperspace and Altered States"
 description: "An exhaustive algorithmic and geometric analysis of DMT-induced states of consciousness, drawing on 'DMT: The Spirit Molecule,' ancient mystery schools, and primary textual analysis from the Arcana Vault archives."
-tags: []
+tradition: "entheogens"
+publishedAt: "2026-03-19"
 date: 2026-03-19
 author: Prime + Hakan
 ---
