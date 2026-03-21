@@ -36,7 +36,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 border-t border-white/8 pt-6 text-sm text-text-secondary">
-          © {new Date().getFullYear()} {t('footer.copyright', 'Vault of Arcana · Rare wisdom, living dialogue.')}
+          {t('footer.copyright', '© 2026 Vault of Arcana · Rare wisdom, living dialogue.')}
         </div>
       </div>
     </footer>
