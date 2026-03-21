@@ -4,17 +4,22 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const slug = searchParams.get('slug');
+  const rawSlug = searchParams.get('slug');
 
-  if (!slug) return NextResponse.json({ error: 'No slug provided' }, { status: 400 });
+  if (!rawSlug) return NextResponse.json({ error: 'No slug provided' }, { status: 400 });
+
+  // Sanitize: only allow alphanumeric, hyphens, underscores — prevents path traversal
+  const slug = rawSlug.replace(/[^a-zA-Z0-9\-_]/g, '');
+  if (!slug || slug !== rawSlug) {
+    return NextResponse.json({ error: 'Invalid slug' }, { status: 400 });
+  }
 
   try {
     const filePath = path.join(process.cwd(), 'content', 'blog', `${slug}.mdx`);
     const content = await fs.readFile(filePath, 'utf8');
-    // Strip frontmatter if it exists - basic regex for simplicity
     const cleanContent = content.replace(/^---[\s\S]*?---\n/, '');
     return NextResponse.json({ content: cleanContent });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'File not found' }, { status: 404 });
   }
-}
+};

@@ -9,33 +9,54 @@ function getSiteUrl(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await getCurrentUserLite()
-  if (!user) return NextResponse.json({ detail: 'Authentication required' }, { status: 401 })
-  const profile = await ensureProfile(user)
-  const body = await req.json().catch(() => ({}))
-  const plan = (body.plan || 'seeker') as PlanId
-  const cfg = PLAN_CONFIG[plan]
-  if (!cfg?.stripePriceId) return NextResponse.json({ detail: 'Invalid paid plan' }, { status: 400 })
+  try {
+    const user = await getCurrentUserLite(req.headers.get('Authorization'))
+    if (!user) return NextResponse.json({ detail: 'Authentication required — please log in again.' }, { status: 401 })
 
-  const stripe = getStripe()
-  let customerId = profile.stripe_customer_id as string | null
-  if (!customerId) {
-    const customer = await stripe.customers.create({ email: user.email || undefined, metadata: { user_id: user.id } })
-    customerId = customer.id
-    const admin = getAdminSupabase()
-    await admin.from('profiles').update({ stripe_customer_id: customerId }).eq('user_id', user.id)
+    const profile = await ensureProfile(user)
+    const body = await req.json().catch(() => ({}))
+    const plan = (body.plan || 'seeker') as PlanId
+    const cfg = PLAN_CONFIG[plan]
+
+    if (!cfg?.stripePriceId) {
+      return NextResponse.json({ detail: `Plan "${plan}" is not a paid plan or Stripe price is not configured.` }, { status: 400 })
+    }
+
+    const stripe = getStripe()
+    let customerId = profile.stripe_customer_id as string | null
+
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email || undefined,
+        metadata: { user_id: user.id },
+      })
+      customerId = customer.id
+      const admin = getAdminSupabase()
+      await admin.from('profiles').update({ stripe_customer_id: customerId }).eq('user_id', user.id)
+    }
+
+    const site = getSiteUrl(req)
+
+    // Use expand to get subscription object so we can read metadata on it
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      customer: customerId,
+      line_items: [{ price: cfg.stripePriceId, quantity: 1 }],
+      success_url: `${site}/membership?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${site}/pricing?checkout=cancelled`,
+      allow_promotion_codes: true,
+      subscription_data: {
+        metadata: { user_id: user.id, plan },
+      },
+      // expand lets us get subscription in the response object
+      expand: ['subscription'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any)
+
+    return NextResponse.json({ url: session.url })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('[/billing/checkout]', message)
+    return NextResponse.json({ detail: `Checkout error: ${message}` }, { status: 500 })
   }
-
-  const site = getSiteUrl(req)
-  const session = await stripe.checkout.sessions.create({
-    mode: 'subscription',
-    customer: customerId,
-    line_items: [{ price: cfg.stripePriceId, quantity: 1 }],
-    success_url: `${site}/membership?checkout=success`,
-    cancel_url: `${site}/pricing?checkout=cancelled`,
-    metadata: { user_id: user.id, plan },
-    allow_promotion_codes: true,
-  })
-
-  return NextResponse.json({ url: session.url })
 }

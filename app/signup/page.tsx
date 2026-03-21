@@ -24,30 +24,81 @@ function SignupForm() {
   const [selectedTraditions, setSelectedTraditions] = useState<TraditionId[]>([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [debugInfo, setDebugInfo] = useState('')
 
   const cfg = PLAN_CONFIG[pendingPlan]
   const maxSlots = cfg?.slots === 'all' ? 99 : (cfg?.slots ?? 1)
 
+  // BATTLE DEBUG
+  console.log('[signup] pendingPlan:', pendingPlan, '| step:', step)
+
   const onSignup = async (e: FormEvent) => {
     e.preventDefault()
+    if (loading) return  // re-entrance guard
     setLoading(true)
     setError('')
-    const supabase = getBrowserSupabase()
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: name },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    })
-    setLoading(false)
-    if (error) { setError(error.message); return }
-    // Go to traditions step if it's a paid plan, otherwise skip to account
-    if (pendingPlan !== 'free') {
-      setStep('traditions')
-    } else {
+    setDebugInfo('')
+
+    try {
+      const supabase = getBrowserSupabase()
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+      setLoading(false)
+      if (error) { setError(error.message); return }
+
+      // CRITICAL: sync Supabase session to server-side cookies before calling billing APIs
+      const { data: sessionData } = await supabase.auth.getSession()
+      const accessToken = sessionData?.session?.access_token
+      const refreshToken = sessionData?.session?.refresh_token
+      if (!accessToken || !refreshToken) {
+        setError('Session error — please refresh the page and try again.')
+        setLoading(false)
+        return
+      }
+
+      try {
+        await fetch('/api/auth/sync-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
+        })
+      } catch (syncErr) {
+        setDebugInfo(`sync-session failed: ${syncErr instanceof Error ? syncErr.message : String(syncErr)}`)
+      }
+
+      if (pendingPlan !== 'free') {
+        setDebugInfo('initiating checkout...')
+        const res = await fetch('/api/billing/checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ plan: pendingPlan }),
+        })
+        const text = await res.text()
+        setDebugInfo(`checkout status: ${res.status}\nbody: ${text.substring(0, 800)}`)
+        let data: Record<string, unknown> = {}
+        try { data = JSON.parse(text) } catch { data = { raw: text } }
+        if (data?.url) { window.location.href = data.url as string; return }
+        if (!data.url) {
+          setError(`Checkout failed: ${data.detail || text.substring(0, 200)}`)
+        }
+        setLoading(false)
+        return
+      }
       router.push('/account')
+    } catch (err) {
+      setLoading(false)
+      const msg = err instanceof Error ? err.message : String(err)
+      setError(msg)
+      setDebugInfo(`Unhandled error: ${msg}`)
     }
   }
 
@@ -61,14 +112,20 @@ function SignupForm() {
     })
     // For paid plans, call Stripe checkout
     if (pendingPlan !== 'free') {
-      const data = await (await fetch('/api/billing/checkout', {
+      const res = await fetch('/api/billing/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan: pendingPlan }),
-      })).json()
-      if (data?.url) { window.location.href = data.url; return }
+      })
+      const text = await res.text()
+      setDebugInfo(`checkout status: ${res.status}\nbody: ${text.substring(0, 500)}`)
+      let data: Record<string, unknown> = {}
+      try { data = JSON.parse(text) } catch { data = { raw: text } }
+      if (data?.url) { window.location.href = data.url as string; return }
+      setLoading(false)
+      return
     }
-    router.push('/account')
+    window.location.href = '/account'
   }
 
   if (step === 'traditions') {
@@ -85,6 +142,9 @@ function SignupForm() {
             onChange={setSelectedTraditions}
             max={maxSlots}
           />
+          {debugInfo && (
+            <div className="rounded-xl bg-red-900/50 border border-red-500 p-4 text-red-200 text-sm font-mono whitespace-pre-wrap">{debugInfo}</div>
+          )}
           <button
             onClick={onSaveAndCheckout}
             disabled={loading}
@@ -106,6 +166,9 @@ function SignupForm() {
           <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none" placeholder={t('auth.email')} value={email} onChange={(e) => setEmail(e.target.value)} />
           <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none" type="password" placeholder={t('auth.password')} value={password} onChange={(e) => setPassword(e.target.value)} />
           {error && <div className="text-[#E05C5C] text-sm">{error}</div>}
+          {debugInfo && (
+            <div className="rounded-xl bg-red-900/50 border border-red-500 p-4 text-red-200 text-sm font-mono whitespace-pre-wrap">{debugInfo}</div>
+          )}
           <button disabled={loading} className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium">{t('auth.submit')}</button>
         </form>
       </div>

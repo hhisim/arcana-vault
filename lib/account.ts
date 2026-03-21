@@ -26,7 +26,14 @@ function todayRange() {
   return { start: start.toISOString(), end: end.toISOString() }
 }
 
-export async function getCurrentUserLite() {
+export async function getCurrentUserLite(bearerToken?: string | null) {
+  if (bearerToken) {
+    const supabase = await getServerSupabase()
+    // Strip "Bearer " prefix if present
+    const token = bearerToken.replace(/^Bearer\s+/i, '').trim()
+    const { data } = await supabase.auth.getUser(token)
+    if (data.user) return data.user
+  }
   const supabase = await getServerSupabase()
   const { data } = await supabase.auth.getUser()
   return data.user ?? null
