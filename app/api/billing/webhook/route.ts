@@ -6,9 +6,59 @@ import { getStripe } from '@/lib/stripe'
 
 export const runtime = 'nodejs'
 
+// ── Helper: resolve plan from subscription ───────────────────────────────────
+function resolvePlan(sub: {
+  metadata?: { user_id?: string | null; plan?: string } | null
+  items?: { data?: Array<{ price?: { id?: string | null } }> }
+}): { userId?: string; planId: string } {
+  let userId = sub.metadata?.user_id
+  let planId = sub.metadata?.plan ?? 'seeker'
+  if (!planId || planId === 'seeker') {
+    const fromPrice = planFromPriceId(sub.items?.data?.[0]?.price?.id)
+    if (fromPrice) planId = fromPrice
+  }
+  return { userId, planId }
+}
+
+// ── Helper: ensure profile exists, create if missing ─────────────────────────
+async function ensureProfileForCustomer(
+  admin: ReturnType<typeof getAdminSupabase>,
+  customerId: string,
+  userId?: string,
+  planId?: string,
+  email?: string,
+) {
+  // Check existing
+  const { data: existing } = await admin
+    .from('profiles')
+    .select('user_id')
+    .eq('stripe_customer_id', customerId)
+    .maybeSingle()
+
+  if (existing) {
+    // Update existing
+    const updates: Record<string, unknown> = { stripe_customer_id: customerId }
+    if (userId) updates.user_id = userId
+    if (planId) updates.plan = planId
+    await admin.from('profiles').update(updates).eq('stripe_customer_id', customerId)
+  } else if (userId) {
+    // Create new with user_id
+    await admin.from('profiles').upsert({
+      user_id: userId,
+      email: email ?? null,
+      plan: planId ?? 'guest',
+      subscription_status: 'active',
+      stripe_customer_id: customerId,
+    }).eq('user_id', userId)
+  }
+  // Note: if no userId and no profile exists, we can't create one without knowing the user.
+  // This case requires the user to go through website signup first.
+}
+
 // ── Helper: update profile from subscription object ──────────────────────────
 async function updateProfileFromSubscription(
   admin: ReturnType<typeof getAdminSupabase>,
+  stripe: ReturnType<typeof getStripe>,
   sub: {
     id?: string
     customer?: string | null
@@ -21,24 +71,7 @@ async function updateProfileFromSubscription(
   const customerId = String(sub.customer ?? '')
   if (!customerId) return
 
-  // Priority: metadata.user_id > metadata.plan > price_id fallback
-  let userId = sub.metadata?.user_id
-  let planId = sub.metadata?.plan as string | undefined
-
-  // Fallback: look up user_id from profile by customer_id
-  if (!userId) {
-    const { data: prof } = await admin
-      .from('profiles')
-      .select('user_id')
-      .eq('stripe_customer_id', customerId)
-      .maybeSingle()
-    userId = prof?.user_id
-  }
-
-  // Fallback plan from price_id
-  if (!planId) {
-    planId = planFromPriceId(sub.items?.data?.[0]?.price?.id) ?? 'seeker'
-  }
+  const { userId, planId } = resolvePlan(sub)
 
   const updates: Record<string, unknown> = {
     subscription_status: sub.status ?? 'active',
@@ -49,18 +82,61 @@ async function updateProfileFromSubscription(
       ? new Date(sub.current_period_end * 1000).toISOString()
       : null,
   }
+  if (planId) updates.plan = planId
 
-  // Only set plan if we have a valid mapping
-  if (planId) {
-    updates.plan = planId
+  // Try update by user_id first
+  if (userId) {
+    const { data: profile } = await admin
+      .from('profiles')
+      .select('user_id')
+      .eq('user_id', userId)
+      .maybeSingle()
+
+    if (profile) {
+      await admin.from('profiles').update(updates).eq('user_id', userId)
+      return
+    }
+  }
+
+  // Try update by customer_id
+  const { data: byCustomer } = await admin
+    .from('profiles')
+    .select('user_id')
+    .eq('stripe_customer_id', customerId)
+    .maybeSingle()
+
+  if (byCustomer) {
+    await admin.from('profiles').update(updates).eq('stripe_customer_id', customerId)
+    return
+  }
+
+  // No profile exists — try to create one
+  // First get customer email from Stripe
+  let email: string | undefined
+  try {
+    const customer = await stripe.customers.retrieve(customerId)
+    if (!customer.deleted) {
+      email = customer.email
+    }
+  } catch {
+    // Stripe customer fetch failed — proceed without email
   }
 
   if (userId) {
-    await admin.from('profiles').update(updates).eq('user_id', userId)
-  } else {
-    // Fallback: update by customer_id
-    await admin.from('profiles').update(updates).eq('stripe_customer_id', customerId)
+    await admin.from('profiles').upsert({
+      user_id: userId,
+      email: email ?? null,
+      plan: planId ?? 'guest',
+      subscription_status: sub.status ?? 'active',
+      stripe_customer_id: customerId,
+      stripe_subscription_id: sub.id ?? null,
+      price_id: sub.items?.data?.[0]?.price?.id ?? null,
+      current_period_end: sub.current_period_end
+        ? new Date(sub.current_period_end * 1000).toISOString()
+        : null,
+    })
   }
+  // If no userId, we can't create a profile — user must sign up through website first
 }
 
 // ── POST handler ──────────────────────────────────────────────────────────────
@@ -93,15 +169,22 @@ export async function POST(req: Request) {
       if (session.mode === 'subscription' && session.customer && session.subscription) {
         const userId = session.metadata?.user_id
         const planId = session.metadata?.plan ?? 'seeker'
+        const email = session.customer_details?.email ?? undefined
 
-        if (userId) {
-          await admin.from('profiles').update({
-            plan: planId,
-            subscription_status: 'active',
-            stripe_customer_id: String(session.customer),
-            stripe_subscription_id: String(session.subscription),
-          }).eq('user_id', userId)
-        }
+        await ensureProfileForCustomer(
+          admin,
+          String(session.customer),
+          userId,
+          planId,
+          email,
+        )
+
+        await admin.from('profiles').update({
+          plan: planId,
+          subscription_status: 'active',
+          stripe_customer_id: String(session.customer),
+          stripe_subscription_id: String(session.subscription),
+        }).eq('stripe_customer_id', String(session.customer))
       }
       break
     }
@@ -110,7 +193,7 @@ export async function POST(req: Request) {
     case 'customer.subscription.updated':
     case 'customer.subscription.created': {
       const sub = event.data.object
-      await updateProfileFromSubscription(admin, sub as Parameters<typeof updateProfileFromSubscription>[1])
+      await updateProfileFromSubscription(admin, stripe, sub as Parameters<typeof updateProfileFromSubscription>[1])
       break
     }
 
