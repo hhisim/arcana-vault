@@ -27,16 +27,41 @@ function todayRange() {
 }
 
 export async function getCurrentUserLite(bearerToken?: string | null) {
+  // 1. Try bearer token first (used during signup when cookies aren't set yet)
   if (bearerToken) {
-    const supabase = await getServerSupabase()
-    // Strip "Bearer " prefix if present
     const token = bearerToken.replace(/^Bearer\s+/i, '').trim()
-    const { data } = await supabase.auth.getUser(token)
-    if (data.user) return data.user
+    if (token) {
+      try {
+        const supabase = await getServerSupabase()
+        const { data, error } = await supabase.auth.getUser(token)
+        if (error) {
+          console.warn('[getCurrentUserLite] Bearer token rejected:', error.message)
+        }
+        if (data?.user) {
+          console.log('[getCurrentUserLite] Bearer auth OK:', data.user.id)
+          return data.user
+        }
+      } catch (err) {
+        console.error('[getCurrentUserLite] Bearer auth exception:', err instanceof Error ? err.message : String(err))
+      }
+    }
   }
-  const supabase = await getServerSupabase()
-  const { data } = await supabase.auth.getUser()
-  return data.user ?? null
+
+  // 2. Fall back to cookie-based auth
+  try {
+    const supabase = await getServerSupabase()
+    const { data, error } = await supabase.auth.getUser()
+    if (error) {
+      // This is normal for unauthenticated requests — don't log as error
+      if (!error.message.includes('not authenticated')) {
+        console.warn('[getCurrentUserLite] Cookie auth error:', error.message)
+      }
+    }
+    return data?.user ?? null
+  } catch (err) {
+    console.error('[getCurrentUserLite] Cookie auth exception:', err instanceof Error ? err.message : String(err))
+    return null
+  }
 }
 
 export async function ensureProfile(user: { id: string; email?: string | null; user_metadata?: Record<string, unknown> }) {

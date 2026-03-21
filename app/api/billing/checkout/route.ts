@@ -9,23 +9,49 @@ function getSiteUrl(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now()
   try {
-    const user = await getCurrentUserLite(req.headers.get('Authorization'))
-    if (!user) return NextResponse.json({ detail: 'Authentication required — please log in again.' }, { status: 401 })
+    const authHeader = req.headers.get('Authorization')
+    console.log(`[checkout] Auth header present: ${!!authHeader}, length: ${authHeader?.length ?? 0}`)
+
+    const user = await getCurrentUserLite(authHeader)
+    if (!user) {
+      console.error('[checkout] No user found after getCurrentUserLite. Auth header:', authHeader?.substring(0, 30))
+      return NextResponse.json(
+        { detail: 'Authentication required — please log in again.', debug: { hasAuthHeader: !!authHeader } },
+        { status: 401 }
+      )
+    }
+
+    console.log(`[checkout] User authenticated: ${user.id}, email: ${user.email}`)
 
     const profile = await ensureProfile(user)
     const body = await req.json().catch(() => ({}))
     const plan = (body.plan || 'seeker') as PlanId
     const cfg = PLAN_CONFIG[plan]
 
+    console.log(`[checkout] Plan: ${plan}, stripePriceId: ${cfg?.stripePriceId || 'UNDEFINED'}`)
+
     if (!cfg?.stripePriceId) {
-      return NextResponse.json({ detail: `Plan "${plan}" is not a paid plan or Stripe price is not configured.` }, { status: 400 })
+      return NextResponse.json(
+        {
+          detail: `Plan "${plan}" is not a paid plan or Stripe price is not configured.`,
+          debug: {
+            plan,
+            configExists: !!cfg,
+            stripePriceId: cfg?.stripePriceId ?? 'undefined',
+            hint: 'NEXT_PUBLIC_STRIPE_PRICE_*_MONTHLY env vars must be set at BUILD TIME on Vercel, not just runtime.',
+          },
+        },
+        { status: 400 }
+      )
     }
 
     const stripe = getStripe()
     let customerId = profile.stripe_customer_id as string | null
 
     if (!customerId) {
+      console.log('[checkout] Creating Stripe customer...')
       const customer = await stripe.customers.create({
         email: user.email || undefined,
         metadata: { user_id: user.id },
@@ -33,11 +59,12 @@ export async function POST(req: NextRequest) {
       customerId = customer.id
       const admin = getAdminSupabase()
       await admin.from('profiles').update({ stripe_customer_id: customerId }).eq('user_id', user.id)
+      console.log(`[checkout] Stripe customer created: ${customerId}`)
     }
 
     const site = getSiteUrl(req)
+    console.log(`[checkout] Creating session: customer=${customerId}, price=${cfg.stripePriceId}, site=${site}`)
 
-    // Use expand to get subscription object so we can read metadata on it
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       customer: customerId,
@@ -48,15 +75,17 @@ export async function POST(req: NextRequest) {
       subscription_data: {
         metadata: { user_id: user.id, plan },
       },
-      // expand lets us get subscription in the response object
-      expand: ['subscription'],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any)
+    })
 
+    console.log(`[checkout] Session created in ${Date.now() - startTime}ms: ${session.id} → ${session.url?.substring(0, 60)}`)
     return NextResponse.json({ url: session.url })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
-    console.error('[/billing/checkout]', message)
-    return NextResponse.json({ detail: `Checkout error: ${message}` }, { status: 500 })
+    const stack = err instanceof Error ? err.stack?.split('\n').slice(0, 3).join(' | ') : undefined
+    console.error(`[checkout] ERROR (${Date.now() - startTime}ms):`, message)
+    return NextResponse.json(
+      { detail: `Checkout error: ${message}`, debug: { stack } },
+      { status: 500 }
+    )
   }
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import type { PlanId, TraditionId } from '@/lib/plans'
 
@@ -40,7 +40,15 @@ const AuthCtx = createContext<Ctx>(defaultState)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<Ctx>(defaultState)
 
+  // Debounce timer: prevents multiple rapid refreshes during auth transitions
+  const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const refreshInFlight = useRef(false)
+
   const refresh = async () => {
+    // If a refresh is already running, skip
+    if (refreshInFlight.current) return
+    refreshInFlight.current = true
+
     try {
       const controller = new AbortController()
       const timer = setTimeout(() => controller.abort(), 6000)
@@ -62,20 +70,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }))
     } catch {
       setState((prev) => ({ ...prev, loading: false }))
+    } finally {
+      refreshInFlight.current = false
     }
+  }
+
+  /**
+   * Debounced refresh: waits 500ms before actually refreshing.
+   * If another auth state change fires within that window, the timer resets.
+   * This prevents the rapid-fire refresh calls that happen during signUp → checkout.
+   */
+  const debouncedRefresh = () => {
+    if (refreshTimer.current) clearTimeout(refreshTimer.current)
+    refreshTimer.current = setTimeout(() => {
+      void refresh()
+    }, 500)
   }
 
   useEffect(() => {
     let mounted = true
     const supabase = getBrowserSupabase()
+
+    // Initial refresh (no debounce)
     void refresh()
-    const { data: sub } = supabase.auth.onAuthStateChange(() => {
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (!mounted) return
-      void refresh()
+      console.log('[AuthProvider] onAuthStateChange:', event)
+      // Debounce to avoid race conditions during signup → checkout flow
+      debouncedRefresh()
     })
+
     return () => {
       mounted = false
       sub.subscription.unsubscribe()
+      if (refreshTimer.current) clearTimeout(refreshTimer.current)
     }
   }, [])
 

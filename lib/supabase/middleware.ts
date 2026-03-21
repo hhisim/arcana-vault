@@ -26,6 +26,10 @@ export async function updateSession(request: NextRequest) {
     },
   })
 
+  // IMPORTANT: await getUser() so the session token refresh actually completes
+  // and the updated cookies are written to the response.
+  // The original code used `void` which meant token refresh was fire-and-forget.
   await supabase.auth.getUser()
+
   return response
 }
