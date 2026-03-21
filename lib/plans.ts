@@ -85,13 +85,13 @@ export function canAccessTradition(plan: PlanId, selected: TraditionId[], tradit
 
 export function planFromPriceId(priceId?: string | null): PlanId | null {
   if (!priceId) return null
-  // Server-side env vars (no NEXT_PUBLIC_ prefix, loaded in .env.local)
-  if (priceId === process.env.STRIPE_PRICE_SEEKER_MONTHLY) return 'seeker'
-  if (priceId === process.env.STRIPE_PRICE_ADEPT_MONTHLY) return 'adept'
-  if (priceId === process.env.STRIPE_PRICE_MAGISTER_MONTHLY) return 'full'
-  // Fallback: direct string match for safety
+  // Direct string match for known production price IDs (authoritative)
   if (priceId === 'price_1T8LZgD1VUXAFjstbnN0UuZL') return 'seeker'
   if (priceId === 'price_1TD7A7D1VUXAFjstg9k5UVsC') return 'adept'
   if (priceId === 'price_1TD79pD1VUXAFjstVPfDqYjr') return 'full'
+  // Server-side env vars fallback (may be missing/misconfigured on Vercel)
+  if (priceId === process.env.STRIPE_PRICE_SEEKER_MONTHLY) return 'seeker'
+  if (priceId === process.env.STRIPE_PRICE_ADEPT_MONTHLY) return 'adept'
+  if (priceId === process.env.STRIPE_PRICE_MAGISTER_MONTHLY) return 'full'
   return null
 }
