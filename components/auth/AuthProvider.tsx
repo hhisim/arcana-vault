@@ -7,7 +7,7 @@ import type { PlanId, TraditionId } from '@/lib/plans'
 export type AuthState = {
   loading: boolean
   isAuthenticated: boolean
-  user: { id: string; email: string | null } | null
+  user: { id: string; email: string | null; full_name?: string | null } | null
   plan: PlanId
   selectedTraditions: TraditionId[]
   usageUsed: number
