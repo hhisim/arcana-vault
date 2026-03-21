@@ -68,7 +68,10 @@ export default function PricingPage() {
               </div>
               <div className="text-[var(--text-secondary)] leading-7">{label.desc}</div>
               <div className="text-sm text-[var(--text-primary)]">
-                {cfg.slots === 'all' ? t('traditionsPicker.all', 'All traditions') : `${cfg.slots} ${t('traditionsPicker.title', 'tradition slot').toLowerCase()}${Number(cfg.slots) > 1 ? 's' : ''}`}
+                {cfg.slots === 'all'
+                  ? t('traditionsPicker.all', 'Study all traditions')
+                  : `Study ${cfg.slots} tradition${Number(cfg.slots) > 1 ? 's' : ''}`
+                }
               </div>
               <div className="text-sm text-[var(--text-primary)]">
                 {t('chat.meter.daily', 'Daily')}: {cfg.dailyLimit === 'unlimited' ? t('chat.meter.unlimited', 'Unlimited') : cfg.dailyLimit}

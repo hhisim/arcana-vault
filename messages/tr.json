@@ -66,5 +66,7 @@
   "plans.free.desc": "Oracle'ı keşfetmek için mükemmel. 1 gelenek ve 5 günlük soru dahildir.",
   "plans.seeker.desc": "Ciddi arayıcı için. 2 gelenek ve 20 günlük soru dahildir.",
   "plans.adept.desc": "Adanmış uygulayıcı için. Tüm 4 gelenek ve sınırsız sorular.",
-  "plans.full.desc": "Maksimum derinlik ve erişim. Tüm gelenekler, sınırsız sorular, öncelikli destek."
+  "plans.full.desc": "Maksimum derinlik ve erişim. Tüm gelenekler, sınırsız sorular, öncelikli destek.",
+  "plans.studyAll": "Tüm gelenekleri incele",
+  "plans.studyN": "{{n}} gelenek incele"
 }

@@ -26,14 +26,14 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
   free: {
     id: 'free',
     name: 'Free',
-    description: 'Choose one tradition and receive a daily question allowance.',
+    description: 'Study one tradition with a daily question allowance.',
     slots: 1,
     dailyLimit: 12,
   },
   seeker: {
     id: 'seeker',
     name: 'Seeker',
-    description: 'Choose three traditions and unlock deeper practice.',
+    description: 'Study three traditions and unlock deeper practice.',
     slots: 3,
     dailyLimit: 60,
     priceMonthly: 8,
@@ -42,7 +42,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
   adept: {
     id: 'adept',
     name: 'Adept',
-    description: 'Four traditions and unlimited daily questions.',
+    description: 'Study four traditions with unlimited daily questions.',
     slots: 4,
     dailyLimit: 'unlimited',
     priceMonthly: 19,
@@ -51,7 +51,7 @@ export const PLAN_CONFIG: Record<PlanId, PlanConfig> = {
   full: {
     id: 'full',
     name: 'Magister',
-    description: 'Unlock every tradition and the deepest daily flow.',
+    description: 'Study all traditions with unlimited daily flow.',
     slots: 'all',
     dailyLimit: 'unlimited',
     priceMonthly: 29,

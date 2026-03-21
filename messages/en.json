@@ -171,5 +171,7 @@
   "testimonials.3.quote": "The entheogen bot spoke to experiences I had no language for. Profoundly helpful.",
   "testimonials.3.author": "A.L.",
   "testimonials.3.role": "Seeker",
-  "chat.meter.unlimited": "Unlimited"
+  "chat.meter.unlimited": "Unlimited",
+  "plans.studyAll": "Study all traditions",
+  "plans.studyN": "Study {{n}} tradition{{s}}"
 }
