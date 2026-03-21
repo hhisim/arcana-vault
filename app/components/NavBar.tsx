@@ -42,7 +42,7 @@ export default function NavBar() {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-[rgba(255,255,255,0.06)] px-4 md:px-6">
       <div className="max-w-7xl mx-auto h-20 flex items-center justify-between gap-4">
         <a href="/" className="focus:outline-none flex-shrink-0 flex items-center">
-          <img src="/logo.jpg" alt="Vault of Arcana" className="h-12 md:h-14 w-auto" />
+          <img src="/logo.svg" alt="Vault of Arcana" className="h-12 md:h-14 w-auto" />
         </a>
 
         {/* Desktop Links */}
