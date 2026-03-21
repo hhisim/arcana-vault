@@ -14,52 +14,52 @@ interface Book {
   tradition: Exclude<Tradition, 'All'>
   access: 'Free' | 'Adept+'
   url: string
-  type: 'embed' | 'link'
+  type: 'link' | 'link'
   color: string
 }
 
 const BOOKS: Book[] = [
   // Tao
-  { id: 'ttc', title: 'Tao Te Ching', author: 'Lao Tzu', tradition: 'Tao', access: 'Free', url: 'taotechingbylaot00laotuoft', type: 'embed', color: '#4ECDC4' },
-  { id: 'zz', title: 'Zhuangzi', author: 'Chuang Tzu', tradition: 'Tao', access: 'Free', url: 'chuangtzu00zhua', type: 'embed', color: '#4ECDC4' },
-  { id: 'ic', title: 'I Ching', author: 'Anonymous', tradition: 'Tao', access: 'Free', url: 'ichingorbookofch00wilh', type: 'embed', color: '#4ECDC4' },
+  { id: 'ttc', title: 'Tao Te Ching', author: 'Lao Tzu', tradition: 'Tao', access: 'Free', url: 'taoteching00laot', type: 'link', color: '#4ECDC4' },
+  { id: 'zz', title: 'Zhuangzi', author: 'Chuang Tzu', tradition: 'Tao', access: 'Free', url: 'chuangtzu00zhua', type: 'link', color: '#4ECDC4' },
+  { id: 'ic', title: 'I Ching', author: 'Anonymous', tradition: 'Tao', access: 'Free', url: 'ichingbook00wilh', type: 'link', color: '#4ECDC4' },
   
   // Tarot
-  { id: 'pfc', title: 'The Tarot', author: 'Paul Foster Case', tradition: 'Tarot', access: 'Adept+', url: 'tarotkeytowisdom00case', type: 'embed', color: '#7B5EA7' },
-  { id: 'bot', title: 'The Book of Thoth', author: 'Aleister Crowley', tradition: 'Tarot', access: 'Adept+', url: 'bookofthothshort00crow', type: 'embed', color: '#7B5EA7' },
-  { id: 'rp', title: 'Pictorial Key to the Tarot', author: 'A.E. Waite', tradition: 'Tarot', access: 'Free', url: 'pictorialkeytota00wait', type: 'embed', color: '#7B5EA7' },
+  { id: 'pfc', title: 'The Tarot', author: 'Paul Foster Case', tradition: 'Tarot', access: 'Adept+', url: 'tarotkeytowis00case', type: 'link', color: '#7B5EA7' },
+  { id: 'bot', title: 'The Book of Thoth', author: 'Aleister Crowley', tradition: 'Tarot', access: 'Adept+', url: 'bookofthoth00crow', type: 'link', color: '#7B5EA7' },
+  { id: 'rp', title: 'Pictorial Key to the Tarot', author: 'A.E. Waite', tradition: 'Tarot', access: 'Free', url: 'pictorialkeyt00wait', type: 'link', color: '#7B5EA7' },
   
   // Tantra
-  { id: 'osho', title: 'Tantra: The Supreme Understanding', author: 'Osho', tradition: 'Tantra', access: 'Adept+', url: 'tantrasupremeund00osho', type: 'embed', color: '#C9A84C' },
-  { id: 'sp', title: 'The Serpent Power', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Adept+', url: 'serpentpowertatt00wooduoft', type: 'embed', color: '#C9A84C' },
-  { id: 'shakti', title: 'Shakti and Shakta', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Free', url: 'shaktishakta00wood', type: 'embed', color: '#C9A84C' },
+  { id: 'osho', title: 'Tantra: The Supreme Understanding', author: 'Osho', tradition: 'Tantra', access: 'Adept+', url: 'TantraTheSupremeUnderstanding', type: 'link', color: '#C9A84C' },
+  { id: 'sp', title: 'The Serpent Power', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Adept+', url: 'serpentpower0000unse', type: 'link', color: '#C9A84C' },
+  { id: 'shakti', title: 'Shakti and Shakta', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Free', url: 'shaktishakta00wood', type: 'link', color: '#C9A84C' },
   
   // Entheogens
-  { id: 'pe', title: 'The Psychedelic Experience', author: 'Leary/Metzner/Alpert', tradition: 'Entheogens', access: 'Free', url: 'psychedelicexper00lear', type: 'embed', color: '#2D5A4A' },
-  { id: 'dop', title: 'The Doors of Perception', author: 'Aldous Huxley', tradition: 'Entheogens', access: 'Free', url: 'doorsofperceptio00huxl_0', type: 'embed', color: '#2D5A4A' },
-  { id: 'pog', title: 'The Peyote Cult', author: 'Weston La Barre', tradition: 'Entheogens', access: 'Adept+', url: 'peyotecult00laba', type: 'embed', color: '#2D5A4A' },
+  { id: 'pe', title: 'The Psychedelic Experience', author: 'Leary/Metzner/Alpert', tradition: 'Entheogens', access: 'Free', url: 'ThePsychedelicExperience_LearyMetznerAlpert', type: 'link', color: '#2D5A4A' },
+  { id: 'dop', title: 'The Doors of Perception', author: 'Aldous Huxley', tradition: 'Entheogens', access: 'Free', url: 'doorsofperception00huxl', type: 'link', color: '#2D5A4A' },
+  { id: 'pog', title: 'The Peyote Cult', author: 'Weston La Barre', tradition: 'Entheogens', access: 'Adept+', url: 'peyotecult00laba', type: 'link', color: '#2D5A4A' },
 
   // Sufism
-  { id: 'masnavi', title: 'The Masnavi', author: 'Rumi', tradition: 'Sufism', access: 'Free', url: 'masnaviofrumij01rumi', type: 'embed', color: '#E05C5C' },
-  { id: 'sufis', title: 'The Sufis', author: 'Idries Shah', tradition: 'Sufism', access: 'Adept+', url: 'sufis00idri', type: 'embed', color: '#E05C5C' },
-  { id: 'bezels', title: 'The Bezels of Wisdom', author: 'Ibn al-Arabi', tradition: 'Sufism', access: 'Adept+', url: 'bezelsofwisdom0000ibna', type: 'embed', color: '#E05C5C' },
+  { id: 'masnavi', title: 'The Masnavi', author: 'Rumi', tradition: 'Sufism', access: 'Free', url: 'masnaviofrumij01rumi', type: 'link', color: '#E05C5C' },
+  { id: 'sufis', title: 'The Sufis', author: 'Idries Shah', tradition: 'Sufism', access: 'Adept+', url: 'thesufis00shah', type: 'link', color: '#E05C5C' },
+  { id: 'bezels', title: 'The Bezels of Wisdom', author: 'Ibn al-Arabi', tradition: 'Sufism', access: 'Adept+', url: 'bezelsofwisdom0000ibna', type: 'link', color: '#E05C5C' },
 
   // Dream
-  { id: 'lucid', title: 'Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Free', url: 'luciddreaming00labeg', type: 'embed', color: '#5C8FE0' },
-  { id: 'astral', title: 'Projection of the Astral Body', author: 'Muldoon', tradition: 'Dream', access: 'Adept+', url: 'astralprojection00muldo', type: 'embed', color: '#5C8FE0' },
-  { id: 'exploring', title: 'Exploring Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Adept+', url: 'exploringworldof00labe', type: 'embed', color: '#5C8FE0' },
+  { id: 'lucid', title: 'Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Free', url: 'luciddreaming00labeg', type: 'link', color: '#5C8FE0' },
+  { id: 'astral', title: 'Projection of the Astral Body', author: 'Muldoon', tradition: 'Dream', access: 'Adept+', url: 'astralprojection00muldo', type: 'link', color: '#5C8FE0' },
+  { id: 'exploring', title: 'Exploring Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Adept+', url: 'exploringworldof00labe', type: 'link', color: '#5C8FE0' },
 
   // Qabalah
-  { id: 'unveiled', title: 'The Kabbalah Unveiled', author: 'S.L. Mathers', tradition: 'Qabalah', access: 'Free', url: 'kabbalahunveiled00math', type: 'embed', color: '#E05CE0' },
-  { id: 'mystical', title: 'The Mystical Qabalah', author: 'Dion Fortune', tradition: 'Qabalah', access: 'Adept+', url: 'mysticalqabalah00fort', type: 'embed', color: '#E05CE0' },
-  { id: 'ezra', title: 'The Zohar', author: 'Moses de Leon', tradition: 'Qabalah', access: 'Adept+', url: 'zohar0000deleo', type: 'embed', color: '#E05CE0' },
+  { id: 'unveiled', title: 'The Kabbalah Unveiled', author: 'S.L. Mathers', tradition: 'Qabalah', access: 'Free', url: 'kabbalahunveiled00math', type: 'link', color: '#E05CE0' },
+  { id: 'mystical', title: 'The Mystical Qabalah', author: 'Dion Fortune', tradition: 'Qabalah', access: 'Adept+', url: 'mysticalqabalah00fort', type: 'link', color: '#E05CE0' },
+  { id: 'ezra', title: 'The Zohar', author: 'Moses de Leon', tradition: 'Qabalah', access: 'Adept+', url: 'zohar0000deleo', type: 'link', color: '#E05CE0' },
 
   // Spiritual Sovereignty
-  { id: 'kybalion', title: 'The Kybalion', author: 'Three Initiates', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'kybalion00threeuoft', type: 'embed', color: '#C9A84C' },
-  { id: 'gnostic', title: 'The Gnostic Bible', author: ' Bentley Layton', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'gnosticbible00pagel', type: 'embed', color: '#C9A84C' },
-  { id: 'corpus', title: 'The Corpus Hermeticum', author: 'Hermes Trismegistus', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'corpushermeticum00bjohnuoft', type: 'embed', color: '#C9A84C' },
-  { id: 'selfmastery', title: 'The Law and the Mastery of Self', author: 'Charles F. Haanel', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'selfmasterylaw00hilluoft', type: 'embed', color: '#C9A84C' },
-  { id: 'sevenbreaths', title: 'The Seven Breaths of the Soul', author: 'Leonard LeRoy', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'sevenbreathser00elil', type: 'embed', color: '#C9A84C' },
+  { id: 'kybalion', title: 'The Kybalion', author: 'Three Initiates', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'kybalion00threeuoft', type: 'link', color: '#C9A84C' },
+  { id: 'gnostic', title: 'The Gnostic Bible', author: ' Bentley Layton', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'gnosticbible00pagel', type: 'link', color: '#C9A84C' },
+  { id: 'corpus', title: 'The Corpus Hermeticum', author: 'Hermes Trismegistus', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'corpushermeticum00bjohnuoft', type: 'link', color: '#C9A84C' },
+  { id: 'selfmastery', title: 'The Law and the Mastery of Self', author: 'Charles F. Haanel', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'selfmasterylaw00hilluoft', type: 'link', color: '#C9A84C' },
+  { id: 'sevenbreaths', title: 'The Seven Breaths of the Soul', author: 'Leonard LeRoy', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'sevenbreathser00elil', type: 'link', color: '#C9A84C' },
 ]
 
 export default function LibraryPage() {
@@ -210,48 +210,28 @@ export default function LibraryPage() {
                 </svg>
               </button>
             </header>
-            <div className="flex-1 bg-white">
-              <iframe
-                src={`https://archive.org/embed/${selectedBook.url}`}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allowFullScreen
-                className="w-full h-full"
-                onError={(e) => {
-                  // Hide broken iframe, show fallback
-                  (e.target as HTMLIFrameElement).style.display = 'none';
-                  const fallback = document.getElementById('archive-fallback-' + selectedBook.id);
-                  if (fallback) fallback.style.display = 'flex';
-                }}
-              />
-              {/* Fallback when archive.org blocks iframe embedding */}
-              <div
-                id={`archive-fallback-${selectedBook.id}`}
-                className="hidden w-full h-full flex-col items-center justify-center bg-[#12121A] text-center p-12"
-              >
-                <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
-                  <svg className="w-10 h-10 text-[#9B93AB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <h3 className="font-serif text-2xl text-[#E8E0F0] mb-3">{selectedBook.title}</h3>
-                <p className="text-[#9B93AB] mb-2 italic">{selectedBook.author}</p>
-                <p className="text-[#9B93AB] text-sm mb-8 max-w-md">
-                  This archive cannot be embedded directly. The source restricts iframe loading.
-                </p>
-                <a
-                  href={`https://archive.org/embed/${selectedBook.url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#7B5EA7] hover:bg-[#8E6FB8] text-white font-bold text-sm transition-all shadow-lg shadow-[#7B5EA7]/20"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                  Read on Archive.org
-                </a>
+            <div className="flex-1 flex flex-col items-center justify-center bg-[#12121A] text-center p-12">
+              <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-8" style={{ borderColor: selectedBook.color + '33', borderWidth: 1 }}>
+                <svg className="w-12 h-12 text-[#9B93AB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
               </div>
+              <h3 className="font-serif text-3xl text-[#E8E0F0] mb-3">{selectedBook.title}</h3>
+              <p className="text-[#9B93AB] mb-2 italic text-lg">{selectedBook.author}</p>
+              <p className="text-[#9B93AB] text-sm mb-10 max-w-md leading-relaxed">
+                This archive cannot be embedded due to the source&apos;s security policy. Open it directly on archive.org to read.
+              </p>
+              <a
+                href={`https://archive.org/embed/${selectedBook.url}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-10 py-4 rounded-2xl bg-[#7B5EA7] hover:bg-[#8E6FB8] text-white font-bold text-sm transition-all shadow-2xl shadow-[#7B5EA7]/20 hover:shadow-[#7B5EA7]/40 hover:-translate-y-0.5"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                Read on Archive.org
+              </a>
             </div>
           </div>
         </div>
