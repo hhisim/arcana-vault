@@ -48,6 +48,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const defaultTitle = (frontmatter.title as string) || 'Untitled Scroll';
     const defaultExcerpt = (frontmatter.excerpt as string) || '';
     const tradition = (frontmatter.tradition as string) || 'Ancient';
+    const heroImage = frontmatter.hero as string | undefined;
 
     return (
       <article className="min-h-screen bg-[#0A0A0F]">
@@ -69,6 +70,18 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             </div>
           </div>
         </header>
+
+        {/* Hero Image */}
+        {heroImage && (
+          <div className="w-full max-h-[520px] overflow-hidden border-b border-white/8 relative">
+            <img
+              src={heroImage}
+              alt={defaultTitle}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-transparent to-transparent opacity-40 pointer-events-none" />
+          </div>
+        )}
 
         {/* i18n data injected for client component */}
         <BlogContent
