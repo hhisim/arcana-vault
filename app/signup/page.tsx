@@ -105,16 +105,25 @@ function SignupForm() {
   const onSaveAndCheckout = async () => {
     setLoading(true)
     const supabase = getBrowserSupabase()
+    const { data: sessionData } = await supabase.auth.getSession()
+    const accessToken = sessionData?.session?.access_token
+
     await fetch('/api/account/traditions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
+      },
       body: JSON.stringify({ traditions: selectedTraditions }),
     })
     // For paid plans, call Stripe checkout
     if (pendingPlan !== 'free') {
       const res = await fetch('/api/billing/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
+        },
         body: JSON.stringify({ plan: pendingPlan }),
       })
       const text = await res.text()
