@@ -8,7 +8,7 @@ import {
   fetchCorrespondenceIndex,
   filterIndexItems,
   topSuggestions,
-} from '../../lib/correspondence-engine.js';
+} from '../lib/correspondence-engine.js';
 
 /* ─── Sub-Components ─────────────────────────────────────── */
 
