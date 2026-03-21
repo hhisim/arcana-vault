@@ -20,6 +20,8 @@ export default function NavBar() {
     { href: '/correspondence-engine', label: t(SITEDICT.nav.codex) },
     { href: '/forum', label: t(SITEDICT.nav.agora) },
     { href: '/blog', label: t(SITEDICT.nav.scroll) },
+    { href: '/pricing', label: 'Pricing' },
+    { href: '/login', label: 'Login' },
   ];
 
   return (
