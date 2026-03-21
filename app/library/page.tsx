@@ -20,14 +20,14 @@ interface Book {
 
 const BOOKS: Book[] = [
   // Tao
-  { id: 'ttc', title: 'Tao Te Ching', author: 'Lao Tzu', tradition: 'Tao', access: 'Free', url: 'taoteching00laot', type: 'link', color: '#4ECDC4' },
+  { id: 'ttc', title: 'Tao Te Ching', author: 'Lao Tzu', tradition: 'Tao', access: 'Free', url: 'taotechingbylaot00laotuoft', type: 'link', color: '#4ECDC4' },
   { id: 'zz', title: 'Zhuangzi', author: 'Chuang Tzu', tradition: 'Tao', access: 'Free', url: 'chuangtzu00zhua', type: 'link', color: '#4ECDC4' },
-  { id: 'ic', title: 'I Ching', author: 'Anonymous', tradition: 'Tao', access: 'Free', url: 'ichingbook00wilh', type: 'link', color: '#4ECDC4' },
+  { id: 'ic', title: 'I Ching', author: 'Anonymous', tradition: 'Tao', access: 'Free', url: 'ichingorbookofch00wilh', type: 'link', color: '#4ECDC4' },
   
   // Tarot
-  { id: 'pfc', title: 'The Tarot', author: 'Paul Foster Case', tradition: 'Tarot', access: 'Adept+', url: 'tarotkeytowis00case', type: 'link', color: '#7B5EA7' },
-  { id: 'bot', title: 'The Book of Thoth', author: 'Aleister Crowley', tradition: 'Tarot', access: 'Adept+', url: 'bookofthoth00crow', type: 'link', color: '#7B5EA7' },
-  { id: 'rp', title: 'Pictorial Key to the Tarot', author: 'A.E. Waite', tradition: 'Tarot', access: 'Free', url: 'pictorialkeyt00wait', type: 'link', color: '#7B5EA7' },
+  { id: 'pfc', title: 'The Tarot', author: 'Paul Foster Case', tradition: 'Tarot', access: 'Adept+', url: 'tarotkeytowisdom00case', type: 'link', color: '#7B5EA7' },
+  { id: 'bot', title: 'The Book of Thoth', author: 'Aleister Crowley', tradition: 'Tarot', access: 'Adept+', url: 'bookofthothshort00crow', type: 'link', color: '#7B5EA7' },
+  { id: 'rp', title: 'Pictorial Key to the Tarot', author: 'A.E. Waite', tradition: 'Tarot', access: 'Free', url: 'pictorialkeytota00wait', type: 'link', color: '#7B5EA7' },
   
   // Tantra
   { id: 'osho', title: 'Tantra: The Supreme Understanding', author: 'Osho', tradition: 'Tantra', access: 'Adept+', url: 'TantraTheSupremeUnderstanding', type: 'link', color: '#C9A84C' },
