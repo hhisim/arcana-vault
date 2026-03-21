@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useSiteI18n } from '@/lib/site-i18n';
 import { posts } from '@/lib/posts';
+import { postsI18n } from '@/lib/posts-i18n';
 
 const CATEGORY_KEYS = ['all', 'tao', 'tarot', 'tantra', 'entheogens'] as const;
 
@@ -32,6 +33,18 @@ export default function BlogPage() {
   const featuredLabel = { en: 'Featured Scroll', tr: 'Öne Çıkan Yazı', ru: 'Избранный свиток' }[lang];
   const readMore = { en: 'Read more', tr: 'Devamını oku', ru: 'Читать далее' }[lang];
   const minRead = { en: 'min read', tr: 'dk okuma', ru: 'мин чтения' }[lang];
+
+  // Resolve i18n title/excerpt
+  const getTitle = (slug: string, fallback: string) => {
+    if (lang === 'tr') return postsI18n[slug]?.title_tr ?? fallback;
+    if (lang === 'ru') return postsI18n[slug]?.title_ru ?? fallback;
+    return fallback;
+  };
+  const getExcerpt = (slug: string, fallback: string) => {
+    if (lang === 'tr') return postsI18n[slug]?.excerpt_tr ?? fallback;
+    if (lang === 'ru') return postsI18n[slug]?.excerpt_ru ?? fallback;
+    return fallback;
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] pb-24">
@@ -65,7 +78,7 @@ export default function BlogPage() {
             <div className="relative h-full flex flex-col justify-end p-12">
               <span className="text-[#C9A84C] text-[10px] uppercase tracking-[0.2em] mb-4 font-bold bg-[#12121A]/50 px-3 py-1 rounded w-fit">{featuredLabel}</span>
               <h2 className="font-cinzel text-4xl md:text-6xl text-white max-w-4xl mb-6">
-                <a href={`/blog/${featured.slug}`}>{featured.title}</a>
+                <a href={`/blog/${featured.slug}`}>{getTitle(featured.slug, featured.title)}</a>
               </h2>
               <div className="flex items-center gap-4 text-xs tracking-widest uppercase text-white/70">
                 <div className="flex items-center gap-2">
@@ -98,9 +111,9 @@ export default function BlogPage() {
                   <span>{post.readTime} {minRead}</span>
                 </div>
                 <h3 className="font-cinzel text-lg text-white mb-3 leading-snug">
-                  <a href={`/blog/${post.slug}`} className="hover:text-[#C9A84C] transition-colors">{post.title}</a>
+                  <a href={`/blog/${post.slug}`} className="hover:text-[#C9A84C] transition-colors">{getTitle(post.slug, post.title)}</a>
                 </h3>
-                <p className="text-sm text-[#9B93AB] leading-relaxed mb-4">{post.excerpt}</p>
+                <p className="text-sm text-[#9B93AB] leading-relaxed mb-4">{getExcerpt(post.slug, post.excerpt)}</p>
                 <a href={`/blog/${post.slug}`} className="text-[10px] uppercase tracking-widest text-[#C9A84C] hover:text-white transition-colors">{readMore} →</a>
               </div>
             </article>

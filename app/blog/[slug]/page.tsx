@@ -18,7 +18,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   try {
     const slug = params.slug;
     const baseDir = path.join(process.cwd(), 'content', 'blog');
-    
+
     // Load main content (English default)
     const filePath = path.join(baseDir, `${slug}.mdx`);
     const fileSource = await fs.readFile(filePath, 'utf8');
@@ -26,20 +26,27 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     // Load translations if they exist
     const translations: { tr?: string; ru?: string } = {};
-    
+    const fmI18n: { tr?: { title?: string; excerpt?: string }; ru?: { title?: string; excerpt?: string } } = {};
+
     try {
       const trPath = path.join(baseDir, `${slug}.tr.mdx`);
       const trSource = await fs.readFile(trPath, 'utf8');
-      translations.tr = matter(trSource).content;
+      const { data: trFm, content: trBody } = matter(trSource);
+      translations.tr = trBody;
+      fmI18n.tr = { title: trFm.title as string, excerpt: trFm.excerpt as string };
     } catch (e) {}
 
     try {
       const ruPath = path.join(baseDir, `${slug}.ru.mdx`);
       const ruSource = await fs.readFile(ruPath, 'utf8');
-      translations.ru = matter(ruSource).content;
+      const { data: ruFm, content: ruBody } = matter(ruSource);
+      translations.ru = ruBody;
+      fmI18n.ru = { title: ruFm.title as string, excerpt: ruFm.excerpt as string };
     } catch (e) {}
 
-    const title = (frontmatter.title as string) || 'Untitled Scroll';
+    // Default English frontmatter
+    const defaultTitle = (frontmatter.title as string) || 'Untitled Scroll';
+    const defaultExcerpt = (frontmatter.excerpt as string) || '';
     const tradition = (frontmatter.tradition as string) || 'Ancient';
 
     return (
@@ -49,8 +56,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             <span className="inline-block px-4 py-1 rounded-full bg-[#7B5EA7]/20 text-[#C9A84C] text-[10px] uppercase font-bold tracking-[0.3em] mb-8 border border-[#7B5EA7]/30">
               {tradition} tradition
             </span>
-            <h1 className="font-cinzel text-5xl md:text-7xl text-[#E8E0F0] mb-10 leading-tight">
-              {title}
+            {/* Title and excerpt injected via hidden elements — BlogContent client reads them */}
+            <h1 className="font-cinzel text-5xl md:text-7xl text-[#E8E0F0] mb-10 leading-tight" id="blog-post-title">
+              {defaultTitle}
             </h1>
             <div className="flex items-center justify-center gap-6 text-[#9B93AB] text-xs uppercase tracking-[0.2em] opacity-60">
               <span>{(frontmatter.author as string) || 'The Oracle'}</span>
@@ -62,9 +70,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         </header>
 
-        {/* Content & Logic (Client Component) */}
-        <BlogContent body={body} tradition={tradition} translations={translations} />
-        
+        {/* i18n data injected for client component */}
+        <BlogContent
+          body={body}
+          tradition={tradition}
+          translations={translations}
+          fmI18n={fmI18n}
+          defaultTitle={defaultTitle}
+        />
       </article>
     );
   } catch (error) {
