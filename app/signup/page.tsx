@@ -5,19 +5,28 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useSiteI18n } from '@/lib/site-i18n'
 import TraditionPicker from '@/app/components/TraditionPicker'
-import { TraditionId } from '@/lib/plans'
+import { PLAN_CONFIG, PlanId, TraditionId } from '@/lib/plans'
 
 function SignupForm() {
   const router = useRouter()
   const params = useSearchParams()
   const { t } = useSiteI18n()
-  const [step, setStep] = useState<'signup' | 'traditions'>('signup')
+
+  const planParam = params.get('plan') as PlanId | null
+  const pendingPlan: PlanId = (planParam && planParam in PLAN_CONFIG) ? planParam : 'free'
+
+  const [step, setStep] = useState<'signup' | 'traditions'>(
+    params.get('step') === 'traditions' ? 'traditions' : 'signup'
+  )
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [selectedTraditions, setSelectedTraditions] = useState<TraditionId[]>([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const cfg = PLAN_CONFIG[pendingPlan]
+  const maxSlots = cfg?.slots === 'all' ? 99 : (cfg?.slots ?? 1)
 
   const onSignup = async (e: FormEvent) => {
     e.preventDefault()
@@ -27,43 +36,61 @@ function SignupForm() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: name } },
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     })
     setLoading(false)
     if (error) { setError(error.message); return }
-    setStep('traditions')
+    // Go to traditions step if it's a paid plan, otherwise skip to account
+    if (pendingPlan !== 'free') {
+      setStep('traditions')
+    } else {
+      router.push('/account')
+    }
   }
 
-  const onSaveTraditions = async () => {
+  const onSaveAndCheckout = async () => {
     setLoading(true)
     const supabase = getBrowserSupabase()
-    // Save to profile via API
     await fetch('/api/account/traditions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ traditions: selectedTraditions }),
     })
-    setLoading(false)
-    router.push(params.get('returnTo') || '/account')
-    router.refresh()
+    // For paid plans, call Stripe checkout
+    if (pendingPlan !== 'free') {
+      const data = await (await fetch('/api/billing/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: pendingPlan }),
+      })).json()
+      if (data?.url) { window.location.href = data.url; return }
+    }
+    router.push('/account')
   }
 
   if (step === 'traditions') {
     return (
       <section className="mx-auto max-w-xl px-6 py-20">
         <div className="glass-card p-8 space-y-6">
+          <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">{t('plans.' + pendingPlan)}</div>
           <h1 className="font-serif text-4xl text-[var(--text-primary)]">{t('traditionsPicker.title')}</h1>
+          <p className="text-[var(--text-secondary)] text-sm">
+            Choose up to {maxSlots} tradition{maxSlots > 1 ? 's' : ''} for your {t('plans.' + pendingPlan)} plan.
+          </p>
           <TraditionPicker
             selected={selectedTraditions}
             onChange={setSelectedTraditions}
-            max={6}
+            max={maxSlots}
           />
           <button
-            onClick={onSaveTraditions}
+            onClick={onSaveAndCheckout}
             disabled={loading}
             className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium"
           >
-            {t('account.save')}
+            {pendingPlan !== 'free' ? t('pricing.checkout') : t('account.save')}
           </button>
         </div>
       </section>

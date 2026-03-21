@@ -21,7 +21,7 @@ export default function PricingPage() {
 
   const begin = async (plan: PlanId) => {
     if (!auth.isAuthenticated) {
-      router.push(`/signup?returnTo=/pricing`)
+      router.push(`/signup?plan=${plan}&returnTo=/pricing`)
       return
     }
     if (plan === 'free') {
@@ -36,7 +36,7 @@ export default function PricingPage() {
 
   const plans: PlanId[] = ['free', 'seeker', 'adept', 'full']
 
-  const planLabels: Record<PlanId, { name: string; desc: string }> = {
+  const planLabels: Record<string, { name: string; desc: string }> = {
     free:    { name: t('plans.free',    PLAN_CONFIG.free.name),
                desc: t('plans.free.desc',  PLAN_CONFIG.free.description) },
     seeker:  { name: t('plans.seeker',  PLAN_CONFIG.seeker.name),

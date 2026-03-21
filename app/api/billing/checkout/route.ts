@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     mode: 'subscription',
     customer: customerId,
     line_items: [{ price: cfg.stripePriceId, quantity: 1 }],
-    success_url: `${site}/account?checkout=success`,
+    success_url: `${site}/membership?checkout=success`,
     cancel_url: `${site}/pricing?checkout=cancelled`,
     metadata: { user_id: user.id, plan },
     allow_promotion_codes: true,
