@@ -7,15 +7,93 @@ import { useSiteI18n } from '@/lib/site-i18n'
 import TraditionPicker from '@/app/components/TraditionPicker'
 import { PLAN_CONFIG, PlanId, TraditionId } from '@/lib/plans'
 
-/* ─── Persistent debug log: survives re-renders ────────────────────── */
+/* ─── Password visibility toggle ─────────────────────────── */
+function EyeIcon({ open }: { open: boolean }) {
+  if (open) {
+    return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    )
+  }
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  )
+}
+
+function PasswordInput({
+  placeholder,
+  value,
+  onChange,
+}: {
+  placeholder: string
+  value: string
+  onChange: (v: string) => void
+}) {
+  const [visible, setVisible] = useState(false)
+  return (
+    <div className="relative">
+      <input
+        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 pr-12 outline-none"
+        type={visible ? 'text' : 'password'}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        autoComplete="new-password"
+      />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+        tabIndex={-1}
+        aria-label={visible ? 'Hide password' : 'Show password'}
+      >
+        <EyeIcon open={visible} />
+      </button>
+    </div>
+  )
+}
+
+/* ─── Persistent debug log ────────────────────────────────── */
 const debugLog: string[] = []
 function addDebug(msg: string) {
   const ts = new Date().toISOString().slice(11, 23)
-  const line = `[${ts}] ${msg}`
-  debugLog.push(line)
+  debugLog.push(`[${ts}] ${msg}`)
   console.log('[signup-debug]', msg)
 }
 
+/* ─── Email verification banner ──────────────────────────── */
+function VerifyEmailBanner({ email }: { email: string }) {
+  return (
+    <section className="mx-auto max-w-xl px-6 py-20">
+      <div className="glass-card p-8 space-y-6 text-center">
+        <div className="text-5xl">✉</div>
+        <h1 className="font-serif text-3xl text-[var(--text-primary)]">Check Your Email</h1>
+        <p className="text-[var(--text-secondary)] leading-7">
+          We sent a verification link to <span className="text-[var(--text-primary)] font-medium">{email}</span>.
+          Click the link in the email to activate your account, then come back and log in.
+        </p>
+        <div className="text-[var(--text-secondary)] text-sm space-y-2">
+          <p>The link will expire in 24 hours.</p>
+          <p>If you don't see it, check your spam folder.</p>
+        </div>
+        <a
+          href="/login"
+          className="inline-block rounded-full bg-[var(--primary-gold)] px-6 py-3 text-black font-medium"
+        >
+          Go to Login
+        </a>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Main form ──────────────────────────────────────────── */
 function SignupForm() {
   const router = useRouter()
   const params = useSearchParams()
@@ -24,18 +102,18 @@ function SignupForm() {
   const planParam = params.get('plan') as PlanId | null
   const pendingPlan: PlanId = (planParam && planParam in PLAN_CONFIG) ? planParam : 'free'
 
-  const [step, setStep] = useState<'signup' | 'traditions'>(
+  const [step, setStep] = useState<'signup' | 'traditions' | 'verify'>(
     params.get('step') === 'traditions' ? 'traditions' : 'signup'
   )
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [selectedTraditions, setSelectedTraditions] = useState<TraditionId[]>([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [debugLines, setDebugLines] = useState<string[]>([])
 
-  // Ref guards prevent double-execution and track redirect state
   const inFlight = useRef(false)
   const redirecting = useRef(false)
 
@@ -44,19 +122,12 @@ function SignupForm() {
 
   const pushDebug = useCallback((msg: string) => {
     addDebug(msg)
-    // Only update state if we haven't started redirecting
-    if (!redirecting.current) {
-      setDebugLines([...debugLog])
-    }
+    if (!redirecting.current) setDebugLines([...debugLog])
   }, [])
 
-  /**
-   * Calls the checkout API and redirects to Stripe.
-   * Returns true if redirecting to Stripe, false if failed.
-   */
+  /* ─── Checkout helper ─── */
   const doCheckout = async (accessToken: string, plan: PlanId): Promise<boolean> => {
-    pushDebug(`doCheckout: plan=${plan}, token=${accessToken.substring(0, 20)}...`)
-
+    pushDebug(`doCheckout: plan=${plan}`)
     try {
       const res = await fetch('/api/billing/checkout', {
         method: 'POST',
@@ -65,77 +136,50 @@ function SignupForm() {
           'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ plan }),
-        redirect: 'manual', // DON'T follow redirects — we need to see them
+        redirect: 'manual',
       })
-
-      pushDebug(`doCheckout response: status=${res.status}, type=${res.type}, redirected=${res.redirected}, url=${res.url}`)
-
-      // If we got an opaqueredirect (3xx), that's a problem — the API shouldn't redirect
+      pushDebug(`response: status=${res.status}, type=${res.type}`)
       if (res.type === 'opaqueredirect') {
-        pushDebug('ERROR: API returned a redirect (3xx). This should not happen.')
-        setError('Checkout API returned a redirect instead of JSON. Check Vercel middleware/config.')
+        setError('Checkout API returned a redirect instead of JSON.')
         return false
       }
-
       const text = await res.text()
-      pushDebug(`doCheckout body (first 500): ${text.substring(0, 500)}`)
-
-      // Try to parse as JSON
+      pushDebug(`body: ${text.substring(0, 500)}`)
       let data: Record<string, unknown> = {}
-      try {
-        data = JSON.parse(text)
-      } catch {
-        pushDebug('ERROR: Response is not JSON. Got HTML or something else.')
-        data = { raw: text.substring(0, 200) }
-      }
-
+      try { data = JSON.parse(text) } catch { data = { raw: text.substring(0, 200) } }
       if (data?.url && typeof data.url === 'string') {
-        if (data.url.startsWith('https://checkout.stripe.com')) {
-          pushDebug(`SUCCESS: Got Stripe URL, redirecting: ${(data.url as string).substring(0, 80)}...`)
-          redirecting.current = true
-          window.location.href = data.url as string
-          return true
-        } else {
-          pushDebug(`WARNING: Got URL but not Stripe: ${data.url}`)
-          // Still try to redirect
-          redirecting.current = true
-          window.location.href = data.url as string
-          return true
-        }
+        pushDebug(`Redirecting to Stripe`)
+        redirecting.current = true
+        window.location.href = data.url as string
+        return true
       }
-
-      // No URL in response — show the error
-      const detail = (data?.detail || data?.raw || 'No checkout URL in response') as string
-      pushDebug(`FAIL: No URL. detail=${detail}`)
-      setError(`Checkout failed: ${detail}`)
+      setError(`Checkout failed: ${(data?.detail as string) || 'No checkout URL returned'}`)
       return false
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err)
-      pushDebug(`doCheckout EXCEPTION: ${msg}`)
-      setError(`Network error during checkout: ${msg}`)
+      setError(`Network error: ${err instanceof Error ? err.message : String(err)}`)
       return false
     }
   }
 
+  /* ─── Signup handler ─── */
   const onSignup = async (e: FormEvent) => {
     e.preventDefault()
-
-    // Prevent double-submission
-    if (inFlight.current || loading) {
-      pushDebug('onSignup blocked: already in flight')
-      return
-    }
+    if (inFlight.current || loading) return
     inFlight.current = true
-    setLoading(true) // stays true until the ENTIRE flow completes
+    setLoading(true)
     setError('')
-    debugLog.length = 0 // clear previous log
+    debugLog.length = 0
     setDebugLines([])
 
-    pushDebug(`onSignup start: plan=${pendingPlan}, email=${email}`)
+    // Client-side validation
+    if (!name.trim()) { setError('Please enter your name.'); setLoading(false); inFlight.current = false; return }
+    if (!email.trim()) { setError('Please enter your email.'); setLoading(false); inFlight.current = false; return }
+    if (password.length < 6) { setError('Password must be at least 6 characters.'); setLoading(false); inFlight.current = false; return }
+    if (password !== confirmPassword) { setError('Passwords do not match.'); setLoading(false); inFlight.current = false; return }
+
+    pushDebug(`signUp: plan=${pendingPlan}, email=${email}`)
 
     try {
-      // ── Step 1: Sign up ──
-      pushDebug('Step 1: signUp...')
       const supabase = getBrowserSupabase()
       const { error: signUpError, data: signUpData } = await supabase.auth.signUp({
         email,
@@ -149,99 +193,67 @@ function SignupForm() {
       if (signUpError) {
         pushDebug(`signUp error: ${signUpError.message}`)
         setError(signUpError.message)
-        return // finally block handles cleanup
-      }
-
-      pushDebug(`signUp OK: user=${signUpData.user?.id?.substring(0, 8)}..., session=${signUpData.session ? 'yes' : 'NO'}`)
-
-      // ── Step 2: Get session ──
-      pushDebug('Step 2: getSession...')
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
-
-      if (sessionError) {
-        pushDebug(`getSession error: ${sessionError.message}`)
-      }
-
-      const accessToken = sessionData?.session?.access_token
-      const refreshToken = sessionData?.session?.refresh_token
-
-      pushDebug(`session: accessToken=${accessToken ? accessToken.substring(0, 20) + '...' : 'NULL'}, refreshToken=${refreshToken ? 'yes' : 'NULL'}`)
-
-      if (!accessToken || !refreshToken) {
-        pushDebug('NO SESSION — likely email confirmation required')
-        setError(
-          'No session available after signup. This usually means email confirmation is required. ' +
-          'Check your inbox, confirm your email, then log in at /login. ' +
-          'To fix: disable "Confirm email" in Supabase → Authentication → Providers → Email.'
-        )
         return
       }
 
-      // ── Step 3: Sync session cookies for server-side ──
-      pushDebug('Step 3: sync-session...')
+      pushDebug(`signUp OK: user=${signUpData.user?.id?.substring(0, 8)}, session=${signUpData.session ? 'yes' : 'no'}`)
+
+      // If Supabase requires email confirmation, there's no session
+      if (!signUpData.session) {
+        pushDebug('No session — email confirmation required. Showing verification screen.')
+        setStep('verify')
+        return
+      }
+
+      // Session exists — sync cookies and proceed
+      const accessToken = signUpData.session.access_token
+      const refreshToken = signUpData.session.refresh_token
+
+      pushDebug('Syncing session cookies...')
       try {
-        const syncRes = await fetch('/api/auth/sync-session', {
+        await fetch('/api/auth/sync-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
         })
-        pushDebug(`sync-session: status=${syncRes.status}`)
       } catch (syncErr) {
         pushDebug(`sync-session failed (non-fatal): ${syncErr instanceof Error ? syncErr.message : String(syncErr)}`)
       }
 
-      // Small delay to let cookies settle (browsers can be async with Set-Cookie processing)
       await new Promise(r => setTimeout(r, 100))
 
-      // ── Step 4: Route based on plan ──
       if (pendingPlan !== 'free') {
-        pushDebug(`Step 4: checkout for plan=${pendingPlan}`)
+        pushDebug(`Checkout for plan=${pendingPlan}`)
         const redirected = await doCheckout(accessToken, pendingPlan)
-        if (redirected) {
-          pushDebug('Redirect initiated — waiting...')
-          return // page is navigating to Stripe
-        }
-        // Checkout failed — error is already set, debug is already shown
-        pushDebug('Checkout did NOT redirect. Error should be visible above.')
+        if (redirected) return
         return
       }
 
-      // ── Free plan ──
-      pushDebug('Free plan — navigating to /account')
+      pushDebug('Free plan — going to /account')
       redirecting.current = true
       router.push('/account')
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
-      pushDebug(`UNHANDLED ERROR: ${msg}`)
+      pushDebug(`UNHANDLED: ${msg}`)
       setError(`Something went wrong: ${msg}`)
     } finally {
-      // Only clear loading if we're NOT navigating away
-      if (!redirecting.current) {
-        setLoading(false)
-      }
+      if (!redirecting.current) setLoading(false)
       inFlight.current = false
     }
   }
 
+  /* ─── Save traditions + checkout ─── */
   const onSaveAndCheckout = async () => {
     if (inFlight.current || loading) return
     inFlight.current = true
     setLoading(true)
     setError('')
-    debugLog.length = 0
-    setDebugLines([])
-
-    pushDebug(`onSaveAndCheckout: plan=${pendingPlan}, traditions=${selectedTraditions.join(',')}`)
 
     try {
       const supabase = getBrowserSupabase()
       const { data: sessionData } = await supabase.auth.getSession()
       const accessToken = sessionData?.session?.access_token
 
-      pushDebug(`session: token=${accessToken ? 'yes' : 'NO'}`)
-
-      // Save traditions
-      pushDebug('saving traditions...')
       await fetch('/api/account/traditions', {
         method: 'POST',
         headers: {
@@ -257,13 +269,10 @@ function SignupForm() {
         return
       }
 
-      pushDebug('Free plan — going to /account')
       redirecting.current = true
       window.location.href = '/account'
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err)
-      pushDebug(`ERROR: ${msg}`)
-      setError(msg)
+      setError(err instanceof Error ? err.message : String(err))
     } finally {
       if (!redirecting.current) setLoading(false)
       inFlight.current = false
@@ -272,15 +281,18 @@ function SignupForm() {
 
   // ── Debug panel ──
   const debugPanel = debugLines.length > 0 ? (
-    <div className="rounded-xl bg-black/80 border border-yellow-500/50 p-4 text-yellow-200 text-xs font-mono whitespace-pre-wrap break-all max-h-60 overflow-y-auto">
-      <div className="text-[10px] uppercase tracking-widest text-yellow-400 mb-2">
-        Debug Log ({debugLines.length} entries)
-      </div>
+    <div className="rounded-xl bg-black/80 border border-yellow-500/50 p-4 text-yellow-200 text-xs font-mono whitespace-pre-wrap break-all max-h-48 overflow-y-auto">
+      <div className="text-[10px] uppercase tracking-widest text-yellow-400 mb-2">Debug ({debugLines.length})</div>
       {debugLines.map((line, i) => (
         <div key={i} className={line.includes('ERROR') || line.includes('FAIL') ? 'text-red-400' : line.includes('SUCCESS') ? 'text-green-400' : ''}>{line}</div>
       ))}
     </div>
   ) : null
+
+  // ── Email verification step ──
+  if (step === 'verify') {
+    return <VerifyEmailBanner email={email} />
+  }
 
   // ── Traditions step ──
   if (step === 'traditions') {
@@ -315,16 +327,40 @@ function SignupForm() {
           </div>
         )}
         <form onSubmit={onSignup} className="space-y-4">
-          <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none"
-            placeholder={t('auth.name')} value={name} onChange={(e) => setName(e.target.value)} />
-          <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none"
-            placeholder={t('auth.email')} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none"
-            type="password" placeholder={t('auth.password')} value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none"
+            placeholder={t('auth.name')}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoComplete="name"
+          />
+          <input
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none"
+            placeholder={t('auth.email')}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
+          <PasswordInput
+            placeholder={t('auth.password')}
+            value={password}
+            onChange={setPassword}
+          />
+          <PasswordInput
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+          />
+          {password && confirmPassword && password !== confirmPassword && (
+            <div className="text-[#E05C5C] text-sm">Passwords do not match</div>
+          )}
           {error && <div className="rounded-xl bg-red-900/50 border border-red-500 p-4 text-red-200 text-sm">{error}</div>}
           {debugPanel}
-          <button disabled={loading}
-            className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50">
+          <button
+            disabled={loading || (!!confirmPassword && password !== confirmPassword)}
+            className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50"
+          >
             {loading ? 'Processing — do not close this page…' : t('auth.submit')}
           </button>
         </form>

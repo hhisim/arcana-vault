@@ -132,69 +132,13 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
   const searchRef = useRef(null);
   const detailRef = useRef(null);
 
-  /* Debounce search */
-  useEffect(() => {
-    const timer = window.setTimeout(() => setDebouncedQuery(query), 200);
-    return () => window.clearTimeout(timer);
-  }, [query]);
-
-  /* Load index */
-  useEffect(() => {
-    let cancelled = false;
-    fetchCorrespondenceIndex()
-      .then((data) => {
-        if (cancelled) return;
-        setIndexData(data);
-        setStatus({ loading: false, error: '' });
-        const hasInitial = data.entries.some((entry) => entry.slug === initialSlug);
-        if (!hasInitial && data.entries[0]) {
-          setActiveSlug(data.entries[0].slug);
-        }
-      })
-      .catch((error) => {
-        if (cancelled) return;
-        setStatus({ loading: false, error: error instanceof Error ? error.message : 'Could not load correspondence index.' });
-      });
-    return () => { cancelled = true; };
-  }, [initialSlug]);
-
-  /* Sync slug when family/query changes */
-  useEffect(() => {
-    if (!filtered.length) return;
-    const exists = filtered.some((entry) => entry.slug === activeSlug);
-    if (!exists) {
-      setActiveSlug(sortBy === 'name' ? filtered[0].slug : filtered[0].slug);
-    }
-  }, [filtered, activeSlug]);
-
-  /* Load detail */
-  useEffect(() => {
-    if (!activeSlug || detailCache[activeSlug]) return;
-    const controller = new AbortController();
-    setDetailLoading(true);
-    setDetailError('');
-
-    fetchCorrespondenceDetail(activeSlug, controller.signal)
-      .then((detail) => {
-        setDetailCache((current) => ({ ...current, [activeSlug]: detail }));
-      })
-      .catch((error) => {
-        if (controller.signal.aborted) return;
-        setDetailError(error instanceof Error ? error.message : 'Could not load entry detail.');
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setDetailLoading(false);
-      });
-
-    return () => controller.abort();
-  }, [activeSlug, detailCache]);
-
-  /* Scroll detail into view on change */
-  useEffect(() => {
-    if (detailRef.current && activeSlug) {
-      detailRef.current.scrollTop = 0;
-    }
-  }, [activeSlug]);
+  /* ══════════════════════════════════════════════════════════
+   * FIX: useMemo and useCallback MUST be declared BEFORE any
+   * useEffect that references them in its dependency array.
+   * The original code had useEffect depending on `filtered`
+   * ~50 lines before `filtered` was declared via useMemo,
+   * causing "Cannot read properties of undefined" crashes.
+   * ══════════════════════════════════════════════════════════ */
 
   /* Families */
   const families = useMemo(() => {
@@ -233,7 +177,7 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
     return indexData.meta.popularByFamily[family] || [];
   }, [indexData, family]);
 
-  /* Handlers */
+  /* Handlers (useCallback) */
   const handleSelect = useCallback((slug) => {
     setActiveSlug(slug);
     setActiveTab('overview');
@@ -264,6 +208,74 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
       handleClearSearch();
     }
   }, [filtered, handleSelect, handleClearSearch]);
+
+  /* ══════════════════════════════════════════════════════════
+   * useEffect hooks (safe to use `filtered` etc. now)
+   * ══════════════════════════════════════════════════════════ */
+
+  /* Debounce search */
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedQuery(query), 200);
+    return () => window.clearTimeout(timer);
+  }, [query]);
+
+  /* Load index */
+  useEffect(() => {
+    let cancelled = false;
+    fetchCorrespondenceIndex()
+      .then((data) => {
+        if (cancelled) return;
+        setIndexData(data);
+        setStatus({ loading: false, error: '' });
+        const hasInitial = data.entries.some((entry) => entry.slug === initialSlug);
+        if (!hasInitial && data.entries[0]) {
+          setActiveSlug(data.entries[0].slug);
+        }
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setStatus({ loading: false, error: error instanceof Error ? error.message : 'Could not load correspondence index.' });
+      });
+    return () => { cancelled = true; };
+  }, [initialSlug]);
+
+  /* Sync slug when family/query changes */
+  useEffect(() => {
+    if (!filtered.length) return;
+    const exists = filtered.some((entry) => entry.slug === activeSlug);
+    if (!exists) {
+      setActiveSlug(filtered[0].slug);
+    }
+  }, [filtered, activeSlug]);
+
+  /* Load detail */
+  useEffect(() => {
+    if (!activeSlug || detailCache[activeSlug]) return;
+    const controller = new AbortController();
+    setDetailLoading(true);
+    setDetailError('');
+
+    fetchCorrespondenceDetail(activeSlug, controller.signal)
+      .then((detail) => {
+        setDetailCache((current) => ({ ...current, [activeSlug]: detail }));
+      })
+      .catch((error) => {
+        if (controller.signal.aborted) return;
+        setDetailError(error instanceof Error ? error.message : 'Could not load entry detail.');
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setDetailLoading(false);
+      });
+
+    return () => controller.abort();
+  }, [activeSlug, detailCache]);
+
+  /* Scroll detail into view on change */
+  useEffect(() => {
+    if (detailRef.current && activeSlug) {
+      detailRef.current.scrollTop = 0;
+    }
+  }, [activeSlug]);
 
   /* ─── Loading ─── */
   if (status.loading) {
