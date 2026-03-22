@@ -3,6 +3,9 @@
 import Link from 'next/link'
 import GlitchCycleText from './components/GlitchCycleText'
 import { useSiteI18n } from '@/lib/site-i18n'
+import DemoOracle from '@/components/home/DemoOracle'
+import ComparisonBlock from '@/components/home/ComparisonBlock'
+import BookPreview from '@/components/library/BookPreview'
 
 type Lang = 'en' | 'tr' | 'ru'
 
@@ -102,6 +105,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <DemoOracle />
+      <ComparisonBlock />
 
       <section id="gateways" className="border-b border-white/5 bg-deep">
         <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">
@@ -262,6 +268,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <BookPreview />
 
       <section className="border-b border-white/5 bg-[linear-gradient(180deg,#090912_0%,#0b0b12_100%)]">
         <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { useAuth } from '@/components/auth/AuthProvider'
+import BookPreview from '@/components/library/BookPreview'
 
 type Tradition = 'Tao' | 'Tarot' | 'Tantra' | 'Entheogens' | 'Sufism' | 'Dream' | 'Qabalah' | 'Spiritual Sovereignty' | 'All'
 
@@ -96,6 +97,8 @@ export default function LibraryPage() {
           <p className="text-[#9B93AB] text-xl font-light tracking-wide uppercase">{t('nav.library')}</p>
         </div>
       </section>
+
+      <BookPreview />
 
       <div className="sticky top-[72px] z-40 mx-4 lg:mx-6 -mt-12 p-4 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/5 bg-[rgba(10,10,15,0.85)] backdrop-blur-2xl rounded-3xl shadow-2xl">
         <div className="flex flex-wrap items-center gap-2">
