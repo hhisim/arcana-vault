@@ -42,22 +42,39 @@ function isInternalLink(href: string): boolean {
   return href && !href.startsWith('http') && !href.startsWith('mailto:')
 }
 
-// Inject inline images into body at the correct heading positions
+// Inject inline images into body sections by matching anchor headings
+// Splits body by ## headings, maps images to the correct section by anchor key
 function injectImages(body: string, images: InlineImage[] = []): string {
   if (!images || images.length === 0) return body
 
+  // Group images by their anchor heading (strip "after-" prefix)
+  const byAnchor: Record<string, InlineImage[]> = {}
   for (const img of images) {
     if (!img.position?.startsWith('after-')) continue
-    const headingKey = img.position.replace('after-', '')
-    // Match ## Heading text (case-insensitive, flexible whitespace)
-    const headingPattern = new RegExp(`(##\\s+${headingKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\n)`, 'i')
-    const match = body.match(headingPattern)
-    if (match) {
-      const imgMarkdown = `\n\n![${img.caption || ''}](${img.src})\n\n`
-      body = body.replace(match[0], match[0] + imgMarkdown)
+    const anchor = img.position.replace('after-', '')
+    if (!byAnchor[anchor]) byAnchor[anchor] = []
+    byAnchor[anchor].push(img)
+  }
+
+  // Split body by ## headings
+  const parts = body.split(/(?=^## )/gm)
+  const result: string[] = []
+
+  for (const part of parts) {
+    result.push(part)
+    // Check if this part ends with a heading (the next heading is the start of next part)
+    const headingMatch = part.match(/^## ([^\n]+)/)
+    if (headingMatch) {
+      const headingText = headingMatch[1].trim()
+      const imgs = byAnchor[headingText]
+      if (imgs && imgs.length > 0) {
+        const imgMarkdown = '\n\n' + imgs.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n') + '\n'
+        result.push(imgMarkdown)
+      }
     }
   }
-  return body
+
+  return result.join('')
 }
 
 export default function BlogContent({ body, translations, fmI18n, defaultTitle = '', images = [] }: BlogContentProps) {
