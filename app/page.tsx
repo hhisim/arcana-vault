@@ -93,6 +93,13 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-6 py-20 md:px-8 md:py-28">
           <div className="max-w-4xl">
             <p className="mb-6 text-xs uppercase tracking-[0.45em] text-text-secondary">Vault of Arcana</p>
+            <div className="flex justify-center mb-10">
+              <img
+                src="/images/hero-symbol.png"
+                alt="Vault of Arcana Symbol"
+                className="w-48 md:w-64 opacity-90"
+              />
+            </div>
             <GlitchCycleText as="h1" className="max-w-5xl font-serif text-5xl leading-[0.95] text-text-primary md:text-7xl" phrases={heroPhrases[L]} intervalMs={5200} glitchMs={180} />
             <p className="mt-8 max-w-3xl text-lg leading-8 text-text-secondary md:text-xl">
               {tt({ en:'Vault of Arcana is not a generic chatbot. It is a curated intelligence system built from over 30 years of esoteric study, rare texts, and lovingly structured datasets developed through the collaboration of Hakan Hisim + PRIME.', tr:'Vault of Arcana genel bir sohbet robotu değildir. Hakan Hisim + PRIME işbirliğiyle geliştirilen 30 yılı aşkın ezoterik çalışma, nadir metinler ve özenle yapılandırılmış veri setlerinden oluşturulmuş seçilmiş bir zeka sistemidir.', ru:'Vault of Arcana — это не обычный чат-бот. Это курируемая интеллектуальная система, созданная более чем за 30 лет эзотерических исследований, редких текстов и тщательно структурированных данных в сотрудничестве Hakan Hisim + PRIME.'})}
