@@ -43,35 +43,57 @@ function isInternalLink(href: string): boolean {
 }
 
 // Inject inline images into body sections by matching anchor headings
-// Splits body by ## headings, maps images to the correct section by anchor key
+// Converts heading text to kebab-case for matching against position keys
+function toKebabCase(text: string): string {
+  return text
+    .replace(/[^a-zA-Z0-9\s-]/g, '')  // remove special chars
+    .replace(/\s+/g, '-')               // spaces to hyphens
+    .replace(/-+/g, '-')               // collapse multiple hyphens
+    .replace(/^-|-$/g, '')             // trim leading/trailing hyphens
+    .toLowerCase()
+}
+
 function injectImages(body: string, images: InlineImage[] = []): string {
   if (!images || images.length === 0) return body
 
-  // Group images by their anchor heading (strip "after-" prefix)
+  // Group images by their anchor heading (strip "after-" prefix, kebab-case)
   const byAnchor: Record<string, InlineImage[]> = {}
   for (const img of images) {
     if (!img.position?.startsWith('after-')) continue
-    const anchor = img.position.replace('after-', '')
+    const anchor = toKebabCase(img.position.replace('after-', ''))
     if (!byAnchor[anchor]) byAnchor[anchor] = []
     byAnchor[anchor].push(img)
   }
+
+  // Collect images that go at the end
+  const endImages: InlineImage[] = (images || [])
+    .filter(img => img.position === 'end')
+    .map(img => img)
 
   // Split body by ## headings
   const parts = body.split(/(?=^## )/gm)
   const result: string[] = []
 
-  for (const part of parts) {
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i]
     result.push(part)
-    // Check if this part ends with a heading (the next heading is the start of next part)
+    // Check if this part starts with a heading
     const headingMatch = part.match(/^## ([^\n]+)/)
     if (headingMatch) {
       const headingText = headingMatch[1].trim()
-      const imgs = byAnchor[headingText]
+      const headingKey = toKebabCase(headingText)
+      const imgs = byAnchor[headingKey]
       if (imgs && imgs.length > 0) {
         const imgMarkdown = '\n\n' + imgs.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n') + '\n'
         result.push(imgMarkdown)
       }
     }
+  }
+
+  // Append end-position images at the very end
+  if (endImages.length > 0) {
+    const endMarkdown = '\n\n' + endImages.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n') + '\n'
+    result.push(endMarkdown)
   }
 
   return result.join('')
