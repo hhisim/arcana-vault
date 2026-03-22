@@ -102,12 +102,7 @@ export default function HomePage() {
               <Link href="#gateways" className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-text-primary transition hover:bg-white/10">{tt({ en:'Explore the Traditions', tr:'Gelenekleri Keşfet', ru:'Исследовать традиции'})}</Link>
             </div>
             <p className="mt-5 text-sm text-text-secondary">{tt({ en:'Start with four living gateways. Expand into a growing constellation of twenty-plus traditions, practices, archives, agents, and intelligences.', tr:'Dört yaşayan geçit ile başlayın. Yirmi artı gelenek, pratik, arşiv, ajan ve zekayı büyüyen bir yıldız takımadasına genişletin.', ru:'Начните с четырёх живых вратарей. Расширьтесь в растущее созвездие из более чем двадцати традиций, практик, архивов, агентов и интеллектов.'})}</p>
-            <div className="mt-8">
-              <a href="/chat" className="inline-flex items-center gap-3 rounded-xl bg-[#C9A84C] px-8 py-4 text-base font-semibold text-black shadow-[0_0_30px_rgba(201,168,76,0.25)] transition hover:opacity-90 hover:shadow-[0_0_40px_rgba(201,168,76,0.35)]">
-                Try 3 Free Questions →
-              </a>
-              <p className="mt-3 text-sm text-text-secondary">No signup required. Instant access.</p>
-            </div>
+            <p className="mt-4 text-sm text-text-secondary">Try for free. No signup required. Instant access to the Oracle.</p>
           </div>
         </div>
       </section>
