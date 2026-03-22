@@ -74,11 +74,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         {/* Hero Image */}
         {heroImage && (
-          <div className="w-full max-h-[520px] overflow-hidden border-b border-white/8 relative">
+          <div className="w-full max-h-[520px] overflow-hidden border-b border-white/8 relative flex items-center justify-center bg-[#0A0A0F]">
             <img
               src={heroImage}
               alt={defaultTitle}
               className="w-full h-full object-cover object-center"
+              style={{ maxHeight: '520px' }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-transparent to-transparent opacity-40 pointer-events-none" />
           </div>
