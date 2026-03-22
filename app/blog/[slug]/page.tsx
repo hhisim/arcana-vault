@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             <img
               src={heroImage}
               alt={defaultTitle}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-transparent to-transparent opacity-40 pointer-events-none" />
           </div>
