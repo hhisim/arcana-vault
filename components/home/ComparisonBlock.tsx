@@ -154,7 +154,7 @@ export default function ComparisonBlock() {
               {/* Pricing row */}
               <div className="pt-2">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">Pricing</p>
-                <Cell value="From $9/mo" highlight />
+                <Cell value="From $8/mo" highlight />
               </div>
             </div>
 
