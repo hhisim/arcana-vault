@@ -260,6 +260,25 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
     </li>
   )
 
+  // Custom image component — renders images full-width with proper styling
+  // Also overrides paragraph to skip wrapper when child is an image
+  const ImageComponent = ({ src, alt, ...props }: any) => (
+    <figure className="my-8 w-full">
+      <img
+        src={src}
+        alt={alt || ''}
+        className="w-full rounded-xl border border-white/8 object-cover"
+        loading="lazy"
+        {...props}
+      />
+      {alt && alt !== '' && (
+        <figcaption className="mt-3 text-center text-[#9B93AB] text-sm italic">
+          {alt}
+        </figcaption>
+      )}
+    </figure>
+  )
+
   const CodeComponent = ({ node, inline, className, children, ...props }: any) => {
     if (inline) {
       return (
@@ -353,6 +372,7 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
             ol: OlComponent,
             li: LiComponent,
             code: CodeComponent,
+            img: ImageComponent,
             // Table wrappers
             table: ({ node, ...props }: any) => <div className="my-8 overflow-x-auto rounded-xl border border-white/8"><table className="w-full" {...props} /></div>,
             th: ({ node, ...props }: any) => <th className="px-4 py-3 text-left text-[#C9A84C] font-semibold text-sm uppercase tracking-wider border-b border-white/8 bg-[rgba(201,168,76,0.04)]" {...props} />,
