@@ -11,12 +11,19 @@ type FmI18n = {
   ru?: { title?: string; excerpt?: string }
 }
 
+type InlineImage = {
+  src: string
+  caption?: string
+  position?: string
+}
+
 type BlogContentProps = {
   body: string
   tradition: string
   translations?: { tr?: string; ru?: string }
   fmI18n?: FmI18n
   defaultTitle?: string
+  images?: InlineImage[]
 }
 
 // Build a lookup: title → slug and slug → title for interlinking
@@ -35,15 +42,36 @@ function isInternalLink(href: string): boolean {
   return href && !href.startsWith('http') && !href.startsWith('mailto:')
 }
 
-export default function BlogContent({ body, translations, fmI18n, defaultTitle = '' }: BlogContentProps) {
+// Inject inline images into body at the correct heading positions
+function injectImages(body: string, images: InlineImage[] = []): string {
+  if (!images || images.length === 0) return body
+
+  for (const img of images) {
+    if (!img.position?.startsWith('after-')) continue
+    const headingKey = img.position.replace('after-', '')
+    // Match ## Heading text (case-insensitive, flexible whitespace)
+    const headingPattern = new RegExp(`(##\\s+${headingKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\n)`, 'i')
+    const match = body.match(headingPattern)
+    if (match) {
+      const imgMarkdown = `\n\n![${img.caption || ''}](${img.src})\n\n`
+      body = body.replace(match[0], match[0] + imgMarkdown)
+    }
+  }
+  return body
+}
+
+export default function BlogContent({ body, translations, fmI18n, defaultTitle = '', images = [] }: BlogContentProps) {
   const { lang } = useSiteI18n()
   const { titleToSlug } = useMemo(() => buildSlugMap(), [])
 
-  const rawBody = (lang === 'tr' && translations?.tr)
+  const langBody = (lang === 'tr' && translations?.tr)
     ? translations.tr
     : (lang === 'ru' && translations?.ru)
     ? translations.ru
     : body
+
+  // Inject images at their correct positions in the body
+  const rawBody = useMemo(() => injectImages(langBody, images), [langBody, images])
 
   const title = (lang === 'tr' && fmI18n?.tr?.title)
     ? fmI18n.tr.title

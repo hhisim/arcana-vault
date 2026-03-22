@@ -49,6 +49,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const defaultExcerpt = (frontmatter.excerpt as string) || '';
     const tradition = (frontmatter.tradition as string) || 'Ancient';
     const heroImage = frontmatter.hero as string | undefined;
+    const inlineImages = (frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [];
 
     return (
       <article className="min-h-screen bg-[#0A0A0F]">
@@ -90,6 +91,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           translations={translations}
           fmI18n={fmI18n}
           defaultTitle={defaultTitle}
+          images={inlineImages}
         />
       </article>
     );
