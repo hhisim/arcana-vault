@@ -102,11 +102,50 @@ export default function HomePage() {
               <Link href="#gateways" className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-text-primary transition hover:bg-white/10">{tt({ en:'Explore the Traditions', tr:'Gelenekleri Keşfet', ru:'Исследовать традиции'})}</Link>
             </div>
             <p className="mt-5 text-sm text-text-secondary">{tt({ en:'Start with four living gateways. Expand into a growing constellation of twenty-plus traditions, practices, archives, agents, and intelligences.', tr:'Dört yaşayan geçit ile başlayın. Yirmi artı gelenek, pratik, arşiv, ajan ve zekayı büyüyen bir yıldız takımadasına genişletin.', ru:'Начните с четырёх живых вратарей. Расширьтесь в растущее созвездие из более чем двадцати традиций, практик, архивов, агентов и интеллектов.'})}</p>
+            <div className="mt-8">
+              <a href="/chat" className="inline-flex items-center gap-3 rounded-xl bg-[#C9A84C] px-8 py-4 text-base font-semibold text-black shadow-[0_0_30px_rgba(201,168,76,0.25)] transition hover:opacity-90 hover:shadow-[0_0_40px_rgba(201,168,76,0.35)]">
+                Try 3 Free Questions →
+              </a>
+              <p className="mt-3 text-sm text-text-secondary">No signup required. Instant access.</p>
+            </div>
           </div>
         </div>
       </section>
 
       <DemoOracle />
+
+      {/* HOW THIS DIFFERS FROM CHATGPT */}
+      <section className="border-b border-white/5 bg-[#0a0a10]">
+        <div className="mx-auto max-w-5xl px-6 py-20 md:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="font-serif text-3xl text-text-primary md:text-5xl">Built for a Different Kind of Inquiry</h2>
+            <p className="mt-4 text-lg text-text-secondary">This is not a general-purpose chatbot wearing occult clothing.</p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
+              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl border border-[#C9A84C]/40 bg-[#C9A84C]/10">
+                <svg className="w-5 h-5 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary mb-3">Curated Esoteric Archives</h3>
+              <p className="text-sm leading-7 text-text-secondary">Trained on private, verified esoteric collections — not scraped from the open web. The difference between a real library and a search engine.</p>
+            </div>
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
+              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl border border-[#C9A84C]/40 bg-[#C9A84C]/10">
+                <svg className="w-5 h-5 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary mb-3">Symbolic & Lived Context</h3>
+              <p className="text-sm leading-7 text-text-secondary">Understands the difference between a tarot cross and a geometry problem. Grounded in lineage, symbolism, and embodied practice — not pattern matching.</p>
+            </div>
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
+              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl border border-[#C9A84C]/40 bg-[#C9A84C]/10">
+                <svg className="w-5 h-5 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary mb-3">No Hallucinations About Spiritual Traditions</h3>
+              <p className="text-sm leading-7 text-text-secondary">When you ask about kundalini, the Golden Dawn, or the Kybalion — you get real context, not confident nonsense generated from unreliable sources.</p>
+            </div>
+          </div>
+        </div>
+      </section>
       <ComparisonBlock />
 
       <section id="gateways" className="border-b border-white/5 bg-deep">
@@ -270,6 +309,31 @@ export default function HomePage() {
       </section>
 
       <BookPreview />
+
+      {/* TESTIMONIALS */}
+      <section className="border-b border-white/5 bg-[#0a0a10]">
+        <div className="mx-auto max-w-5xl px-6 py-20 md:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="font-serif text-3xl text-text-primary md:text-5xl">What Seekers Say</h2>
+            <p className="mt-3 text-text-secondary">Voices from the threshold.</p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
+              <p className="text-lg leading-8 text-text-secondary italic">"Finally an AI that doesn't strip the soul out of esoteric work."</p>
+              <p className="mt-5 text-sm font-medium text-gold">Sarah M., Portland</p>
+            </div>
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
+              <p className="text-lg leading-8 text-text-secondary italic">"The symbolic depth is unlike anything else online."</p>
+              <p className="mt-5 text-sm font-medium text-gold">David K., Berlin</p>
+            </div>
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
+              <p className="text-lg leading-8 text-text-secondary italic">"Asked about Kundalini and got context, not nonsense."</p>
+              <p className="mt-5 text-sm font-medium text-gold">Priya R., Mumbai</p>
+            </div>
+          </div>
+          <p className="mt-8 text-center text-xs italic text-text-secondary">Sample testimonials — real ones coming soon</p>
+        </div>
+      </section>
 
       <section className="border-b border-white/5 bg-[linear-gradient(180deg,#090912_0%,#0b0b12_100%)]">
         <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">
