@@ -153,9 +153,19 @@ export default function BlogPage() {
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
               {others.map((post) => (
                 <article key={post.slug} className="glass-card rounded-2xl overflow-hidden border border-white/10 group">
-                  <div className="h-48 bg-gradient-to-br from-[#7B5EA7] to-[#12121A] flex items-center justify-center">
-                    <span className="font-cinzel text-6xl text-white/20">{post.tradition[0].toUpperCase()}</span>
-                  </div>
+                  {post.hero ? (
+                    <div className="h-44 overflow-hidden">
+                      <img
+                        src={post.hero}
+                        alt={post.title}
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-44 bg-gradient-to-br from-[#7B5EA7] to-[#12121A] flex items-center justify-center">
+                      <span className="font-cinzel text-6xl text-white/20">{post.tradition[0].toUpperCase()}</span>
+                    </div>
+                  )}
                   <div className="p-6">
                     <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-[#C9A84C] mb-3">
                       <span>{post.tradition}</span>

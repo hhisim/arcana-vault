@@ -6,6 +6,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "12 min",
     "author": "Prime + Hakan",
+    "hero": "/images/blog/alchemy-of-soul-magnum-opus/cover.png",
     "excerpt": "Solve et Coagula. From the blackening (nigredo) to the reddening (rubedo), alchemy is not about lead into gold but the transformation of the base self into the incorruptible solar spirit."
   },
   {
@@ -15,6 +16,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "11 min",
     "author": "Prime + Hakan",
+    "hero": "/images/blog/dreamwalker-lucid-dreaming-astral-projection/cover.png",
     "excerpt": "Beyond sleep lies a vast, non-local landscape of consciousness. From Stephen LaBerge's modern techniques to Robert Monroe's journeys out-of-body, the Dreamwalker maps the internal abyss."
   },
   {
@@ -24,6 +26,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "13 min",
     "author": "Prime + Hakan",
+    "hero": "/images/blog/enochian-angelic-language-modern-occultism/cover.png",
     "excerpt": "John Dee and Edward Kelley claimed to receive a divine language from angels in the 16th century. The resulting 48 Calls or 'Keys' structured an entire magical tradition."
   },
   {
@@ -96,16 +99,9 @@ export const posts = [
     "publishedAt": "2026-03-19",
     "readTime": "18 min",
     "author": "Prime + Hakan",
+    "hero": "/images/blog/dmt-and-the-hyperbolic-mind/cover.png",
     "excerpt": "An exhaustive algorithmic and geometric analysis of DMT-induced states of consciousness, drawing on 'DMT: The Spirit Molecule,' ancient mystery schools, and primary textual analysis from the Arcana Vault archives.",
-    "tags": [
-      "DMT",
-      "Hyperbolic Geometry",
-      "Consciousness",
-      "Qualia",
-      "Symmetry",
-      "Terence McKenna",
-      "Rick Strassman"
-    ]
+    "tags": ["DMT", "Hyperbolic Geometry", "Consciousness", "Qualia", "Symmetry", "Terence McKenna", "Rick Strassman"]
   },
   {
     "slug": "sexual-alchemy-taoist-tradition-nei-dan",
@@ -130,26 +126,27 @@ export const posts = [
     "title": "The Uncarved Block: Applying Wu Wei to Modern Decision Fatigue",
     "tradition": "tao",
     "publishedAt": "2025-03-15",
-    "excerpt": "In an era of relentless optimization, the ancient Taoist concept of non-action offers a radical strategy for high-stakes decision making.",
-    "readTime": 8,
-    "author": "The Tao Oracle"
+    "readTime": "8 min",
+    "author": "The Tao Oracle",
+    "excerpt": "In an era of relentless optimization, the ancient Taoist concept of non-action offers a radical strategy for high-stakes decision making."
   },
   {
     "slug": "seven-hermetic-principles-silicon-valley",
     "title": "As Above, So Below: Why Hermeticism Resonates with Silicon Valley",
     "tradition": "philosophy",
     "publishedAt": "2025-03-12",
-    "excerpt": "From systems thinking to recursive algorithms, the Seven Hermetic Principles provide a ancient framework for the digital age.",
-    "readTime": 10,
-    "author": "Hermetic Oracle"
+    "readTime": "10 min",
+    "author": "Hermetic Oracle",
+    "excerpt": "From systems thinking to recursive algorithms, the Seven Hermetic Principles provide a ancient framework for the digital age."
   },
   {
     "slug": "chaos-magick-not-what-you-think",
     "title": "Chaos Magick: Belief as a Recursive Technology",
     "tradition": "philosophy",
     "publishedAt": "2025-03-10",
-    "excerpt": "Is it magick or just a very aggressive A/B test? Exploring the postmodern tech of belief and sigil-crafting.",
-    "readTime": 9,
-    "author": "Chaos Oracle"
+    "readTime": "9 min",
+    "author": "Chaos Oracle",
+    "hero": "/images/blog/chaos-magick-not-what-you-think/cover.png",
+    "excerpt": "Is it magick or just a very aggressive A/B test? Exploring the postmodern tech of belief and sigil-crafting."
   }
 ];
