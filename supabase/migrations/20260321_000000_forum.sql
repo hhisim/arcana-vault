@@ -138,3 +138,11 @@ create policy "Authenticated can react" on forum_reactions for insert with check
 create policy "Users can remove reactions" on forum_reactions for delete using (user_id = auth.uid());
 
 create policy "Categories publicly readable" on forum_categories for select using (is_active = true);
+
+-- RPC: increment view count (called from API)
+create or replace function increment_view_count(post_id uuid)
+returns void language plpgsql security definer as $$
+begin
+  update forum_posts set view_count = view_count + 1 where id = post_id;
+end;
+$$;
