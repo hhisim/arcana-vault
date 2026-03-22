@@ -125,8 +125,12 @@ export default function BlogPage() {
             {/* Featured Post */}
             {featured && filter === 'all' && (
               <section className="relative h-96 w-full rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl group cursor-pointer">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#7B5EA7] to-[#12121A]" />
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-all group-hover:backdrop-blur-sm" />
+                {featured.hero ? (
+                  <img src={featured.hero} alt={featured.title} className="absolute inset-0 w-full h-full object-cover object-center" />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#7B5EA7] to-[#12121A]" />
+                )}
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] transition-all group-hover:backdrop-blur-sm" />
                 <div className="relative h-full flex flex-col justify-end p-12">
                   <span className="text-[#C9A84C] text-[10px] uppercase tracking-[0.2em] mb-4 font-bold bg-[#12121A]/50 px-3 py-1 rounded w-fit">{featuredLabel}</span>
                   <h2 className="font-cinzel text-4xl md:text-6xl text-white max-w-4xl mb-6">
