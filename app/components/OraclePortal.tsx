@@ -16,6 +16,8 @@ import {
   t,
 } from '@/lib/oracle-ui'
 import { getMenuScreen, MenuAction, TAROT_ALL_CARDS } from '@/lib/oracle-menu'
+import { getBrowserSupabase } from '@/lib/supabase/client'
+import type { Conversation } from '@/lib/supabase/conversations'
 
 type VoiceStyle = 'female' | 'male'
 type ContextState = { userVisible: string; prompt: string; answer: string }
@@ -157,6 +159,10 @@ export default function OraclePortal() {
   const [menuKey, setMenuKey] = useState<string>(rootMenuFor('tao'))
   const [showOlder, setShowOlder] = useState(false)
   const [lastContext, setLastContext] = useState<Partial<Record<OraclePack, ContextState>>>({})
+  const [userId, setUserId] = useState<string | null>(null)
+  const [conversationId, setConversationId] = useState<string | null>(null)
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [showHistory, setShowHistory] = useState(false)
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
 
@@ -189,6 +195,27 @@ export default function OraclePortal() {
     if (!welcomeText) return
     setMessages((prev) => [{ id: uid(), role: 'system', text: welcomeText, pack, mode: ORACLE_CONFIG[pack].defaultMode }, ...prev])
     localStorage.setItem(storageKey, '1')
+  }, [pack])
+
+  // ── Auth check + load conversation history on mount ────────────────────────
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const loadUser = async () => {
+      try {
+        const supabase = getBrowserSupabase()
+        const { data } = await supabase.auth.getUser()
+        if (data.user) {
+          setUserId(data.user.id)
+          // Load recent conversations for this pack
+          const res = await fetch(`/api/conversations?tradition=${pack}`)
+          if (res.ok) {
+            const data = await res.json()
+            setConversations(data as Conversation[])
+          }
+        }
+      } catch {}
+    }
+    void loadUser()
   }, [pack])
 
   useEffect(() => {
@@ -237,6 +264,37 @@ export default function OraclePortal() {
     setInput('')
     if (afterMenu) setMenuKey(afterMenu)
 
+    // ── Persist conversation for logged-in users ─────────────────────────────
+    let activeConvId = conversationId
+    if (userId && !conversationId) {
+      try {
+        const res = await fetch('/api/conversations', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ tradition: pack, mode: effectiveMode }),
+        })
+        if (res.ok) {
+          const conv = await res.json() as Conversation
+          setConversationId(conv.id)
+          activeConvId = conv.id
+        }
+      } catch {}
+    }
+
+    const saveMessage = async (role: 'user' | 'assistant' | 'system', content: string) => {
+      if (!userId || !activeConvId) return
+      try {
+        await fetch(`/api/conversations/${activeConvId}/messages`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ role, content }),
+        })
+      } catch {}
+    }
+
+    // Save user message immediately after sending
+    await saveMessage('user', visibleText)
+
     try {
       const response = await fetch('/api/oracle/ask', {
         method: 'POST',
@@ -261,8 +319,11 @@ export default function OraclePortal() {
       }
       setMessages((prev) => [oracleMessage, ...prev])
       setLastContext((prev) => ({ ...prev, [pack]: { userVisible: visibleText, prompt: trimmed, answer: data.answer } }))
+      // Save oracle response
+      await saveMessage('assistant', data.answer)
     } catch (error: any) {
       setMessages((prev) => [{ id: uid(), role: 'system', text: normalizeError(error?.message || '') }, ...prev])
+      await saveMessage('system', normalizeError(error?.message || ''))
     } finally {
       setBusy(false)
     }
@@ -427,7 +488,10 @@ export default function OraclePortal() {
                 <div className="font-cinzel text-2xl text-text-primary"><span className="mr-2 text-lg">{currentPack.emoji}</span>{currentPack.title[lang]}</div>
                 <div className="mt-0.5 text-xs text-[var(--text-secondary)]">{currentPack.subtitle[lang]}</div>
               </div>
-              <button type="button" onClick={() => { setMessages([]); setLastContext({}); }} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
+              <button type="button" onClick={async () => { setMessages([]); setLastContext({}); setConversationId(null); if (userId && conversationId) { try { await fetch(`/api/conversations/${conversationId}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ is_archived: true }) }); setConversations(prev => prev.filter(c => c.id !== conversationId)) } catch {} } }} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
+              {userId && (
+                <button type="button" onClick={() => setShowHistory(v => !v)} className={`rounded-full border px-3 py-1.5 text-xs transition ${showHistory ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>History</button>
+              )}
             </div>
           </div>
 
@@ -469,25 +533,100 @@ export default function OraclePortal() {
           </div>
         </div>
 
-        {/* RIGHT: Menu panel */}
+        {/* RIGHT: Menu / History panel */}
         <aside className="glass-card order-3 voa-scrollbar hidden h-full overflow-y-auto p-4 lg:block">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">{t(lang, menu.title)}</div>
-            {messages.length > 3 && (
-              <button type="button" onClick={() => setShowOlder((v) => !v)} className="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{showOlder ? 'Collapse' : `History (${hiddenCount})`}</button>
-            )}
-          </div>
-          <div className="space-y-2">
-            {menu.buttons.flat().map((button) => (
-              <button key={button.id} type="button" onClick={() => handleAction(button)} className={`group flex w-full items-start gap-2 rounded-xl border px-3 py-3 text-left transition ${button.kind === 'submenu' || button.kind === 'back' ? 'border-[var(--primary-purple)]/30 bg-[rgba(123,94,167,0.06)] hover:border-[var(--primary-purple)]/60 hover:bg-[rgba(123,94,167,0.12)]' : 'border-white/8 bg-[rgba(255,255,255,0.015)] hover:border-[var(--primary-purple)]/35 hover:bg-[rgba(123,94,167,0.08)] hover:shadow-[0_0_12px_rgba(123,94,167,0.12)]'}`}>
-                <div className="mt-0.5 flex-shrink-0 text-xs text-[var(--primary-gold)]">{button.kind === 'submenu' ? '▶' : button.kind === 'back' ? '◀' : '◆'}</div>
-                <div>
-                  <div className="text-xs font-medium leading-snug text-text-primary">{t(lang, button.label).replace(/^\//, '')}</div>
-                  {button.description ? <div className="mt-0.5 text-[10px] leading-relaxed text-[var(--text-secondary)]">{t(lang, button.description)}</div> : null}
+          {showHistory ? (
+            /* ── History panel ── */
+            <div>
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-gold)]">Practice Journal</div>
+                <button type="button" onClick={() => setShowHistory(false)} className="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">← Menu</button>
+              </div>
+              {conversations.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-white/10 p-4 text-center text-xs text-[var(--text-secondary)]">
+                  No sessions yet in {currentPack.title[lang]}.<br />Start a conversation to begin your journal.
                 </div>
-              </button>
-            ))}
-          </div>
+              ) : (
+                <div className="space-y-2">
+                  {conversations.map((conv) => {
+                    const date = new Date(conv.last_message_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                    const isActive = conv.id === conversationId
+                    return (
+                      <div key={conv.id} className={`group rounded-xl border p-3 text-left transition ${isActive ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.08)]' : 'border-white/8 hover:border-[var(--primary-purple)]/40'}`}>
+                        <div className="flex items-start justify-between gap-1">
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              // Load this conversation's messages
+                              const res = await fetch(`/api/conversations/${conv.id}/messages`)
+                              if (res.ok) {
+                                const msgs = await res.json()
+                                // Map DB messages to ChatMessage format
+                                const loaded: ChatMessage[] = msgs.map((m: { role: string; content: string; created_at: string }) => ({
+                                  id: uid(),
+                                  role: m.role === 'assistant' ? 'oracle' : (m.role as 'user' | 'system'),
+                                  text: m.content,
+                                  pack,
+                                  mode: conv.mode as OracleMode,
+                                }))
+                                setMessages(loaded.reverse())
+                                setConversationId(conv.id)
+                                setLastContext({})
+                                setShowHistory(false)
+                              }
+                            }}
+                            className="flex-1 text-left"
+                          >
+                            <div className="text-xs font-medium leading-snug text-text-primary line-clamp-2">{conv.title ?? `${currentPack.emoji} Session`}</div>
+                            <div className="mt-0.5 text-[10px] text-[var(--text-secondary)]">{date} · {conv.message_count} msg{conv.message_count !== 1 ? 's' : ''}</div>
+                          </button>
+                          <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                await fetch(`/api/conversations/${conv.id}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ is_starred: !conv.is_starred }) })
+                                setConversations(prev => prev.map(c => c.id === conv.id ? { ...c, is_starred: !c.is_starred } : c))
+                              }}
+                              className={`text-xs transition ${conv.is_starred ? 'text-[var(--primary-gold)]' : 'text-[var(--text-secondary)]'} hover:text-[var(--primary-gold)]`}
+                            >{conv.is_starred ? '★' : '☆'}</button>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                await fetch(`/api/conversations/${conv.id}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ is_archived: true }) })
+                                setConversations(prev => prev.filter(c => c.id !== conv.id))
+                              }}
+                              className="text-xs text-[var(--text-secondary)] transition hover:text-[#E05C5C]"
+                            >✕</button>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          ) : (
+            /* ── Menu panel ── */
+            <>
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">{t(lang, menu.title)}</div>
+                {messages.length > 3 && (
+                  <button type="button" onClick={() => setShowOlder((v) => !v)} className="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{showOlder ? 'Collapse' : `History (${hiddenCount})`}</button>
+                )}
+              </div>
+              <div className="space-y-2">
+                {menu.buttons.flat().map((button) => (
+                  <button key={button.id} type="button" onClick={() => handleAction(button)} className={`group flex w-full items-start gap-2 rounded-xl border px-3 py-3 text-left transition ${button.kind === 'submenu' || button.kind === 'back' ? 'border-[var(--primary-purple)]/30 bg-[rgba(123,94,167,0.06)] hover:border-[var(--primary-purple)]/60 hover:bg-[rgba(123,94,167,0.12)]' : 'border-white/8 bg-[rgba(255,255,255,0.015)] hover:border-[var(--primary-purple)]/35 hover:bg-[rgba(123,94,167,0.08)] hover:shadow-[0_0_12px_rgba(123,94,167,0.12)]'}`}>
+                    <div className="mt-0.5 flex-shrink-0 text-xs text-[var(--primary-gold)]">{button.kind === 'submenu' ? '▶' : button.kind === 'back' ? '◀' : '◆'}</div>
+                    <div>
+                      <div className="text-xs font-medium leading-snug text-text-primary">{t(lang, button.label).replace(/^\//, '')}</div>
+                      {button.description ? <div className="mt-0.5 text-[10px] leading-relaxed text-[var(--text-secondary)]">{t(lang, button.description)}</div> : null}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </aside>
       </div>
     </section>
