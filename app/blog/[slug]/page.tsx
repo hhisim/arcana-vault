@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 import { posts } from '@/lib/posts';
 import BlogContent from '@/components/BlogContent';
 import BlogReturnButton from '@/components/BlogReturnButton';
+import EmailCaptureWrapper from '@/components/EmailCaptureWrapper';
 
 export const dynamic = 'force-static';
 
@@ -93,6 +94,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           defaultTitle={defaultTitle}
           images={inlineImages}
         />
+
+        {/* Email signup — compact variant */}
+        <div className="max-w-4xl mx-auto px-6 pb-16">
+          <div className="border-t border-white/8 pt-12 mt-12">
+            <EmailCaptureWrapper variant="compact" />
+          </div>
+        </div>
       </article>
     );
   } catch (error) {

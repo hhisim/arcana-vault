@@ -1,5 +1,6 @@
 'use client'
 import { useSiteI18n } from '@/lib/site-i18n'
+import EmailCapture from '@/components/EmailCapture'
 
 export default function Footer() {
   const { t } = useSiteI18n()
@@ -22,7 +23,7 @@ export default function Footer() {
               <a href="/chat" className="hover:text-text-primary">{t('nav.chat', 'Portal')}</a>
               <a href="/library" className="hover:text-text-primary">{t('nav.library', 'Library')}</a>
               <a href="/blog" className="hover:text-text-primary">{t('nav.scroll', 'The Scroll')}</a>
-              <a href="/forum" className="hover:text-text-primary">{t('nav.agora', 'Agora')}</a>
+              <a href="/agora" className="hover:text-text-primary">{t('nav.agora', 'Agora')}</a>
               <a href="/about" className="hover:text-text-primary">{t('nav.about', 'About')}</a>
             </div>
           </div>
@@ -33,6 +34,10 @@ export default function Footer() {
               {t('footer.vision_text', 'Begin with four living gateways. Grow into a larger constellation of traditions, agents, correspondences, archives, and human–AI dialogue.')}
             </p>
           </div>
+        </div>
+
+        <div className="mt-10">
+          <EmailCapture variant="full" />
         </div>
 
         <div className="mt-10 border-t border-white/8 pt-6 text-sm text-text-secondary">
