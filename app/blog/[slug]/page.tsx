@@ -119,8 +119,45 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const heroImage = frontmatter.hero as string | undefined;
     const inlineImages = (frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [];
 
+    // Look up post and meta for JSON-LD
+    const post = posts.find((p) => p.slug === slug);
+    const meta = essayMeta[slug];
+    const jsonLd = post && meta ? {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: post.title,
+      description: meta.description,
+      datePublished: post.publishedAt,
+      dateModified: post.publishedAt,
+      author: {
+        '@type': 'Organization',
+        name: 'Hakan Hisim + PRIME',
+        url: 'https://www.vaultofarcana.com/about',
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Vault of Arcana',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://www.vaultofarcana.com/logo.svg',
+        },
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': `https://www.vaultofarcana.com/blog/${slug}`,
+      },
+      articleSection: post.tradition,
+      keywords: meta.keywords.join(', '),
+    } : null;
+
     return (
       <article className="min-h-screen bg-[#0A0A0F]">
+        {jsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        )}
         <header className="relative py-32 px-6 border-b border-white/5 bg-gradient-to-b from-[#12121A] to-[#0A0A0F]">
           <div className="max-w-4xl mx-auto text-center">
             <span className="inline-block px-4 py-1 rounded-full bg-[#7B5EA7]/20 text-[#C9A84C] text-[10px] uppercase font-bold tracking-[0.3em] mb-8 border border-[#7B5EA7]/30">
