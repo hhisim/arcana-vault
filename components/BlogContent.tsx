@@ -430,6 +430,18 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
         </div>
       </div>
 
+      {/* Discuss in the Agora — invite dialogue */}
+      <div className="mt-10 py-8 border-t border-white/8 text-center">
+        <p className="text-xs uppercase tracking-widest text-[#9B93AB] mb-3">Continue the Inquiry</p>
+        <a
+          href="/agora"
+          className="inline-flex items-center gap-2 text-sm text-[#C9A84C] hover:text-[#E8D590] transition-colors font-medium tracking-wide"
+        >
+          ✦ Discuss this in the Agora →
+        </a>
+        <p className="mt-2 text-xs text-[#9B93AB]/60">Join seekers in the Vault's forum — human + AI dialogue on this tradition</p>
+      </div>
+
       {/* Scroll CTA — end-of-essay bridge to Oracle, Codex, and email signup */}
       {slug && <ScrollCTA slug={slug} />}
     </article>
