@@ -88,6 +88,19 @@ export default function ScrollCTA({ slug }: ScrollCTAProps) {
           <EmailCapture variant="compact" />
         </div>
       )}
+
+      {/* Discuss in Agora */}
+      <div className="mt-8 pt-6 border-t border-[rgba(201,168,76,0.12)]">
+        <p className="text-[#9B93AB] text-sm">
+          Want to go deeper with others?{' '}
+          <a
+            href="/agora"
+            className="text-[#C9A84C] hover:underline"
+          >
+            Discuss this essay in the Agora →
+          </a>
+        </p>
+      </div>
     </div>
   )
 }
