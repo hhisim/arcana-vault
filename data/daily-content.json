@@ -1,1 +1,34 @@
-{}
+{
+  "2026-03-23": {
+    "entries": {
+      "tao": {
+        "title": "The Valley Spirit",
+        "teaser": "Today's contemplation draws from the Tao Te Ching — the inexhaustible source that nourishes all things without striving.",
+        "fullText": "The valley spirit never dies. It is called the mysterious female — the root of heaven and earth. Drawn to its yielding, all things return. Today, practice non-striving: let the river carve the stone not by fighting it, but by being endlessly present. Return to the source.",
+        "tradition": "tao",
+        "generated": "2026-03-23T00:00:00.000Z"
+      },
+      "tarot": {
+        "cardName": "The High Priestess",
+        "teaser": "The veil between known and unknown is thin today. Trust what you sense but cannot yet name.",
+        "fullText": "The High Priestess sits between two pillars — the threshold of the known world and the mystery beyond. She knows that true knowledge lives in the pause, in the breath between questions. Today, sit with what cannot yet be spoken. The answers you seek are already forming in the dark.",
+        "tradition": "tarot",
+        "generated": "2026-03-23T00:00:00.000Z"
+      },
+      "tantra": {
+        "title": "Anahata — The Unstruck Sound",
+        "teaser": "Today's meditation focuses on the heart center — the space where giving and receiving become one breath.",
+        "fullText": "Anahata, the heart chakra, is the seat of the unstruck sound — the sound that arises without any instrument being struck. It is the sound of pure giving. Today, breathe into the chest. Notice where the boundary between offering and receiving dissolves. The heart knows: love is not diminished by giving.",
+        "tradition": "tantra",
+        "generated": "2026-03-23T00:00:00.000Z"
+      },
+      "entheogen": {
+        "title": "The Mirror of the Sacred",
+        "teaser": "Today, let the plant medicine perspective inform not what you see — but how clearly you can bear to look.",
+        "fullText": "Entheogens are mirrors, not windows. They do not show you new things — they show you what was always there with unbearable clarity. Today, reflect on integration: how do you carry what you saw? What has changed, and what must change in you to honor it? The sacred requires accountability.",
+        "tradition": "entheogen",
+        "generated": "2026-03-23T00:00:00.000Z"
+      }
+    }
+  }
+}
