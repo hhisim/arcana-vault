@@ -112,3 +112,158 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-sheen::after, .voa-dots span { animation:none !important; }
 }
+
+/* ── Mode button tooltips (Phase 10) ──────────────────────────────────────── */
+.mode-tooltip-btn {
+  position: relative;
+  cursor: help;
+}
+
+.mode-tooltip-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--tooltip-bg, #1a1025);
+  color: var(--text-muted, #c0c0c0);
+  border: 1px solid rgba(123, 94, 167, 0.4);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  width: 220px;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.mode-tooltip-btn:hover::after,
+.mode-tooltip-btn:focus-visible::after {
+  opacity: 1;
+}
+
+/* Mobile: show on focus */
+@media (max-width: 768px) {
+  .mode-tooltip-btn::after {
+    left: 50%;
+    top: calc(100% + 8px);
+    transform: translateX(-50%);
+    width: 200px;
+  }
+  .mode-tooltip-btn:focus-visible::after {
+    opacity: 1;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CROSS-LINKS — dotted gold underline style
+   ════════════════════════════════════════════════════════════════ */
+
+/* Cross-links: dotted gold underline — distinct from regular links */
+.cross-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--primary-gold, #C9A84C);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+.cross-link:hover {
+  text-decoration-style: solid;
+  text-decoration-color: #00d4ff;
+  color: var(--primary-gold, #C9A84C);
+}
+
+/* Subtle type icons */
+.cross-link-icon {
+  font-size: 0.65em;
+  opacity: 0.5;
+  margin-left: 1px;
+  vertical-align: super;
+  pointer-events: none;
+}
+
+.cross-link:hover .cross-link-icon {
+  opacity: 0.8;
+}
+
+/* ─── Hover Popover ─────────────────────────────────────────────── */
+.cross-link-popover-wrap {
+  position: relative;
+  display: inline;
+}
+
+.cross-link-popover {
+  position: absolute;
+  background: #12101a;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  width: 280px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  font-family: inherit;
+  top: calc(100% + 6px);
+  left: 0;
+}
+
+.cross-link-popover-wrap:hover .cross-link-popover,
+.cross-link-popover:hover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popover-header {
+  font-family: 'Cinzel', serif;
+  color: var(--primary-gold, #C9A84C);
+  font-size: 13px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.popover-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.popover-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px;
+  color: #9B93AB;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-size: 12px;
+}
+
+.popover-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #E8E0F0;
+}
+
+.popover-icon {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  font-size: 11px;
+}
+
+.popover-text {
+  flex: 1;
+  line-height: 1.3;
+}

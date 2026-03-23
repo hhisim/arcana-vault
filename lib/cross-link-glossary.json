@@ -1,0 +1,1230 @@
+{
+  "the-fool": {
+    "label": "The Fool",
+    "codex": "/correspondence-engine?node=the-fool",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Fool+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-fool",
+      "the-fool card"
+    ]
+  },
+  "the-magician": {
+    "label": "The Magician",
+    "codex": "/correspondence-engine?node=the-magician",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Magician+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-magician",
+      "the-magician card"
+    ]
+  },
+  "the-high-priestess": {
+    "label": "The High Priestess",
+    "codex": "/correspondence-engine?node=the-high-priestess",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+High+Priestess+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-high-priestess",
+      "the-high-priestess card"
+    ]
+  },
+  "the-empress": {
+    "label": "The Empress",
+    "codex": "/correspondence-engine?node=the-empress",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Empress+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-empress",
+      "the-empress card"
+    ]
+  },
+  "the-emperor": {
+    "label": "The Emperor",
+    "codex": "/correspondence-engine?node=the-emperor",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Emperor+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-emperor",
+      "the-emperor card"
+    ]
+  },
+  "the-hierophant": {
+    "label": "The Hierophant",
+    "codex": "/correspondence-engine?node=the-hierophant",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Hierophant+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-hierophant",
+      "the-hierophant card"
+    ]
+  },
+  "the-lovers": {
+    "label": "The Lovers",
+    "codex": "/correspondence-engine?node=the-lovers",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Lovers+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-lovers",
+      "the-lovers card"
+    ]
+  },
+  "the-chariot": {
+    "label": "The Chariot",
+    "codex": "/correspondence-engine?node=the-chariot",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Chariot+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-chariot",
+      "the-chariot card"
+    ]
+  },
+  "strength": {
+    "label": "Strength",
+    "codex": "/correspondence-engine?node=strength",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+Strength+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "strength",
+      "strength card"
+    ]
+  },
+  "the-hermit": {
+    "label": "The Hermit",
+    "codex": "/correspondence-engine?node=the-hermit",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Hermit+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-hermit",
+      "the-hermit card"
+    ]
+  },
+  "wheel-of-fortune": {
+    "label": "Wheel Of Fortune",
+    "codex": "/correspondence-engine?node=wheel-of-fortune",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+Wheel+Of+Fortune+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "wheel-of-fortune",
+      "wheel-of-fortune card"
+    ]
+  },
+  "justice": {
+    "label": "Justice",
+    "codex": "/correspondence-engine?node=justice",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+Justice+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "justice",
+      "justice card"
+    ]
+  },
+  "the-hanged-man": {
+    "label": "The Hanged Man",
+    "codex": "/correspondence-engine?node=the-hanged-man",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Hanged+Man+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-hanged-man",
+      "the-hanged-man card"
+    ]
+  },
+  "death": {
+    "label": "Death",
+    "codex": "/correspondence-engine?node=death",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+Death+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "death",
+      "death card"
+    ]
+  },
+  "temperance": {
+    "label": "Temperance",
+    "codex": "/correspondence-engine?node=temperance",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+Temperance+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "temperance",
+      "temperance card"
+    ]
+  },
+  "the-tower": {
+    "label": "The Tower",
+    "codex": "/correspondence-engine?node=the-tower",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Tower+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-tower",
+      "the-tower card"
+    ]
+  },
+  "the-star": {
+    "label": "The Star",
+    "codex": "/correspondence-engine?node=the-star",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Star+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-star",
+      "the-star card"
+    ]
+  },
+  "the-moon": {
+    "label": "The Moon",
+    "codex": "/correspondence-engine?node=the-moon",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Moon+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-moon",
+      "the-moon card"
+    ]
+  },
+  "the-sun": {
+    "label": "The Sun",
+    "codex": "/correspondence-engine?node=the-sun",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+Sun+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-sun",
+      "the-sun card"
+    ]
+  },
+  "judgment": {
+    "label": "Judgment",
+    "codex": "/correspondence-engine?node=judgment",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+Judgment+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "judgment",
+      "judgment card"
+    ]
+  },
+  "the-world": {
+    "label": "The World",
+    "codex": "/correspondence-engine?node=the-world",
+    "oracle": "/chat?tradition=tarot&prompt=Interpret+The+World+for+me",
+    "scroll": [
+      {
+        "slug": "tarot-symbolic-machine-for-fate",
+        "title": "The Tarot: A Symbolic Machine for Mapping the Architecture of Fate"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tarot"
+    ],
+    "aliases": [
+      "the-world",
+      "the-world card"
+    ]
+  },
+  "sun": {
+    "label": "Sun",
+    "codex": "/correspondence-engine?node=sun",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Sun+in+esoteric+tradition",
+    "scroll": [],
+    "library": [],
+    "traditions": [
+      "tarot",
+      "hermetics"
+    ],
+    "aliases": [
+      "sun"
+    ]
+  },
+  "moon": {
+    "label": "Moon",
+    "codex": "/correspondence-engine?node=moon",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Moon+in+esoteric+tradition",
+    "scroll": [],
+    "library": [],
+    "traditions": [
+      "tarot",
+      "hermetics"
+    ],
+    "aliases": [
+      "moon"
+    ]
+  },
+  "mercury": {
+    "label": "Mercury",
+    "codex": "/correspondence-engine?node=mercury",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Mercury+in+esoteric+tradition",
+    "scroll": [],
+    "library": [],
+    "traditions": [
+      "tarot",
+      "hermetics"
+    ],
+    "aliases": [
+      "mercury"
+    ]
+  },
+  "venus": {
+    "label": "Venus",
+    "codex": "/correspondence-engine?node=venus",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Venus+in+esoteric+tradition",
+    "scroll": [],
+    "library": [],
+    "traditions": [
+      "tarot",
+      "hermetics"
+    ],
+    "aliases": [
+      "venus"
+    ]
+  },
+  "mars": {
+    "label": "Mars",
+    "codex": "/correspondence-engine?node=mars",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Mars+in+esoteric+tradition",
+    "scroll": [],
+    "library": [],
+    "traditions": [
+      "tarot",
+      "hermetics"
+    ],
+    "aliases": [
+      "mars"
+    ]
+  },
+  "jupiter": {
+    "label": "Jupiter",
+    "codex": "/correspondence-engine?node=jupiter",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Jupiter+in+esoteric+tradition",
+    "scroll": [],
+    "library": [],
+    "traditions": [
+      "tarot",
+      "hermetics"
+    ],
+    "aliases": [
+      "jupiter"
+    ]
+  },
+  "saturn": {
+    "label": "Saturn",
+    "codex": "/correspondence-engine?node=saturn",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Saturn+in+esoteric+tradition",
+    "scroll": [],
+    "library": [],
+    "traditions": [
+      "tarot",
+      "hermetics"
+    ],
+    "aliases": [
+      "saturn"
+    ]
+  },
+  "chakras": {
+    "label": "Chakras",
+    "codex": "/correspondence-engine?node=chakras",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Chakras",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "chakras",
+      "chakra",
+      "subtle body",
+      "energy centers"
+    ]
+  },
+  "root-chakra": {
+    "label": "Root Chakra",
+    "codex": "/correspondence-engine?node=root-chakra",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Root+Chakra",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "root chakra",
+      "muladhara",
+      "base chakra",
+      "first chakra"
+    ]
+  },
+  "sacral-chakra": {
+    "label": "Sacral Chakra",
+    "codex": "/correspondence-engine?node=sacral-chakra",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Sacral+Chakra",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "sacral chakra",
+      "svadhisthana",
+      "second chakra"
+    ]
+  },
+  "solar-plexus-chakra": {
+    "label": "Solar Plexus Chakra",
+    "codex": "/correspondence-engine?node=solar-plexus-chakra",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Solar+Plexus+Chakra",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "solar plexus chakra",
+      "manipura",
+      "third chakra"
+    ]
+  },
+  "heart-chakra": {
+    "label": "Heart Chakra",
+    "codex": "/correspondence-engine?node=heart-chakra",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Heart+Chakra",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "heart chakra",
+      "anahata",
+      "fourth chakra"
+    ]
+  },
+  "throat-chakra": {
+    "label": "Throat Chakra",
+    "codex": "/correspondence-engine?node=throat-chakra",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Throat+Chakra",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "throat chakra",
+      "vishuddha",
+      "fifth chakra"
+    ]
+  },
+  "third-eye-chakra": {
+    "label": "Third Eye Chakra",
+    "codex": "/correspondence-engine?node=third-eye-chakra",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Third+Eye+Chakra",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "third eye chakra",
+      "ajna",
+      "sixth chakra",
+      "third eye"
+    ]
+  },
+  "crown-chakra": {
+    "label": "Crown Chakra",
+    "codex": "/correspondence-engine?node=crown-chakra",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+the+Crown+Chakra",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "crown chakra",
+      "sahasrara",
+      "seventh chakra"
+    ]
+  },
+  "tao-te-ching": {
+    "label": "Tao Te Ching",
+    "codex": null,
+    "oracle": "/chat?tradition=tao&prompt=Let+us+explore+the+Tao+Te+Ching",
+    "scroll": [
+      {
+        "slug": "what-tao-te-ching-says-about-uncertainty",
+        "title": "The Uncarved Block: Applying Wu Wei to Modern Decision Fatigue"
+      }
+    ],
+    "library": [
+      {
+        "slug": "tao-te-ching",
+        "title": "Tao Te Ching \u2014 Lao Tzu"
+      }
+    ],
+    "traditions": [
+      "tao"
+    ],
+    "aliases": [
+      "tao te ching",
+      "daodejing",
+      "dao de jing",
+      "lao tzu",
+      "laozi"
+    ]
+  },
+  "i-ching": {
+    "label": "I Ching",
+    "codex": "/correspondence-engine?family=i-ching",
+    "oracle": "/chat?tradition=tao&prompt=Cast+a+hexagram+for+me",
+    "scroll": [
+      {
+        "slug": "i-ching-ancient-oracle-of-change",
+        "title": "The I Ching: Ancient Oracle of Change Through 8 Trigrams and 64 Hexagrams"
+      }
+    ],
+    "library": [
+      {
+        "slug": "i-ching",
+        "title": "I Ching \u2014 The Book of Changes"
+      }
+    ],
+    "traditions": [
+      "tao"
+    ],
+    "aliases": [
+      "i ching",
+      "yijing",
+      "yi jing",
+      "book of changes",
+      "hexagram",
+      "hexagrams"
+    ]
+  },
+  "corpus-hermeticum": {
+    "label": "Corpus Hermeticum",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Corpus+Hermeticum",
+    "scroll": [
+      {
+        "slug": "seven-hermetic-principles-silicon-valley",
+        "title": "As Above, So Below: Why Hermeticism Resonates with Silicon Valley"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "corpus hermeticum",
+      "hermetica"
+    ]
+  },
+  "kybalion": {
+    "label": "The Kybalion",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Kybalion",
+    "scroll": [
+      {
+        "slug": "the-kybalion-7-principles-hermetic-philosophy",
+        "title": "The Kybalion: The 7 Principles of Hermetic Philosophy That Predate Modern Psychology"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "kybalion",
+      "the kybalion"
+    ]
+  },
+  "chuang-tzu": {
+    "label": "Chuang Tzu",
+    "codex": null,
+    "oracle": "/chat?tradition=tao&prompt=Tell+me+about+Chuang+Tzu",
+    "scroll": [],
+    "library": [
+      {
+        "slug": "zhuangzi",
+        "title": "Zhuangzi \u2014 The Inner Chapters"
+      }
+    ],
+    "traditions": [
+      "tao"
+    ],
+    "aliases": [
+      "chuang tzu",
+      "zhuangzi"
+    ]
+  },
+  "kundalini": {
+    "label": "Kundalini",
+    "codex": "/correspondence-engine?family=chakras",
+    "oracle": "/chat?tradition=tantra&prompt=Tell+me+about+kundalini",
+    "scroll": [
+      {
+        "slug": "kundalini-shakti-serpent-power-western-science",
+        "title": "Kundalini Shakti: The Serpent Power That Western Science Can't Explain"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tantra"
+    ],
+    "aliases": [
+      "kundalini",
+      "kundalini shakti",
+      "serpent power",
+      "serpent fire",
+      "shakti"
+    ]
+  },
+  "wu-wei": {
+    "label": "Wu Wei",
+    "codex": "/correspondence-engine?node=wu-wei",
+    "oracle": "/chat?tradition=tao&prompt=Tell+me+about+wu+wei",
+    "scroll": [
+      {
+        "slug": "what-tao-te-ching-says-about-uncertainty",
+        "title": "The Uncarved Block: Applying Wu Wei to Modern Decision Fatigue"
+      },
+      {
+        "slug": "sexual-alchemy-taoist-tradition-nei-dan",
+        "title": "Sexual Alchemy in Taoist Tradition: A Guide to Nei Dan"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tao"
+    ],
+    "aliases": [
+      "wu wei",
+      "wu-wei",
+      "non-action",
+      "nonaction"
+    ]
+  },
+  "tao": {
+    "label": "Tao",
+    "codex": "/correspondence-engine?node=tao",
+    "oracle": "/chat?tradition=tao&prompt=Tell+me+about+the+Tao",
+    "scroll": [
+      {
+        "slug": "what-tao-te-ching-says-about-uncertainty",
+        "title": "The Uncarved Block: Applying Wu Wei to Modern Decision Fatigue"
+      },
+      {
+        "slug": "taoism-quantum-physics-real-parallels",
+        "title": "Taoism and Quantum Physics: The Real Parallels"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tao"
+    ],
+    "aliases": [
+      "tao",
+      "dao",
+      "the way"
+    ]
+  },
+  "nigredo": {
+    "label": "Nigredo",
+    "codex": "/correspondence-engine?node=nigredo",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+nigredo+in+alchemy",
+    "scroll": [
+      {
+        "slug": "alchemy-of-soul-magnum-opus",
+        "title": "The Alchemy of the Soul: The Twelve Stages of the Great Work (Magnum Opus)"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "nigredo",
+      "blackening"
+    ]
+  },
+  "albedo": {
+    "label": "Albedo",
+    "codex": "/correspondence-engine?node=albedo",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+albedo+in+alchemy",
+    "scroll": [
+      {
+        "slug": "alchemy-of-soul-magnum-opus",
+        "title": "The Alchemy of the Soul: The Twelve Stages of the Great Work (Magnum Opus)"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "albedo",
+      "whitening"
+    ]
+  },
+  "rubedo": {
+    "label": "Rubedo",
+    "codex": "/correspondence-engine?node=rubedo",
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+rubedo+in+alchemy",
+    "scroll": [
+      {
+        "slug": "alchemy-of-soul-magnum-opus",
+        "title": "The Alchemy of the Soul: The Twelve Stages of the Great Work (Magnum Opus)"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "rubedo",
+      "reddening"
+    ]
+  },
+  "magnum-opus": {
+    "label": "Magnum Opus",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+the+Magnum+Opus",
+    "scroll": [
+      {
+        "slug": "alchemy-of-soul-magnum-opus",
+        "title": "The Alchemy of the Soul: The Twelve Stages of the Great Work (Magnum Opus)"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "magnum opus",
+      "great work",
+      "the great work",
+      "solve et coagula"
+    ]
+  },
+  "hermetic-principles": {
+    "label": "Hermetic Principles",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Explain+the+seven+Hermetic+Principles",
+    "scroll": [
+      {
+        "slug": "the-kybalion-7-principles-hermetic-philosophy",
+        "title": "The Kybalion: The 7 Principles of Hermetic Philosophy That Predate Modern Psychology"
+      },
+      {
+        "slug": "seven-hermetic-principles-silicon-valley",
+        "title": "As Above, So Below: Why Hermeticism Resonates with Silicon Valley"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "hermetic principles",
+      "seven hermetic principles",
+      "mentalism",
+      "correspondence",
+      "vibration",
+      "polarity",
+      "as above so below"
+    ]
+  },
+  "gnosis": {
+    "label": "Gnosis",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+gnosis",
+    "scroll": [
+      {
+        "slug": "gnosticism-archive-of-light-architecture-divine-spark",
+        "title": "Gnosticism: The Archive of Light and the Architecture of the Divine Spark"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics",
+      "gnosticism"
+    ],
+    "aliases": [
+      "gnosis",
+      "direct knowledge"
+    ]
+  },
+  "dhikr": {
+    "label": "Dhikr",
+    "codex": null,
+    "oracle": "/chat?tradition=sufi&prompt=Tell+me+about+dhikr",
+    "scroll": [
+      {
+        "slug": "sufism-the-path-of-divine-love",
+        "title": "Sufism: The Mystical Path of Divine Love and the Alchemy of the Soul"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "sufi"
+    ],
+    "aliases": [
+      "dhikr",
+      "zekr",
+      "remembrance of god"
+    ]
+  },
+  "sigil": {
+    "label": "Sigil",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+sigil+magick",
+    "scroll": [
+      {
+        "slug": "chaos-magick-not-what-you-think",
+        "title": "Chaos Magick: Belief as a Recursive Technology"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "chaos-magick"
+    ],
+    "aliases": [
+      "sigil",
+      "sigil magick",
+      "sigil magic",
+      "sigils"
+    ]
+  },
+  "hermes-trismegistus": {
+    "label": "Hermes Trismegistus",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+Hermes+Trismegistus",
+    "scroll": [
+      {
+        "slug": "seven-hermetic-principles-silicon-valley",
+        "title": "As Above, So Below: Why Hermeticism Resonates with Silicon Valley"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "hermes trismegistus",
+      "trismegistus"
+    ]
+  },
+  "rumi": {
+    "label": "Rumi",
+    "codex": null,
+    "oracle": "/chat?tradition=sufi&prompt=Tell+me+about+Rumi",
+    "scroll": [
+      {
+        "slug": "sufism-the-path-of-divine-love",
+        "title": "Sufism: The Mystical Path of Divine Love and the Alchemy of the Soul"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "sufi"
+    ],
+    "aliases": [
+      "rumi",
+      "jalal ad-din rumi",
+      "maulana rumi"
+    ]
+  },
+  "ibn-arabi": {
+    "label": "Ibn Arabi",
+    "codex": null,
+    "oracle": "/chat?tradition=sufi&prompt=Tell+me+about+Ibn+Arabi",
+    "scroll": [
+      {
+        "slug": "sufism-the-path-of-divine-love",
+        "title": "Sufism: The Mystical Path of Divine Love and the Alchemy of the Soul"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "sufi"
+    ],
+    "aliases": [
+      "ibn arabi",
+      "ibn e arabi"
+    ]
+  },
+  "enochian": {
+    "label": "Enochian",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+Enochian",
+    "scroll": [
+      {
+        "slug": "enochian-angelic-language-modern-occultism",
+        "title": "Enochian: The Angelic Language That Created Modern Occultism"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "hermetics"
+    ],
+    "aliases": [
+      "enochian",
+      "enochian language"
+    ]
+  },
+  "sufism": {
+    "label": "Sufism",
+    "codex": null,
+    "oracle": "/chat?tradition=sufi&prompt=Tell+me+about+Sufism",
+    "scroll": [
+      {
+        "slug": "sufism-the-path-of-divine-love",
+        "title": "Sufism: The Mystical Path of Divine Love and the Alchemy of the Soul"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "sufi"
+    ],
+    "aliases": [
+      "sufism",
+      "sufi",
+      "sufi mysticism"
+    ]
+  },
+  "chaos-magick": {
+    "label": "Chaos Magick",
+    "codex": null,
+    "oracle": "/chat?tradition=tarot&prompt=Tell+me+about+Chaos+Magick",
+    "scroll": [
+      {
+        "slug": "chaos-magick-not-what-you-think",
+        "title": "Chaos Magick: Belief as a Recursive Technology"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "chaos-magick"
+    ],
+    "aliases": [
+      "chaos magick",
+      "chaos magic",
+      "chaos-magick"
+    ]
+  },
+  "entheogens": {
+    "label": "Entheogens",
+    "codex": null,
+    "oracle": "/chat?tradition=entheogens&prompt=Tell+me+about+entheogens",
+    "scroll": [
+      {
+        "slug": "dmt-hyperbolic-mind",
+        "title": "DMT and the Hyperbolic Mind: A Treatise on the Geometry of Hyperspace and Altered States"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "entheogens"
+    ],
+    "aliases": [
+      "entheogens",
+      "entheogen",
+      "psychedelics"
+    ]
+  },
+  "dmt": {
+    "label": "DMT",
+    "codex": null,
+    "oracle": "/chat?tradition=entheogens&prompt=Tell+me+about+DMT",
+    "scroll": [
+      {
+        "slug": "dmt-hyperbolic-mind",
+        "title": "DMT and the Hyperbolic Mind: A Treatise on the Geometry of Hyperspace and Altered States"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "entheogens"
+    ],
+    "aliases": [
+      "dmt",
+      "dimethyltryptamine"
+    ]
+  },
+  "lucid-dreaming": {
+    "label": "Lucid Dreaming",
+    "codex": null,
+    "oracle": "/chat?tradition=dreamwalker&prompt=Tell+me+about+lucid+dreaming",
+    "scroll": [
+      {
+        "slug": "dreamwalker-lucid-dreaming-astral-projection",
+        "title": "The Dreamwalker's Protocol: Navigating Lucid Dreaming and Astral Projection"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "dreamwalker"
+    ],
+    "aliases": [
+      "lucid dreaming",
+      "lucid dream",
+      "lucid dreams"
+    ]
+  },
+  "astral-projection": {
+    "label": "Astral Projection",
+    "codex": null,
+    "oracle": "/chat?tradition=dreamwalker&prompt=Tell+me+about+astral+projection",
+    "scroll": [
+      {
+        "slug": "dreamwalker-lucid-dreaming-astral-projection",
+        "title": "The Dreamwalker's Protocol: Navigating Lucid Dreaming and Astral Projection"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "dreamwalker"
+    ],
+    "aliases": [
+      "astral projection",
+      "out of body",
+      "out-of-body",
+      "obe",
+      "astral travel"
+    ]
+  },
+  "nei-dan": {
+    "label": "Nei Dan",
+    "codex": null,
+    "oracle": "/chat?tradition=tao&prompt=Tell+me+about+Nei+Dan",
+    "scroll": [
+      {
+        "slug": "sexual-alchemy-taoist-tradition-nei-dan",
+        "title": "Sexual Alchemy in Taoist Tradition: A Guide to Nei Dan"
+      }
+    ],
+    "library": [],
+    "traditions": [
+      "tao"
+    ],
+    "aliases": [
+      "nei dan",
+      "nei-dan",
+      "inner alchemy"
+    ]
+  }
+}

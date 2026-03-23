@@ -486,6 +486,13 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
                   <div className={styles.detailTitle}>{currentDetail.name}</div>
                   <div className={styles.detailSubtitle}>{currentDetail.subtitle || currentDetail.kind}</div>
                 </div>
+                {/* Ask the Oracle — cross-link from Codex entry */}
+                <a
+                  href={`/chat?tradition=tarot&prompt=Tell+me+about+${encodeURIComponent(currentDetail.name)}`}
+                  className={styles.oracleCta}
+                >
+                  ✦ Ask the Oracle
+                </a>
               </div>
 
               {/* Flow Block */}

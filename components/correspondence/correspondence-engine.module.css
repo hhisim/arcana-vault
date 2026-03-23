@@ -875,3 +875,27 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ─── Ask the Oracle CTA on Codex entry ─── */
+.oracleCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: #C9A84C;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.oracleCta:hover {
+  background: rgba(201, 168, 76, 0.22);
+  border-color: rgba(201, 168, 76, 0.55);
+  color: #E8D590;
+}

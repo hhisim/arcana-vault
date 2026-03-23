@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { posts } from '@/lib/posts'
 import ScrollCTA from '@/components/ScrollCTA'
+import { injectCrossLinks, glossary } from '@/lib/cross-link-injector'
 
 type FmI18n = {
   tr?: { title?: string; excerpt?: string }
@@ -137,7 +138,13 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
     : body
 
   // Inject images at their correct positions in the body
-  const rawBody = useMemo(() => injectImages(langBody, images), [langBody, images])
+  const imageProcessedBody = useMemo(() => injectImages(langBody, images), [langBody, images])
+
+  // Inject cross-links for glossary terms (dotted gold underline)
+  const rawBody = useMemo(
+    () => injectCrossLinks(imageProcessedBody, glossary, slug, 10),
+    [imageProcessedBody, slug]
+  )
 
   const title = (lang === 'tr' && fmI18n?.tr?.title)
     ? fmI18n.tr.title
