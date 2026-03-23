@@ -21,6 +21,7 @@ export default function Footer() {
             <h3 className="text-sm uppercase tracking-[0.2em] text-text-primary">{t('footer.explore', 'Explore')}</h3>
             <div className="mt-4 flex flex-col gap-3 text-text-secondary">
               <a href="/chat" className="hover:text-text-primary">{t('nav.chat', 'Portal')}</a>
+              <a href="/daily" className="hover:text-text-primary">Daily Practice</a>
               <a href="/library" className="hover:text-text-primary">{t('nav.library', 'Library')}</a>
               <a href="/blog" className="hover:text-text-primary">{t('nav.scroll', 'The Scroll')}</a>
               <a href="/agora" className="hover:text-text-primary">{t('nav.agora', 'Agora')}</a>

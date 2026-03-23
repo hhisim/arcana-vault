@@ -36,6 +36,12 @@ const features: FeatureRow[] = [
     vault: 'Deep tradition-specific pathways',
   },
   {
+    label: 'Correspondence system',
+    generic: 'None',
+    basic: 'None',
+    vault: '577 nodes, 12 dimensions',
+  },
+  {
     label: 'Privacy',
     generic: 'Your data trained on',
     basic: 'Unknown',

@@ -4,7 +4,9 @@ import Link from 'next/link'
 import GlitchCycleText from './components/GlitchCycleText'
 import { useSiteI18n } from '@/lib/site-i18n'
 import DemoOracle from '@/components/home/DemoOracle'
+import DailyPractice from '@/components/DailyPractice'
 import ComparisonBlock from '@/components/home/ComparisonBlock'
+import CodexShowcase from '@/components/CodexShowcase'
 import BookPreview from '@/components/library/BookPreview'
 
 type Lang = 'en' | 'tr' | 'ru'
@@ -148,6 +150,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <CodexShowcase />
+
       <ComparisonBlock />
 
       <section id="gateways" className="border-b border-white/5 bg-deep">
@@ -165,6 +170,26 @@ export default function HomePage() {
                 <div className="mt-6 inline-flex rounded-full border border-purple/30 bg-purple/10 px-3 py-1 text-xs tracking-wide text-text-primary">{item.badge[L] ?? item.badge.en}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TODAY IN THE VAULT */}
+      <section className="border-b border-white/5 bg-deep">
+        <div className="mx-auto max-w-7xl px-6 py-20 md:px-8">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-xs uppercase tracking-[0.45em] text-gold">Daily Practice</p>
+            <h2 className="font-serif text-4xl text-text-primary md:text-5xl">Today in the Vault</h2>
+            <div className="mx-auto mt-4 h-px w-16 bg-gold/40"></div>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-text-secondary">
+              Return each day. The Vault offers a fresh threshold.
+            </p>
+          </div>
+          <DailyPractice />
+          <div className="mt-10 text-center">
+            <Link href="/daily" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-text-primary transition hover:bg-white/10">
+              Explore all daily practices →
+            </Link>
           </div>
         </div>
       </section>
