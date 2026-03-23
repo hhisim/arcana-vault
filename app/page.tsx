@@ -312,28 +312,82 @@ export default function HomePage() {
 
       <BookPreview />
 
-      {/* TESTIMONIALS */}
+      {/* WHAT SEEKERS BRING TO THE VAULT */}
       <section className="border-b border-white/5 bg-[#0a0a10]">
-        <div className="mx-auto max-w-5xl px-6 py-20 md:px-8">
-          <div className="mb-12 text-center">
-            <h2 className="font-serif text-3xl text-text-primary md:text-5xl">What Seekers Say</h2>
-            <p className="mt-3 text-text-secondary">Voices from the threshold.</p>
+        <div className="mx-auto max-w-6xl px-6 py-20 md:px-8">
+          <div className="mb-14 text-center">
+            <h2 className="font-serif text-3xl text-text-primary md:text-5xl">What Seekers Bring to the Vault</h2>
+            <p className="mt-4 text-lg text-text-secondary max-w-2xl mx-auto">
+              Not a search engine. A conversation partner shaped by 30+ years of curated archives and real lineage context.
+            </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
-              <p className="text-lg leading-8 text-text-secondary italic">"Finally an AI that doesn't strip the soul out of esoteric work."</p>
-              <p className="mt-5 text-sm font-medium text-gold">Sarah M., Portland</p>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {/* Daily Practice */}
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8 flex flex-col gap-4 hover:border-[#C9A84C]/25 transition-all duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#C9A84C]/30 bg-[#C9A84C]/10">
+                <svg className="w-6 h-6 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                </svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary">Daily Practice</h3>
+              <p className="text-sm leading-7 text-text-secondary">A morning tarot pull, a Tao meditation prompt, or a kundalini contemplation to anchor the day.</p>
             </div>
-            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
-              <p className="text-lg leading-8 text-text-secondary italic">"The symbolic depth is unlike anything else online."</p>
-              <p className="mt-5 text-sm font-medium text-gold">David K., Berlin</p>
+
+            {/* Deep Textual Study */}
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8 flex flex-col gap-4 hover:border-[#7B5EA7]/25 transition-all duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#7B5EA7]/30 bg-[#7B5EA7]/10">
+                <svg className="w-6 h-6 text-[#7B5EA7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary">Deep Textual Study</h3>
+              <p className="text-sm leading-7 text-text-secondary">Research across rare esoteric texts — the Kybalion, Corpus Hermeticum, Tao Te Ching — with an intelligence that knows the source material.</p>
             </div>
-            <div className="rounded-3xl border border-white/8 bg-card/70 p-8">
-              <p className="text-lg leading-8 text-text-secondary italic">"Asked about Kundalini and got context, not nonsense."</p>
-              <p className="mt-5 text-sm font-medium text-gold">Priya R., Mumbai</p>
+
+            {/* Shadow Work */}
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8 flex flex-col gap-4 hover:border-[#9B93AB]/25 transition-all duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#9B93AB]/30 bg-[#9B93AB]/10">
+                <svg className="w-6 h-6 text-[#9B93AB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary">Shadow Work & Inner Inquiry</h3>
+              <p className="text-sm leading-7 text-text-secondary">Bring a personal question, a recurring pattern, or a dream — and let the Oracle reflect it through symbolic and psychological depth.</p>
+            </div>
+
+            {/* Cross-Tradition Research */}
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8 flex flex-col gap-4 hover:border-[#4ECDC4]/25 transition-all duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#4ECDC4]/30 bg-[#4ECDC4]/10">
+                <svg className="w-6 h-6 text-[#4ECDC4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                </svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary">Cross-Tradition Research</h3>
+              <p className="text-sm leading-7 text-text-secondary">Use the Correspondence Codex to map connections between planets, chakras, frequencies, Kabbalah, I-Ching, and 12+ symbolic dimensions.</p>
+            </div>
+
+            {/* Entheogenic Integration */}
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8 flex flex-col gap-4 hover:border-[#2D5A4A]/25 transition-all duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#2D5A4A]/30 bg-[#2D5A4A]/10">
+                <svg className="w-6 h-6 text-[#2D5A4A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+                </svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary">Entheogenic Integration</h3>
+              <p className="text-sm leading-7 text-text-secondary">Process and contextualize visionary experiences with a guide trained on psychonautic literature, not generic wellness advice.</p>
+            </div>
+
+            {/* Living Dialogue */}
+            <div className="rounded-3xl border border-white/8 bg-card/70 p-8 flex flex-col gap-4 hover:border-[#E8722A]/25 transition-all duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#E8722A]/30 bg-[#E8722A]/10">
+                <svg className="w-6 h-6 text-[#E8722A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+                </svg>
+              </div>
+              <h3 className="font-serif text-xl text-text-primary">Living Dialogue</h3>
+              <p className="text-sm leading-7 text-text-secondary">Not a search engine. A conversation partner shaped by 30+ years of curated archives and real lineage context.</p>
             </div>
           </div>
-          <p className="mt-8 text-center text-xs italic text-text-secondary">Sample testimonials — real ones coming soon</p>
         </div>
       </section>
 

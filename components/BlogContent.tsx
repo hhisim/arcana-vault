@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { posts } from '@/lib/posts'
+import ScrollCTA from '@/components/ScrollCTA'
 
 type FmI18n = {
   tr?: { title?: string; excerpt?: string }
@@ -20,6 +21,7 @@ type InlineImage = {
 type BlogContentProps = {
   body: string
   tradition: string
+  slug: string
   translations?: { tr?: string; ru?: string }
   fmI18n?: FmI18n
   defaultTitle?: string
@@ -124,7 +126,7 @@ function injectImages(body: string, images: InlineImage[] = []): string {
   return resultParts.join('')
 }
 
-export default function BlogContent({ body, translations, fmI18n, defaultTitle = '', images = [] }: BlogContentProps) {
+export default function BlogContent({ body, translations, fmI18n, defaultTitle = '', images = [], slug = '' }: BlogContentProps) {
   const { lang } = useSiteI18n()
   const { titleToSlug } = useMemo(() => buildSlugMap(), [])
 
@@ -427,6 +429,9 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
           ))}
         </div>
       </div>
+
+      {/* Scroll CTA — end-of-essay bridge to Oracle, Codex, and email signup */}
+      {slug && <ScrollCTA slug={slug} />}
     </article>
   )
 }
