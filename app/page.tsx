@@ -164,11 +164,19 @@ export default function HomePage() {
           </div>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {gateways.map(item => (
-              <div key={item.key} className="glass-card rounded-3xl border border-white/8 bg-card/80 p-6">
+              <div key={item.key} className="glass-card rounded-3xl border border-white/8 bg-card/80 p-6 flex flex-col">
                 <p className="text-xs uppercase tracking-[0.35em] text-gold">{item.title}</p>
                 <h3 className="mt-4 font-serif text-2xl text-text-primary">{item.subtitle[L] ?? item.subtitle.en}</h3>
                 <p className="mt-4 text-sm leading-7 text-text-secondary">{item.desc[L] ?? item.desc.en}</p>
                 <div className="mt-6 inline-flex rounded-full border border-purple/30 bg-purple/10 px-3 py-1 text-xs tracking-wide text-text-primary">{item.badge[L] ?? item.badge.en}</div>
+                <div className="mt-auto pt-5">
+                  <Link
+                    href={`/traditions/${item.key}`}
+                    className="text-xs text-[#9B93AB] hover:text-[#C9A84C] transition-colors"
+                  >
+                    Learn more about {item.title.toLowerCase()} →
+                  </Link>
+                </div>
               </div>
             ))}
           </div>

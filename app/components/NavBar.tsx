@@ -28,8 +28,10 @@ export default function NavBar() {
   const navLinks = [
     { href: '/', label: t(SITEDICT.nav.home) },
     { href: '/chat', label: t(SITEDICT.nav.chat) },
+    { href: '/journal', label: t(SITEDICT.nav.journal) },
     { href: '/daily', label: 'Daily' },
     { href: '/library', label: t(SITEDICT.nav.library) },
+    { href: '/traditions', label: 'Traditions' },
     { href: '/correspondence-engine', label: t(SITEDICT.nav.codex) },
     { href: '/agora', label: t(SITEDICT.nav.agora) },
     { href: '/blog', label: t(SITEDICT.nav.scroll) },
