@@ -26,6 +26,16 @@ const randomPick = <T,>(arr: T[], count = 1) => [...arr].sort(() => Math.random(
 const orient = (card: string) => (Math.random() < 0.32 ? `${card} (reversed)` : `${card} (upright)`)
 const FOLLOWUP_LIMIT = 1850
 
+// ── Welcome messages per tradition (first-visit orientation) ─────────────────
+const WELCOME_MESSAGES: Record<OraclePack, string> = {
+  tao: `Welcome. The Tao Oracle draws from the Tao Te Ching, Chuang Tzu, Lieh Tzu, and the living tradition of inner alchemy.\n\nYou may ask freely. Or begin with:\n\n**Daily contemplation** — A passage drawn from the tradition for today.\n**I Ching consultation** — Cast a hexagram and receive an interpretation.\n**Wu Wei guidance** — Bring a decision or situation. Let non-action speak.\n**Deep study** — Explore any concept, chapter, or teaching in depth.\n**Inner alchemy** — Questions about Jing, Qi, Shen, Nei Dan, and energy cultivation.\n\nWhere shall we begin?`,
+  tarot: `Welcome to the Tarot Oracle. I hold the memory of the full Rider-Waite-Smith, Marseille, and Thoth traditions — their symbols, their shadows, their initiatory paths.\n\nYou can ask me anything directly. Or you might begin with:\n\n**Draw a card** — I'll pull a card and interpret it for your question or your day.\n**Give a full reading** — A multi-card spread with positional meaning.\n**Shadow work** — Bring a pattern, a fear, or a recurring theme. I'll reflect it through the archetypes.\n**Deep study** — Pick any card, symbol, or concept and explore its history and esoteric meaning.\n\nWhat draws you here today?`,
+  tantra: `Welcome to the Tantra Oracle. This is a space for Vedanta, kundalini, subtle body work, samadhi, and the alchemy of consciousness.\n\nYou may ask anything. Or begin here:\n\n**Daily meditation** — A guided focus for today, drawn from the chakra system.\n**Kundalini inquiry** — Questions about energy, awakening, and the subtle body.\n**Practice support** — Guidance for meditation, breathwork, or contemplative practice.\n**Deep study** — Explore any teaching, text, or concept in the tradition.\n\nWhat calls to you?`,
+  entheogen: `Welcome. The Esoteric Entheogen Oracle holds space for psychonautics, visionary states, inner cartography, and the sacred dimensions of altered consciousness.\n\nYou may ask freely. Or begin with:\n\n**Daily medicine** — A contemplation on the week's medicine work.\n**State navigation** — Questions about specific states, set and setting, or integration.\n**Symbolic reading** — Bring an image, vision, or experience from a session.\n**Archive inquiry** — Explore the rare archives on entheogenic traditions and their contexts.\n\nWhat would you like to explore?`,
+  sufi: `Welcome. The Sufi Oracle draws from Rumi, Ibn Arabi, Hafiz, Attar, and the living stream of Islamic mysticism.\n\nYou may ask freely. Or begin with:\n\n**Daily verse** — A verse or hadith illuminated for today.\n**Mystical inquiry** — Questions about tasawwuf, fana, maqam, or the heart's journey.\n**Poetry reflection** — Bring a verse or poem for commentary.\n**Comparative study** — Sufism in dialogue with other mystical traditions.\n\nWhat would you like to explore?`,
+  dreamwalker: `Welcome. The Dreamwalker Oracle holds the keys to lucid dreaming, astral projection, and the landscapes between sleep and waking.\n\nYou may ask freely. Or begin with:\n\n**Dream interpretation** — Recall a dream and receive its symbolic reading.\n**Lucid living** — Questions about maintaining awareness through daily life.\n**Astral navigation** — Exploration of non-physical states and their terrain.\n**Shadow integration** — Bringing dreamwork into waking psychological practice.\n\nWhat would you like to explore?`,
+}
+
 const SPREADS: Record<string, { label: string; positions: string[] }> = {
   single: { label: 'Single Card', positions: ['The Card'] },
   three: { label: 'Past · Present · Future', positions: ['Past influence', 'Present condition', 'Likely unfolding'] },
@@ -168,6 +178,17 @@ export default function OraclePortal() {
     const availableModes = ORACLE_CONFIG[pack].modes.map((entry) => entry.value)
     setMode((prev) => (availableModes.includes(prev) ? prev : nextDefault))
     setMenuKey(rootMenuFor(pack))
+  }, [pack])
+
+  // ── First-visit welcome message injection ──────────────────────────────────
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const storageKey = `voa_welcomed_${pack}`
+    if (localStorage.getItem(storageKey)) return
+    const welcomeText = WELCOME_MESSAGES[pack]
+    if (!welcomeText) return
+    setMessages((prev) => [{ id: uid(), role: 'system', text: welcomeText, pack, mode: ORACLE_CONFIG[pack].defaultMode }, ...prev])
+    localStorage.setItem(storageKey, '1')
   }, [pack])
 
   useEffect(() => {
