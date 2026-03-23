@@ -46,25 +46,25 @@ export default function GlitchCycleText({
 
   return (
     <>
-      <Tag className={`voa-glitch ${glitching ? 'is-glitching' : ''} ${className}`} aria-live="polite">
-        <span className="voa-glitch__main">{text}</span>
-        <span className="voa-glitch__layer voa-glitch__layer--a" aria-hidden="true">{text}</span>
-        <span className="voa-glitch__layer voa-glitch__layer--b" aria-hidden="true">{text}</span>
+      <Tag
+        className={`voa-glitch ${glitching ? 'is-glitching' : ''} ${className}`}
+        data-text={text}
+        aria-live="polite"
+      >
+        {text}
       </Tag>
 
       <style jsx global>{`
+        /* One DOM node only — decorative layers via CSS pseudo-elements */
         .voa-glitch {
           position: relative;
           display: inline-block;
           line-height: 1.08;
         }
 
-        .voa-glitch__main {
-          position: relative;
-          z-index: 3;
-        }
-
-        .voa-glitch__layer {
+        .voa-glitch::before,
+        .voa-glitch::after {
+          content: attr(data-text);
           position: absolute;
           inset: 0;
           opacity: 0;
@@ -73,47 +73,50 @@ export default function GlitchCycleText({
           user-select: none;
         }
 
-        .voa-glitch.is-glitching .voa-glitch__main {
+        .voa-glitch.is-glitching {
           animation: voa-glitch-main ${glitchMs}ms steps(2, end);
         }
 
-        .voa-glitch.is-glitching .voa-glitch__layer--a {
+        .voa-glitch.is-glitching::before {
           opacity: 0.22;
           color: var(--primary-gold, #C9A84C);
           animation: voa-glitch-a ${glitchMs}ms steps(2, end);
+          z-index: 2;
         }
 
-        .voa-glitch.is-glitching .voa-glitch__layer--b {
+        .voa-glitch.is-glitching::after {
           opacity: 0.18;
           color: #a78bfa;
           animation: voa-glitch-b ${glitchMs}ms steps(2, end);
+          z-index: 1;
         }
 
         @keyframes voa-glitch-main {
-          0% { transform: translate(0, 0); filter: blur(0); }
-          20% { transform: translate(-1px, 0); }
-          40% { transform: translate(1px, -1px); }
-          60% { transform: translate(0, 1px); filter: blur(0.2px); }
+          0%   { transform: translate(0, 0); filter: blur(0); }
+          20%  { transform: translate(-1px, 0); }
+          40%  { transform: translate(1px, -1px); }
+          60%  { transform: translate(0, 1px); filter: blur(0.2px); }
           100% { transform: translate(0, 0); filter: blur(0); }
         }
 
         @keyframes voa-glitch-a {
-          0% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
-          25% { transform: translate(-2px, 0); clip-path: inset(10% 0 55% 0); }
-          50% { transform: translate(1px, -1px); clip-path: inset(65% 0 5% 0); }
+          0%   { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+          25%  { transform: translate(-2px, 0); clip-path: inset(10% 0 55% 0); }
+          50%  { transform: translate(1px, -1px); clip-path: inset(65% 0 5% 0); }
           100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
         }
 
         @keyframes voa-glitch-b {
-          0% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
-          25% { transform: translate(2px, 1px); clip-path: inset(55% 0 15% 0); }
-          50% { transform: translate(-1px, 0); clip-path: inset(5% 0 70% 0); }
+          0%   { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+          25%  { transform: translate(2px, 1px); clip-path: inset(55% 0 15% 0); }
+          50%  { transform: translate(-1px, 0); clip-path: inset(5% 0 70% 0); }
           100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
         }
 
         @media (prefers-reduced-motion: reduce) {
           .voa-glitch,
-          .voa-glitch * {
+          .voa-glitch::before,
+          .voa-glitch::after {
             animation: none !important;
             transition: none !important;
           }
