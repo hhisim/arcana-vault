@@ -49,9 +49,18 @@ function LoginForm() {
       setSuccess(t('auth.forgot_sent'))
       return
     }
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error, data: signInData } = await supabase.auth.signInWithPassword({ email, password })
     setLoading(false)
     if (error) { setError(error.message); return }
+    // Persist tokens for session recovery
+    if (signInData.session) {
+      try {
+        localStorage.setItem('arcana_auth_tokens', JSON.stringify({
+          access_token: signInData.session.access_token,
+          refresh_token: signInData.session.refresh_token,
+        }))
+      } catch {}
+    }
     router.push(params.get('returnTo') || '/account')
     router.refresh()
   }

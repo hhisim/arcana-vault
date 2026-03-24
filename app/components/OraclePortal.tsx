@@ -28,6 +28,40 @@ const randomPick = <T,>(arr: T[], count = 1) => [...arr].sort(() => Math.random(
 const orient = (card: string) => (Math.random() < 0.32 ? `${card} (reversed)` : `${card} (upright)`)
 const FOLLOWUP_LIMIT = 1850
 
+// ── Token bridge: recovers sessions when browser auth goes stale ────────────
+const LS_TOKENS = 'arcana_auth_tokens'
+
+function lsSaveTokens(tokens: { access_token: string; refresh_token: string }) {
+  try { localStorage.setItem(LS_TOKENS, JSON.stringify(tokens)) } catch {}
+}
+function lsLoadTokens(): { access_token: string; refresh_token: string } | null {
+  try {
+    const raw = localStorage.getItem(LS_TOKENS)
+    if (!raw) return null
+    return JSON.parse(raw) as { access_token: string; refresh_token: string }
+  } catch { return null }
+}
+function lsClearTokens() {
+  try { localStorage.removeItem(LS_TOKENS) } catch {}
+}
+
+async function recoverSession(): Promise<string | null> {
+  const tokens = lsLoadTokens()
+  if (!tokens?.access_token || !tokens?.refresh_token) return null
+  try {
+    const res = await fetch('/api/auth/sync-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tokens),
+    })
+    if (!res.ok) return null
+    // On success, tokens were refreshed server-side and cookies were set
+    // Return the user ID by decoding the access token (JWT payload)
+    const payload = JSON.parse(atob(tokens.access_token.split('.')[1]))
+    return payload.sub as string
+  } catch { return null }
+}
+
 // ── Welcome messages per tradition (first-visit orientation) ─────────────────
 const WELCOME_MESSAGES: Record<OraclePack, string> = {
   tao: `Welcome. The Tao Oracle draws from the Tao Te Ching, Chuang Tzu, Lieh Tzu, and the living tradition of inner alchemy.\n\nYou may ask freely. Or begin with:\n\n**Daily contemplation** — A passage drawn from the tradition for today.\n**I Ching consultation** — Cast a hexagram and receive an interpretation.\n**Wu Wei guidance** — Bring a decision or situation. Let non-action speak.\n**Deep study** — Explore any concept, chapter, or teaching in depth.\n**Inner alchemy** — Questions about Jing, Qi, Shen, Nei Dan, and energy cultivation.\n\nWhere shall we begin?`,
@@ -211,6 +245,17 @@ export default function OraclePortal() {
           if (res.ok) {
             const data = await res.json()
             setConversations(data as Conversation[])
+          }
+        } else {
+          // Browser session stale — try token-bridge recovery via server
+          const recoveredId = await recoverSession()
+          if (recoveredId) {
+            setUserId(recoveredId)
+            const res = await fetch(`/api/conversations?tradition=${pack}`)
+            if (res.ok) {
+              const data = await res.json()
+              setConversations(data as Conversation[])
+            }
           }
         }
       } catch {}

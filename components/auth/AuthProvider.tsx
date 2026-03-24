@@ -130,6 +130,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     const supabase = getBrowserSupabase()
     await supabase.auth.signOut()
+    try { localStorage.removeItem('arcana_auth_tokens') } catch {}
     await refresh()
   }
 
