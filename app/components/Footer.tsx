@@ -23,6 +23,8 @@ export default function Footer() {
               <a href="/chat" className="hover:text-text-primary">{t('nav.chat', 'Portal')}</a>
               <a href="/daily" className="hover:text-text-primary">Daily Practice</a>
               <a href="/library" className="hover:text-text-primary">{t('nav.library', 'Library')}</a>
+              <a href="/journal" className="hover:text-text-primary">Journal</a>
+              <a href="/inquiry" className="hover:text-text-primary">Inquiry</a>
               <a href="/blog" className="hover:text-text-primary">{t('nav.scroll', 'The Scroll')}</a>
               <a href="/agora" className="hover:text-text-primary">{t('nav.agora', 'Agora')}</a>
               <a href="/about" className="hover:text-text-primary">{t('nav.about', 'About')}</a>

@@ -29,6 +29,7 @@ export default function NavBar() {
     { href: '/', label: t(SITEDICT.nav.home) },
     { href: '/chat', label: t(SITEDICT.nav.chat) },
     { href: '/journal', label: t(SITEDICT.nav.journal) },
+    { href: '/inquiry', label: 'Inquiry' },
     { href: '/daily', label: 'Daily' },
     { href: '/library', label: t(SITEDICT.nav.library) },
     { href: '/traditions', label: 'Traditions' },
