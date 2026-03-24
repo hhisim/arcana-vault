@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { traditions, liveTraditions, upcomingTraditions, horizonTraditions, type TraditionEntry } from '@/lib/tradition-config'
 import { posts } from '@/lib/posts'
 import { books } from '@/lib/books'
+import NotifyForm from './NotifyForm'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -511,31 +512,7 @@ function ComingSoonSection({ t }: { t: TraditionEntry }) {
         </p>
 
         {/* Notify form */}
-        <div className="mx-auto max-w-md rounded-2xl border border-white/8 bg-white/[0.02] p-6">
-          <p className="mb-4 text-sm text-[#9B93AB]">
-            Be notified when the {t.name} opens:
-          </p>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex gap-2"
-          >
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="flex-1 rounded-md border border-white/20 bg-white/5 px-4 py-2.5 text-sm text-[#E8E0F0] placeholder-[#9B93AB]/50 focus:border-[#C9A84C]/50 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/20 transition-all"
-            />
-            <button
-              type="submit"
-              className="rounded-md px-4 py-2.5 text-sm font-medium text-[#0A0A10] transition-all duration-200"
-              style={{ backgroundColor: t.color }}
-            >
-              Notify Me
-            </button>
-          </form>
-          <p className="mt-3 text-xs text-[#9B93AB]/60">
-            Join the seekers waiting for this gateway.
-          </p>
-        </div>
+        <NotifyForm traditionName={t.name} color={t.color} />
 
         {/* Related scrolls for upcoming */}
         <div className="mt-12">
