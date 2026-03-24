@@ -30,6 +30,11 @@ export const SITEDICT = {
       tr: 'Yazıt',
       ru: 'Свиток',
     },
+    journal: {
+      en: 'Journal',
+      tr: 'Günlük',
+      ru: 'Дневник',
+    },
     cta: {
       en: 'Begin Your Journey',
       tr: 'Yolculuğa Başla',
