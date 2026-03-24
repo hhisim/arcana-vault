@@ -4,6 +4,38 @@ import React, { useState, useEffect } from 'react'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useAuth } from '@/components/auth/AuthProvider'
 
+function YouTubeEmbed({ content }: { content: string }) {
+  const YOUTUBE_REGEX = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})[^\s<]*/gi
+  const urls: string[] = []
+  let match
+  while ((match = YOUTUBE_REGEX.exec(content)) !== null) {
+    urls.push(match[0])
+  }
+  if (urls.length === 0) return null
+  return (
+    <div className="my-4 space-y-3">
+      {urls.slice(0, 2).map((url, i) => {
+        const idMatch = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+        if (!idMatch) return null
+        const videoId = idMatch[1]
+        return (
+          <div key={i} className="relative w-full overflow-hidden rounded-xl" style={{ aspectRatio: '16/9', maxHeight: '50vh' }}>
+            <iframe
+              key={i}
+              src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`}
+              title={`Video ${i + 1}`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+              style={{ border: 0 }}
+            />
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 interface PostCardProps {
   post?: {
     id: string
@@ -73,6 +105,7 @@ export default function PostCard({
   const targetId = post?.id || reply?.id
   const targetType = post ? 'post' : 'reply'
   const content = post?.content || reply?.content || ''
+  const contentHtml = (post as any)?.content_html || (reply as any)?.content_html
   const authorName = post?.author_name || reply?.author_name || 'Seeker'
   const createdAt = post?.created_at || reply?.created_at || new Date().toISOString()
 
@@ -209,9 +242,17 @@ export default function PostCard({
 
         {/* Content */}
         <div className="px-6 pb-5">
-          <div className="text-sm leading-relaxed text-[#C8C0D8] whitespace-pre-wrap">
-            {content}
-          </div>
+          {contentHtml ? (
+            <div
+              className="text-sm leading-relaxed text-[#C8C0D8] [&_iframe]:rounded-xl [&_iframe]:w-full [&_iframe]:max-w-full"
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
+          ) : (
+            <div className="text-sm leading-relaxed text-[#C8C0D8] whitespace-pre-wrap">
+              {content}
+            </div>
+          )}
+          <YouTubeEmbed content={content} />
         </div>
 
         {/* Actions */}

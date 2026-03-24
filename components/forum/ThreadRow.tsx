@@ -61,6 +61,9 @@ export default function ThreadRow({
           {isLocked && (
             <span className="text-[#9B93AB]" title="Locked">🔒</span>
           )}
+          {tags && tags.some(t => t.toLowerCase().includes('video')) && (
+            <span className="text-[#7B5EA7]" title="Contains Video">🎬</span>
+          )}
         </div>
 
         {/* Main content */}

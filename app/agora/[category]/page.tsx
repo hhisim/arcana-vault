@@ -70,6 +70,7 @@ export default function CategoryPage({
           .eq('is_deleted', false)
           .order('is_pinned', { ascending: false })
           .order('last_reply_at', { ascending: false })
+          .order('created_at', { ascending: false })
           .range((page - 1) * limit, page * limit - 1),
       ])
 
