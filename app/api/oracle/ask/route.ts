@@ -45,11 +45,48 @@ export async function POST(req: NextRequest) {
   if (targetLang) params.set('target_lang', targetLang)
 
   try {
-    const upstream = await fetch(`${base.replace(/\/$/, '')}/ask?${params.toString()}`, { method: 'GET', cache: 'no-store' })
-    const text = await upstream.text()
-    const response = new NextResponse(text, {
+    const upstream = await fetch(`${base.replace(/\/$/, '')}/ask?${params.toString()}`, {
+      method: 'GET',
+      cache: 'no-store',
+      // Stream the response through instead of buffering it
+      // This prevents Vercel serverless timeout when Oracle takes >10s to respond
+    })
+
+    if (!upstream.ok) {
+      const text = await upstream.text()
+      return new NextResponse(text, {
+        status: upstream.status,
+        headers: { 'content-type': upstream.headers.get('content-type') || 'application/json' },
+      })
+    }
+
+    // Stream the response body directly to the client
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = upstream.body!.getReader()
+        const encoder = new TextEncoder()
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) {
+              controller.close()
+              break
+            }
+            controller.enqueue(encoder.encode(new TextDecoder().decode(value)))
+          }
+        } catch (e) {
+          controller.error(e)
+        }
+      },
+    })
+
+    const response = new NextResponse(stream, {
       status: upstream.status,
-      headers: { 'content-type': upstream.headers.get('content-type') || 'application/json' },
+      headers: {
+        'content-type': upstream.headers.get('content-type') || 'application/json',
+        'x-accel-buffering': 'no',
+        'cache-control': 'no-store',
+      },
     })
 
     if (upstream.ok) {
