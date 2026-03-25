@@ -340,12 +340,16 @@ export default function OraclePortal() {
     // Save user message immediately after sending
     await saveMessage('user', visibleText)
 
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 55000)
     try {
       const response = await fetch('/api/oracle/ask', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ q: trimmed, pack, mode: effectiveMode, target_lang: lang }),
+        signal: controller.signal,
       })
+      clearTimeout(timeout)
       const rawText = await response.text()
       if (!response.ok) throw new Error(rawText)
       const data = JSON.parse(rawText) as AskResponse
@@ -367,8 +371,10 @@ export default function OraclePortal() {
       // Save oracle response
       await saveMessage('assistant', data.answer)
     } catch (error: any) {
-      setMessages((prev) => [{ id: uid(), role: 'system', text: normalizeError(error?.message || '') }, ...prev])
-      await saveMessage('system', normalizeError(error?.message || ''))
+      clearTimeout(timeout)
+      const isTimeout = error?.name === 'AbortError' || error?.message?.includes('aborted')
+      setMessages((prev) => [{ id: uid(), role: 'system', text: normalizeError(isTimeout ? 'The oracle is taking longer than usual. Please try again.' : error?.message || '') }, ...prev])
+      await saveMessage('system', normalizeError(isTimeout ? 'Request timed out.' : error?.message || ''))
     } finally {
       setBusy(false)
     }
