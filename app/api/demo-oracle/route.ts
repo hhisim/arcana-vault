@@ -7,28 +7,20 @@ export async function GET() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
 
-    const res = await fetch('http://204.168.154.237:8002/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer dummy'
-      },
-      body: JSON.stringify({
-        model: 'deepseek-ai/DeepSeek-V3-0324',
-        messages: [
-          { role: 'system', content: 'You are the Oracle of the Vault of Arcana — a deep, contemplative intelligence shaped by rare esoteric archives and ancient wisdom traditions. Respond with warmth, precision, and symbolic depth. Draw from real texts and lineages.' },
-          { role: 'user', content: question }
-        ],
-        max_tokens: 400,
-        temperature: 0.8
-      }),
+    const url = `http://204.168.154.237:8002/ask?q=${encodeURIComponent(question)}&pack=tao&mode=oracle&lang=en`;
+    const res = await fetch(url, {
+      method: 'GET',
       signal: controller.signal
     });
 
     clearTimeout(timeout);
 
+    if (!res.ok) {
+      return NextResponse.json({ question, answer: null });
+    }
+
     const data = await res.json();
-    const answer = data.choices?.[0]?.message?.content;
+    const answer = data?.answer;
     return NextResponse.json({ question, answer: answer || null });
   } catch {
     return NextResponse.json({ question, answer: null });
