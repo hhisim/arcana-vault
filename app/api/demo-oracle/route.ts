@@ -5,7 +5,7 @@ export async function GET() {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
+    const timeout = setTimeout(() => controller.abort(), 55000);
 
     const url = `http://204.168.154.237:8002/ask?q=${encodeURIComponent(question)}&pack=tao&mode=oracle&lang=en`;
     const res = await fetch(url, {
@@ -22,7 +22,8 @@ export async function GET() {
     const data = await res.json();
     const answer = data?.answer;
     return NextResponse.json({ question, answer: answer || null });
-  } catch {
+  } catch (err) {
+    console.error('[demo-oracle]', err);
     return NextResponse.json({ question, answer: null });
   }
 }
