@@ -19,32 +19,50 @@ export default function AccountClient() {
   const auth = useAuth()
   const { t } = useSiteI18n()
   const router = useRouter()
-  const [selected, setSelected] = useState<TraditionId[]>(auth.selectedTraditions)
+  const [selected, setSelected] = useState<TraditionId[]>(() => {
+    if (auth.plan === 'full') return [...TRADITIONS]
+    if (auth.plan === 'guest') return auth.selectedTraditions.length ? auth.selectedTraditions : [...TRADITIONS]
+    return auth.selectedTraditions
+  })
   const slots = PLAN_CONFIG[auth.plan].slots
 
   useEffect(() => {
     if (auth.plan === 'full') {
       setSelected([...TRADITIONS])
-    } else {
-      setSelected(auth.selectedTraditions)
+    } else if (auth.plan === 'guest') {
+      setSelected([...auth.selectedTraditions])
     }
-  }, [auth.plan, auth.selectedTraditions.join(',')])
+  }, [auth.plan, auth.selectedTraditions])
 
-  const toggle = (tradition: TraditionId) => {
-    const planSlots = PLAN_CONFIG[auth.plan].slots
-    if (planSlots === 'all') {
-      // full/guest — all always active, just save immediately
-      void save()
-      return
+  useEffect(() => {
+    if (auth.plan === 'full') {
+      setSelected([...TRADITIONS])
+    } else {
+      setSelected([...auth.selectedTraditions])
     }
+  }, [auth.plan, auth.selectedTraditions])
+
+  const toggle = async (tradition: TraditionId) => {
+    if (auth.plan === 'full') return // full plan — all always active, nothing to toggle
     const next = selected.includes(tradition)
       ? selected.filter((t) => t !== tradition)
-      : normalizeSelectedTraditions(auth.plan, [...selected, tradition])
+      : selected.length >= (PLAN_CONFIG[auth.plan].slots as number)
+        ? selected // already at limit
+        : [...selected, tradition]
     setSelected(next)
+    if (auth.plan === 'guest') {
+      // guest: immediately save after deselect
+      await fetch('/api/account/traditions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ traditions: next }),
+      })
+      await auth.refresh()
+    }
   }
 
   const save = async () => {
-    const toSave = normalizeSelectedTraditions(auth.plan, selected)
+    const toSave = auth.plan === 'full' ? [...TRADITIONS] : normalizeSelectedTraditions(auth.plan, selected)
     await fetch('/api/account/traditions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
