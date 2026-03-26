@@ -22,10 +22,21 @@ export default function AccountClient() {
   const [selected, setSelected] = useState<TraditionId[]>(auth.selectedTraditions)
   const slots = PLAN_CONFIG[auth.plan].slots
 
-  useEffect(() => setSelected(auth.selectedTraditions), [auth.selectedTraditions.join(',')])
+  useEffect(() => {
+    if (auth.plan === 'full') {
+      setSelected([...TRADITIONS])
+    } else {
+      setSelected(auth.selectedTraditions)
+    }
+  }, [auth.plan, auth.selectedTraditions.join(',')])
 
   const toggle = (tradition: TraditionId) => {
-    if (slots === 'all') return
+    const planSlots = PLAN_CONFIG[auth.plan].slots
+    if (planSlots === 'all') {
+      // full/guest — all always active, just save immediately
+      void save()
+      return
+    }
     const next = selected.includes(tradition)
       ? selected.filter((t) => t !== tradition)
       : normalizeSelectedTraditions(auth.plan, [...selected, tradition])
@@ -33,10 +44,11 @@ export default function AccountClient() {
   }
 
   const save = async () => {
+    const toSave = normalizeSelectedTraditions(auth.plan, selected)
     await fetch('/api/account/traditions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ traditions: selected }),
+      body: JSON.stringify({ traditions: toSave }),
     })
     await auth.refresh()
   }
@@ -80,22 +92,20 @@ export default function AccountClient() {
           <div className="text-sm text-[var(--text-secondary)]">{slots === 'all' ? 'All traditions are available on your plan.' : `Choose ${slots} tradition slot${Number(slots) > 1 ? 's' : ''}.`}</div>
           <div className="grid sm:grid-cols-2 gap-3">
             {TRADITIONS.map((tradition) => {
-              const active = slots === 'all' || selected.includes(tradition)
+              const active = auth.plan === 'full' || slots === 'all' || selected.includes(tradition)
               return (
                 <button
                   key={tradition}
                   type="button"
-                  onClick={() => toggle(tradition)}
-                  className={`glass-card p-4 text-left transition-all ${active ? 'border-[var(--primary-purple)]/40 bg-[var(--primary-purple)]/10' : 'hover:border-white/10'}`}
+                  onClick={() => { toggle(tradition); void save() }}
+                  className={`glass-card p-4 text-left transition-all cursor-pointer ${active ? 'border-[var(--primary-purple)]/40 bg-[var(--primary-purple)]/10' : 'border-[var(--primary-gold)]/30 bg-[var(--primary-gold)]/5 hover:border-[var(--primary-gold)]/60'}`}
                 >
-                  <div className="font-medium text-[var(--text-primary)]">{labels[tradition]}</div>
+                  <div className="font-medium text-[var(--text-primary)]">{active ? '✓ ' : '○ '}{labels[tradition]}</div>
                 </button>
               )
             })}
           </div>
-          {slots !== 'all' && (
-            <button onClick={save} className="rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black">{t('account.save')}</button>
-          )}
+          <button onClick={save} className="rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black">{t('account.save')}</button>
         </div>
 
         <div className="glass-card p-6 space-y-4">
