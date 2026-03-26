@@ -5,7 +5,11 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/chat',
+      disallow: [
+        '/api/',
+        '/_next/',
+        '/admin/',
+      ],
     },
     sitemap: 'https://www.vaultofarcana.com/sitemap.xml',
   }
