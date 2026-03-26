@@ -5,12 +5,14 @@ export async function GET() {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 55000);
+    const timeout = setTimeout(() => controller.abort(), 25000);
 
-    const url = `http://204.168.154.237:8002/ask?q=${encodeURIComponent(question)}&pack=tao&mode=oracle&lang=en`;
-    const res = await fetch(url, {
-      method: 'GET',
-      signal: controller.signal
+    // Use /chat endpoint which is confirmed working
+    const res = await fetch('http://204.168.154.237:8002/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: question, session_id: 'demo-oracle' }),
+      signal: controller.signal,
     });
 
     clearTimeout(timeout);
@@ -20,7 +22,7 @@ export async function GET() {
     }
 
     const data = await res.json();
-    const answer = data?.answer;
+    const answer = typeof data === 'string' ? data : data?.answer;
     return NextResponse.json({ question, answer: answer || null });
   } catch (err) {
     console.error('[demo-oracle]', err);
