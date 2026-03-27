@@ -25,8 +25,6 @@ const action = (id: string, label: Localized, kind: MenuActionKind, extra: Parti
 const back = (nextMenu: string) => [action('back', L('« Back', '« Geri', '« Назад'), 'back', { nextMenu })]
 const utilityRows = [
   [action('voice', L('🎙 Voice', '🎙 Ses', '🎙 Голос'), 'voice'), action('language', L('🌐 Language', '🌐 Dil', '🌐 Язык'), 'language')],
-  [action('invite', L('🔗 Invite', '🔗 Davet', '🔗 Пригласить'), 'invite'), action('gift', L('🎁 Gift', '🎁 Hediye', '🎁 Подарок'), 'gift')],
-  [action('switch', L('🔀 Switch', '🔀 Değiştir', '🔀 Сменить'), 'switch'), action('plans', L('💳 Plans', '💳 Planlar', '💳 Тарифы'), 'plans')],
 ]
 
 const majorCards = [
