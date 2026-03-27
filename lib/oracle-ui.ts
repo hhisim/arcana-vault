@@ -1,5 +1,5 @@
 
-export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' 
+export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker'
 export type UiLang = 'en' | 'tr' | 'ru'
 
 export type OracleMode =
@@ -8,8 +8,6 @@ export type OracleMode =
   | 'scholar'
   | 'quote'
   | 'reading'
-  | 'contemplation'
-  | 'practice'
   | 'teacher'
   | 'historian'
   | 'deck_compare'
@@ -51,12 +49,6 @@ export type OracleMode =
   | 'interpretation'
   | 'sleep_practice'
   | 'checklist'
-  | 'blessing'
-  | 'symbology'
-  | 'magick'
-  | 'affirmation'
-  | 'recitation'
-  | 'theurgy'
 
 export type MessageRole = 'user' | 'oracle' | 'system'
 
@@ -106,7 +98,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '☯️',
     title: label('Tao Oracle', 'Tao Kehaneti', 'Оракул Дао'),
     subtitle: label('Flow with the uncarved block', 'Yontulmamış blok gibi ak', 'Следуй потоку неразделанного блока'),
-    onlineLabel: label('Live', 'Canlı', 'Онлайн'),
+    onlineLabel: label('Classic', 'Klasik', 'Классика'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['What does the Tao say about patience?', 'Why do obstacles appear?', 'How should I approach a difficult decision?', 'Share wisdom for today.'],
@@ -125,7 +117,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '🎴',
     title: label('Tarot Oracle', 'Tarot Kehaneti', 'Оракул Таро'),
     subtitle: label('The archetypal journey', 'Arketipsel yolculuk', 'Архетипическое путешествие'),
-    onlineLabel: label('Live', 'Canlı', 'Онлайн'),
+    onlineLabel: label('Text + Voice', 'Metin + Ses', 'Текст + Голос'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['Draw a card for my current situation.', 'Interpret The High Priestess for me.', 'Give me a shadow reading.', 'Compare Marseille and Rider-Waite on The Fool.'],
@@ -155,7 +147,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '🔥',
     title: label('Tantra Oracle', 'Tantra Kehaneti', 'Оракул Тантры'),
     subtitle: label('Tantra · Vedanta · Samadhi · Kundalini', 'Tantra · Vedanta · Samadhi · Kundalini', 'Тантра · Веданта · Самадхи · Кундалини'),
-    onlineLabel: label('Live', 'Canlı', 'Онлайн'),
+    onlineLabel: label('Text + Voice', 'Metin + Ses', 'Текст + Голос'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['Give me a dharana for today.', 'Explain kundalini safely and clearly.', 'Teach me about Shiva and Shakti.', 'Offer one practice for surrender.'],
@@ -183,7 +175,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '🍄',
     title: label('Esoteric Entheogen', 'Ezoterik Entheogen', 'Эзотерический Энтеоген'),
     subtitle: label('Entheogens · Mysticism · Shamanism · Consciousness', 'Entheogenler · Mistisizm · Şamanizm · Bilinç', 'Энтеогены · Мистицизм · Шаманизм · Сознание'),
-    onlineLabel: label('Live', 'Canlı', 'Онлайн'),
+    onlineLabel: label('Text Only', 'Sadece Metin', 'Только текст'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['What can plant wisdom teach about fear?', 'Offer a reflection on ego dissolution.', 'Speak about integration after a profound experience.', 'Give a short contemplative quote.'],
@@ -213,7 +205,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '🌙',
     title: label('Sufi Mystic', 'Sufi Mistiği', 'Суфийский Мистик'),
     subtitle: label('Sufism · Dhikr · Heart Knowledge · Poetry', 'Tasavvuf · Zikir · Kalp Bilgisi · Şiir', 'Суфизм · Зикр · Знание сердца · Поэзия'),
-    onlineLabel: label('Live', 'Canlı', 'Онлайн'),
+    onlineLabel: label('Text Only', 'Sadece Metin', 'Только текст'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['What is the difference between maqam and hal in Sufism?', 'Compare the Naqshbandi, Mevlevi, Chishti, Qadiri, and Shadhili paths.', 'How do fana and baqa differ from ordinary ego-loss talk?', 'Explain Sufi symbolism of the Beloved, wine, the reed flute, and the moth.'],
@@ -245,7 +237,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
     emoji: '🌌',
     title: label('Dreamwalker', 'Rüya Gezgini', 'Путник Снов'),
     subtitle: label('Lucid Dreaming · Dream Yoga · Astral · Remote Viewing', 'Bilinçli Rüya · Rüya Yogası · Astral · Uzak Görüş', 'Осознанные сны · Йога сна · Астрал · Дистанционное видение'),
-    onlineLabel: label('Archive live', 'Arşiv canlı', 'Архив онлайн'),
+    onlineLabel: label('Beta', 'Beta', 'Бета'),
     defaultMode: 'oracle',
     starterPrompts: {
       en: ['How do I start lucid dreaming safely?', 'Explain dream yoga in a grounded way.', 'What is the difference between astral projection and lucid dreaming?', 'Help me interpret a recurring dream symbol.'],
@@ -328,12 +320,10 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
   },
   dreamwalker: {
     en: ['Give me one lucid-dream practice for tonight.', 'Interpret this as dream symbolism, not omen literalism.', 'Compare dream yoga, astral projection, and remote viewing.'],
-    tr: ['Bu gece için bir bilinçli rüya pratiği ver.', 'Bunu kehanet değil rüya sembolizmi olarak yorumla.', 'Rüya yogası, astral projeksiyon ve uzak görüş karşılaştır.'],
+    tr: ['Bu gece için bir bilinçli rüya pratiği ver.', 'Bunu kehanet değil rüya sembolizmi olarak yorumla.', 'Rüya yogası, astral projeksiyon ve uzak görüşü karşılaştır.'],
     ru: ['Дай одну практику осознанного сна на эту ночь.', 'Истолкуй это как символику сна, а не буквальное знамение.', 'Сравни йогу сна, астральную проекцию и дистанционное видение.'],
   },
-
-
-};
+}
 
 
 export function t(lang: UiLang, value: Record<UiLang, string>): string {
