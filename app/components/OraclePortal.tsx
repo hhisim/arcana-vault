@@ -343,10 +343,8 @@ export default function OraclePortal() {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 55000)
     try {
-      const response = await fetch('/api/oracle/ask', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ q: trimmed, pack, mode: effectiveMode, target_lang: lang }),
+      const oracleParams = new URLSearchParams({ q: trimmed, mode: effectiveMode, lang: lang || 'en' })
+      const response = await fetch(`https://oracle.hakanhisim.net/ask?${oracleParams}`, {
         signal: controller.signal,
       })
       clearTimeout(timeout)
