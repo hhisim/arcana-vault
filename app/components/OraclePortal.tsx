@@ -343,14 +343,15 @@ export default function OraclePortal() {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 55000)
     try {
-      const oracleParams = new URLSearchParams({ q: trimmed, mode: effectiveMode, lang: lang || 'en' })
-      const response = await fetch(`https://oracle.hakanhisim.net/ask?${oracleParams}`, {
+      const response = await fetch('/api/oracle/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ q: trimmed, mode: effectiveMode, lang: lang || 'en' }),
         signal: controller.signal,
       })
       clearTimeout(timeout)
-      const rawText = await response.text()
-      if (!response.ok) throw new Error(rawText)
-      const data = JSON.parse(rawText) as AskResponse
+      if (!response.ok) throw new Error(await response.text())
+      const data = await response.json() as AskResponse
       const oracleMessage: ChatMessage = { id: uid(), role: 'oracle', text: data.answer, pack, mode: effectiveMode }
       if (voiceReply && voiceEnabledForMode) {
         try {
