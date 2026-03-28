@@ -8,9 +8,6 @@ import { Analytics } from '@vercel/analytics/react'
 export const metadata: Metadata = {
   title: 'Vault of Arcana',
   description: 'A living mystery school built from rare archives, curated datasets, symbolic intelligence, and the collaboration of Hakan Hisim + PRIME.',
-  verification: {
-    google: 'PyWbm-jHDkD7MMCQr5Q76WBOeCdwMFd00GeFa7ecGDU',
-  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
