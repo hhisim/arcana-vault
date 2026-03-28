@@ -184,6 +184,7 @@ export default function OraclePortal() {
   const [mode, setMode] = useState<OracleMode>(ORACLE_CONFIG.tao.defaultMode)
   const [voiceReply, setVoiceReply] = useState(true)
   const [voiceStyle, setVoiceStyle] = useState<VoiceStyle>('female')
+  const [speed, setSpeed] = useState<'fast' | 'deep'>('fast')
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [busy, setBusy] = useState(false)
@@ -346,7 +347,7 @@ export default function OraclePortal() {
       const response = await fetch('/api/oracle/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ q: trimmed, mode: effectiveMode, lang: lang || 'en' }),
+        body: JSON.stringify({ q: trimmed, mode: effectiveMode, lang: lang || 'en', speed }),
         signal: controller.signal,
       })
       clearTimeout(timeout)
@@ -503,6 +504,28 @@ export default function OraclePortal() {
                 ))}
               </div>
             )}
+          </div>
+          {/* Speed Toggle */}
+          <div className="mb-4 rounded-xl border border-white/8 bg-[rgba(255,255,255,0.02)] p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-xs font-medium text-text-primary">⚡ Speed</span>
+              <div className="flex items-center gap-1 rounded-full border border-white/8 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setSpeed('fast')}
+                  className={`rounded-full px-2 py-0.5 text-[10px] transition ${speed === 'fast' ? 'bg-[var(--primary-purple)] text-text-primary' : 'text-[var(--text-secondary)] hover:text-text-primary'}`}
+                >
+                  ⚡ Fast
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSpeed('deep')}
+                  className={`rounded-full px-2 py-0.5 text-[10px] transition ${speed === 'deep' ? 'bg-[var(--primary-gold)] text-black' : 'text-[var(--text-secondary)] hover:text-text-primary'}`}
+                >
+                  ◈ Deep
+                </button>
+              </div>
+            </div>
           </div>
           <div className="space-y-2">
             {(Object.keys(ORACLE_CONFIG) as OraclePack[]).map((item) => {
