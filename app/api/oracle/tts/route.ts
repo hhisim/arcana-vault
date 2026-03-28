@@ -1,42 +1,44 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
-export const runtime = 'nodejs'
+const BACKEND_URL = process.env.ORACLE_BACKEND_URL || 'http://204.168.154.237:8002';
 
-export async function POST(request: NextRequest) {
-  const base = process.env.ORACLE_API_BASE
-  if (!base) {
-    return NextResponse.json({ detail: 'ORACLE_API_BASE is not set.' }, { status: 500 })
-  }
-
-  const payload = await request.json()
-  const params = new URLSearchParams({
-    text: String(payload.text ?? ''),
-    lang: String(payload.lang ?? 'en'),
-  })
-
+export async function POST(req: Request) {
   try {
-    const response = await fetch(`${base.replace(/\/$/, '')}/tts?${params.toString()}`, {
-      method: 'GET',
-      cache: 'no-store',
-    })
-
-    if (!response.ok) {
-      const text = await response.text()
-      return new NextResponse(text, {
-        status: response.status,
-        headers: { 'content-type': response.headers.get('content-type') ?? 'application/json' },
-      })
+    const { text, lang, voice } = await req.json();
+    if (!text?.trim()) {
+      return NextResponse.json({ error: 'No text' }, { status: 400 });
     }
 
-    const audio = await response.arrayBuffer()
-    return new NextResponse(audio, {
-      status: 200,
-      headers: { 'content-type': response.headers.get('content-type') ?? 'audio/ogg' },
-    })
-  } catch (error) {
-    return NextResponse.json(
-      { detail: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 503 },
-    )
+    // Strip markdown/emoji before TTS
+    const clean = text
+      .replace(/[#*_🜂⚛🧭🔐✧✦✶◎𒀭🔗🂠⚡🔤]/g, '')
+      .replace(/\[.*?\]\(.*?\)/g, '')
+      .replace(/```[\s\S]*?```/g, '')
+      .slice(0, 3000);
+
+    const params = new URLSearchParams({
+      text: clean,
+      lang: lang || 'en',
+      voice: voice || 'hd',
+    });
+
+    const res = await fetch(`${BACKEND_URL}/tts?${params}`, {
+      signal: AbortSignal.timeout(30000),
+    });
+
+    if (!res.ok) {
+      return NextResponse.json({ error: 'TTS unavailable' }, { status: 502 });
+    }
+
+    const audioBuffer = await res.arrayBuffer();
+    return new NextResponse(audioBuffer, {
+      headers: {
+        'Content-Type': 'audio/ogg',
+        'Cache-Control': 'no-cache',
+      },
+    });
+  } catch (err) {
+    console.error('[oracle/tts]', err);
+    return NextResponse.json({ error: 'TTS failed' }, { status: 500 });
   }
 }

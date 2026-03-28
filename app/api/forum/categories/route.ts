@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server'
-import { getServerSupabase } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export async function GET() {
   try {
-    const supabase = getServerSupabase()
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
     const { data: categories, error } = await supabase
       .from('forum_categories')
       .select('*')
@@ -12,16 +16,17 @@ export async function GET() {
 
     if (error) throw error
 
-    // Get post counts per category
+    // Get post counts per category using raw SQL to avoid API complexity
     const { data: counts } = await supabase
       .from('forum_posts')
-      .select('category_slug', { count: 'exact', head: true })
-      .eq('is_deleted', false)
+      .select('category_slug')
 
     const countMap: Record<string, number> = {}
-    counts?.forEach((c: any) => {
-      countMap[c.category_slug] = (countMap[c.category_slug] || 0) + 1
-    })
+    ;(counts || [])
+      .filter((p: any) => !p.is_deleted)
+      .forEach((p: any) => {
+        countMap[p.category_slug] = (countMap[p.category_slug] || 0) + 1
+      })
 
     const result = (categories || []).map((cat: any) => ({
       ...cat,

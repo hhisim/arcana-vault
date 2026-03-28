@@ -27,7 +27,7 @@ const utilityRows = [
   [action('voice', L('🎙 Voice', '🎙 Ses', '🎙 Голос'), 'voice'), action('language', L('🌐 Language', '🌐 Dil', '🌐 Язык'), 'language')],
 ]
 
-const majorCards = [
+export const TAROT_ALL_CARDS = [
   '0 · The Fool','I · The Magician','II · The High Priestess','III · The Empress','IV · The Emperor','V · The Hierophant',
   'VI · The Lovers','VII · The Chariot','VIII · Strength','IX · The Hermit','X · Wheel of Fortune','XI · Justice',
   'XII · The Hanged Man','XIII · Death','XIV · Temperance','XV · The Devil','XVI · The Tower','XVII · The Star',
