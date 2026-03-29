@@ -355,7 +355,7 @@ export default function HomePage() {
           <div className="mb-14 text-center">
             <h2 className="font-serif text-3xl text-text-primary md:text-5xl">What Seekers Bring to the Vault</h2>
             <p className="mt-4 text-lg text-text-secondary max-w-2xl mx-auto">
-              Not a search engine. A conversation partner shaped by 30+ years of curated archives and real lineage context.
+              {tt({ en:'The Vault is not a reference tool — it is a dialogue partner. Bring your questions, your confusions, your awakenings, and your doubts.', tr:'Vault bir referans aracı değildir — bir diyalog ortağıdır. Sorularınızı, kafa karışıklıklarınızı, uyanışlarınızı ve şüphelerinizi getirin.', ru:'Vault — это не справочник. Это собеседник. Принесите свои вопросы, свою путаницу, свои пробуждения и свои сомнения.'})}
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -422,7 +422,7 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="font-serif text-xl text-text-primary">Living Dialogue</h3>
-              <p className="text-sm leading-7 text-text-secondary">Not a search engine. A conversation partner shaped by 30+ years of curated archives and real lineage context.</p>
+              <p className="text-sm leading-7 text-text-secondary">An intelligence that knows the texts, the lineages, and the traditions — and can hold a conversation that goes somewhere real.</p>
             </div>
           </div>
         </div>
