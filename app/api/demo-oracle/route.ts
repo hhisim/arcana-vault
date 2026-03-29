@@ -28,40 +28,6 @@ const DEMO_ANSWERS = [
   },
 ]
 
-async function getBackendAnswer(q: string, tradition: string): Promise<string | null> {
-  try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 50000)
-
-    const res = await fetch('http://204.168.154.237:8002/ask', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q, tradition: tradition.toLowerCase() }),
-      signal: controller.signal,
-    })
-
-    clearTimeout(timeout)
-    if (!res.ok) return null
-
-    const text = await res.text()
-    
-    // Try JSON first (structured response)
-    try {
-      const obj = JSON.parse(text)
-      if (obj.answer) return obj.answer
-      if (typeof obj === 'string' && obj.length > 10) return obj
-    } catch {}
-    
-    // Plain text response — use as-is if it looks like an answer
-    const cleaned = text.trim()
-    if (cleaned.length > 20) return cleaned
-    
-    return null
-  } catch {
-    return null
-  }
-}
-
 export async function GET() {
   return NextResponse.json(DEMO_ANSWERS[0])
 }
@@ -93,39 +59,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'A question is required.' }, { status: 400 })
   }
 
-  const q = question.trim()
-  const lower = q.toLowerCase()
+  const q = question.toLowerCase().trim()
 
-  // Detect tradition
-  let tradition = 'Taoism'
-  let answerObj = DEMO_ANSWERS[0]
-  if (lower.includes('tarot') || lower.includes('card') || lower.includes('major arcana') || lower.includes('divination') || lower.includes('fool')) {
-    tradition = 'tarot'; answerObj = DEMO_ANSWERS[1]
-  } else if (lower.includes('sufi') || lower.includes('rumi') || lower.includes('whirling') || lower.includes('dhikr') || lower.includes('fana') || lower.includes('love')) {
-    tradition = 'sufi'; answerObj = DEMO_ANSWERS[2]
-  } else if (lower.includes('enneagram') || lower.includes('personality') || lower.includes('type')) {
-    tradition = 'enneagram'; answerObj = DEMO_ANSWERS[3]
-  } else if (lower.includes('kabbalah') || lower.includes('sephiroth') || lower.includes('jewish') || lower.includes('torah') || lower.includes('tzimtzum') || lower.includes('zohar') || lower.includes('reincarnation')) {
-    tradition = 'kabbalah'; answerObj = DEMO_ANSWERS[4]
+  if (q.includes('tarot') || q.includes('card') || q.includes('major arcana') || q.includes('divination') || q.includes('fool')) {
+    return NextResponse.json({ ...DEMO_ANSWERS[1], remaining: 3 - ((record?.count) || 1) })
+  } else if (q.includes('sufi') || q.includes('rumi') || q.includes('whirling') || q.includes('dhikr') || q.includes('fana') || q.includes('love')) {
+    return NextResponse.json({ ...DEMO_ANSWERS[2], remaining: 3 - ((record?.count) || 1) })
+  } else if (q.includes('enneagram') || q.includes('personality') || q.includes('type')) {
+    return NextResponse.json({ ...DEMO_ANSWERS[3], remaining: 3 - ((record?.count) || 1) })
+  } else if (q.includes('kabbalah') || q.includes('sephiroth') || q.includes('jewish') || q.includes('torah') || q.includes('tzimtzum') || q.includes('zohar') || q.includes('reincarnation')) {
+    return NextResponse.json({ ...DEMO_ANSWERS[4], remaining: 3 - ((record?.count) || 1) })
   }
 
-  // Try live backend
-  const live = await getBackendAnswer(q, tradition)
-  if (live) {
-    return NextResponse.json({
-      question: q,
-      answer: live,
-      tradition: tradition.charAt(0).toUpperCase() + tradition.slice(1),
-      isLive: true,
-      remaining: 3 - ((record?.count) || 1),
-    })
-  }
-
-  // Static fallback
-  return NextResponse.json({
-    ...answerObj,
-    question: q,
-    isLive: false,
-    remaining: 3 - ((record?.count) || 1),
-  })
+  return NextResponse.json({ ...DEMO_ANSWERS[0], remaining: 3 - ((record?.count) || 1) })
 }
