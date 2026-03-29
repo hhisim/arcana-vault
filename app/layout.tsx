@@ -15,11 +15,13 @@ export const metadata: Metadata = {
     url: 'https://www.vaultofarcana.com',
     siteName: 'Vault of Arcana',
     type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Vault of Arcana',
     description: 'A living mystery school — 30 years of esoteric archives, curated datasets, and symbolic intelligence.',
+    images: ['/og-image.jpg'],
   },
 }
 
