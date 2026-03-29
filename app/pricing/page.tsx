@@ -77,6 +77,13 @@ export default function PricingPage() {
         <p className="text-[var(--primary-gold)] mt-4">{t('pricing.note')}</p>
       </div>
 
+      {/* Launch offer banner */}
+      <div className="mb-8 rounded-2xl border border-[var(--primary-gold)]/30 bg-[var(--primary-gold)]/5 p-6 text-center">
+        <p className="text-[var(--primary-gold)] text-sm uppercase tracking-widest mb-2">Launch Offer</p>
+        <p className="text-[var(--text-primary)] text-2xl font-serif">30% off your first 3 months</p>
+        <p className="text-[var(--text-secondary)] mt-2">Use code <span className="text-[var(--primary-gold)] font-mono font-bold">LAUNCH30</span> at checkout</p>
+      </div>
+
       {/* Feature comparison table */}
       <div className="mb-12 overflow-x-auto">
         <table className="w-full text-sm mb-8">
