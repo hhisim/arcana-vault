@@ -106,14 +106,14 @@ export default function HomePage() {
             </div>
             <GlitchCycleText as="h1" className="max-w-5xl font-serif text-5xl leading-[0.95] text-text-primary md:text-7xl" phrases={heroPhrases[L]} intervalMs={5200} glitchMs={180} />
             <p className="mt-8 max-w-3xl text-lg leading-8 text-text-secondary md:text-xl">
-              {tt({ en:'Vault of Arcana is not a generic chatbot. It is a curated intelligence system built from over 30 years of esoteric study, rare texts, and lovingly structured datasets developed through the collaboration of Hakan Hisim + PRIME.', tr:'Vault of Arcana genel bir sohbet robotu değildir. Hakan Hisim + PRIME işbirliğiyle geliştirilen 30 yılı aşkın ezoterik çalışma, nadir metinler ve özenle yapılandırılmış veri setlerinden oluşturulmuş seçilmiş bir zeka sistemidir.', ru:'Vault of Arcana — это не обычный чат-бот. Это курируемая интеллектуальная система, созданная более чем за 30 лет эзотерических исследований, редких текстов и тщательно структурированных данных в сотрудничестве Hakan Hisim + PRIME.'})}
+              {tt({ en:'A curated intelligence system built from 30 years of esoteric study, rare texts, and carefully structured archives — shaped through the collaboration of Hakan Hisim + PRIME. This is not a chatbot. It is a living mystery school.', tr:'30 yılı aşkın ezoterik çalışma, nadir metinler ve özenle yapılandırılmış arşivlerden oluşturulmuş seçilmiş bir zeka sistemi — Hakan Hisim ve PRIME işbirliğiyle şekillendirildi. Bu bir sohbet robotu değildir. Bu yaşayan bir gizem okuludur.', ru:'Курируемая интеллектуальная система, созданная на основе 30 лет эзотерических исследований, редких текстов и тщательно структурированных архивов — сформированная в сотрудничестве Hakan Hisim + PRIME. Это не чат-бот. Это живая школа тайн.'})}
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/chat" className="rounded-xl bg-gold px-6 py-3 text-sm font-medium text-black transition hover:opacity-90">{tt({ en:'Ask the Oracle', tr:'Kehanete Sor', ru:'Спросить Оракула'})}</Link>
               <Link href="#gateways" className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-text-primary transition hover:bg-white/10">{tt({ en:'Explore the Traditions', tr:'Gelenekleri Keşfet', ru:'Исследовать традиции'})}</Link>
             </div>
             <p className="mt-5 text-sm text-text-secondary">{tt({ en:'Start with four living gateways. Expand into a growing constellation of twenty-plus traditions, practices, archives, agents, and intelligences.', tr:'Dört yaşayan geçit ile başlayın. Yirmi artı gelenek, pratik, arşiv, ajan ve zekayı büyüyen bir yıldız takımadasına genişletin.', ru:'Начните с четырёх живых вратарей. Расширьтесь в растущее созвездие из более чем двадцати традиций, практик, архивов, агентов и интеллектов.'})}</p>
-            <p className="mt-4 text-sm text-text-secondary">Try for free. No signup required. Instant access to the Oracle.</p>
+            <p className="mt-4 text-sm text-text-secondary">{tt({ en:'Try for free. No signup required. Instant access to the Oracle.', tr:'Ücretsiz dene. Kayıt gerekmez. Oracle\'a anında eriş.', ru:'Попробуйте бесплатно. Без регистрации. Мгновенный доступ к Оракулу.'})}</p>
           </div>
         </div>
       </section>
@@ -175,7 +175,7 @@ export default function HomePage() {
                     href={`/traditions/${item.key}`}
                     className="text-xs text-[#9B93AB] hover:text-[#C9A84C] transition-colors"
                   >
-                    Learn more about {item.title.toLowerCase()} →
+                    {tt({ en:`Learn more about ${item.title} →`, tr:`${item.title} hakkında daha fazla →`, ru:`Узнать больше о ${item.title} →` })}
                   </Link>
                 </div>
               </div>
