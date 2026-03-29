@@ -212,7 +212,7 @@ export default function HomePage() {
               {tt({ en:'Traditions Coming Soon', tr:'Yakında Gelen Gelenekler', ru:'Традиции скоро'})}
             </div>
             <h2 className="mt-4 font-serif text-4xl text-text-primary md:text-5xl">
-              {tt({ en:'More Gates Are Opening', tr:'Daha Fazra Geçit Açılıyor', ru:'Больше вратарей открываются'})}
+              {tt({ en:'More Gates Are Opening', tr:'Daha Fazla Geçit Açılıyor', ru:'Новые врата открываются'})}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-text-secondary">
               {tt({

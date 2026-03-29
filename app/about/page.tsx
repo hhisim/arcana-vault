@@ -110,12 +110,12 @@ export default function AboutPage() {
               hakanhisim.net →
             </a>
             <a
-              href="https://www.universal-transmissions.net"
+              href="https://www.universal-transmissions.com"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full border border-[var(--primary-gold)]/35 bg-[var(--primary-gold)]/10 px-5 py-2 text-sm text-[var(--primary-gold)] transition hover:bg-[var(--primary-gold)]/20"
             >
-              universal-transmissions.net →
+              universal-transmissions.com →
             </a>
           </div>
         </div>
