@@ -280,15 +280,21 @@ export default function HomePage() {
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {[
-                { en:'Gnostic Oracle', tr:'Gnostik Kahin', ru:'Гностический оракул', accent:'gold' },
+                { en:'Gnostic Oracle', tr:'Gnostik Kahin', ru:'Гностический оракул', accent:'purple' },
                 { en:'Enochian Vault', tr:'Enochian Mahzeni', ru:'Енохианское хранилище', accent:'purple' },
                 { en:'Golden Dawn', tr:'Şafak Yükselişi', ru:'Золотая Заря', accent:'gold' },
-                { en:'Thelema', tr:'Thelema', ru:'Телезма', accent:'purple' },
+                { en:'Thelema', tr:'Thelema', ru:'Телезма', accent:'gold' },
                 { en:'Kabbalah', tr:'Kabbala', ru:'Каббала', accent:'gold' },
                 { en:'Ritual Magick', tr:'Ritüel Büyü', ru:'Ритуальная магия', accent:'purple' },
                 { en:'Wicca & Witchcraft', tr:'Wicca ve Cadılık', ru:'Викка и ведовство', accent:'green' },
                 { en:'Kemet', tr:'Kemet', ru:'Кемет', accent:'gold' },
-                { en:'+ More', tr:'+ Daha Fazla', ru:'+ Больше', accent:'white' },
+                { en:'Rosicrucianism', tr:'Rosicrucianizm', ru:'Розенкрейцерство', accent:'gold' },
+                { en:'Freemasonry', tr:'Freemasonry', ru:'Масонство', accent:'gold' },
+                { en:'Grimoires', tr:'Grimoire', ru:'Гримуары', accent:'purple' },
+                { en:'Meditation', tr:'Meditasyon', ru:'Медитация', accent:'green' },
+                { en:'Enneagram', tr:'Enneagram', ru:'Эннеаграмма', accent:'purple' },
+                { en:'Frequency & Sound', tr:'Frekans ve Ses', ru:'Частота и звук', accent:'gold' },
+                { en:'The Syncretist', tr:'Senkretist', ru:'Синкретист', accent:'purple' },
               ].map(item => (
                 <span
                   key={item.en}
