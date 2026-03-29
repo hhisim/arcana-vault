@@ -171,10 +171,12 @@ export default function BlogPage() {
                     </div>
                   )}
                   <div className="p-6">
-                    <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-[#C9A84C] mb-3">
+                    <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-[#C9A84C] mb-3 flex-wrap">
                       <span>{post.tradition}</span>
                       <span>•</span>
                       <span>{post.readTime} {minRead}</span>
+                      <span>•</span>
+                      <span>{new Date(post.publishedAt).toLocaleDateString(lang === 'tr' ? 'tr-TR' : lang === 'ru' ? 'ru-RU' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                     </div>
                     <h3 className="font-cinzel text-lg text-white mb-3 leading-snug">
                       <a href={`/blog/${post.slug}`} className="hover:text-[#C9A84C] transition-colors">{getTitle(post.slug, post.title)}</a>

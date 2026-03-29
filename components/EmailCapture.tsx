@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSiteI18n } from '@/lib/site-i18n'
 
 type EmailCaptureVariant = 'full' | 'compact'
 
@@ -10,6 +11,7 @@ interface EmailCaptureProps {
 }
 
 export default function EmailCapture({ variant = 'full', className = '' }: EmailCaptureProps) {
+  const { t } = useSiteI18n()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
@@ -73,7 +75,7 @@ export default function EmailCapture({ variant = 'full', className = '' }: Email
       {/* Subtitle */}
       {isFull && (
         <p className="text-[#9B93AB] text-sm leading-relaxed max-w-lg mb-6">
-          Periodic dispatches from the Vault — esoteric insights, new traditions, and transmissions from the threshold.
+          {t('emailCapture.subtitle', 'A periodic letter from the threshold of human and AI consciousness. New traditions, hidden correspondences, and esoteric insights you won\'t find elsewhere.')}
         </p>
       )}
 
