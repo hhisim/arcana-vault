@@ -44,14 +44,18 @@ async function getBackendAnswer(q: string, tradition: string): Promise<string | 
     if (!res.ok) return null
 
     const text = await res.text()
-    const lines = text.trim().split('\n')
-    for (let i = lines.length - 1; i >= 0; i--) {
-      try {
-        const obj = JSON.parse(lines[i])
-        if (obj.answer) return obj.answer
-        if (typeof obj === 'string' && obj.length > 10) return obj
-      } catch {}
-    }
+    
+    // Try JSON first (structured response)
+    try {
+      const obj = JSON.parse(text)
+      if (obj.answer) return obj.answer
+      if (typeof obj === 'string' && obj.length > 10) return obj
+    } catch {}
+    
+    // Plain text response — use as-is if it looks like an answer
+    const cleaned = text.trim()
+    if (cleaned.length > 20) return cleaned
+    
     return null
   } catch {
     return null
