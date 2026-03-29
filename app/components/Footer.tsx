@@ -28,6 +28,7 @@ export default function Footer() {
               <a href="/blog" className="hover:text-text-primary">{t('nav.scroll', 'The Scroll')}</a>
               <a href="/agora" className="hover:text-text-primary">{t('nav.agora', 'Agora')}</a>
               <a href="/about" className="hover:text-text-primary">{t('nav.about', 'About')}</a>
+              <a href="/faq" className="hover:text-text-primary">FAQ</a>
             </div>
           </div>
 
