@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import GlitchCycleText from './components/GlitchCycleText'
+import Testimonials from './components/Testimonials'
 import { useSiteI18n } from '@/lib/site-i18n'
 import DemoOracle from '@/components/home/DemoOracle'
 import DailyPractice from '@/components/DailyPractice'
@@ -347,6 +348,8 @@ export default function HomePage() {
       <BookPreview />
 
       {/* WHAT SEEKERS BRING TO THE VAULT */}
+      <Testimonials />
+
       <section className="border-b border-white/5 bg-[#0a0a10]">
         <div className="mx-auto max-w-6xl px-6 py-20 md:px-8">
           <div className="mb-14 text-center">
