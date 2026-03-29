@@ -28,33 +28,56 @@ const DEMO_ANSWERS = [
   },
 ]
 
-async function getLiveAnswer(q: string, tradition: string): Promise<string | null> {
+async function getLiveAnswer(q: string, tradition: string): Promise<{ answer: string; live: boolean }> {
+  // Try direct VPS public IP first
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 55000)
 
-    const res = await fetch('http://204.168.154.237:8002/ask', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q, tradition: tradition.toLowerCase() }),
+    const url = `http://204.168.154.237:8002/ask?q=${encodeURIComponent(q)}&tradition=${encodeURIComponent(tradition.toLowerCase())}`
+    const res = await fetch(url, {
+      method: 'GET',
       signal: controller.signal,
     })
 
     clearTimeout(timeout)
-    if (!res.ok) return null
-
-    const text = await res.text()
-    const lines = text.trim().split('\n')
-    for (let i = lines.length - 1; i >= 0; i--) {
-      try {
-        const obj = JSON.parse(lines[i])
-        if (obj.answer) return obj.answer
-      } catch {}
+    if (res.ok) {
+      const text = await res.text()
+      if (text.trim().length > 10) {
+        return { answer: text.trim(), live: true }
+      }
     }
-    return text.trim().length > 10 ? text.trim() : null
-  } catch {
-    return null
-  }
+  } catch {}
+
+  // Fallback through Vercel (circular but works)
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 55000)
+
+    const res = await fetch('https://vaultofarcana.com/api/oracle/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q, tradition }),
+      signal: controller.signal,
+    })
+
+    clearTimeout(timeout)
+    if (res.ok) {
+      const text = await res.text()
+      if (text.trim().length > 10) {
+        // Try parse JSON (accumulated NDJSON)
+        try {
+          const obj = JSON.parse(text)
+          if (obj.answer) return { answer: obj.answer, live: true }
+          if (obj.response) return { answer: obj.response, live: true }
+        } catch {}
+        // Return as plain text
+        return { answer: text.trim(), live: true }
+      }
+    }
+  } catch {}
+
+  return { answer: '', live: false }
 }
 
 export async function GET() {
@@ -99,24 +122,24 @@ export async function POST(req: NextRequest) {
   } else if (lower.includes('sufi') || lower.includes('rumi') || lower.includes('whirling') || lower.includes('dhikr') || lower.includes('fana') || lower.includes('love')) {
     tradition = 'sufi'; answerObj = DEMO_ANSWERS[2]
   } else if (lower.includes('enneagram') || lower.includes('personality') || lower.includes('type')) {
-    tradition = 'tao'; answerObj = DEMO_ANSWERS[3]
+    tradition = 'enneagram'; answerObj = DEMO_ANSWERS[3]
   } else if (lower.includes('kabbalah') || lower.includes('sephiroth') || lower.includes('jewish') || lower.includes('torah') || lower.includes('tzimtzum') || lower.includes('zohar') || lower.includes('reincarnation')) {
     tradition = 'kabbalah'; answerObj = DEMO_ANSWERS[4]
   }
 
-  // Try live VPS backend
-  const liveAnswer = await getLiveAnswer(q, tradition)
-  if (liveAnswer) {
+  // Try live backend
+  const live = await getLiveAnswer(q, tradition)
+  if (live.answer) {
     return NextResponse.json({
       question: q,
-      answer: liveAnswer,
+      answer: live.answer,
       tradition: tradition.charAt(0).toUpperCase() + tradition.slice(1),
-      isLive: true,
+      isLive: live.live,
       remaining: 3 - ((record?.count) || 1),
     })
   }
 
-  // Fallback to curated static answer
+  // Absolute fallback
   return NextResponse.json({
     ...answerObj,
     question: q,
