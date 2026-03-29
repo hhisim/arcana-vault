@@ -76,13 +76,45 @@ export default function PricingPage() {
         <p className="text-[var(--text-secondary)] leading-8">{t('pricing.subtitle')}</p>
         <p className="text-[var(--primary-gold)] mt-4">{t('pricing.note')}</p>
       </div>
+
+      {/* Feature comparison table */}
+      <div className="mb-12 overflow-x-auto">
+        <table className="w-full text-sm mb-8">
+          <thead>
+            <tr className="border-b border-white/10">
+              <th className="text-left py-3 pr-4 text-[#9B93AB] font-medium">Feature</th>
+              <th className="text-center py-3 px-4 text-[#9B93AB] font-medium">Free</th>
+              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Seeker $8</th>
+              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Adept $19</th>
+              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Magister $29</th>
+            </tr>
+          </thead>
+          <tbody className="text-[var(--text-secondary)]">
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">Traditions</td><td className="text-center py-3 px-4">1</td><td className="text-center py-3 px-4">3</td><td className="text-center py-3 px-4">4</td><td className="text-center py-3 px-4">All</td></tr>
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">Daily Questions</td><td className="text-center py-3 px-4">12</td><td className="text-center py-3 px-4">60</td><td className="text-center py-3 px-4">Unlimited</td><td className="text-center py-3 px-4">Unlimited</td></tr>
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">Voice Oracle</td><td className="text-center py-3 px-4">—</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td></tr>
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">Correspondence Codex</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td></tr>
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">Library Access</td><td className="text-center py-3 px-4">Basic</td><td className="text-center py-3 px-4">Extended</td><td className="text-center py-3 px-4">Full</td><td className="text-center py-3 px-4">Full</td></tr>
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">The Scroll (Essays)</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td></tr>
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">Journal & Inquiry</td><td className="text-center py-3 px-4">—</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td><td className="text-center py-3 px-4">✓</td></tr>
+            <tr className="border-b border-white/5"><td className="py-3 pr-4">Priority Support</td><td className="text-center py-3 px-4">—</td><td className="text-center py-3 px-4">—</td><td className="text-center py-3 px-4">—</td><td className="text-center py-3 px-4">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {plans.map((plan) => {
           const cfg = PLAN_CONFIG[plan]
           const isCurrent = auth.plan === plan
+          const isAdept = plan === 'adept'
           const label = planLabels[plan]
           return (
-            <div key={plan} className="glass-card p-6 flex flex-col gap-4">
+            <div key={plan} className={`glass-card p-6 flex flex-col gap-4 ${isAdept ? 'border-[var(--primary-gold)]/50 shadow-[0_0_30px_rgba(201,168,76,0.15)]' : ''}`}>
+              {isAdept && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="bg-[var(--primary-gold)] text-black text-xs font-bold px-3 py-1 rounded-full">Most Popular</span>
+                </div>
+              )}
               <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">{label.name}</div>
               <div className="flex items-baseline gap-1">
                 <span className="font-serif text-3xl text-[var(--text-primary)]">{cfg.priceMonthly ? `$${cfg.priceMonthly}` : t('plans.free', 'Free')}</span>
@@ -101,7 +133,7 @@ export default function PricingPage() {
               {isCurrent ? (
                 <div className="rounded-full border border-[var(--primary-gold)]/40 px-4 py-2 text-center text-[var(--primary-gold)]">{t('pricing.current', 'Current Plan')}</div>
               ) : (
-                <button onClick={() => begin(plan)} className="rounded-full bg-[var(--primary-gold)] px-4 py-3 text-black font-medium">
+                <button onClick={() => begin(plan)} className={`rounded-full px-4 py-3 font-medium ${isAdept ? 'bg-[var(--primary-gold)] text-black hover:opacity-90' : 'bg-[var(--primary-gold)] text-black hover:opacity-90'}`}>
                   {plan === 'free' ? t('pricing.free.activate', 'Activate Free Plan') : t('pricing.checkout', 'Subscribe')}
                 </button>
               )}
