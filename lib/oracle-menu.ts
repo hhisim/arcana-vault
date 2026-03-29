@@ -36,8 +36,8 @@ export const TAROT_ALL_CARDS = [
 
 function tarotCardRows() {
   const rows: MenuAction[][] = []
-  for (let i=0;i<majorCards.length;i+=2) {
-    const slice = majorCards.slice(i,i+2)
+  for (let i=0;i<TAROT_ALL_CARDS.length;i+=2) {
+    const slice = TAROT_ALL_CARDS.slice(i,i+2)
     rows.push(slice.map((card) => action(`tarot-card-${card}`, L(card), 'prompt', {
       prompt: `Give a deep but readable reading of ${card} in Tarot, including symbolism, shadow, light, and practical guidance.`,
       mode: 'reading',
