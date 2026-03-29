@@ -20,7 +20,7 @@
   backdrop-filter: blur(14px);
 }
 
-.font-cinzel { font-family: Georgia, 'Times New Roman', serif; }
+.font-cinzel { font-family: 'Cinzel', Georgia, serif; }
 .bg-deep { background: var(--bg-deep); }
 .text-text-primary { color: var(--text-primary); }
 .text-text-secondary { color: var(--text-secondary); }

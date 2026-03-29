@@ -8,6 +8,18 @@ import { Analytics } from '@vercel/analytics/react'
 export const metadata: Metadata = {
   title: 'Vault of Arcana',
   description: 'A living mystery school built from rare archives, curated datasets, symbolic intelligence, and the collaboration of Hakan Hisim + PRIME.',
+  openGraph: {
+    title: 'Vault of Arcana',
+    description: 'A living mystery school built from 30 years of esoteric archives, curated datasets, and symbolic intelligence.',
+    url: 'https://www.vaultofarcana.com',
+    siteName: 'Vault of Arcana',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Vault of Arcana',
+    description: 'A living mystery school — 30 years of esoteric archives, curated datasets, and symbolic intelligence.',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
