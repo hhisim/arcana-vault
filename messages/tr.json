@@ -68,5 +68,10 @@
   "plans.adept.desc": "Adanmış uygulayıcı için. Tüm 4 gelenek ve sınırsız sorular.",
   "plans.full.desc": "Maksimum derinlik ve erişim. Tüm gelenekler, sınırsız sorular, öncelikli destek.",
   "plans.studyAll": "Tüm gelenekleri incele",
-  "plans.studyN": "{{n}} gelenek incele"
+  "plans.studyN": "{{n}} gelenek incele",
+  "pricing.launch.banner": "Lansman Teklifi",
+  "pricing.launch.headline": "İlk 3 ay %30 indirim",
+  "pricing.launch.code": "Kod kullanın",
+  "pricing.launch.at_checkout": "satın alma sırasında",
+  "plans.most_popular": "En Popüler"
 }

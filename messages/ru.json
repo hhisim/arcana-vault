@@ -68,5 +68,10 @@
   "plans.adept.desc": "Для преданного практика. Все 4 традиции и безлимитные вопросы.",
   "plans.full.desc": "Максимальная глубина и доступ. Все традиции, безлимит, приоритетная поддержка.",
   "plans.studyAll": "Изучать все традиции",
-  "plans.studyN": "Изучать {{n}} традиций"
+  "plans.studyN": "Изучать {{n}} традиций",
+  "pricing.launch.banner": "Предложение запуска",
+  "pricing.launch.headline": "Скидка 30% на первые 3 месяца",
+  "pricing.launch.code": "Используйте код",
+  "pricing.launch.at_checkout": "при оформлении",
+  "plans.most_popular": "Самый популярный"
 }

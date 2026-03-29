@@ -79,9 +79,9 @@ export default function PricingPage() {
 
       {/* Launch offer banner */}
       <div className="mb-8 rounded-2xl border border-[var(--primary-gold)]/30 bg-[var(--primary-gold)]/5 p-6 text-center">
-        <p className="text-[var(--primary-gold)] text-sm uppercase tracking-widest mb-2">Launch Offer</p>
-        <p className="text-[var(--text-primary)] text-2xl font-serif">30% off your first 3 months</p>
-        <p className="text-[var(--text-secondary)] mt-2">Use code <span className="text-[var(--primary-gold)] font-mono font-bold">LAUNCH30</span> at checkout</p>
+        <p className="text-[var(--primary-gold)] text-sm uppercase tracking-widest mb-2">{t('pricing.launch.banner')}</p>
+        <p className="text-[var(--text-primary)] text-2xl font-serif">{t('pricing.launch.headline')}</p>
+        <p className="text-[var(--text-secondary)] mt-2">{t('pricing.launch.code')} <span className="text-[var(--primary-gold)] font-mono font-bold">LAUNCH30</span> {t('pricing.launch.at_checkout')}</p>
       </div>
 
       {/* Feature comparison table */}
@@ -119,7 +119,7 @@ export default function PricingPage() {
             <div key={plan} className={`glass-card p-6 flex flex-col gap-4 ${isAdept ? 'border-[var(--primary-gold)]/50 shadow-[0_0_30px_rgba(201,168,76,0.15)]' : ''}`}>
               {isAdept && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-[var(--primary-gold)] text-black text-xs font-bold px-3 py-1 rounded-full">Most Popular</span>
+                  <span className="bg-[var(--primary-gold)] text-black text-xs font-bold px-3 py-1 rounded-full">{t('plans.most_popular')}</span>
                 </div>
               )}
               <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">{label.name}</div>

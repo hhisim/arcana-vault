@@ -173,5 +173,10 @@
   "testimonials.3.role": "Seeker",
   "chat.meter.unlimited": "Unlimited",
   "plans.studyAll": "Study all traditions",
-  "plans.studyN": "Study {{n}} tradition{{s}}"
+  "plans.studyN": "Study {{n}} tradition{{s}}",
+  "pricing.launch.banner": "Launch Offer",
+  "pricing.launch.headline": "30% off your first 3 months",
+  "pricing.launch.code": "Use code",
+  "pricing.launch.at_checkout": "at checkout",
+  "plans.most_popular": "Most Popular"
 }
