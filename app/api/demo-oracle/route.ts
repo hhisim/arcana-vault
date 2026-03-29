@@ -28,56 +28,35 @@ const DEMO_ANSWERS = [
   },
 ]
 
-async function getLiveAnswer(q: string, tradition: string): Promise<{ answer: string; live: boolean }> {
-  // Try direct VPS public IP first
+async function getLiveAnswer(q: string, tradition: string): Promise<string | null> {
+  // Use the oracle/ask route which properly proxies to VPS and accumulates streaming response
   try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 55000)
-
-    const url = `http://204.168.154.237:8002/ask?q=${encodeURIComponent(q)}&tradition=${encodeURIComponent(tradition.toLowerCase())}`
-    const res = await fetch(url, {
-      method: 'GET',
-      signal: controller.signal,
-    })
-
-    clearTimeout(timeout)
-    if (res.ok) {
-      const text = await res.text()
-      if (text.trim().length > 10) {
-        return { answer: text.trim(), live: true }
-      }
-    }
-  } catch {}
-
-  // Fallback through Vercel (circular but works)
-  try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 55000)
-
     const res = await fetch('https://vaultofarcana.com/api/oracle/ask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ q, tradition }),
-      signal: controller.signal,
+      signal: AbortSignal.timeout(58000),
     })
 
-    clearTimeout(timeout)
-    if (res.ok) {
-      const text = await res.text()
-      if (text.trim().length > 10) {
-        // Try parse JSON (accumulated NDJSON)
-        try {
-          const obj = JSON.parse(text)
-          if (obj.answer) return { answer: obj.answer, live: true }
-          if (obj.response) return { answer: obj.response, live: true }
-        } catch {}
-        // Return as plain text
-        return { answer: text.trim(), live: true }
-      }
-    }
-  } catch {}
+    if (!res.ok) return null
 
-  return { answer: '', live: false }
+    const text = await res.text()
+
+    // Try JSON first
+    try {
+      const obj = JSON.parse(text)
+      if (obj.answer) return obj.answer
+      if (obj.response) return obj.response
+    } catch {}
+
+    // Return as plain text if it looks like an answer
+    const cleaned = text.trim()
+    if (cleaned.length > 20) return cleaned
+
+    return null
+  } catch {
+    return null
+  }
 }
 
 export async function GET() {
@@ -127,19 +106,19 @@ export async function POST(req: NextRequest) {
     tradition = 'kabbalah'; answerObj = DEMO_ANSWERS[4]
   }
 
-  // Try live backend
-  const live = await getLiveAnswer(q, tradition)
-  if (live.answer) {
+  // Try live oracle — the oracle/ask route handles streaming accumulation
+  const liveAnswer = await getLiveAnswer(q, tradition)
+  if (liveAnswer) {
     return NextResponse.json({
       question: q,
-      answer: live.answer,
+      answer: liveAnswer,
       tradition: tradition.charAt(0).toUpperCase() + tradition.slice(1),
-      isLive: live.live,
+      isLive: true,
       remaining: 3 - ((record?.count) || 1),
     })
   }
 
-  // Absolute fallback
+  // Fallback to curated static answer
   return NextResponse.json({
     ...answerObj,
     question: q,
