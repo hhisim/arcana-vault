@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
       success_url: `${site}/membership?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${site}/pricing?checkout=cancelled`,
       allow_promotion_codes: true,
+      discounts: [{ coupon: 'LAUNCH30' }],
       subscription_data: {
         metadata: { user_id: user.id, plan },
       },
