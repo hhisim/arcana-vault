@@ -7,3 +7,4 @@
 node_modules/@next/swc-linux-*/
 node_modules/@vercel/ncc/
 .env.production.local
+.env.vercel
