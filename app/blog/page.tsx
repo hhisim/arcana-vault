@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { useSiteI18n } from '@/lib/site-i18n';
 import { posts } from '@/lib/posts';
 import { postsI18n } from '@/lib/posts-i18n';
@@ -126,7 +127,7 @@ export default function BlogPage() {
             {featured && filter === 'all' && (
               <section className="relative h-96 w-full rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl group cursor-pointer">
                 {featured.hero ? (
-                  <img src={featured.hero} alt={featured.title} className="absolute inset-0 w-full h-full object-contain" />
+                  <Image src={featured.hero} alt={featured.title} fill className="object-contain" sizes="100vw" priority />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-[#7B5EA7] to-[#12121A]" />
                 )}
@@ -158,11 +159,13 @@ export default function BlogPage() {
               {others.map((post) => (
                 <article key={post.slug} className="glass-card rounded-2xl overflow-hidden border border-white/10 group">
                   {post.hero ? (
-                    <div className="h-44 overflow-hidden flex items-center justify-center bg-[#0A0A0F]">
-                      <img
+                    <div className="h-44 overflow-hidden flex items-center justify-center bg-[#0A0A0F] relative">
+                      <Image
                         src={post.hero}
                         alt={post.title}
-                        className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        fill
+                        className="object-contain group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     </div>
                   ) : (
