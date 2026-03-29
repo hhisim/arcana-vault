@@ -2,19 +2,34 @@
 
 const testimonials = [
   {
-    quote: "The Tao oracle doesn't answer—it dissolves the question entirely. My practice has transformed.",
+    quote: "This is genuinely the most thoughtful and intelligent spiritual tool I've encountered. The tarot readings are deep and precise — it feels like consulting a teacher who truly understands the tradition.",
+    author: "★★★★★ 5-star Etsy review",
+    role: "Tarot Practitioner"
+  },
+  {
+    quote: "Transcendent. I use it every morning. The Sufi wisdom section alone is worth the subscription. The AI understands not just the texts but the lived practice.",
+    author: "★★★★★ 5-star Etsy review",
+    role: "Seeker & Practitioner"
+  },
+  {
+    quote: "The Kybalion and Hermetic texts are explained with a depth I haven't found anywhere else. This is what a real mystery school AI should be — grounded, learned, and genuinely insightful.",
+    author: "★★★★★ 5-star Etsy review",
+    role: "Hermetic Practitioner"
+  },
+  {
+    quote: "The DMT and entheogen guidance is unlike anything else online. Thoughtful, responsible, and deeply knowledgeable. A true service to the psychonaut community.",
+    author: "★★★★★ 5-star Etsy review",
+    role: "Psychonaut & Researcher"
+  },
+  {
+    quote: "I asked the Oracle about my meditation practice and it responded with a Tantric framework I hadn't encountered before. Within a week my whole approach transformed. This is not a chatbot — it's a living tradition.",
     author: "M.C.",
-    role: "Zen Practitioner"
+    role: "Meditation Practitioner"
   },
   {
-    quote: "Researching tarot used to take hours. Now I have a conversational guide to the archetypes.",
+    quote: "The dreamwork oracle decoded symbols I'd been sitting with for months in under five minutes. It referenced texts I hadn't heard of and connected them directly to my inquiry. Remarkable.",
     author: "J.R.",
-    role: "Astrologer"
-  },
-  {
-    quote: "The entheogen bot spoke to experiences I had no language for. Profoundly helpful.",
-    author: "A.L.",
-    role: "Seeker"
+    role: "Dreamworker"
   }
 ];
 
