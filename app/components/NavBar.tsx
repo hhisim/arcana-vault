@@ -8,6 +8,7 @@ import { useAuth } from '@/components/auth/AuthProvider'
 import { PLAN_CONFIG } from '@/lib/plans'
 
 export default function NavBar() {
+  const [mobileOpen, setMobileOpen] = useState(false)
   const [exploreOpen, setExploreOpen] = useState(false)
   const exploreRef = useRef<HTMLDivElement>(null)
   const { lang, setLang, t } = useLang()
