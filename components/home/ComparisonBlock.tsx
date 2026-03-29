@@ -13,39 +13,39 @@ interface FeatureRow {
 const features: FeatureRow[] = [
   {
     label: 'Training data',
-    generic: 'Generic internet scrape',
-    basic: 'Few PDFs',
-    vault: 'Curated rare archive, verified sources',
+    generic: 'Generic internet scrape — no lineage, no verification',
+    basic: 'Few PDFs, shallow coverage',
+    vault: 'Curated rare archive, 30+ years of verified sources',
   },
   {
     label: 'Memory',
-    generic: 'None between sessions',
-    basic: 'Basic',
+    generic: 'Wiped after every session',
+    basic: 'None',
     vault: 'Full session context + vault memory',
   },
   {
     label: 'Sources cited',
-    generic: 'Often hallucinated',
-    basic: 'Unverified',
-    vault: 'Real texts, real traditions',
+    generic: 'Hallucinated — no real citations',
+    basic: 'Unverified, often wrong',
+    vault: 'Real texts, real traditions, real lineages',
   },
   {
-    label: 'Tradition context',
-    generic: 'Generic spiritual answers',
-    basic: 'Some context',
-    vault: 'Deep tradition-specific pathways',
+    label: 'Tradition depth',
+    generic: 'Generic spiritual platitudes',
+    basic: 'Surface-level, no deep context',
+    vault: 'Deep tradition-specific pathways and archetypes',
   },
   {
     label: 'Correspondence system',
     generic: 'None',
     basic: 'None',
-    vault: '577 nodes, 12 dimensions',
+    vault: '577 nodes, 12 dimensions — unique to the Vault',
   },
   {
     label: 'Privacy',
-    generic: 'Your data trained on',
-    basic: 'Unknown',
-    vault: 'Private by design',
+    generic: 'Your data is their product',
+    basic: 'Unknown, often shared',
+    vault: 'Private by design — nothing trained on',
   },
 ];
 
@@ -106,7 +106,7 @@ export default function ComparisonBlock() {
               {/* Pricing row */}
               <div className="pt-2">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">Pricing</p>
-                <Cell value="Free" />
+                <Cell value="Free — but generic, sourceless, not grounded in any tradition" />
               </div>
             </div>
           </div>
