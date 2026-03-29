@@ -8,3 +8,8 @@ node_modules/@next/swc-linux-*/
 node_modules/@vercel/ncc/
 .env.production.local
 .env.vercel
+
+# Backup files
+*.bak
+*.backup*
+*.bck
