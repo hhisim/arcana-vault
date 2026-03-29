@@ -37,7 +37,7 @@ async function streamBackendAnswer(question: string, tradition: string): Promise
     const res = await fetch('http://204.168.154.237:8002/ask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q: question, tradition }),
+      body: JSON.stringify({ q: question, tradition: tradition.toLowerCase() }),
       signal: controller.signal,
     })
 
