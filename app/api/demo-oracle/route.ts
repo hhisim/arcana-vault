@@ -28,6 +28,52 @@ const DEMO_ANSWERS = [
   },
 ]
 
+// Stream-aware: accumulate NDJSON chunks from backend
+async function streamBackendAnswer(question: string, tradition: string): Promise<string | null> {
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 25000)
+
+    const res = await fetch('http://204.168.154.237:8002/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: question, tradition }),
+      signal: controller.signal,
+    })
+
+    clearTimeout(timeout)
+
+    if (!res.ok) return null
+
+    // Accumulate streaming NDJSON response
+    const text = await res.text()
+    const lines = text.trim().split('\n')
+    
+    // Last line usually has the full answer
+    for (let i = lines.length - 1; i >= 0; i--) {
+      try {
+        const obj = JSON.parse(lines[i])
+        if (obj.answer || obj.response) return obj.answer || obj.response
+      } catch {}
+    }
+    
+    // Fallback: join all text fields
+    const answers: string[] = []
+    for (const line of lines) {
+      try {
+        const obj = JSON.parse(line)
+        if (typeof obj === 'string') answers.push(obj)
+        else if (obj.answer) answers.push(obj.answer)
+        else if (obj.text) answers.push(obj.text)
+        else if (obj.content) answers.push(obj.content)
+      } catch {}
+    }
+    return answers.join('').trim() || null
+  } catch {
+    return null
+  }
+}
+
 export async function GET() {
   const answer = DEMO_ANSWERS[0]
   return NextResponse.json({ question: answer.question, answer: answer.answer, tradition: answer.tradition })
@@ -63,69 +109,40 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'A question is required.' }, { status: 400 })
   }
 
-  const q = question.toLowerCase().trim()
+  const q = question.trim()
+  const tradition = detectTradition(q)
 
-  // Try live backend first
-  try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 20000)
-
-    const res = await fetch('http://204.168.154.237:8002/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: question.trim(),
-        session_id: `demo-${ip}`,
-        tradition: detectTradition(q)
-      }),
-      signal: controller.signal,
+  // Try live backend
+  const liveAnswer = await streamBackendAnswer(q, tradition)
+  if (liveAnswer) {
+    return NextResponse.json({
+      answer: liveAnswer,
+      tradition: detectTraditionLabel(tradition),
+      question: q,
+      isLive: true,
+      remaining: 3 - ((record?.count) || 1),
     })
-
-    clearTimeout(timeout)
-
-    if (res.ok) {
-      const data = await res.json()
-      const answer = typeof data === 'string' ? data : data?.answer || data?.response
-      if (answer) {
-        return NextResponse.json({
-          answer,
-          tradition: detectTraditionLabel(detectTradition(q)),
-          question: question.trim(),
-          isLive: true,
-          remaining: 3 - ((record?.count) || 1),
-        })
-      }
-    }
-  } catch {
-    // Backend unavailable — fall through to static answers
   }
 
   // Fallback: static answers
-  const selected = DEMO_ANSWERS.find(a => {
-    const t = detectTradition(q)
-    if (t === 'Tarot') return a.tradition === 'Tarot'
-    if (t === 'Sufism') return a.tradition === 'Sufism'
-    if (t === 'Enneagram') return a.tradition === 'Enneagram'
-    if (t === 'Kabbalah') return a.tradition === 'Kabbalah'
-    return a.tradition === 'Taoism'
-  }) || DEMO_ANSWERS[0]
-
+  const selected = DEMO_ANSWERS.find(a => a.tradition === detectTraditionLabel(tradition)) || DEMO_ANSWERS[0]
   return NextResponse.json({
     ...selected,
-    question: question.trim(),
+    question: q,
     isLive: false,
     remaining: 3 - ((record?.count) || 1),
   })
 }
 
 function detectTradition(q: string): string {
-  if (q.includes('tarot') || q.includes('card') || q.includes('major arcana') || q.includes('divination') || q.includes('fool')) return 'Tarot'
-  if (q.includes('sufi') || q.includes('rumi') || q.includes('whirling') || q.includes('dhikr') || q.includes('fana') || q.includes('love')) return 'Sufism'
-  if (q.includes('enneagram') || q.includes('personality') || q.includes('type') || q.includes('attachment')) return 'Enneagram'
-  if (q.includes('kabbalah') || q.includes('sephiroth') || q.includes('jewish') || q.includes('torah') || q.includes('tzimtzum') || q.includes('zohar') || q.includes('reincarnation')) return 'Kabbalah'
-  if (q.includes('tantra') || q.includes('shakti') || q.includes('kundalini')) return 'Tantra'
-  if (q.includes('dream') || q.includes('shadow') || q.includes('jung')) return 'Dreamwalker'
-  if (q.includes('entheogen') || q.includes('dmt') || q.includes('psychedelic') || q.includes('lsd') || q.includes('medicine')) return 'Entheogen'
+  const lower = q.toLowerCase()
+  if (lower.includes('tarot') || lower.includes('card') || lower.includes('major arcana') || lower.includes('divination') || lower.includes('fool')) return 'Tarot'
+  if (lower.includes('sufi') || lower.includes('rumi') || lower.includes('whirling') || lower.includes('dhikr') || lower.includes('fana') || lower.includes('love')) return 'Sufism'
+  if (lower.includes('enneagram') || lower.includes('personality') || lower.includes('type') || lower.includes('attachment')) return 'Enneagram'
+  if (lower.includes('kabbalah') || lower.includes('sephiroth') || lower.includes('jewish') || lower.includes('torah') || lower.includes('tzimtzum') || lower.includes('zohar') || lower.includes('reincarnation')) return 'Kabbalah'
+  if (lower.includes('tantra') || lower.includes('shakti') || lower.includes('kundalini')) return 'Tantra'
+  if (lower.includes('dream') || lower.includes('shadow') || lower.includes('jung')) return 'Dreamwalker'
+  if (lower.includes('entheogen') || lower.includes('dmt') || lower.includes('psychedelic') || lower.includes('lsd') || lower.includes('medicine')) return 'Entheogen'
   return 'Taoism'
 }
 
