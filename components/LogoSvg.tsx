@@ -62,4 +62,6 @@ export default function LogoSvg({ className = 'h-12 md:h-14 w-auto' }: { classNa
         </g>
       </g>
       <g id="Layer_3_xA0_Image">
-        <image id="Layer_3_xA0_Image1" data-name="Layer_3_xA0_Image" width="621" height="18" transform="translate(205.47 158.52) scale(.24)" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAm4AAAARCAYAAABkQyAuAAAACXBIWXMAAC4jAAAuIwF4pT92AAABxklEQVR4nO3dQXLaMBiA0d+BNmmTNOlpuIQOwBF1AC6hW3VRM+MK0yhg
+        <image id="Layer_3_xA0_Image1" data-name="Layer_3_xA0_Image" width="621" height="18" transform="translate(205.47 158.52) scale(.24)" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAm4AAAARCAYAAABkQyAuAAAACXBIWXMAAC4jAAAuIwF4pT92AAABxklEQVR4nO3dQXLaMBiA0d+BNmmTNOlpuIQOwBF1AC6hW3VRM+MK0yhg"/>
+      </g>
+    </svg>
