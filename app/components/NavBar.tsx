@@ -8,17 +8,21 @@ import { useAuth } from '@/components/auth/AuthProvider'
 import { PLAN_CONFIG } from '@/lib/plans'
 
 export default function NavBar() {
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [exploreOpen, setExploreOpen] = useState(false)
+  const exploreRef = useRef<HTMLDivElement>(null)
   const { lang, setLang, t } = useLang()
   const auth = useAuth()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Close dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false)
+      }
+      if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
+        setExploreOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -28,15 +32,18 @@ export default function NavBar() {
   const navLinks = [
     { href: '/', label: t(SITEDICT.nav.home) },
     { href: '/chat', label: t(SITEDICT.nav.chat) },
-    { href: '/journal', label: t(SITEDICT.nav.journal) },
-    { href: '/inquiry', label: 'Inquiry' },
-    { href: '/daily', label: 'Daily' },
-    { href: '/library', label: t(SITEDICT.nav.library) },
     { href: '/traditions', label: 'Traditions' },
-    { href: '/correspondence-engine', label: t(SITEDICT.nav.codex) },
-    { href: '/agora', label: t(SITEDICT.nav.agora) },
+    { href: '/library', label: t(SITEDICT.nav.library) },
     { href: '/blog', label: t(SITEDICT.nav.scroll) },
     { href: '/pricing', label: 'Pricing' },
+  ]
+
+  const exploreLinks = [
+    { href: '/daily', label: 'Daily Practice' },
+    { href: '/journal', label: 'Journal' },
+    { href: '/inquiry', label: 'Inquiry' },
+    { href: '/correspondence-engine', label: t(SITEDICT.nav.codex) },
+    { href: '/agora', label: t(SITEDICT.nav.agora) },
   ]
 
   const planName = auth.isAuthenticated ? PLAN_CONFIG[auth.plan]?.name : null
@@ -60,6 +67,30 @@ export default function NavBar() {
               {link.label}
             </a>
           ))}
+          {/* Explore dropdown */}
+          <div className="relative" ref={exploreRef}>
+            <button
+              onClick={() => setExploreOpen(!exploreOpen)}
+              className="text-[#9B93AB] hover:text-[#E8E0F0] transition-colors duration-200 text-sm font-medium focus:outline-none flex items-center gap-1"
+            >
+              Explore
+              <svg className={`w-3 h-3 transition-transform ${exploreOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {exploreOpen && (
+              <div className="absolute right-0 mt-3 w-48 rounded-xl border border-white/10 bg-[#1a1a2e]/95 backdrop-blur-xl shadow-2xl overflow-hidden z-50">
+                {exploreLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="block px-4 py-2.5 text-sm text-[#9B93AB] hover:text-[#E8E0F0] hover:bg-white/5 transition-colors"
+                    onClick={() => setExploreOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right side: language + auth */}
@@ -202,6 +233,14 @@ export default function NavBar() {
                 {link.label}
               </a>
             ))}
+            <div className="border-t border-white/10 pt-3 mt-1">
+              <div className="text-xs text-[#9B93AB] uppercase tracking-wider mb-2">Explore</div>
+              {exploreLinks.map((link) => (
+                <a key={link.href} href={link.href} className="block text-[#9B93AB] hover:text-[#E8E0F0] py-1.5 text-sm transition-colors" onClick={() => setMobileOpen(false)}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
             {auth.isAuthenticated ? (
               <>
                 <div className="border-t border-white/10 pt-3 mt-1">
