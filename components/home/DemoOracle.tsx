@@ -15,7 +15,7 @@ const PRESET_QUESTIONS = [
 ];
 
 export default function DemoOracle() {
-  const [status, setStatus] = useState<'loading' | 'live' | 'fallback'>('loading');
+  const [status, setStatus] = useState<'loading' | 'demo' | 'fallback'>('loading');
   const [answer, setAnswer] = useState(FALLBACK_ANSWER);
   const [question, setQuestion] = useState(FALLBACK_QUESTION);
   const [tradition, setTradition] = useState('Taoism');
@@ -34,7 +34,7 @@ export default function DemoOracle() {
           setAnswer(d.answer);
           setQuestion(d.question || FALLBACK_QUESTION);
           setTradition(d.tradition || 'Taoism');
-          setStatus('live');
+          setStatus('demo');
         } else {
           setStatus('fallback');
         }
@@ -61,7 +61,7 @@ export default function DemoOracle() {
 
       if (!res.ok) {
         if (res.status === 429) {
-          setError('Demo limit reached — visit the full Oracle for unlimited questions.');
+          setError('Demo limit reached — visit /chat for unlimited access.');
         } else {
           setError(data.error || 'The oracle is in meditation. Please try again.');
         }
@@ -73,7 +73,7 @@ export default function DemoOracle() {
         setQuestion(data.question || q);
         setAnswer(data.answer);
         setTradition(data.tradition || 'Oracle');
-        setStatus('live');
+        setStatus('demo');
         setInputValue('');
         setShowInput(false);
         if (data.remaining !== undefined) setRemaining(data.remaining);
@@ -108,7 +108,6 @@ export default function DemoOracle() {
           {/* Card header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
             <div className="flex items-center gap-3">
-              {/* Oracle icon */}
               <div className="w-8 h-8 rounded-full bg-[rgba(201,168,76,0.15)] border border-[rgba(201,168,76,0.3)] flex items-center justify-center">
                 <svg className="w-4 h-4 text-[#C9A84C]" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5"/>
@@ -123,12 +122,11 @@ export default function DemoOracle() {
               </div>
             </div>
 
-            {/* Status badge */}
             <div className="flex items-center gap-2">
-              {status === 'live' && (
+              {status === 'demo' && (
                 <div className="flex items-center gap-1.5 mr-3">
                   <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="text-xs text-emerald-400 font-medium">Live</span>
+                  <span className="text-xs text-emerald-400 font-medium">Demo</span>
                 </div>
               )}
               {remaining !== null && remaining < 3 && (
@@ -155,7 +153,7 @@ export default function DemoOracle() {
             </div>
           </div>
 
-          {/* Question bubble (right-aligned, user style) */}
+          {/* Question bubble */}
           <div className="px-6 pt-5">
             <div className="flex justify-end">
               <div className="max-w-[80%] rounded-2xl rounded-tr-md bg-[rgba(123,94,167,0.15)] border border-[rgba(123,94,167,0.25)] px-5 py-3">
@@ -166,10 +164,9 @@ export default function DemoOracle() {
             </div>
           </div>
 
-          {/* Answer (left-aligned, oracle style) */}
+          {/* Answer */}
           <div className="px-6 pt-4 pb-6">
             <div className="flex items-start gap-3">
-              {/* Oracle avatar */}
               <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[rgba(201,168,76,0.15)] border border-[rgba(201,168,76,0.3)] flex items-center justify-center mt-0.5">
                 <svg className="w-3.5 h-3.5 text-[#C9A84C]" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5"/>
@@ -177,8 +174,6 @@ export default function DemoOracle() {
                   <circle cx="12" cy="12" r="1"/>
                 </svg>
               </div>
-
-              {/* Answer text */}
               <div className="flex-1 min-w-0">
                 {isSubmitting ? (
                   <div className="space-y-2">
@@ -199,7 +194,7 @@ export default function DemoOracle() {
             </div>
           </div>
 
-          {/* Ask your own question — expandable input */}
+          {/* Ask your own */}
           {!showInput ? (
             <div className="px-6 pb-5">
               <button
@@ -240,13 +235,13 @@ export default function DemoOracle() {
             </div>
           )}
 
-          {/* Card footer */}
+          {/* Footer */}
           <div className="px-6 py-4 border-t border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-[10px] text-[#9B93AB]">
               <svg className="w-3 h-3 text-[#7B5EA7]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
-              <span>{status === 'live' ? 'Live from the Archive' : 'Preview — connect to Oracle for full experience'}</span>
+              <span>Demo — Full Oracle at /chat</span>
             </div>
 
             <Link

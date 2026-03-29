@@ -28,55 +28,38 @@ const DEMO_ANSWERS = [
   },
 ]
 
-// Stream-aware: accumulate NDJSON chunks from backend
-async function streamBackendAnswer(question: string, tradition: string): Promise<string | null> {
+async function getBackendAnswer(q: string, tradition: string): Promise<string | null> {
   try {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 25000)
+    const timeout = setTimeout(() => controller.abort(), 50000)
 
     const res = await fetch('http://204.168.154.237:8002/ask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q: question, tradition: tradition.toLowerCase() }),
+      body: JSON.stringify({ q, tradition: tradition.toLowerCase() }),
       signal: controller.signal,
     })
 
     clearTimeout(timeout)
-
     if (!res.ok) return null
 
-    // Accumulate streaming NDJSON response
     const text = await res.text()
     const lines = text.trim().split('\n')
-    
-    // Last line usually has the full answer
     for (let i = lines.length - 1; i >= 0; i--) {
       try {
         const obj = JSON.parse(lines[i])
-        if (obj.answer || obj.response) return obj.answer || obj.response
+        if (obj.answer) return obj.answer
+        if (typeof obj === 'string' && obj.length > 10) return obj
       } catch {}
     }
-    
-    // Fallback: join all text fields
-    const answers: string[] = []
-    for (const line of lines) {
-      try {
-        const obj = JSON.parse(line)
-        if (typeof obj === 'string') answers.push(obj)
-        else if (obj.answer) answers.push(obj.answer)
-        else if (obj.text) answers.push(obj.text)
-        else if (obj.content) answers.push(obj.content)
-      } catch {}
-    }
-    return answers.join('').trim() || null
+    return null
   } catch {
     return null
   }
 }
 
 export async function GET() {
-  const answer = DEMO_ANSWERS[0]
-  return NextResponse.json({ question: answer.question, answer: answer.answer, tradition: answer.tradition })
+  return NextResponse.json(DEMO_ANSWERS[0])
 }
 
 export async function POST(req: NextRequest) {
@@ -91,10 +74,7 @@ export async function POST(req: NextRequest) {
   if (record) {
     if (now < record.resetAt) {
       if (record.count >= 3) {
-        return NextResponse.json(
-          { error: 'Demo limit reached. Try the full Oracle for unlimited questions.' },
-          { status: 429 }
-        )
+        return NextResponse.json({ error: 'Demo limit reached — visit /chat for unlimited access.' }, { status: 429 })
       }
       record.count++
     } else {
@@ -110,47 +90,38 @@ export async function POST(req: NextRequest) {
   }
 
   const q = question.trim()
-  const tradition = detectTradition(q)
+  const lower = q.toLowerCase()
+
+  // Detect tradition
+  let tradition = 'Taoism'
+  let answerObj = DEMO_ANSWERS[0]
+  if (lower.includes('tarot') || lower.includes('card') || lower.includes('major arcana') || lower.includes('divination') || lower.includes('fool')) {
+    tradition = 'tarot'; answerObj = DEMO_ANSWERS[1]
+  } else if (lower.includes('sufi') || lower.includes('rumi') || lower.includes('whirling') || lower.includes('dhikr') || lower.includes('fana') || lower.includes('love')) {
+    tradition = 'sufi'; answerObj = DEMO_ANSWERS[2]
+  } else if (lower.includes('enneagram') || lower.includes('personality') || lower.includes('type')) {
+    tradition = 'enneagram'; answerObj = DEMO_ANSWERS[3]
+  } else if (lower.includes('kabbalah') || lower.includes('sephiroth') || lower.includes('jewish') || lower.includes('torah') || lower.includes('tzimtzum') || lower.includes('zohar') || lower.includes('reincarnation')) {
+    tradition = 'kabbalah'; answerObj = DEMO_ANSWERS[4]
+  }
 
   // Try live backend
-  const liveAnswer = await streamBackendAnswer(q, tradition)
-  if (liveAnswer) {
+  const live = await getBackendAnswer(q, tradition)
+  if (live) {
     return NextResponse.json({
-      answer: liveAnswer,
-      tradition: detectTraditionLabel(tradition),
       question: q,
+      answer: live,
+      tradition: tradition.charAt(0).toUpperCase() + tradition.slice(1),
       isLive: true,
       remaining: 3 - ((record?.count) || 1),
     })
   }
 
-  // Fallback: static answers
-  const selected = DEMO_ANSWERS.find(a => a.tradition === detectTraditionLabel(tradition)) || DEMO_ANSWERS[0]
+  // Static fallback
   return NextResponse.json({
-    ...selected,
+    ...answerObj,
     question: q,
     isLive: false,
     remaining: 3 - ((record?.count) || 1),
   })
-}
-
-function detectTradition(q: string): string {
-  const lower = q.toLowerCase()
-  if (lower.includes('tarot') || lower.includes('card') || lower.includes('major arcana') || lower.includes('divination') || lower.includes('fool')) return 'Tarot'
-  if (lower.includes('sufi') || lower.includes('rumi') || lower.includes('whirling') || lower.includes('dhikr') || lower.includes('fana') || lower.includes('love')) return 'Sufism'
-  if (lower.includes('enneagram') || lower.includes('personality') || lower.includes('type') || lower.includes('attachment')) return 'Enneagram'
-  if (lower.includes('kabbalah') || lower.includes('sephiroth') || lower.includes('jewish') || lower.includes('torah') || lower.includes('tzimtzum') || lower.includes('zohar') || lower.includes('reincarnation')) return 'Kabbalah'
-  if (lower.includes('tantra') || lower.includes('shakti') || lower.includes('kundalini')) return 'Tantra'
-  if (lower.includes('dream') || lower.includes('shadow') || lower.includes('jung')) return 'Dreamwalker'
-  if (lower.includes('entheogen') || lower.includes('dmt') || lower.includes('psychedelic') || lower.includes('lsd') || lower.includes('medicine')) return 'Entheogen'
-  return 'Taoism'
-}
-
-function detectTraditionLabel(t: string): string {
-  const labels: Record<string, string> = {
-    Tarot: 'Tarot', Sufism: 'Sufism', Enneagram: 'Enneagram',
-    Kabbalah: 'Kabbalah', Tantra: 'Tantra', Dreamwalker: 'Dreamwalker',
-    Entheogen: 'Entheogen', Taoism: 'Taoism',
-  }
-  return labels[t] || 'Oracle'
 }
