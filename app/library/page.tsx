@@ -177,7 +177,7 @@ export default function LibraryPage() {
                   
                   {canAccess(book) ? (
                     <button
-                      onClick={() => book.type === 'embed' ? setSelectedBook(book) : window.open(book.url, '_blank')}
+                      onClick={() => window.open(`https://archive.org/details/${book.url}`, '_blank')}
                       className="w-full rounded-2xl bg-white/5 hover:bg-white/10 py-3.5 text-sm font-bold text-[#E8E0F0] transition-all border border-white/5"
                     >
                       {t('library.read') || 'Begin Reading'}
