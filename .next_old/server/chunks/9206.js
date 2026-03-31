@@ -1,0 +1,1 @@
+"use strict";exports.id=9206,exports.ids=[9206],exports.modules={69206:(e,t,r)=>{r.d(t,{getStripe:()=>E});var i=r(89777);let s=null;function E(){if(!s){if(!process.env.STRIPE_SECRET_KEY)throw Error("STRIPE_SECRET_KEY missing");s=new i.Z(process.env.STRIPE_SECRET_KEY,{apiVersion:"2025-02-24.acacia",httpClient:i.Z.createFetchHttpClient()})}return s}}};

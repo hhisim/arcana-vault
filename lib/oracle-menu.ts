@@ -425,6 +425,123 @@ const MENUS: Record<string, MenuScreen> = {
       back('dreamwalker:root'),
     ],
   },
+
+  // ── Kabbalah ──────────────────────────────────────────────────────────
+  'kabbalah:root': {
+    title: L('✡ The Kabbalist'),
+    buttons: [
+      [action('kab-daily', L('✡ Daily Wisdom', '✡ Günlük Bilgelik', '✡ Мудрость дня'), 'prompt', { prompt: 'Give a single piece of Kabbalistic wisdom for today, drawing from the Zohar, Sefer Yetzirah, or the Ari. Contemplative oracle prose.', mode: 'oracle' }), action('kab-tree', L('🌳 The Tree of Life', '🌳 Hayat Ağacı', '🌳 Древо Жизни'), 'submenu', { nextMenu: 'kabbalah:tree' })],
+      [action('kab-zohar', L('📖 The Zohar', '📖 Zohar', '📖 Зоар'), 'submenu', { nextMenu: 'kabbalah:zohar' }), action('kab-study', L('📚 Deep Study', '📚 Derin Çalışma', '📚 Глубокое изучение'), 'submenu', { nextMenu: 'kabbalah:study' })],
+      [action('kab-meditation', L('🧘 Meditation', '🧘 Meditasyon', '🧘 Медитация'), 'submenu', { nextMenu: 'kabbalah:meditation' }), action('kab-names', L('🔯 72 Names', '🔯 72İsim', '🔯 72 Имени'), 'submenu', { nextMenu: 'kabbalah:names' })],
+      [action('kab-paths', L('🔤 22 Paths & Letters', '🔤 22 Yol ve Harf', '🔤 22 Пути и буквы'), 'submenu', { nextMenu: 'kabbalah:paths' }), action('kab-worlds', L('🌐 Four Worlds', '🌐 Dört Dünya', '🌐 Четыре мира'), 'prompt', { prompt: 'Teach the Four Worlds of Kabbalah — Atziluth, Beriah, Yetzirah, Assiah — and how they nest within each other. Include the divine name, archangelic presence, and angelic order of each world.', mode: 'teacher' })],
+      [action('kab-lurianic', L('🌀 Lurianic System', '🌀 Lurianik Sistem', '🌀 Лурианская система'), 'submenu', { nextMenu: 'kabbalah:lurianic' }), action('kab-hermetic', L('⚗️ Hermetic Qabalah', '⚗️ Hermetik Kabala', '⚗️ Герметическая Каббала'), 'submenu', { nextMenu: 'kabbalah:hermetic' })],
+      [action('kab-learn', L('🎓 Learning Paths', '🎓 Öğrenme Yolları', '🎓 Пути обучения'), 'submenu', { nextMenu: 'kabbalah:learn' }), action('kab-compare', L('⚖️ Compare Schools', '⚖️ Okulları Karşılaştır', '⚖️ Сравнить школы'), 'prompt', { prompt: 'Compare the major schools of Kabbalah: Classical Jewish Kabbalah (Zohar, Cordovero, Luria), Hasidic Kabbalah (Baal Shem Tov, Tanya), and Hermetic Qabalah (Golden Dawn, Crowley, B.O.T.A.) without collapsing them into one.', mode: 'school_compare' })],
+      ...utilityRows,
+    ],
+  },
+
+  'kabbalah:tree': {
+    title: L('🌳 The Tree of Life', '🌳 Hayat Ağacı', '🌳 Древо Жизни'),
+    buttons: [
+      [action('tree-overview', L('🌳 Tree Overview', '🌳 Ağaç Genel Bakış', '🌳 Обзор Древа'), 'prompt', { prompt: 'Teach the Tree of Life as a complete map: the ten Sephiroth, three pillars, four worlds, and 22 connecting paths. How does this map describe the structure of consciousness, creation, and the human soul?', mode: 'teacher' })],
+      [action('tree-keter', L('👑 Keter (Crown)'), 'prompt', { prompt: 'Teach Keter — the first Sephirah, the Crown, the Infinite Will. Its divine name, archangel, correspondences, and how to meditate upon it.', mode: 'sephirah' }), action('tree-chokmah', L('⚡ Chokmah (Wisdom)'), 'prompt', { prompt: 'Teach Chokmah — the second Sephirah, supernal Wisdom. The Yod, the first flash of revelation, the Father principle, and its correspondences.', mode: 'sephirah' })],
+      [action('tree-binah', L('🌊 Binah (Understanding)'), 'prompt', { prompt: 'Teach Binah — the third Sephirah, the supernal Mother. The first Heh, the womb of form, Saturn, and the Great Sea.', mode: 'sephirah' }), action('tree-daat', L("Da'at (Abyss)"), 'prompt', { prompt: "Teach Da'at — the hidden Sephirah, the Abyss. Not one of the ten, yet the gateway to the supernal triad. Explain its role in both Lurianic and Hermetic systems.", mode: 'sephirah' })],
+      [action('tree-chesed', L('💙 Chesed (Mercy)'), 'prompt', { prompt: 'Teach Chesed — the fourth Sephirah, Lovingkindness. Jupiter, the right hand of God, expansive grace, and its role in the moral triad.', mode: 'sephirah' }), action('tree-gevurah', L('🔴 Gevurah (Severity)'), 'prompt', { prompt: 'Teach Gevurah — the fifth Sephirah, Strength and Judgment. Mars, the left hand of God, contraction, boundaries, and sacred fire.', mode: 'sephirah' })],
+      [action('tree-tiferet', L('☀️ Tiferet (Beauty)'), 'prompt', { prompt: 'Teach Tiferet — the sixth Sephirah, the Heart of the Tree. The Sun, the Son, the Vav, the reconciliation of Chesed and Gevurah.', mode: 'sephirah' }), action('tree-netzach', L('🌿 Netzach (Victory)'), 'prompt', { prompt: 'Teach Netzach — the seventh Sephirah, Eternity and Victory. Venus, desire, passion, the right leg, and the force of nature.', mode: 'sephirah' })],
+      [action('tree-hod', L('🧡 Hod (Splendor)'), 'prompt', { prompt: 'Teach Hod — the eighth Sephirah, Splendor and Glory. Mercury, intellect, language, magic, and the architect of form.', mode: 'sephirah' }), action('tree-yesod', L('🌙 Yesod (Foundation)'), 'prompt', { prompt: 'Teach Yesod — the ninth Sephirah, the Foundation. The Moon, the astral plane, sexuality, dreams, the Tzaddik, and the channel between worlds.', mode: 'sephirah' })],
+      [action('tree-malkuth', L('🌍 Malkuth (Kingdom)'), 'prompt', { prompt: 'Teach Malkuth — the tenth Sephirah, the Kingdom. Earth, the Shekhinah, the bride, embodied reality, and the gateway to ascent.', mode: 'sephirah' })],
+      [action('tree-pillars', L('⚡ Three Pillars', '⚡ Üç Sütun', '⚡ Три столпа'), 'prompt', { prompt: 'Teach the three pillars of the Tree of Life: the Pillar of Mercy (right), the Pillar of Severity (left), and the Middle Pillar. How do they balance and what do they represent in the human body and psyche?', mode: 'teacher' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:zohar': {
+    title: L('📖 The Zohar', '📖 Zohar', '📖 Зоар'),
+    buttons: [
+      [action('zohar-intro', L('📖 What is the Zohar?'), 'prompt', { prompt: 'What is the Zohar? Explain its authorship debate (Rabbi Shimon bar Yochai vs Moses de Leon), its structure, its literary form, and why it is considered the central text of Kabbalah.', mode: 'zohar' })],
+      [action('zohar-bereshit', L('🌅 Bereshit (Genesis)'), 'prompt', { prompt: "Teach the Zohar's commentary on Bereshit — the opening of Genesis. How does the Zohar reinterpret creation as a process of divine emanation rather than material fabrication?", mode: 'zohar' }), action('zohar-sifra', L('📜 Sifra Detzniyutha'), 'prompt', { prompt: 'Teach the Sifra Detzniyutha — the Book of Concealed Mystery. What does it reveal about the hidden structure of the Godhead and the unmanifest aspects of the divine?', mode: 'zohar' })],
+      [action('zohar-idra', L('⚡ Idra Rabba & Zuta'), 'prompt', { prompt: 'Teach the Idra Rabba (Greater Assembly) and Idra Zuta (Lesser Assembly) of the Zohar. What happened at these mystical gatherings and what was revealed about the divine face (Partzufim)?', mode: 'zohar' }), action('zohar-raya', L('🐑 Raya Mehemna'), 'prompt', { prompt: 'Teach the Raya Mehemna — the Faithful Shepherd section of the Zohar. How does Moses appear as a guide to Rabbi Shimon, and what does this layer reveal about Torah and commandments?', mode: 'zohar' })],
+      [action('zohar-shimon', L('👤 Rabbi Shimon bar Yochai'), 'prompt', { prompt: 'Tell the story of Rabbi Shimon bar Yochai — the cave, the companions (Chevraya), and how the Zohar tradition portrays his mystical experience and death (Idra Zuta).', mode: 'zohar' }), action('zohar-shekhinah', L('🕊️ The Shekhinah'), 'prompt', { prompt: 'Teach the Shekhinah in the Zohar — the feminine presence of God in exile. Her relationship to Tiferet, the lover-beloved dynamic, and the cosmic drama of divine reunion.', mode: 'zohar' })],
+      [action('zohar-reading', L('📚 How to Read the Zohar'), 'prompt', { prompt: 'Give practical guidance on reading the Zohar as a contemplative practice. Which editions to use (Soncino, Pritzker, Matt), how to approach its narrative style, and how to let the text work on the reader.', mode: 'teacher' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:study': {
+    title: L('📚 Deep Study', '📚 Derin Çalışma', '📚 Глубокое изучение'),
+    buttons: [
+      [action('study-yetzirah', L('🔤 Sefer Yetzirah'), 'prompt', { prompt: 'Teach the Sefer Yetzirah — the Book of Formation. The 10 Sefirot of Nothingness, the 22 foundation letters, the 231 gates. Use Kaplan ed. as primary reference.', mode: 'yetzirah' }), action('study-bahir', L('✨ Sefer HaBahir'), 'prompt', { prompt: 'Teach the Sefer HaBahir — the Book of Brilliance. The earliest Kabbalistic text, its parables, its introduction of the Sephiroth concept.', mode: 'scholar' })],
+      [action('study-etz-chaim', L('🌳 Etz Chaim (Ari)'), 'prompt', { prompt: "Teach the Etz Chaim — the Tree of Life by Chaim Vital, recording the Ari's (Isaac Luria's) Kabbalistic system. Tzimtzum, Shevirat HaKelim, and Tikkun.", mode: 'lurianic' }), action('study-tanya', L('📕 Tanya (Chabad)'), 'prompt', { prompt: 'Teach the Tanya by Rabbi Schneur Zalman of Liadi — the foundational text of Chabad Hasidism. The two souls, the five levels, the Beinoni.', mode: 'scholar' })],
+      [action('study-cordovero', L('🌹 Pardes Rimonim'), 'prompt', { prompt: "Teach Moshe Cordovero's Pardes Rimonim — the Garden of Pomegranates. How Cordovero systematized Kabbalah before Luria.", mode: 'scholar' }), action('study-abulafia', L('🌀 Abulafia Ecstasy'), 'prompt', { prompt: "Teach Abraham Abulafia's ecstatic Kabbalah — his methods of letter permutation, breathing techniques, and prophetic experience.", mode: 'scholar' })],
+      [action('study-gematria', L('🔢 Gematria'), 'prompt', { prompt: 'Teach the art of gematria — the numerical values of Hebrew letters and how they reveal hidden connections in Torah. Include standard gematria, notarikon, temurah, and at-bash.', mode: 'gematria' }), action('study-scholem', L('🏛️ Gershom Scholem'), 'prompt', { prompt: 'Teach Gershom Scholems contribution to Kabbalah studies — Major Trends in Jewish Mysticism, his periodization, and his thesis about Gnosticism and early Kabbalah.', mode: 'historian' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:meditation': {
+    title: L('🧘 Kabbalistic Meditation', '🧘 Kabalistik Meditasyon', '🧘 Каббалистическая медитация'),
+    buttons: [
+      [action('med-hitbodedut', L('🕯️ Hitbodedut'), 'prompt', { prompt: 'Teach hitbodedut — contemplative isolation as practiced in the Kabbalistic tradition. How to enter solitude, how to speak to the divine, and how this differs from Eastern meditation.', mode: 'meditation' })],
+      [action('med-letters', L('🔤 Letter Meditation'), 'prompt', { prompt: 'Teach Kabbalistic letter meditation — how to visualize, combine, and permute Hebrew letters as a path to altered states. The method of Abulafia.', mode: 'meditation' }), action('med-pillar', L('⚡ Middle Pillar'), 'prompt', { prompt: 'Guide a Middle Pillar meditation — the Western magical adaptation. Vibrate the divine names at each Sephirah from Keter to Malkuth, circulating light through the body.', mode: 'pathwork' })],
+      [action('med-sephirah', L('🌳 Sephirah Contemplation'), 'prompt', { prompt: 'Guide a contemplative meditation on a single Sephirah. Include the color, divine name, archangel, and quality to embody.', mode: 'meditation' }), action('med-shema', L('📿 Shema Meditation'), 'prompt', { prompt: 'Teach the Shema as a Kabbalistic meditation — not just a prayer but a unification practice. How the six words encode the union of the Sephiroth.', mode: 'meditation' })],
+      [action('med-pathwork', L('🚶 Pathworking'), 'prompt', { prompt: 'Guide a pathworking meditation on the Tree of Life. Lead the seeker through the gateway, the landscape, and the encounter.', mode: 'pathwork' }), action('med-devekut', L('🔥 Devekut (Cleaving)'), 'prompt', { prompt: 'Teach devekut — the Kabbalistic and Hasidic practice of cleaving to God. How to cultivate constant awareness of the divine in every action, thought, and breath.', mode: 'meditation' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:names': {
+    title: L('🔯 The 72 Names of God', '🔯 Tanrının 72 İsmi', '🔯 72 Имени Бога'),
+    buttons: [
+      [action('names-intro', L('🔯 What Are the 72 Names?'), 'prompt', { prompt: 'Teach the 72 Names of God (Shem HaMephorash) — how they are derived from Exodus 14:19-21, how each three-letter combination functions as a vibrational key.', mode: 'names' })],
+      [action('names-1-18', L('Names 1–18'), 'prompt', { prompt: 'Teach the first 18 of the 72 Names of God. For each: the three Hebrew letters, the angelic intelligence, the quality it governs, and how to meditate on it.', mode: 'names' }), action('names-19-36', L('Names 19–36'), 'prompt', { prompt: 'Teach Names 19-36 of the 72 Names of God. For each: the three Hebrew letters, the angelic intelligence, and the quality it governs.', mode: 'names' })],
+      [action('names-37-54', L('Names 37–54'), 'prompt', { prompt: 'Teach Names 37-54 of the 72 Names of God. For each: the three Hebrew letters, the angelic intelligence, and the quality it governs.', mode: 'names' }), action('names-55-72', L('Names 55–72'), 'prompt', { prompt: 'Teach Names 55-72 of the 72 Names of God. For each: the three Hebrew letters, the angelic intelligence, and the quality it governs.', mode: 'names' })],
+      [action('names-practice', L('🧘 72 Names Practice'), 'prompt', { prompt: 'Give a practical guide to working with the 72 Names: scanning, meditation, visualization, and how to select the right Name for your current situation.', mode: 'practical' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:paths': {
+    title: L('🔤 The 22 Paths & Hebrew Letters', '🔤 22 Yol ve İbrani Harfler', '🔤 22 Пути и еврейские буквы'),
+    buttons: [
+      [action('paths-overview', L('🔤 The 22 Paths Overview'), 'prompt', { prompt: 'Teach the 22 paths of the Tree of Life — how each Hebrew letter connects two Sephiroth, the classification into 3 mothers, 7 doubles, and 12 simples, and the correspondence to Tarot trumps.', mode: 'path' })],
+      [action('paths-mothers', L('🌬️ 3 Mother Letters'), 'prompt', { prompt: 'Teach the three Mother Letters: Aleph (Air/Spirit), Mem (Water), Shin (Fire). Their cosmic role in the Sefer Yetzirah, their Tarot correspondences.', mode: 'path' }), action('paths-doubles', L('🔄 7 Double Letters'), 'prompt', { prompt: 'Teach the seven Double Letters: Beth, Gimel, Daleth, Kaph, Peh, Resh, Tav. Their planetary correspondences and dual nature.', mode: 'path' })],
+      [action('paths-simples', L('✡️ 12 Simple Letters'), 'prompt', { prompt: 'Teach the twelve Simple Letters and their zodiacal correspondences. How do these paths connect the lower Sephiroth?', mode: 'path' }), action('paths-tarot', L('🎴 Paths & Tarot'), 'prompt', { prompt: 'Explain how the 22 Tarot Major Arcana map onto the 22 paths of the Tree of Life. Include the Golden Dawn attributions.', mode: 'path' })],
+      [action('paths-231', L('🌀 231 Gates'), 'prompt', { prompt: 'Teach the 231 Gates of the Sefer Yetzirah — the permutations of the 22 Hebrew letters taken two at a time. What do these gates represent?', mode: 'yetzirah' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:lurianic': {
+    title: L('🌀 Lurianic Kabbalah', '🌀 Lurianik Kabala', '🌀 Лурианская Каббала'),
+    buttons: [
+      [action('luria-tzimtzum', L('🌑 Tzimtzum (Contraction)'), 'prompt', { prompt: 'Teach Tzimtzum — the Aris radical doctrine that God contracted to make room for creation. The Reshimu, the Kav, and why this idea transformed all of Kabbalah.', mode: 'lurianic' })],
+      [action('luria-shevirah', L('💥 Shevirat HaKelim'), 'prompt', { prompt: 'Teach Shevirat HaKelim — the Breaking of the Vessels. Why did the vessels shatter? What are the Nitzotzot (sparks) and Klipot (shells)?', mode: 'lurianic' }), action('luria-tikkun', L('🔧 Tikkun (Repair)'), 'prompt', { prompt: 'Teach Tikkun — the cosmic repair. How do human actions gather the scattered sparks and rebuild the shattered vessels?', mode: 'lurianic' })],
+      [action('luria-partzufim', L('👤 Partzufim (Faces)'), 'prompt', { prompt: 'Teach the five Partzufim of Lurianic Kabbalah: Atik Yomin, Arikh Anpin, Abba, Imma, and Zeir Anpin with Nukvah.', mode: 'lurianic' }), action('luria-gilgul', L('🔄 Gilgul (Reincarnation)'), 'prompt', { prompt: 'Teach Gilgul Neshamot — the Kabbalistic doctrine of reincarnation as taught by the Ari in Shaar HaGilgulim. How does tikkun carry across lifetimes?', mode: 'lurianic' })],
+      [action('luria-ari', L('👤 The Ari (Isaac Luria)'), 'prompt', { prompt: 'Tell the story of Rabbi Isaac Luria (the Ari) — his life in Safed, his relationship with Chaim Vital, his teaching method.', mode: 'historian' }), action('luria-vital', L('📜 Chaim Vital'), 'prompt', { prompt: 'Tell the story of Chaim Vital — the Aris primary student who recorded the Lurianic system.', mode: 'historian' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:hermetic': {
+    title: L('⚗️ Hermetic Qabalah', '⚗️ Hermetik Kabala', '⚗️ Герметическая Каббала'),
+    buttons: [
+      [action('herm-gd', L('✡️ Golden Dawn'), 'prompt', { prompt: 'Teach how the Hermetic Order of the Golden Dawn adapted Jewish Kabbalah into a Western magical system. The grade structure mapped to the Tree, the four color scales.', mode: 'hermetic' })],
+      [action('herm-777', L('📊 777 (Crowley)'), 'prompt', { prompt: "Teach Crowley's 777 — the master correspondence table that maps every symbol onto the Tree of Life. How to use it as a practical tool.", mode: 'hermetic' }), action('herm-bota', L('🎴 B.O.T.A. (Case)'), 'prompt', { prompt: 'Teach Paul Foster Case and B.O.T.A. — how Case integrated Qabalah with Tarot, color theory, and sound vibration into a complete Western mystery school curriculum.', mode: 'hermetic' })],
+      [action('herm-fortune', L('📕 Dion Fortune'), 'prompt', { prompt: "Teach Dion Fortune's contribution through The Mystical Qabalah — the most accessible Western introduction to the Tree. Her emphasis on psychological realities and practical pathworking.", mode: 'hermetic' }), action('herm-qliphoth', L('🕸️ Qliphoth & Nightside'), 'prompt', { prompt: 'Teach the Qliphoth — the shadow side of the Tree of Life. The shells, the anti-Sephiroth, the tunnels of Set. Handle with care.', mode: 'qliphoth' })],
+      [action('herm-ritual', L('🕯️ Ritual Qabalah'), 'prompt', { prompt: 'Teach the practical ritual applications: the Lesser Banishing Ritual of the Pentagram, the Middle Pillar, the Qabalistic Cross.', mode: 'practical' }), action('herm-knight', L('📚 Gareth Knight'), 'prompt', { prompt: "Teach Gareth Knight's Practical Guide to Qabalistic Symbolism — how the two-volume system maps every symbol to the Sephiroth and paths.", mode: 'hermetic' })],
+      back('kabbalah:root'),
+    ],
+  },
+
+  'kabbalah:learn': {
+    title: L('🎓 Learning Paths', '🎓 Öğrenme Yolları', '🎓 Пути обучения'),
+    buttons: [
+      [action('learn-kab-begin', L('🌱 Foundation Path', '🌱 Temel Yol', '🌱 Основы'), 'prompt', { prompt: 'Give the Foundation learning path for Kabbalah: start with Dion Fortune or Halevi, learn the Tree, the Four Worlds, and the Hebrew letters. Step by step with book recommendations.', mode: 'teacher' }), action('learn-kab-inter', L('🔥 Practitioner Path', '🔥 Uygulayıcı Yolu', '🔥 Путь практика'), 'prompt', { prompt: 'Give the Practitioner learning path: Zohar study, Lurianic Kabbalah, Kabbalistic meditation (Kaplan), gematria, and the kavvanot. Step by step with sources and practice.', mode: 'teacher' })],
+      [action('learn-kab-herm', L('⚗️ Hermetic Path', '⚗️ Hermetik Yol', '⚗️ Герметический путь'), 'prompt', { prompt: 'Give the Hermetic Qabalah learning path: Golden Dawn (Regardie), 777 (Crowley), B.O.T.A. (Case), pathworking, and practical ritual. Step by step.', mode: 'teacher' }), action('learn-kab-acad', L('🏛️ Academic Path', '🏛️ Akademik Yol', '🏛️ Академический путь'), 'prompt', { prompt: 'Give the Academic Kabbalah studies path: Scholem, Idel, Wolfson, Dan, Matt, Fishbane. Major Trends, Kabbalah: New Perspectives, and critical scholarship.', mode: 'teacher' })],
+      [action('learn-kab-hasid', L('🕎 Hasidic Path', '🕎 Hasidik Yol', '🕎 Хасидский путь'), 'prompt', { prompt: 'Give the Hasidic Kabbalah path: from the Baal Shem Tov through the Tanya to contemporary Chabad and Breslov practice. Focus on devekut, hitbodedut, joy, and the democratization of mystical experience.', mode: 'teacher' }), action('learn-kab-prac', L('🔮 Practical Magic Path', '🔮 Pratik Büyü Yolu', '🔮 Путь практической магии'), 'prompt', { prompt: 'Give the Practical Kabbalistic Magic path: from Bardons Key to the True Quabbalah through Ambelains Practical Kabbalah to the Shem operations and angel magic.', mode: 'teacher' })],
+      back('kabbalah:root'),
+    ],
+  },
 }
 
 export function getMenuScreen(pack: OraclePack, menuKey?: string, _currentCard?: string | null): MenuScreen {

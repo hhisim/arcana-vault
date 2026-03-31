@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST='{"app/chat/page.tsx -> @/app/components/OraclePortal":{"id":3782,"files":["static/chunks/6038-f48d1daab766de4f.js","static/chunks/4201-3598154f24f7f49b.js","static/chunks/3782.e19cbfb43db7f715.js"]},"app/components/OraclePortal.tsx -> @/lib/tantra-data":{"id":552,"files":["static/chunks/552.7a4af1f320cc74ac.js"]}}';

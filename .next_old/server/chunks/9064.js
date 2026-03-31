@@ -1,0 +1,1 @@
+"use strict";exports.id=9064,exports.ids=[9064],exports.modules={99064:(s,e,r)=>{r.d(e,{getAdminSupabase:()=>o});var t=r(37857);function o(){let s="https://mqixjzolgrdzbwzkrzxz.supabase.co",e=process.env.SUPABASE_SERVICE_ROLE_KEY;if(!s||!e)throw Error("Supabase admin env vars are missing");return(0,t.eI)(s,e,{auth:{persistSession:!1,autoRefreshToken:!1}})}}};

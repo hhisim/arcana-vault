@@ -493,10 +493,10 @@ export const traditions: Record<string, TraditionEntry> = {
     subtitle: 'The Tree of Life and the architecture of creation',
     description:
       'The ten Sephiroth, the 22 paths, the four worlds — Kabbalistic cosmology as a living map of consciousness, creation, and return.',
-    status: 'coming_soon',
+    status: 'live',
     color: '#C9A84C',
     accentColor: '#E8D590',
-    oracleLink: '/chat?tradition=tarot',
+    oracleLink: '/chat?tradition=kabbalah',
     primaryTexts: [
       {
         title: 'The Zohar',
