@@ -1,5 +1,5 @@
 
-export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'kabbalah'
+export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'kabbalah' | 'chaos-magick'
 export type UiLang = 'en' | 'tr' | 'ru'
 
 export type OracleMode =

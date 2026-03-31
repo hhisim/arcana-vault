@@ -443,10 +443,10 @@ export const traditions: Record<string, TraditionEntry> = {
     subtitle: 'Belief as recursive technology',
     description:
       'Cast sigils with precision. Engineer paradigm shifts. The pragmatic neo-occultism of Austin Osman Spare, Peter Carroll, and the IOT made living and interactive.',
-    status: 'coming_soon',
+    status: 'live',
     color: '#E83E8C',
     accentColor: '#F070B8',
-    oracleLink: '/chat?tradition=tarot',
+    oracleLink: '/chat?tradition=chaos-magick',
     primaryTexts: [
       {
         title: 'The Book of Pleasure',

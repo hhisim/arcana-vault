@@ -1,5 +1,5 @@
 export type PlanId = 'guest' | 'free' | 'seeker' | 'adept' | 'full'
-export type TraditionId = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker'
+export type TraditionId = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'chaos-magick'
 
 export type PlanConfig = {
   id: PlanId
@@ -12,7 +12,7 @@ export type PlanConfig = {
   priceMonthly?: number
 }
 
-export const TRADITIONS: TraditionId[] = ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker']
+export const TRADITIONS: TraditionId[] = ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker', 'chaos-magick']
 
 // New V2 env vars (set on Vercel) > hardcoded fallback > old env vars
 const SEEKER_PRICE = (

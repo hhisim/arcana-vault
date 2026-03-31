@@ -542,6 +542,102 @@ const MENUS: Record<string, MenuScreen> = {
       back('kabbalah:root'),
     ],
   },
+
+  // ── Chaos Magick ─────────────────────────────────────────────────────────
+  'chaos-magick:root': {
+    title: L('✴ The Paradigm Hacker'),
+    buttons: [
+      [action('chaos-daily', L('✴ Daily Hack', '✴ Günlük Hack', '✴ Хак дня'), 'prompt', { prompt: 'Give a single piece of pragmatic chaos magick wisdom for today. Short, sharp, operational. Channel Spare\'s directness.', mode: 'oracle' }), action('chaos-sigils', L('🔮 Sigil Workshop', '🔮 Sigil Atölyesi', '🔮 Сигильная мастерская'), 'submenu', { nextMenu: 'chaos-magick:sigils' })],
+      [action('chaos-spare', L('🖤 Austin Osman Spare', '🖤 Austin Osman Spare', '🖤 Остин Осман Спэйр'), 'submenu', { nextMenu: 'chaos-magick:spare' }), action('chaos-servitors', L('👁 Servitors & Entities', '👁 Servitörler', '👁 Сервиторы'), 'submenu', { nextMenu: 'chaos-magick:servitors' })],
+      [action('chaos-gnosis', L('⚡ Gnosis States', '⚡ Gnosis Durumları', '⚡ Состояния гнозиса'), 'submenu', { nextMenu: 'chaos-magick:gnosis' }), action('chaos-lhp', L('🔥 Left Hand Path', '🔥 Sol El Yolu', '🔥 Путь Левой Руки'), 'submenu', { nextMenu: 'chaos-magick:lhp' })],
+      [action('chaos-practical', L('🛠️ Practical Sorcery', '🛠️ Pratik Büyü', '🛠️ Практическая магия'), 'submenu', { nextMenu: 'chaos-magick:practical' }), action('chaos-paradigm', L('🔄 Paradigm Shifting', '🔄 Paradigma Kaydırma', '🔄 Сдвиг парадигмы'), 'submenu', { nextMenu: 'chaos-magick:paradigm' })],
+      [action('chaos-learn', L('🎓 Learning Paths', '🎓 Öğrenme Yolları', '🎓 Пути обучения'), 'submenu', { nextMenu: 'chaos-magick:learn' }), action('chaos-compare', L('⚖️ Compare Currents', '⚖️ Akımları Karşılaştır', '⚖️ Сравнить течения'), 'prompt', { prompt: 'Compare the major currents within and around chaos magick: Spare\'s art-magic, Carroll\'s IOT, Ford\'s Luciferianism, Morrison\'s pop-magic, and Crowley\'s Thelema as precursor. What each uniquely contributes and where they diverge.', mode: 'school_compare' })],
+      ...utilityRows,
+    ],
+  },
+
+  'chaos-magick:sigils': {
+    title: L('🔮 Sigil Workshop', '🔮 Sigil Atölyesi', '🔮 Сигильная мастерская'),
+    buttons: [
+      [action('sigil-create', L('✏️ Create a Sigil (Full Guide)'), 'prompt', { prompt: 'Walk me through creating a sigil from scratch: crafting the statement of intent, the reduction methods (word, letter, and pictorial), designing the glyph, and finalizing it for charging. Be precise and operational.', mode: 'sigil' })],
+      [action('sigil-charge', L('⚡ Charging Methods'), 'prompt', { prompt: 'Teach all the major sigil charging methods: sexual gnosis, pain, exhaustion, meditation/trance, ecstatic dance, laughter, the death posture, and the "doesn\'t matter / need not be" method. Compare their strengths and when to use each.', mode: 'sigil' }), action('sigil-launch', L('🚀 Launching & Forgetting'), 'prompt', { prompt: 'Teach the art of launching and forgetting a sigil — why forgetting matters, the different approaches (fire, burial, distraction), and what to do when a sigil won\'t leave your mind. Include Spare\'s "neither-neither" approach vs Carroll\'s systematic method.', mode: 'sigil' })],
+      [action('sigil-alphabet', L('🔤 Alphabet of Desire'), 'prompt', { prompt: 'Teach Spare\'s Alphabet of Desire — not standard sigil magick but his personal system of symbolic representations of fundamental drives. How it differs from simple letter-reduction sigils, how to build your own alphabet, and why Spare considered it his most important magical tool.', mode: 'spare' }), action('sigil-trouble', L('🔧 Troubleshooting'), 'prompt', { prompt: 'Why do sigils fail? Common mistakes: weak gnosis, poor intent formulation, obsessing over results, lust of result, unconscious counter-intentions. How to diagnose and fix failed sigil work.', mode: 'sigil' })],
+      [action('sigil-advanced', L('🌀 Advanced Techniques'), 'prompt', { prompt: 'Teach advanced sigil techniques: linking sigils, time-delayed sigils, sigil chains, shoaling (launching multiple sigils together), hypersigils (narrative-based reality engineering), and robofish technique. How Gordon White and Peter Carroll expanded Spare\'s original method.', mode: 'sigil' })],
+      back('chaos-magick:root'),
+    ],
+  },
+
+  'chaos-magick:spare': {
+    title: L('🖤 Austin Osman Spare'),
+    buttons: [
+      [action('spare-book', L('📖 The Book of Pleasure'), 'prompt', { prompt: 'Teach the core ideas of Spare\'s Book of Pleasure (Self-Love): the nature of desire, the Kia, Zos, the Neither-Neither principle, and how the book lays the foundation for all chaos magick. This text is dense — unpack it carefully.', mode: 'spare' })],
+      [action('spare-zos', L('🤲 Zos (The Body)'), 'prompt', { prompt: 'Teach Spare\'s concept of Zos — the body considered as a whole, the total psycho-physical organism as a magical instrument. How does Zos relate to Kia? Why did Spare insist that magic operates through the body, not despite it?', mode: 'spare' }), action('spare-kia', L('💨 Kia (Atmospheric I)'), 'prompt', { prompt: 'Teach Spare\'s concept of Kia — the atmospheric "I", pure awareness freed from all belief and identification. How is Kia the source of magical power? How does one access it?', mode: 'spare' })],
+      [action('spare-nn', L('∅ Neither-Neither'), 'prompt', { prompt: 'Teach Spare\'s Neither-Neither principle — the exhaustion of all duality, the yes and no, belief and disbelief. How it functions as both a philosophical insight and a practical magical technique. Why Spare considered it the key to all sorcery.', mode: 'spare' }), action('spare-atavism', L('🐍 Atavistic Resurgence'), 'prompt', { prompt: 'Teach Spare\'s doctrine of Atavistic Resurgence — the deliberate invocation of pre-human, ancestral, and animal states of consciousness. How did Spare access these through art and the death posture? What are the risks and the rewards?', mode: 'spare' })],
+      [action('spare-death', L('💀 The Death Posture'), 'prompt', { prompt: 'Teach the Death Posture — Spare\'s technique of extreme physical tension followed by collapse to achieve momentary ego-death and gnosis. The original form from the Book of Pleasure and its modern adaptations. Include safety considerations.', mode: 'spare' }), action('spare-art', L('🎨 Art as Magic'), 'prompt', { prompt: 'Teach how Spare used automatic drawing, painting, and the creative act itself as a magical technique. The relationship between aesthetic trance, the subconscious, and the manifestation of desire through art.', mode: 'spare' })],
+      [action('spare-bio', L('👤 Spare\'s Life & Legacy'), 'prompt', { prompt: 'Tell the story of Austin Osman Spare — the prodigy who exhibited at the Royal Academy at 17, rejected Crowley\'s AA, chose poverty and obscurity over fame, and died in a basement in Brixton. How his life embodied his philosophy.', mode: 'historian' })],
+      back('chaos-magick:root'),
+    ],
+  },
+
+  'chaos-magick:servitors': {
+    title: L('👁 Servitors & Entities', '👁 Servitörler ve Varlıklar', '👁 Сервиторы и сущности'),
+    buttons: [
+      [action('serv-create', L('🔨 Create a Servitor (Full Guide)'), 'prompt', { prompt: 'Walk me through creating a servitor from scratch: defining its purpose, designing its form and name, determining its power source (offerings, emotions, actions), setting behavioral parameters and limitations, activation method, maintenance schedule, and dissolution protocol. Be thorough and operational.', mode: 'servitor' })],
+      [action('serv-types', L('📋 Types of Servitors'), 'prompt', { prompt: 'Teach the different types of servitors and thought-form entities: simple task servitors, guardian servitors, information-gathering servitors, egregores (group thought-forms), and the distinction between servitors and independently existing spirits. When to use each.', mode: 'servitor' }), action('serv-maintain', L('🔧 Maintenance & Dissolution'), 'prompt', { prompt: 'Teach servitor maintenance and disposal: how to feed a servitor, how to know when it\'s working, signs of malfunction or rogue behavior, how to repair a damaged servitor, and how to safely dissolve one when its task is complete. The importance of always including a kill-switch.', mode: 'servitor' })],
+      [action('serv-ford', L('🔥 Ford\'s Chaos Servitors'), 'prompt', { prompt: 'Teach Michael Ford\'s approach to chaos servitors from his writings — how his Luciferian framework shapes the creation and deployment of thought-form entities. How does the adversarial current inform servitor design?', mode: 'lhp' }), action('serv-egregore', L('🌐 Egregores & Group Mind'), 'prompt', { prompt: 'Teach the concept of egregores — thought-forms created by groups rather than individuals. How magical orders, religions, corporations, and fandoms create and sustain egregores. How a chaos mage can work with or against existing egregores.', mode: 'servitor' })],
+      back('chaos-magick:root'),
+    ],
+  },
+
+  'chaos-magick:gnosis': {
+    title: L('⚡ Gnosis States', '⚡ Gnosis Durumları', '⚡ Состояния гнозиса'),
+    buttons: [
+      [action('gnosis-overview', L('⚡ What is Gnosis?'), 'prompt', { prompt: 'Teach gnosis in chaos magick — the altered state of consciousness where magical operations are performed. Why is gnosis necessary? How does it relate to the subconscious and to Spare\'s concept of the "vacuity" of mind? Compare Carroll\'s model with Spare\'s original.', mode: 'gnosis' })],
+      [action('gnosis-inhibit', L('🧘 Inhibitory Gnosis'), 'prompt', { prompt: 'Teach inhibitory gnosis methods: meditation, sensory deprivation, fasting, prolonged stillness, sleep deprivation, yoga nidra, and the "empty mind" technique. Step by step instructions for the most accessible methods. Include safety guidance.', mode: 'gnosis' }), action('gnosis-excite', L('🥁 Excitatory Gnosis'), 'prompt', { prompt: 'Teach excitatory gnosis methods: drumming, chanting, ecstatic dance, hyperventilation, pain, sexual arousal at peak, extreme physical exertion, and emotional flooding. How to use these to bypass the conscious mind. Safety and boundary-setting.', mode: 'gnosis' })],
+      [action('gnosis-nn', L('∅ Spare\'s Indifference'), 'prompt', { prompt: 'Teach Spare\'s "indifference" or neither-neither as a gnosis method — the most subtle and arguably most powerful technique. Achieving magical effect through the deliberate cultivation of not-caring. How this paradoxically short-circuits lust of result.', mode: 'spare' }), action('gnosis-practice', L('🎯 Gnosis Training Plan'), 'prompt', { prompt: 'Give a 30-day gnosis training plan for a chaos magick beginner: starting with basic meditation, progressing through inhibitory and excitatory techniques, and culminating in a first sigil working using each method. One technique per week.', mode: 'teacher' })],
+      back('chaos-magick:root'),
+    ],
+  },
+
+  'chaos-magick:lhp': {
+    title: L('🔥 Left Hand Path', '🔥 Sol El Yolu', '🔥 Путь Левой Руки'),
+    buttons: [
+      [action('lhp-philosophy', L('🔥 Luciferian Philosophy'), 'prompt', { prompt: 'Teach Michael Ford\'s Luciferian philosophy — the Black Flame as inner illumination, the Adversary as mirror of the self, self-deification through challenge and shadow integration. How this differs from both theistic Satanism and edgy atheism.', mode: 'lhp' })],
+      [action('lhp-goetia', L('👹 Luciferian Goetia'), 'prompt', { prompt: 'Teach Ford\'s approach to the Luciferian Goetia — working with the 72 Goetic spirits not through Solomonic subjugation but through a Luciferian framework of mutual respect and self-empowerment. How Ford reframes the spirits as aspects of consciousness to be integrated.', mode: 'lhp' }), action('lhp-evocation', L('🕯️ Evocation Techniques'), 'prompt', { prompt: 'Teach the practical evocation techniques from Ford\'s archive: preparation, circle design, the Luciferian framework for spirit communication, scrying methods (Unlocking the Gaze), and theurgic evocation for self-transformation.', mode: 'evocation' })],
+      [action('lhp-sabbat', L('🌙 The Sabbat Current'), 'prompt', { prompt: 'Teach the Sabbat current from Ford\'s Master of the Sabbat — the witches\' Sabbath as an internal initiatory experience, the meeting with the Adversary at the crossroads, and the Black Sabbath as a state of consciousness.', mode: 'lhp' }), action('lhp-necro', L('💀 Draconian Necromancy'), 'prompt', { prompt: 'Teach the necromantic current in Ford\'s work — Draconian Necromancy, necroscience, and communication with death-current energies. Context this within the Luciferian framework as a path of self-knowledge through confrontation with mortality.', mode: 'lhp' })],
+      [action('lhp-pact', L('📜 Pact-Making'), 'prompt', { prompt: 'Teach the Luciferian approach to pact-making from Ford\'s Pacte Diabolique — not selling one\'s soul to an external entity, but making a binding commitment to one\'s own self-deification. The structure, the commitment, and the psychological reality of the pact.', mode: 'lhp' }), action('lhp-crowley', L('⭐ Crowley & Thelema'), 'prompt', { prompt: 'Teach how Crowley\'s Thelema relates to chaos magick and the Left Hand Path. The Book of the Law, "Do what thou wilt," and how chaos magick took Crowley\'s system and made it modular and paradigm-independent. Where they converge and where they diverge.', mode: 'historian' })],
+      back('chaos-magick:root'),
+    ],
+  },
+
+  'chaos-magick:practical': {
+    title: L('🛠️ Practical Sorcery', '🛠️ Pratik Büyü', '🛠️ Практическая магия'),
+    buttons: [
+      [action('prac-spellcraft', L('✨ SpellCraft Basics'), 'prompt', { prompt: 'Teach the fundamentals of chaos magick spellcraft from the archive: structuring a spell, selecting components, timing, correspondences (or deliberately ignoring them), execution, and result-tracking. The chaos approach to traditional spellwork.', mode: 'practical' }), action('prac-scrying', L('🔮 Scrying & Vision'), 'prompt', { prompt: 'Teach scrying techniques from Ford\'s Scrying the Shroud and Unlocking the Gaze: mirror scrying, crystal gazing, fire gazing, and how to enter the receptive state. The Luciferian approach to vision work.', mode: 'practical' })],
+      [action('prac-ritual', L('🕯️ Ritual Design'), 'prompt', { prompt: 'Teach how to design a chaos magick ritual from scratch: the principle that structure serves intent (not the other way around), how to select and combine elements, banishing with laughter vs LBRP, opening and closing, and the importance of post-ritual grounding.', mode: 'practical' }), action('prac-divination', L('🎲 Chaos Divination'), 'prompt', { prompt: 'Teach chaos magick approaches to divination: using any system as a temporary belief lens (Tarot, I Ching, runes, bones), creating personal divination systems, and the theoretical framework for why divination works from a chaos perspective.', mode: 'practical' })],
+      [action('prac-banish', L('🧹 Banishing Techniques'), 'prompt', { prompt: 'Teach chaos magick banishing: the Gnostic Pentagram Ritual, banishing with laughter, Peter Carroll\'s vortex method, the LBRP repurposed for chaos work, and Ford\'s adversarial banishing. When and why to banish.', mode: 'practical' }), action('prac-enchant', L('🎯 Results Magick'), 'prompt', { prompt: 'Teach enchantment — the branch of chaos magick focused on producing tangible results in the material world. Combining sigils, servitors, and practical timing. How to set up a results-tracking system and iterate based on what works.', mode: 'practical' })],
+      back('chaos-magick:root'),
+    ],
+  },
+
+  'chaos-magick:paradigm': {
+    title: L('🔄 Paradigm Shifting', '🔄 Paradigma Kaydırma', '🔄 Сдвиг парадигмы'),
+    buttons: [
+      [action('para-what', L('🔄 What is a Paradigm Shift?'), 'prompt', { prompt: 'Teach paradigm shifting — the core meta-skill of chaos magick. How to temporarily adopt any belief system (Christianity, Voodoo, Thelema, atheism), use it fully as a magical lens, and release it cleanly. The difference between sincere belief and operational belief.', mode: 'paradigm' })],
+      [action('para-tunnel', L('🚇 Reality Tunnels'), 'prompt', { prompt: 'Teach the concept of reality tunnels (from Robert Anton Wilson through chaos magick): how every belief system creates a self-confirming perceptual filter, how to recognize your own tunnel, and how to deliberately switch between tunnels for magical and psychological benefit.', mode: 'paradigm' }), action('para-hack', L('💻 Hacking Belief'), 'prompt', { prompt: 'Teach the practical techniques for hacking your own belief system: acting-as-if, belief shifting exercises, the "month of practice" method, immersive paradigm work, and how to handle the disorientation that comes from taking belief apart and reassembling it.', mode: 'paradigm' })],
+      [action('para-meta', L('🧠 Meta-Belief'), 'prompt', { prompt: 'Teach meta-belief — the awareness that sits above all belief systems. How chaos magick trains the ability to hold beliefs lightly, to see through the matrix of any paradigm while still being able to use it. The relationship between this and Spare\'s Neither-Neither.', mode: 'paradigm' }), action('para-danger', L('⚠️ Dangers & Safeguards'), 'prompt', { prompt: 'Teach the psychological risks of paradigm shifting: identity destabilization, Chapel Perilous, the "everything is meaningless" crisis, spiritual emergency vs spiritual emergence. How to stay grounded while working at the edges of reality. When to stop and stabilize.', mode: 'paradigm' })],
+      back('chaos-magick:root'),
+    ],
+  },
+
+  'chaos-magick:learn': {
+    title: L('🎓 Learning Paths', '🎓 Öğrenme Yolları', '🎓 Пути обучения'),
+    buttons: [
+      [action('learn-chaos-begin', L('🌱 Chaos Initiate', '🌱 Kaos Müptedisi', '🌱 Посвящение в Хаос'), 'prompt', { prompt: 'Give the Chaos Magick Initiate learning path: core principles (belief as tool, gnosis, sigils), first practices, essential reading (Hine, Carroll, Spare), and a 90-day structured program from zero to first successful working.', mode: 'teacher' }), action('learn-chaos-spare', L('🖤 The Spare Path', '🖤 Spare Yolu', '🖤 Путь Спэйра'), 'prompt', { prompt: 'Give a learning path focused on Austin Osman Spare: the Book of Pleasure, the Zos Kia system, automatic drawing, the Alphabet of Desire, and atavistic resurgence. For practitioners who want to go deep into Spare\'s original art-magic.', mode: 'teacher' })],
+      [action('learn-chaos-lhp', L('🔥 Left Hand Path', '🔥 Sol El Yolu', '🔥 Путь Левой Руки'), 'prompt', { prompt: 'Give a learning path for Ford\'s Luciferian current: starting with Luciferian Philosophy, through the Goetia, into the practical grimoire work (SpellCraft, Evocation, Scrying), and the deeper initiatory material (Sabbat, Necromancy, Pact). Step by step with the actual texts in the archive.', mode: 'teacher' }), action('learn-chaos-prac', L('🛠️ Practical Sorcerer', '🛠️ Pratik Büyücü', '🛠️ Практический маг'), 'prompt', { prompt: 'Give a practical sorcery learning path focused on producing results: sigil mastery, servitor creation, enchantment, divination, banishing, and results tracking. The engineering-minded approach to chaos magick.', mode: 'teacher' })],
+      back('chaos-magick:root'),
+    ],
+  },
 }
 
 export function getMenuScreen(pack: OraclePack, menuKey?: string, _currentCard?: string | null): MenuScreen {
