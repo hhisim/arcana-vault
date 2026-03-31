@@ -21,46 +21,46 @@ interface Book {
 
 const BOOKS: Book[] = [
   // Tao
-  { id: 'ttc', title: 'Tao Te Ching', author: 'Lao Tzu', tradition: 'Tao', access: 'Free', url: 'taotechingbylaot00laotuoft', type: 'link', color: '#4ECDC4' },
-  { id: 'zz', title: 'Zhuangzi', author: 'Chuang Tzu', tradition: 'Tao', access: 'Free', url: 'chuangtzu00zhua', type: 'link', color: '#4ECDC4' },
-  { id: 'ic', title: 'I Ching', author: 'Anonymous', tradition: 'Tao', access: 'Free', url: 'ichingorbookofch00wilh', type: 'link', color: '#4ECDC4' },
+  { id: 'ttc', title: 'Tao Te Ching', author: 'Lao Tzu', tradition: 'Tao', access: 'Free', url: 'taotechinglaotzuvictorhmair_202002', type: 'link', color: '#4ECDC4' },
+  { id: 'zz', title: 'Zhuangzi', author: 'Chuang Tzu', tradition: 'Tao', access: 'Free', url: 'thebookofchuangtzu_202002', type: 'link', color: '#4ECDC4' },
+  { id: 'ic', title: 'I Ching', author: 'Richard Wilhelm', tradition: 'Tao', access: 'Free', url: 'ichingorbookofch0000unse_n6a7', type: 'link', color: '#4ECDC4' },
   
   // Tarot
-  { id: 'pfc', title: 'The Tarot', author: 'Paul Foster Case', tradition: 'Tarot', access: 'Adept+', url: 'tarotkeytowisdom00case', type: 'link', color: '#7B5EA7' },
-  { id: 'bot', title: 'The Book of Thoth', author: 'Aleister Crowley', tradition: 'Tarot', access: 'Adept+', url: 'bookofthothshort00crow', type: 'link', color: '#7B5EA7' },
-  { id: 'rp', title: 'Pictorial Key to the Tarot', author: 'A.E. Waite', tradition: 'Tarot', access: 'Free', url: 'pictorialkeytota00wait', type: 'link', color: '#7B5EA7' },
+  { id: 'pfc', title: 'The Book of Thoth', author: 'Aleister Crowley', tradition: 'Tarot', access: 'Adept+', url: 'bookofthothshort0000crow', type: 'link', color: '#7B5EA7' },
+  { id: 'bot', title: 'Understanding the Thoth Tarot', author: 'Lon Milo DuQuette', tradition: 'Tarot', access: 'Adept+', url: 'LonMiloDuquette-UnderstandingAleisterCrowleysThothTarot-2002', type: 'link', color: '#7B5EA7' },
+  { id: 'rp', title: 'Pictorial Key to the Tarot', author: 'A.E. Waite', tradition: 'Tarot', access: 'Free', url: 'A.EWaiteThePictorialKeyToTheTarot', type: 'link', color: '#7B5EA7' },
   
   // Tantra
-  { id: 'osho', title: 'Tantra: The Supreme Understanding', author: 'Osho', tradition: 'Tantra', access: 'Adept+', url: 'TantraTheSupremeUnderstanding', type: 'link', color: '#C9A84C' },
-  { id: 'sp', title: 'The Serpent Power', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Adept+', url: 'serpentpower0000unse', type: 'link', color: '#C9A84C' },
-  { id: 'shakti', title: 'Shakti and Shakta', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Free', url: 'shaktishakta00wood', type: 'link', color: '#C9A84C' },
+  { id: 'osho', title: 'Tantra: The Supreme Understanding', author: 'Osho', tradition: 'Tantra', access: 'Adept+', url: 'oshoYoga', type: 'link', color: '#C9A84C' },
+  { id: 'sp', title: 'The Serpent Power', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Adept+', url: 'TheSerpentPowerByArthurAvalon', type: 'link', color: '#C9A84C' },
+  { id: 'shakti', title: 'Shakti and Shakta', author: 'Sir John Woodroffe', tradition: 'Tantra', access: 'Free', url: 'in.ernet.dli.2015.217317', type: 'link', color: '#C9A84C' },
   
   // Entheogens
-  { id: 'pe', title: 'The Psychedelic Experience', author: 'Leary/Metzner/Alpert', tradition: 'Entheogens', access: 'Free', url: 'ThePsychedelicExperience_LearyMetznerAlpert', type: 'link', color: '#2D5A4A' },
-  { id: 'dop', title: 'The Doors of Perception', author: 'Aldous Huxley', tradition: 'Entheogens', access: 'Free', url: 'doorsofperception00huxl', type: 'link', color: '#2D5A4A' },
+  { id: 'pe', title: 'The Psychedelic Experience', author: 'Leary/Metzner/Alpert', tradition: 'Entheogens', access: 'Free', url: 'ThePsychedelicExperienceAManualBasedOnTheTibetanBookOfTheDead', type: 'link', color: '#2D5A4A' },
+  { id: 'dop', title: 'The Doors of Perception', author: 'Aldous Huxley', tradition: 'Entheogens', access: 'Free', url: 'doorsofperceptio0000huxl_j9p5', type: 'link', color: '#2D5A4A' },
   { id: 'pog', title: 'The Peyote Cult', author: 'Weston La Barre', tradition: 'Entheogens', access: 'Adept+', url: 'peyotecult00laba', type: 'link', color: '#2D5A4A' },
 
   // Sufism
-  { id: 'masnavi', title: 'The Masnavi', author: 'Rumi', tradition: 'Sufism', access: 'Free', url: 'masnaviofrumij01rumi', type: 'link', color: '#E05C5C' },
-  { id: 'sufis', title: 'The Sufis', author: 'Idries Shah', tradition: 'Sufism', access: 'Adept+', url: 'thesufis00shah', type: 'link', color: '#E05C5C' },
-  { id: 'bezels', title: 'The Bezels of Wisdom', author: 'Ibn al-Arabi', tradition: 'Sufism', access: 'Adept+', url: 'bezelsofwisdom0000ibna', type: 'link', color: '#E05C5C' },
+  { id: 'masnavi', title: 'Teachings of Rumi: The Masnavi', author: 'Rumi (trans. Whinfield)', tradition: 'Sufism', access: 'Free', url: 'in.ernet.dli.2015.65659', type: 'link', color: '#E05C5C' },
+  { id: 'sufis', title: 'The Sufis', author: 'Idries Shah', tradition: 'Sufism', access: 'Adept+', url: 'x-sufis', type: 'link', color: '#E05C5C' },
+  { id: 'bezels', title: 'The Bezels of Wisdom', author: 'Ibn al-Arabi', tradition: 'Sufism', access: 'Adept+', url: 'bezelsofwisdom00ibna', type: 'link', color: '#E05C5C' },
 
   // Dream
-  { id: 'lucid', title: 'Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Free', url: 'luciddreaming00labeg', type: 'link', color: '#5C8FE0' },
-  { id: 'astral', title: 'Projection of the Astral Body', author: 'Muldoon', tradition: 'Dream', access: 'Adept+', url: 'astralprojection00muldo', type: 'link', color: '#5C8FE0' },
-  { id: 'exploring', title: 'Exploring Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Adept+', url: 'exploringworldof00labe', type: 'link', color: '#5C8FE0' },
+  { id: 'lucid', title: 'Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Free', url: 'luciddreaming00labe', type: 'link', color: '#5C8FE0' },
+  { id: 'astral', title: 'Projection of the Astral Body', author: 'Muldoon & Carrington', tradition: 'Dream', access: 'Adept+', url: '1929MuldoonCarringtonTheProjectionOfTheAstralBody', type: 'link', color: '#5C8FE0' },
+  { id: 'exploring', title: 'Exploring the World of Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Adept+', url: 'luciddreamingcon0000labe_v7k4', type: 'link', color: '#5C8FE0' },
 
   // Qabalah
-  { id: 'unveiled', title: 'The Kabbalah Unveiled', author: 'S.L. Mathers', tradition: 'Qabalah', access: 'Free', url: 'kabbalahunveiled00math', type: 'link', color: '#E05CE0' },
-  { id: 'mystical', title: 'The Mystical Qabalah', author: 'Dion Fortune', tradition: 'Qabalah', access: 'Adept+', url: 'mysticalqabalah00fort', type: 'link', color: '#E05CE0' },
-  { id: 'ezra', title: 'The Zohar', author: 'Moses de Leon', tradition: 'Qabalah', access: 'Adept+', url: 'zohar0000deleo', type: 'link', color: '#E05CE0' },
+  { id: 'unveiled', title: 'The Kabbalah Unveiled', author: 'S.L. MacGregor Mathers', tradition: 'Qabalah', access: 'Free', url: 'The_Kabbalah_Unveiled_-_S_L_Mac_Gregor_Mathers', type: 'link', color: '#E05CE0' },
+  { id: 'mystical', title: 'The Mystical Qabalah', author: 'Dion Fortune', tradition: 'Qabalah', access: 'Adept+', url: 'mysticalqabalah0000fort', type: 'link', color: '#E05CE0' },
+  { id: 'ezra', title: 'The Zohar', author: 'Moses de Leon', tradition: 'Qabalah', access: 'Adept+', url: 'zohar0000unse', type: 'link', color: '#E05CE0' },
 
   // Spiritual Sovereignty
-  { id: 'kybalion', title: 'The Kybalion', author: 'Three Initiates', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'kybalion00threeuoft', type: 'link', color: '#C9A84C' },
-  { id: 'gnostic', title: 'The Gnostic Bible', author: ' Bentley Layton', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'gnosticbible00pagel', type: 'link', color: '#C9A84C' },
-  { id: 'corpus', title: 'The Corpus Hermeticum', author: 'Hermes Trismegistus', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'corpushermeticum00bjohnuoft', type: 'link', color: '#C9A84C' },
-  { id: 'selfmastery', title: 'The Law and the Mastery of Self', author: 'Charles F. Haanel', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'selfmasterylaw00hilluoft', type: 'link', color: '#C9A84C' },
-  { id: 'sevenbreaths', title: 'The Seven Breaths of the Soul', author: 'Leonard LeRoy', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'sevenbreathser00elil', type: 'link', color: '#C9A84C' },
+  { id: 'kybalion', title: 'The Kybalion', author: 'Three Initiates', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'kybalion0000thre', type: 'link', color: '#C9A84C' },
+  { id: 'gnostic', title: 'The Gnostic Bible', author: 'Barnstone & Meyer', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'gnosticbible0000unse', type: 'link', color: '#C9A84C' },
+  { id: 'corpus', title: 'The Corpus Hermeticum', author: 'Hermes Trismegistus', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'corpus-hermeticum-balboa', type: 'link', color: '#C9A84C' },
+  { id: 'selfmastery', title: 'The Master Key System', author: 'Charles F. Haanel', tradition: 'Spiritual Sovereignty', access: 'Adept+', url: 'themasterkeysystemcharlesf.haanel', type: 'link', color: '#C9A84C' },
+  { id: 'sevenbreaths', title: 'The Kybalion (Study of Hermetic Philosophy)', author: 'Three Initiates', tradition: 'Spiritual Sovereignty', access: 'Free', url: 'kybalionstudyofh00init', type: 'link', color: '#C9A84C' },
 ]
 
 export default function LibraryPage() {
