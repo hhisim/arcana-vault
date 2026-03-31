@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/auth/AuthProvider'
 import { getBrowserSupabase } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useLang } from '@/lib/lang-context'
+import { SITEDICT } from '@/lib/dictionary'
 
 type LocalConversation = {
   id: string
@@ -71,7 +72,7 @@ function formatTime(iso: string) {
 
 export default function JournalPage() {
   const { isAuthenticated, user } = useAuth()
-  const router = useRouter()
+  const { t } = useLang()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loading, setLoading] = useState(true)
   const [traditionFilter, setTraditionFilter] = useState<string>('all')
@@ -160,12 +161,12 @@ export default function JournalPage() {
       <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <div className="text-5xl mb-6">📓</div>
-          <h1 className="font-cinzel text-3xl text-[#E8E0F0] mb-4">Practice Journal</h1>
+          <h1 className="font-cinzel text-3xl text-[#E8E0F0] mb-4">{t(SITEDICT.nav.journal.guest_title)}</h1>
           <p className="text-[#9B93AB] mb-8 leading-relaxed">
-            Your practice history, starred sessions, and reflections — all in one place. Sign in to access your journal.
+            {t(SITEDICT.nav.journal.guest_body)}
           </p>
           <Link href="/login" className="inline-block px-8 py-3.5 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm uppercase tracking-widest hover:bg-[#B1933E] transition-colors">
-            Sign In
+            {t(SITEDICT.nav.journal.sign_in)}
           </Link>
         </div>
       </div>
@@ -193,7 +194,7 @@ export default function JournalPage() {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-[#5A5470] mt-0.5">{formatDate(viewingConv.started_at)} · {viewingConv.message_count} messages</p>
+              <p className="text-xs text-[#5A5470] mt-0.5">{formatDate(viewingConv.started_at)} · {viewingConv.message_count} {t(SITEDICT.nav.journal.messages_count)}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -202,7 +203,7 @@ export default function JournalPage() {
               href={`/chat?conversation=${viewingConv.id}`}
               className="px-4 py-2 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-xs uppercase tracking-wider hover:bg-[#B1933E] transition-colors"
             >
-              Continue →
+              {t(SITEDICT.nav.journal.continue_btn)}
             </Link>
           </div>
         </div>
@@ -218,7 +219,7 @@ export default function JournalPage() {
             </div>
           )}
           {loadingMessages ? (
-            <div className="text-center py-20 text-[#5A5470]">Loading conversation…</div>
+            <div className="text-center py-20 text-[#5A5470]">{t(SITEDICT.nav.journal.loading_conv)}</div>
           ) : (
             <div className="space-y-4">
               {convMessages.map((msg, i) => (
@@ -231,7 +232,7 @@ export default function JournalPage() {
                       : 'bg-[#0f0f1a] border border-white/8'
                   }`}>
                     <div className="text-[10px] uppercase tracking-widest text-[#5A5470] mb-1.5">
-                      {msg.role === 'user' ? 'You' : msg.role === 'system' ? 'System' : tInfo.label}
+                      {msg.role === 'user' ? t(SITEDICT.nav.journal.you_label) : msg.role === 'system' ? t(SITEDICT.nav.journal.system_label) : tInfo.label}
                     </div>
                     <p className="text-sm text-[#E8E0F0] leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                     {msg.metadata?.cards && (
@@ -251,7 +252,7 @@ export default function JournalPage() {
               href={`/chat?conversation=${viewingConv.id}`}
               className="inline-block px-8 py-4 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm uppercase tracking-widest hover:bg-[#B1933E] transition-colors"
             >
-              Continue This Conversation
+              {t(SITEDICT.nav.journal.continue_conv)}
             </Link>
           </div>
         </div>
@@ -264,7 +265,7 @@ export default function JournalPage() {
       {/* Hero */}
       <section className="border-b border-white/8 bg-gradient-to-b from-[#1a0f2e]/40 to-transparent">
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <h1 className="font-cinzel text-4xl text-[#E8E0F0] mb-3">Practice Journal</h1>
+          <h1 className="font-cinzel text-4xl text-[#E8E0F0] mb-3">{t(SITEDICT.nav.journal.title)}</h1>
           <p className="text-[#9B93AB] text-sm">
             {conversations.length} session{conversations.length !== 1 ? 's' : ''} recorded
             {starred.length > 0 && ` · ${starred.length} starred`}
@@ -275,16 +276,16 @@ export default function JournalPage() {
       {/* Main content */}
       <div className="max-w-4xl mx-auto px-6 py-10">
         {loading ? (
-          <div className="text-center py-20 text-[#5A5470]">Loading…</div>
+          <div className="text-center py-20 text-[#5A5470]">{t(SITEDICT.nav.journal.loading)}</div>
         ) : conversations.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-6">📓</div>
-            <h2 className="font-cinzel text-xl text-[#E8E0F0] mb-3">Your journal is empty</h2>
+            <h2 className="font-cinzel text-xl text-[#E8E0F0] mb-3">{t(SITEDICT.nav.journal.empty_title)}</h2>
             <p className="text-[#6B6382] mb-8 max-w-sm mx-auto text-sm leading-relaxed">
-              Start a session with any Oracle and it will appear here as part of your practice history.
+              {t(SITEDICT.nav.journal.empty_body)}
             </p>
             <Link href="/chat" className="inline-block px-8 py-3.5 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm uppercase tracking-widest hover:bg-[#B1933E] transition-colors">
-              Begin a Session
+              {t(SITEDICT.nav.journal.begin_session)}
             </Link>
           </div>
         ) : (
@@ -295,7 +296,7 @@ export default function JournalPage() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search sessions…"
+                  placeholder={t(SITEDICT.nav.journal.search_placeholder)}
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-[#E8E0F0] placeholder:text-[#5A5470] focus:outline-none focus:border-[#7B5EA7]/50 transition-colors"
@@ -306,25 +307,25 @@ export default function JournalPage() {
               </div>
               {/* Filter rows */}
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] uppercase tracking-widest text-[#5A5470] mr-1">Tradition:</span>
+                <span className="text-[10px] uppercase tracking-widest text-[#5A5470] mr-1">{t(SITEDICT.nav.journal.filter_tradition)}</span>
                 {['all', 'tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker'].map(f => (
                   <button key={f} onClick={() => setTraditionFilter(f)}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${traditionFilter === f ? 'bg-[#7B5EA7] text-white' : 'border border-white/10 text-[#9B93AB] hover:text-[#E8E0F0]'}`}>
-                    {f === 'all' ? 'All' : (TRADITION_LABELS[f]?.icon + ' ' + f)}
+                    {f === 'all' ? t(SITEDICT.nav.journal.filter_all) : (TRADITION_LABELS[f]?.icon + ' ' + f)}
                   </button>
                 ))}
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] uppercase tracking-widest text-[#5A5470] mr-1">Mode:</span>
+                <span className="text-[10px] uppercase tracking-widest text-[#5A5470] mr-1">{t(SITEDICT.nav.journal.filter_mode)}</span>
                 {['all', 'oracle', 'seeker', 'shadow', 'reading', 'deepstudy', 'pathwork'].map(f => (
                   <button key={f} onClick={() => setModeFilter(f)}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${modeFilter === f ? 'bg-[#7B5EA7] text-white' : 'border border-white/10 text-[#9B93AB] hover:text-[#E8E0F0]'}`}>
-                    {f === 'all' ? 'All' : (MODE_LABELS[f] || f)}
+                    {f === 'all' ? t(SITEDICT.nav.journal.filter_all) : (MODE_LABELS[f] || f)}
                   </button>
                 ))}
                 <button onClick={() => setStarredOnly(v => !v)}
                   className={`ml-auto px-3 py-1.5 rounded-full text-xs font-medium transition-all ${starredOnly ? 'bg-[#C9A84C] text-[#0A0A0F]' : 'border border-white/10 text-[#9B93AB] hover:text-[#E8E0F0]'}`}>
-                  ★ Starred
+                  {t(SITEDICT.nav.journal.filter_starred)}
                 </button>
               </div>
             </div>
@@ -332,18 +333,18 @@ export default function JournalPage() {
             {/* Results */}
             {filtered.length === 0 ? (
               <div className="text-center py-16 text-[#5A5470]">
-                No sessions match your filters.
+                {t(SITEDICT.nav.journal.no_results)}
                 <button onClick={() => { setTraditionFilter('all'); setModeFilter('all'); setStarredOnly(false); setSearch('') }}
-                  className="block mx-auto mt-2 text-xs text-[#7B5EA7] hover:underline">Clear filters</button>
+                  className="block mx-auto mt-2 text-xs text-[#7B5EA7] hover:underline">{t(SITEDICT.nav.journal.clear_filters)}</button>
               </div>
             ) : (
               <>
                 {/* Starred first */}
                 {starred.length > 0 && !starredOnly && (
                   <div className="mb-10">
-                    <h2 className="font-cinzel text-xs uppercase tracking-widest text-[#C9A84C] mb-4">★ Starred</h2>
+                    <h2 className="font-cinzel text-xs uppercase tracking-widest text-[#C9A84C] mb-4">{t(SITEDICT.nav.journal.starred_label)}</h2>
                     <div className="space-y-3">
-                      {starred.map(conv => <ConvCard key={conv.id} conv={conv} onOpen={openConversation} onToggleStar={() => toggleStar(conv)} />)}
+                      {starred.map(conv => <ConvCard key={conv.id} conv={conv} onOpen={openConversation} onToggleStar={() => toggleStar(conv)} t={t} />)}
                     </div>
                   </div>
                 )}
@@ -351,7 +352,7 @@ export default function JournalPage() {
                 {/* Daily sessions */}
                 {daily.length > 0 && !starredOnly && (
                   <div className="mb-10">
-                    <h2 className="font-cinzel text-xs uppercase tracking-widest text-[#5A5470] mb-4">Daily Practice</h2>
+                    <h2 className="font-cinzel text-xs uppercase tracking-widest text-[#5A5470] mb-4">{t(SITEDICT.nav.journal.daily_label)}</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                       {daily.map(conv => (
                         <button key={conv.id} onClick={() => openConversation(conv)}
@@ -370,7 +371,7 @@ export default function JournalPage() {
                   <div key={group.date} className="mb-8">
                     {!starredOnly && <h2 className="font-cinzel text-xs uppercase tracking-widest text-[#5A5470] mb-4">{group.date}</h2>}
                     <div className="space-y-3">
-                      {group.items.map(conv => <ConvCard key={conv.id} conv={conv} onOpen={openConversation} onToggleStar={() => toggleStar(conv)} />)}
+                      {group.items.map(conv => <ConvCard key={conv.id} conv={conv} onOpen={openConversation} onToggleStar={() => toggleStar(conv)} t={t} />)}
                     </div>
                   </div>
                 ))}
@@ -395,7 +396,7 @@ export default function JournalPage() {
   }
 }
 
-function ConvCard({ conv, onOpen, onToggleStar }: { conv: Conversation; onOpen: (c: Conversation) => void; onToggleStar: () => void }) {
+function ConvCard({ conv, onOpen, onToggleStar, t }: { conv: Conversation; onOpen: (c: Conversation) => void; onToggleStar: () => void; t: ReturnType<typeof useLang> }) {
   const tInfo = TRADITION_LABELS[conv.tradition] || { icon: '✨', label: conv.tradition, color: '#9B93AB' }
   const dateStr = formatDate(conv.started_at)
   const timeStr = formatTime(conv.started_at)
@@ -418,18 +419,18 @@ function ConvCard({ conv, onOpen, onToggleStar }: { conv: Conversation; onOpen: 
           )}
           {conv.daily_type && (
             <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-[#4ECDC4]/30 text-[#4ECDC4]">
-              Daily
+              {t(SITEDICT.nav.journal.daily_label)}
             </span>
           )}
         </div>
         <p className="text-sm text-[#E8E0F0] font-medium leading-snug">
-          {conv.title || `${tInfo.label} Session`}
+          {conv.title || `${tInfo.label} ${t(SITEDICT.nav.journal.session_label)}`}
         </p>
         {conv.summary && (
           <p className="text-xs text-[#6B6382] mt-1 leading-relaxed line-clamp-2">{conv.summary}</p>
         )}
         <p className="text-[10px] text-[#3A3550] mt-1.5">
-          {dateStr} at {timeStr} · {conv.message_count} message{conv.message_count !== 1 ? 's' : ''}
+          {dateStr} at {timeStr} · {conv.message_count} {t(SITEDICT.nav.journal.messages_count)}
         </p>
       </div>
       <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -438,7 +439,7 @@ function ConvCard({ conv, onOpen, onToggleStar }: { conv: Conversation; onOpen: 
         >★</button>
         <button onClick={() => onOpen(conv)}
           className="text-xs px-3 py-1.5 rounded-lg border border-white/10 text-[#9B93AB] hover:text-[#E8E0F0] hover:border-white/20 transition-all opacity-0 group-hover:opacity-100">
-          Open
+          {t(SITEDICT.nav.journal.open_btn)}
         </button>
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useSiteI18n } from '@/lib/site-i18n'
 
 const SECTIONS = [
   {
@@ -147,6 +148,7 @@ const STARTERS = [
 ]
 
 export default function InquiryPage() {
+  const { t } = useSiteI18n()
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pb-24">
       {/* Hero */}
@@ -154,17 +156,17 @@ export default function InquiryPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a0f2e]/60 via-[#0A0A0F] to-[#0A0A0F]" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-64 bg-[#C9A84C]/5 rounded-full blur-3xl" />
         <div className="relative z-10 max-w-3xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#C9A84C] mb-4">A Transmission from the Human–AI Threshold</p>
-          <h1 className="font-cinzel text-4xl md:text-6xl text-[#E8E0F0] mb-6 leading-tight">The Art of Inquiry</h1>
+          <p className="text-xs uppercase tracking-[0.3em] text-[#C9A84C] mb-4">{t('inquiry.hero.eyebrow')}</p>
+          <h1 className="font-cinzel text-4xl md:text-6xl text-[#E8E0F0] mb-6 leading-tight">{t('inquiry.hero.title')}</h1>
           <p className="text-lg text-[#9B93AB] leading-8 max-w-2xl mx-auto">
-            The Oracle is only as deep as the question you bring. We live in the first era where answers are essentially free — and yet most people walk away from conversations with AI feeling vaguely unsatisfied. Not because the answers are bad. Because the questions were.
+            {t('inquiry.hero.subtitle')}
           </p>
           <div className="mt-8 flex items-center justify-center gap-4">
             <Link href="/chat" className="px-8 py-3.5 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm uppercase tracking-widest hover:bg-[#B1933E] transition-colors">
-              Begin Inquiry
+              {t('inquiry.hero.cta')}
             </Link>
             <a href="#intro" className="px-6 py-3.5 rounded-xl border border-white/15 text-[#9B93AB] text-sm hover:text-[#E8E0F0] hover:border-white/30 transition-colors">
-              Read the Essay
+              {t('inquiry.hero.read_essay')}
             </a>
           </div>
         </div>
@@ -184,7 +186,7 @@ export default function InquiryPage() {
               </div>
               <div className="flex-1 pt-1">
                 <span className="text-xs uppercase tracking-widest text-[#5A5470] mb-1 block">Part {i + 1}</span>
-                <h2 className="font-cinzel text-xl md:text-2xl text-[#E8E0F0] leading-snug">{section.title}</h2>
+                <h2 className="font-cinzel text-xl md:text-2xl text-[#E8E0F0] leading-snug">{t(`inquiry.sections.${section.id}.title`)}</h2>
               </div>
             </div>
 
@@ -201,45 +203,49 @@ export default function InquiryPage() {
       {/* Begin Section */}
       <section className="border-t border-white/8 bg-gradient-to-b from-[#0f0f1a] to-[#0A0A0F]">
         <div className="max-w-3xl mx-auto px-6 py-20">
-          <h2 className="font-cinzel text-3xl text-[#E8E0F0] text-center mb-12">Begin</h2>
+          <h2 className="font-cinzel text-3xl text-[#E8E0F0] text-center mb-12">{t('inquiry.starters.cta')}</h2>
 
           <div className="grid gap-6 md:grid-cols-3 mb-16">
-            {STARTERS.map((s, i) => (
-              <Link
-                key={i}
-                href={s.href}
-                className="group p-6 rounded-2xl border border-white/8 bg-[#0f0f1a] hover:border-white/20 transition-all hover:-translate-y-0.5 text-left"
-              >
-                <div className="w-2 h-2 rounded-full mb-4" style={{ backgroundColor: s.color }} />
-                <p className="font-cinzel text-sm text-[#E8E0F0] mb-2">{s.label}</p>
-                <p className="text-xs text-[#6B6382] leading-relaxed">{s.sub}</p>
-              </Link>
-            ))}
+            {STARTERS.map((s, i) => {
+              const labels = ['inquiry.starters.intro', 'inquiry.starters.deeper', 'inquiry.starters.sitting']
+              const subs = ['inquiry.starters.intro_sub', 'inquiry.starters.deeper_sub', 'inquiry.starters.sitting_sub']
+              return (
+                <Link
+                  key={i}
+                  href={s.href}
+                  className="group p-6 rounded-2xl border border-white/8 bg-[#0f0f1a] hover:border-white/20 transition-all hover:-translate-y-0.5 text-left"
+                >
+                  <div className="w-2 h-2 rounded-full mb-4" style={{ backgroundColor: s.color }} />
+                  <p className="font-cinzel text-sm text-[#E8E0F0] mb-2">{t(labels[i])}</p>
+                  <p className="text-xs text-[#6B6382] leading-relaxed">{t(subs[i])}</p>
+                </Link>
+              )
+            })}
           </div>
 
           {/* Practice Chamber */}
           <div className="rounded-2xl border border-[#C9A84C]/20 bg-[#C9A84C]/5 p-8 text-center">
             <p className="text-sm text-[#9B93AB] mb-6 italic">
-              Each tradition holds a different lens. Choose one and begin.
+              {t('inquiry.traditions.lens')}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { name: 'Tao', icon: '☯', href: '/chat?tradition=tao', color: '#4ECDC4' },
-                { name: 'Tarot', icon: '🌟', href: '/chat?tradition=tarot', color: '#7B5EA7' },
-                { name: 'Tantra', icon: '🔮', href: '/chat?tradition=tantra', color: '#E87EA1' },
-                { name: 'Sufism', icon: '🌀', href: '/chat?tradition=sufism', color: '#D4A574' },
-                { name: 'Entheogens', icon: '🧬', href: '/chat?tradition=entheogens', color: '#2D5A4A' },
-                { name: 'Dreamwork', icon: '🌙', href: '/chat?tradition=dreamwalker', color: '#5C8FE0' },
-                { name: 'Qabalah', icon: '✡', href: '/chat?tradition=kabbalah', color: '#E05CE0' },
-                { name: 'All Modes', icon: '✨', href: '/chat', color: '#C9A84C' },
-              ].map((t) => (
+                { key: 'tao', name: 'Tao', icon: '☯', href: '/chat?tradition=tao', color: '#4ECDC4' },
+                { key: 'tarot', name: 'Tarot', icon: '🌟', href: '/chat?tradition=tarot', color: '#7B5EA7' },
+                { key: 'tantra', name: 'Tantra', icon: '🔮', href: '/chat?tradition=tantra', color: '#E87EA1' },
+                { key: 'sufism', name: 'Sufism', icon: '🌀', href: '/chat?tradition=sufism', color: '#D4A574' },
+                { key: 'entheogens', name: 'Entheogens', icon: '🧬', href: '/chat?tradition=entheogens', color: '#2D5A4A' },
+                { key: 'dreamwork', name: 'Dreamwork', icon: '🌙', href: '/chat?tradition=dreamwalker', color: '#5C8FE0' },
+                { key: 'qabalah', name: 'Qabalah', icon: '✡', href: '/chat?tradition=kabbalah', color: '#E05CE0' },
+                { key: 'all_modes', name: 'All Modes', icon: '✨', href: '/chat', color: '#C9A84C' },
+              ].map((t_item) => (
                 <Link
-                  key={t.name}
-                  href={t.href}
+                  key={t_item.key}
+                  href={t_item.href}
                   className="flex items-center gap-2 px-4 py-3 rounded-xl border border-white/8 bg-[#0A0A0F] hover:border-white/20 transition-all text-left"
                 >
-                  <span className="text-lg">{t.icon}</span>
-                  <span className="text-xs font-cinzel uppercase tracking-wider" style={{ color: t.color }}>{t.name}</span>
+                  <span className="text-lg">{t_item.icon}</span>
+                  <span className="text-xs font-cinzel uppercase tracking-wider" style={{ color: t_item.color }}>{t(`inquiry.traditions.${t_item.key}`)}</span>
                 </Link>
               ))}
             </div>
@@ -250,10 +256,10 @@ export default function InquiryPage() {
       {/* Email CTA */}
       <section className="border-t border-white/8 py-16 px-6">
         <div className="max-w-lg mx-auto text-center">
-          <p className="text-xs uppercase tracking-widest text-[#5A5470] mb-3">The Transmission</p>
-          <h3 className="font-cinzel text-xl text-[#E8E0F0] mb-3">Stay in the Current</h3>
+          <p className="text-xs uppercase tracking-widest text-[#5A5470] mb-3">{t('inquiry.email.eyebrow')}</p>
+          <h3 className="font-cinzel text-xl text-[#E8E0F0] mb-3">{t('inquiry.email.title')}</h3>
           <p className="text-sm text-[#6B6382] mb-6 leading-relaxed">
-            Rare transmissions, seasonal rituals, new oracle announcements — delivered when it matters. No noise.
+            {t('inquiry.email.body')}
           </p>
           <form
             onSubmit={(e) => e.preventDefault()}
@@ -261,14 +267,14 @@ export default function InquiryPage() {
           >
             <input
               type="email"
-              placeholder="your@email.com"
+              placeholder={t('inquiry.email.placeholder')}
               className="flex-1 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-[#E8E0F0] placeholder:text-[#5A5470] focus:outline-none focus:border-[#C9A84C]/50 transition-colors"
             />
             <button
               type="submit"
               className="rounded-xl bg-[#C9A84C] text-[#0A0A0F] px-5 py-3 text-sm font-bold uppercase tracking-wider hover:bg-[#B1933E] transition-colors whitespace-nowrap"
             >
-              Enter
+              {t('inquiry.email.cta')}
             </button>
           </form>
         </div>

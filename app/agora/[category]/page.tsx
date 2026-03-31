@@ -48,7 +48,7 @@ export default function CategoryPage({
   const [total, setTotal] = useState(0)
   const [showNewThread, setShowNewThread] = useState(false)
   const limit = 20
-  const { lang } = useSiteI18n()
+  const { t, lang } = useSiteI18n()
   const { user } = useAuth()
 
   const getName = (cat: Category) =>
@@ -90,7 +90,7 @@ export default function CategoryPage({
     return (
       <div className="min-h-screen bg-[#0A0A0F] flex flex-col items-center justify-center py-24">
         <div className="voa-dots text-3xl text-[#C9A84C] mb-4">●●●</div>
-        <p className="text-sm text-[#9B93AB] uppercase tracking-widest">Loading Archives...</p>
+        <p className="text-sm text-[#9B93AB] uppercase tracking-widest">{t('agora.category.loading')}</p>
       </div>
     )
   }
@@ -98,9 +98,9 @@ export default function CategoryPage({
   if (!category) {
     return (
       <div className="min-h-screen bg-[#0A0A0F] flex flex-col items-center justify-center py-24">
-        <p className="text-[#9B93AB] font-serif text-xl">Category not found.</p>
+        <p className="text-[#9B93AB] font-serif text-xl">{t('agora.category.not_found')}</p>
         <Link href="/agora" className="mt-4 text-[#C9A84C] text-sm hover:underline">
-          ← Return to Agora
+          {t('agora.category.return')}
         </Link>
       </div>
     )
@@ -116,7 +116,7 @@ export default function CategoryPage({
             href="/agora"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#7B5EA7] hover:text-[#C9A84C] transition-colors mb-8"
           >
-            ← The Agora
+            {t('agora.category.back')}
           </Link>
           <div className="flex items-start justify-between gap-6 flex-wrap">
             <div>
@@ -133,7 +133,7 @@ export default function CategoryPage({
                 onClick={() => setShowNewThread(true)}
                 className="shrink-0 px-8 py-3.5 rounded-full bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm shadow-[0_0_40px_rgba(201,168,76,0.2)] hover:brightness-110 transition-all"
               >
-                ✦ New Thread
+                ✦ {t('agora.category.new_thread')}
               </button>
             )}
           </div>
@@ -145,12 +145,12 @@ export default function CategoryPage({
         {showNewThread && (
           <div className="glass-card rounded-3xl p-8 border border-[rgba(201,168,76,0.15)] shadow-[0_0_60px_rgba(201,168,76,0.05)] animate-fade-in-up">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="font-serif text-2xl text-[#E8E0F0]">Open a New Thread</h2>
+              <h2 className="font-serif text-2xl text-[#E8E0F0]">{t('agora.category.open_thread')}</h2>
               <button
                 onClick={() => setShowNewThread(false)}
                 className="text-[#9B93AB] hover:text-[#E8E0F0] transition-colors text-sm font-bold uppercase tracking-widest"
               >
-                Cancel
+                {t('agora.category.cancel')}
               </button>
             </div>
             <ThreadForm
@@ -169,10 +169,10 @@ export default function CategoryPage({
           <div className="text-center py-24 glass-card rounded-3xl border border-[rgba(255,255,255,0.06)]">
             <div className="text-5xl mb-4">🌌</div>
             <p className="font-serif text-xl text-[#9B93AB] italic mb-2">
-              The silence here awaits its first voice.
+              {t('agora.category.empty_title')}
             </p>
             <p className="text-sm text-[#5A5468]">
-              Be the first to open a thread in this category.
+              {t('agora.category.empty_body')}
             </p>
           </div>
         ) : (
@@ -205,17 +205,17 @@ export default function CategoryPage({
                   disabled={page === 1}
                   className="px-5 py-2 rounded-xl border border-[rgba(255,255,255,0.08)] text-xs font-bold uppercase tracking-widest text-[#9B93AB] hover:text-[#E8E0F0] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  ← Prev
+                  {t('agora.pagination.prev')}
                 </button>
                 <div className="flex items-center gap-2 text-xs text-[#9B93AB]">
-                  Page {page} of {totalPages}
+                  {t('agora.pagination.page_of', { page, total: totalPages })}
                 </div>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                   className="px-5 py-2 rounded-xl border border-[rgba(255,255,255,0.08)] text-xs font-bold uppercase tracking-widest text-[#9B93AB] hover:text-[#E8E0F0] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  Next →
+                  {t('agora.pagination.next')}
                 </button>
               </div>
             )}

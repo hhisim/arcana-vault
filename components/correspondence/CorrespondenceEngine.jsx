@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import styles from './correspondence-engine.module.css';
+import { useSiteI18n } from '@/lib/site-i18n';
 import {
   FAMILY_ORDER,
   fetchCorrespondenceDetail,
@@ -118,6 +119,7 @@ function LoadingSpinner({ message }) {
 /* ─── Main Component ─────────────────────────────────────── */
 
 export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
+  const { t } = useSiteI18n()
   const [indexData, setIndexData] = useState(null);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -282,10 +284,10 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
     return (
       <div className={styles.engine}>
         <div className={styles.hero}>
-          <div className={styles.heroEyebrow}>Tekabülât Kodeksi</div>
-          <h1 className={styles.heroTitle}>Correspondence Codex</h1>
+          <div className={styles.heroEyebrow}>{t('correspondence.hero.eyebrow')}</div>
+          <h1 className={styles.heroTitle}>{t('correspondence.hero.title')}</h1>
         </div>
-        <LoadingSpinner message="Loading correspondence index…" />
+        <LoadingSpinner message={t('correspondence.loading.index')} />
       </div>
     );
   }
@@ -294,8 +296,8 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
     return (
       <div className={styles.engine}>
         <div className={styles.hero}>
-          <div className={styles.heroEyebrow}>Tekabülât Kodeksi</div>
-          <h1 className={styles.heroTitle}>Correspondence Codex</h1>
+          <div className={styles.heroEyebrow}>{t('correspondence.hero.eyebrow')}</div>
+          <h1 className={styles.heroTitle}>{t('correspondence.hero.title')}</h1>
         </div>
         <div className={styles.status}>{status.error}</div>
       </div>
@@ -305,7 +307,7 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
   if (!indexData) {
     return (
       <div className={styles.engine}>
-        <div className={styles.status}>No correspondence data is available.</div>
+        <div className={styles.status}>{t('correspondence.error.no_data')}</div>
       </div>
     );
   }
@@ -314,11 +316,10 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
     <div className={styles.engine}>
       {/* ─── Hero ─── */}
       <div className={styles.hero}>
-        <div className={styles.heroEyebrow}>✦ Tekabülât Kodeksi ✦</div>
-        <h1 className={styles.heroTitle}>Correspondence Codex</h1>
+        <div className={styles.heroEyebrow}>{t('correspondence.hero.eyebrow')}</div>
+        <h1 className={styles.heroTitle}>{t('correspondence.hero.title')}</h1>
         <p className={styles.heroText}>
-          30+ years of esoteric research mapped across planets, symbols, frequencies, geometries, and sacred systems.
-          410+ entries cross-linked across 12 dimensions.
+          {t('correspondence.hero.text')}
         </p>
       </div>
 
@@ -336,7 +337,7 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyInSearch}
-              placeholder="Venus, Root chakra, 528 Hz, Aleph, Calcination, Rose…"
+              placeholder={t('correspondence.search.placeholder')}
             />
             {query && (
               <button className={styles.clearBtn} onClick={handleClearSearch} title="Clear search">
@@ -352,14 +353,14 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
             </button>
           </div>
           <span className={styles.helper}>
-            Kabbalah / Qabalah, I‑Ching, frequency / Hz, and more — forgiving search.
+            {t('correspondence.search.helper')}
           </span>
         </label>
 
         {/* Suggestions */}
         {suggestions.length > 0 && (
           <div>
-            <div className={styles.label}>Quick match</div>
+            <div className={styles.label}>{t('correspondence.labels.quick_match')}</div>
             <div className={styles.chipRow}>
               {suggestions.map((item) => (
                 <Chip key={item.slug} subtle onClick={() => handleSelect(item.slug)}>
@@ -372,10 +373,10 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
 
         {/* Family Filter */}
         <div>
-          <div className={styles.label}>Browse by Family</div>
+          <div className={styles.label}>{t('correspondence.labels.browse_by_family')}</div>
           <div className={styles.chipRow}>
             <Chip active={family === 'all'} count={indexData.entries.length} onClick={() => setFamily('all')}>
-              ◈ All
+              {t('correspondence.labels.all')}
             </Chip>
             {families.map((item) => (
               <Chip key={item.key} active={family === item.key} count={item.count} onClick={() => setFamily(item.key)}>
@@ -387,7 +388,7 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
 
         {/* Quick Paths */}
         <div>
-          <div className={styles.label}>Quick Paths</div>
+          <div className={styles.label}>{t('correspondence.labels.quick_paths')}</div>
           <div className={styles.chipRow}>
             {indexData.meta.quickPaths.map((item) => (
               <Chip
@@ -407,7 +408,7 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
         {/* Popular in family */}
         {popularForFamily.length > 0 && family !== 'all' && (
           <div>
-            <div className={styles.label}>Popular in {family}</div>
+            <div className={styles.label}>{t('correspondence.labels.popular_in', { family })}</div>
             <div className={styles.chipRow}>
               {popularForFamily.slice(0, 12).map((item) => (
                 <Chip key={item.value} subtle onClick={() => setQuery(item.value)}>
@@ -425,11 +426,11 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
         <div className={styles.resultsPane}>
           <div className={styles.resultsHeader}>
             <div>
-              <div className={styles.label}>Results</div>
+              <div className={styles.label}>{t('correspondence.results.label')}</div>
               <div className={styles.resultsCount}>
-                {filtered.length} {filtered.length === 1 ? 'node' : 'nodes'}
-                {family !== 'all' && ` in ${family}`}
-                {debouncedQuery && ` matching "${debouncedQuery}"`}
+                {filtered.length} {filtered.length === 1 ? t('correspondence.results.node_one') : t('correspondence.results.node_plural')}
+                {family !== 'all' && ` ${t('correspondence.results.in_family', { family })}`}
+                {debouncedQuery && ` ${t('correspondence.results.matching', { query: debouncedQuery })}`}
               </div>
             </div>
             <div className={styles.sortRow}>
@@ -437,12 +438,12 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
                 className={`${styles.sortBtn} ${sortBy === 'name' ? styles.sortBtnActive : ''}`}
                 onClick={() => setSortBy('name')}
                 title="Sort by name"
-              >A–Z</button>
+              >{t('correspondence.labels.sort_name')}</button>
               <button
                 className={`${styles.sortBtn} ${sortBy === 'kind' ? styles.sortBtnActive : ''}`}
                 onClick={() => setSortBy('kind')}
                 title="Sort by kind"
-              >Type</button>
+              >{t('correspondence.labels.sort_kind')}</button>
             </div>
           </div>
 
@@ -459,10 +460,10 @@ export default function CorrespondenceEngine({ initialSlug = 'venus' }) {
             </div>
           ) : (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>◎</div>
-              <div className={styles.emptyTitle}>No nodes found</div>
-              <div className={styles.emptyText}>Try a broader family or a different search phrase.</div>
-              <button className={styles.emptyBtn} onClick={handleClearSearch}>Clear search</button>
+              <div className={styles.emptyIcon}>{t('correspondence.empty.icon')}</div>
+              <div className={styles.emptyTitle}>{t('correspondence.empty.title')}</div>
+              <div className={styles.emptyText}>{t('correspondence.empty.body')}</div>
+              <button className={styles.emptyBtn} onClick={handleClearSearch}>{t('correspondence.empty.clear')}</button>
             </div>
           )}
         </div>

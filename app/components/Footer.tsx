@@ -1,5 +1,6 @@
 'use client'
 import { useSiteI18n } from '@/lib/site-i18n'
+import { SITEDICT } from '@/lib/dictionary'
 import EmailCapture from '@/components/EmailCapture'
 
 export default function Footer() {
@@ -21,14 +22,14 @@ export default function Footer() {
             <h3 className="text-sm uppercase tracking-[0.2em] text-text-primary">{t('footer.explore', 'Explore')}</h3>
             <div className="mt-4 flex flex-col gap-3 text-text-secondary">
               <a href="/chat" className="hover:text-text-primary">{t('nav.chat', 'Portal')}</a>
-              <a href="/daily" className="hover:text-text-primary">Daily Practice</a>
+              <a href="/daily" className="hover:text-text-primary">{t(SITEDICT.nav.daily)}</a>
               <a href="/library" className="hover:text-text-primary">{t('nav.library', 'Library')}</a>
-              <a href="/journal" className="hover:text-text-primary">Journal</a>
-              <a href="/inquiry" className="hover:text-text-primary">Inquiry</a>
+              <a href="/journal" className="hover:text-text-primary">{t(SITEDICT.nav.journal)}</a>
+              <a href="/inquiry" className="hover:text-text-primary">{t(SITEDICT.nav.inquiry)}</a>
               <a href="/blog" className="hover:text-text-primary">{t('nav.scroll', 'The Scroll')}</a>
               <a href="/agora" className="hover:text-text-primary">{t('nav.agora', 'Agora')}</a>
               <a href="/about" className="hover:text-text-primary">{t('nav.about', 'About')}</a>
-              <a href="/faq" className="hover:text-text-primary">FAQ</a>
+              <a href="/faq" className="hover:text-text-primary">{t(SITEDICT.nav.faq)}</a>
             </div>
           </div>
 

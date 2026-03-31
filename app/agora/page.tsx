@@ -22,7 +22,7 @@ interface Category {
 export default function AgoraPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
-  const { lang } = useSiteI18n()
+  const { t, lang } = useSiteI18n()
   const { user } = useAuth()
 
   useEffect(() => {
@@ -87,14 +87,13 @@ export default function AgoraPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto">
           <div className="text-xs font-bold uppercase tracking-[0.3em] text-[#C9A84C] mb-4 opacity-80">
-            The Vault of Arcana
+            {t('agora.hero.eyebrow')}
           </div>
           <h1 className="font-serif text-5xl md:text-7xl text-[#E8E0F0] mb-6 tracking-tight">
-            The Agora
+            {t('agora.hero.title')}
           </h1>
           <p className="text-lg text-[#9B93AB] max-w-2xl mx-auto leading-relaxed">
-            The public square of the Vault. Where seekers gather to share wisdom,
-            debate symbolism, and explore the great questions — together.
+            {t('agora.hero.body')}
           </p>
           <div className="mt-8 flex justify-center gap-4 flex-wrap">
             {user ? (
@@ -102,14 +101,14 @@ export default function AgoraPage() {
                 href="/agora/new"
                 className="px-8 py-3 rounded-full bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm shadow-[0_0_40px_rgba(201,168,76,0.25)] hover:brightness-110 transition-all"
               >
-                ✦ Begin a New Thread
+                ✦ {t('agora.cta.new_thread')}
               </Link>
             ) : (
               <Link
                 href="/login"
                 className="px-8 py-3 rounded-full bg-[rgba(255,255,255,0.08)] text-[#E8E0F0] font-bold text-sm border border-[rgba(255,255,255,0.12)] hover:bg-[rgba(255,255,255,0.12)] transition-all"
               >
-                Sign in to Post
+                {t('agora.cta.sign_in')}
               </Link>
             )}
           </div>
@@ -121,12 +120,12 @@ export default function AgoraPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 space-y-4">
             <div className="voa-dots text-3xl text-[#C9A84C]">●●●</div>
-            <p className="text-sm text-[#9B93AB] uppercase tracking-widest">Loading the Agora...</p>
+            <p className="text-sm text-[#9B93AB] uppercase tracking-widest">{t('agora.loading')}</p>
           </div>
         ) : categories.length === 0 ? (
           <div className="text-center py-24 glass-card rounded-3xl border border-[rgba(255,255,255,0.06)]">
             <div className="text-5xl mb-4">🌌</div>
-            <p className="text-[#9B93AB] italic font-serif text-xl">The Agora awaits its first voices.</p>
+            <p className="text-[#9B93AB] italic font-serif text-xl">{t('agora.empty')}</p>
           </div>
         ) : (
           <>
@@ -134,17 +133,17 @@ export default function AgoraPage() {
             <div className="glass-card rounded-2xl p-6 mb-10 border border-[rgba(255,255,255,0.06)] flex flex-wrap gap-8 justify-center">
               <div className="text-center">
                 <div className="text-2xl font-serif text-[#C9A84C]">{categories.length}</div>
-                <div className="text-[10px] uppercase tracking-widest text-[#9B93AB]">Categories</div>
+                <div className="text-[10px] uppercase tracking-widest text-[#9B93AB]">{t('agora.stats.categories')}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-serif text-[#C9A84C]">
                   {categories.reduce((sum, c) => sum + c.post_count, 0)}
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-[#9B93AB]">Threads</div>
+                <div className="text-[10px] uppercase tracking-widest text-[#9B93AB]">{t('agora.stats.threads')}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-serif text-[#7B5EA7]">∞</div>
-                <div className="text-[10px] uppercase tracking-widest text-[#9B93AB]">Perspectives</div>
+                <div className="text-[10px] uppercase tracking-widest text-[#9B93AB]">{t('agora.stats.perspectives')}</div>
               </div>
             </div>
 
