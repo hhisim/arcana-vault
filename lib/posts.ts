@@ -159,5 +159,15 @@ export const posts = [
     "author": "Chaos Oracle",
     "hero": "/images/blog/chaos-magick-not-what-you-think/cover.png",
     "excerpt": "Is it magick or just a very aggressive A/B test? Exploring the postmodern tech of belief and sigil-crafting."
+  },
+  {
+    "slug": "emerald-tablet-proto-quantum-physics",
+    "title": "The Emerald Tablet: Proto-Quantum Physics in Seven Axioms",
+    "tradition": "alchemy",
+    "publishedAt": "2026-04-01",
+    "readTime": "11 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/emerald-tablet-proto-quantum-physics/cover.svg",
+    "excerpt": "The Emerald Tablet — thirteen lines that alchemists called the seeds of creation itself. What happens when we map the Tabula Smaragdina onto quantum field theory?"
   }
 ];
