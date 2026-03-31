@@ -298,8 +298,33 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'quote', label: label('Quote', 'Alıntı', 'Цитата'), voiceEnabled: true },
     ],
   },
+  'chaos-magick': {
+    key: 'chaos-magick',
+    emoji: '✴',
+    title: label('Paradigm Hacker', 'Paradigm Hacker', 'Paradigm Hacker'),
+    subtitle: label('Chaos Magic', 'Kaos Büyüsü', 'Хаос Магия'),
+    onlineLabel: label('Text Only', 'Sadece Metin', 'Только текст'),
+    defaultMode: 'oracle',
+    starterPrompts: {
+      en: ['Teach me sigil magick from first principles.', 'What is the Kia and how do I work with it?', 'How do I engineer a paradigm shift?', 'Explain Spare\'s alphabet of desire.'],
+      tr: ['Bana sigil büyüsünü temel prensiplerden öğret.', 'Kia nedir ve onunla nasıl çalışırım?', 'Paradigma kaymasını nasıl mühendislik yaparım?', 'Spare\'in arzu alfabesini açıkla.'],
+      ru: ['Научи меня сигел магии с первых принципов.', 'Что такое Киа и как с ней работать?', 'Как инженерить парадигмальный сдвиг?', 'Объясни алфавит желания Спейра.'],
+    },
+    modes: [
+      { value: 'oracle', label: label('Oracle', 'Kehanet', 'Оракул'), voiceEnabled: true },
+      { value: 'seeker', label: label('Seeker', 'Arayıcı', 'Искатель'), voiceEnabled: true },
+      { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
+      { value: 'quote', label: label('Quote', 'Alıntı', 'Цитата'), voiceEnabled: true },
+      { value: 'sigil', label: label('Sigil Magick', 'Sigil', 'Сигел'), voiceEnabled: false },
+      { value: 'servitor', label: label('Servitor', 'Servitor', 'Сервитор'), voiceEnabled: false },
+      { value: 'gnosis', label: label('Gnosis', 'Gnosis', 'Гнозис'), voiceEnabled: false },
+      { value: 'paradigm', label: label('Paradigm', 'Paradigma', 'Парадигма'), voiceEnabled: false },
+      { value: 'teacher', label: label('Teacher', 'Öğretmen', 'Учитель'), voiceEnabled: false },
+      { value: 'historian', label: label('Historian', 'Tarihçi', 'Историк'), voiceEnabled: false },
+      { value: 'school_compare', label: label('School Compare', 'Okul Karşılaştır', 'Сравнить школы'), voiceEnabled: false },
+    ],
+  },
 }
-
 
 export const UI_COPY = {
   title: label('Select Oracle', 'Kehaneti Seç', 'Выберите Оракула'),
