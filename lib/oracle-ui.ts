@@ -1,5 +1,5 @@
 
-export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker'
+export type OraclePack = 'tao' | 'tarot' | 'tantra' | 'entheogen' | 'sufi' | 'dreamwalker' | 'kabbalah'
 export type UiLang = 'en' | 'tr' | 'ru'
 
 export type OracleMode =
@@ -263,6 +263,41 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
     ],
   },
+
+  kabbalah: {
+    key: 'kabbalah',
+    emoji: '✡️',
+    title: label('Kabbalah Oracle', 'Kabala Kehaneti', 'Каббалистический Оракул'),
+    subtitle: label('The Tree of Life · 72 Names · Gematria', 'Hayat Ağacı · 72 İsim · Gematriya', 'Древо Жизни · 72 Имени · Гематрия'),
+    onlineLabel: label('Text Only', 'Sadece Metin', 'Только текст'),
+    defaultMode: 'oracle',
+    starterPrompts: {
+      en: ['Teach me about the ten Sephiroth.', 'What is Tzimtzum and why does it matter?', 'Explain gematria and how to use it.', 'Give me daily wisdom from the Zohar.'],
+      tr: ['Bana on Sephirothu öğret.', 'Tzimtzum nedir ve neden önemli?', 'Gematriyayı ve nasıl kullanılacağını açıkla.', 'Bana Zohardan günlük bilgelik ver.'],
+      ru: ['Научи меня десяти Sephiroth.', 'Что такое Tzimtzum и почему это важно?', 'Объясни гематрию и как её использовать.', 'Дай мне ежедневную мудрость из Зоара.'],
+    },
+    modes: [
+      { value: 'oracle', label: label('Oracle', 'Kehanet', 'Оракул'), voiceEnabled: true },
+      { value: 'seeker', label: label('Seeker', 'Arayıcı', 'Искатель'), voiceEnabled: true },
+      { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
+      { value: 'teacher', label: label('Teacher', 'Öğretmen', 'Учитель'), voiceEnabled: false },
+      { value: 'sephirah', label: label('Sephirah', 'Sephirah', 'Сефира'), voiceEnabled: false },
+      { value: 'path', label: label('Path', 'Yol', 'Путь'), voiceEnabled: false },
+      { value: 'meditation', label: label('Meditation', 'Meditasyon', 'Медитация'), voiceEnabled: false },
+      { value: 'pathwork', label: label('Pathwork', 'Yol Çalışması', 'Путевая работа'), voiceEnabled: false },
+      { value: 'gematria', label: label('Gematria', 'Gematriya', 'Гематрия'), voiceEnabled: false },
+      { value: 'zohar', label: label('Zohar', 'Zohar', 'Зоар'), voiceEnabled: false },
+      { value: 'yetzirah', label: label('Yetzirah', 'Yetzirah', 'Йецира'), voiceEnabled: false },
+      { value: 'lurianic', label: label('Lurianic', 'Lurianik', 'Лурианская'), voiceEnabled: false },
+      { value: 'names', label: label('72 Names', '72 İsim', '72 Имени'), voiceEnabled: false },
+      { value: 'historian', label: label('Historian', 'Tarihçi', 'Историк'), voiceEnabled: false },
+      { value: 'school_compare', label: label('School Compare', 'Okul Karşılaştır', 'Сравнить школы'), voiceEnabled: false },
+      { value: 'practical', label: label('Practical', 'Pratik', 'Практика'), voiceEnabled: false },
+      { value: 'merkabah', label: label('Merkabah', 'Merkabah', 'Меркава'), voiceEnabled: false },
+      { value: 'qliphoth', label: label('Qliphoth', 'Qliphoth', 'Клипот'), voiceEnabled: false },
+      { value: 'quote', label: label('Quote', 'Alıntı', 'Цитата'), voiceEnabled: true },
+    ],
+  },
 }
 
 
@@ -322,6 +357,11 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
     en: ['Give me one lucid-dream practice for tonight.', 'Interpret this as dream symbolism, not omen literalism.', 'Compare dream yoga, astral projection, and remote viewing.'],
     tr: ['Bu gece için bir bilinçli rüya pratiği ver.', 'Bunu kehanet değil rüya sembolizmi olarak yorumla.', 'Rüya yogası, astral projeksiyon ve uzak görüşü karşılaştır.'],
     ru: ['Дай одну практику осознанного сна на эту ночь.', 'Истолкуй это как символику сна, а не буквальное знамение.', 'Сравни йогу сна, астральную проекцию и дистанционное видение.'],
+  },
+  kabbalah: {
+    en: ['Go deeper into the Tree of Life.', 'Give me a Sephirah meditation.', 'Explain gematria of this.', 'Compare Kabbalistic and Hermetic approaches.'],
+    tr: ['Hayat Ağacına daha derine in.', 'Bana bir Sephirah meditasyonu ver.', 'Bunun gematriyasını açıkla.', 'Kabalistik ve Hermetik yaklaşımları karşılaştır.'],
+    ru: ['Углубись в Древо Жизни.', 'Дай мне медитацию на Сефиру.', 'Объясни гематрию этого.', 'Сравни каббалистический и герметический подходы.'],
   },
 }
 
