@@ -119,9 +119,85 @@ export default function NavBar() {
                 className="flex items-center gap-2 rounded-full border border-[var(--primary-gold)]/30 hover:border-[var(--primary-gold)] transition-colors p-1 focus:outline-none"
                 aria-label="Account menu"
               >
-                <div className="w-8 h-8 rounded-full bg-[#7B5EA7] flex items-center justify-center text-white text-sm font-bold uppercase">
-                  {(user?.full_name?.[0] || user?.email?.[0] || '?')}
-                </div>
+                {/* Animated glowing favicon icon — pulsing triskelion */}
+                <svg
+                  width="44"
+                  height="44"
+                  viewBox="0 0 100 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ filter: 'drop-shadow(0 0 6px rgba(139,92,246,0.9)) drop-shadow(0 0 12px rgba(59,130,246,0.6)) drop-shadow(0 0 20px rgba(234,179,8,0.4))' }}
+                >
+                  <style>{`
+                    @keyframes iconColorCycle {
+                      0%   { stop-color: #3B82F6; }
+                      33%  { stop-color: #8B5CF6; }
+                      66%  { stop-color: #EAB308; }
+                      100% { stop-color: #3B82F6; }
+                    }
+                    @keyframes iconPulse {
+                      0%, 100% { opacity: 0.18; transform: scale(1); }
+                      50%       { opacity: 0.35; transform: scale(1.06); }
+                    }
+                    @keyframes iconSpin {
+                      0%   { transform: rotate(0deg); }
+                      100% { transform: rotate(360deg); }
+                    }
+                  `}</style>
+                  <defs>
+                    <linearGradient id="triskelionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%"   stopColor="#3B82F6">
+                        <animate attributeName="stopColor" values="#3B82F6;#8B5CF6;#EAB308;#3B82F6" dur="4s" repeatCount="indefinite" />
+                      </stop>
+                      <stop offset="50%"  stopColor="#8B5CF6">
+                        <animate attributeName="stopColor" values="#8B5CF6;#EAB308;#3B82F6;#8B5CF6" dur="4s" repeatCount="indefinite" />
+                      </stop>
+                      <stop offset="100%" stopColor="#EAB308">
+                        <animate attributeName="stopColor" values="#EAB308;#3B82F6;#8B5CF6;#EAB308" dur="4s" repeatCount="indefinite" />
+                      </stop>
+                    </linearGradient>
+                    <filter id="iconGlow" x="-60%" y="-60%" width="220%" height="220%">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  {/* Outer pulse ring */}
+                  <circle cx="50" cy="50" r="44"
+                    fill="url(#triskelionGrad)"
+                    style={{ animation: 'iconPulse 2.5s ease-in-out infinite', transformOrigin: '50px 50px' }}
+                  />
+
+                  {/* Triskelion — three comma arms at 0°, 120°, 240° */}
+                  <g filter="url(#iconGlow)" style={{ animation: 'iconSpin 20s linear infinite', transformOrigin: '50px 50px' }}>
+                    {/* Arm 1 (top) */}
+                    <path d="M50 50 Q58 38 66 28 Q72 20 78 16 Q84 12 86 10 Q88 8 88 6 Q88 4 86 6 Q84 8 80 14 Q74 22 66 32 Q58 42 50 50 Z"
+                      fill="url(#triskelionGrad)" />
+                    <circle cx="82" cy="10" r="5" fill="url(#triskelionGrad)" />
+                    <circle cx="76" cy="18" r="3.5" fill="url(#triskelionGrad)" />
+                    <circle cx="70" cy="26" r="2.5" fill="url(#triskelionGrad)" />
+
+                    {/* Arm 2 (bottom-right, 120°) */}
+                    <path d="M50 50 Q62 58 72 68 Q80 76 84 80 Q88 84 90 86 Q92 88 90 90 Q88 92 84 88 Q78 82 68 72 Q58 62 50 50 Z"
+                      fill="url(#triskelionGrad)" />
+                    <circle cx="90" cy="88" r="5" fill="url(#triskelionGrad)" />
+                    <circle cx="84" cy="82" r="3.5" fill="url(#triskelionGrad)" />
+                    <circle cx="76" cy="74" r="2.5" fill="url(#triskelionGrad)" />
+
+                    {/* Arm 3 (bottom-left, 240°) */}
+                    <path d="M50 50 Q38 58 28 68 Q20 76 16 80 Q12 84 10 86 Q8 88 10 90 Q12 92 16 88 Q22 82 32 72 Q42 62 50 50 Z"
+                      fill="url(#triskelionGrad)" />
+                    <circle cx="10" cy="88" r="5" fill="url(#triskelionGrad)" />
+                    <circle cx="16" cy="82" r="3.5" fill="url(#triskelionGrad)" />
+                    <circle cx="24" cy="74" r="2.5" fill="url(#triskelionGrad)" />
+
+                    {/* Center jewel */}
+                    <circle cx="50" cy="50" r="8" fill="url(#triskelionGrad)" />
+                    <circle cx="50" cy="50" r="5" fill="rgba(255,255,255,0.4)" />
+                  </g>
+                </svg>
               </button>
 
               {dropdownOpen && (
