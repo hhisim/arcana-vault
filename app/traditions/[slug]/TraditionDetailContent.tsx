@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import { useSiteI18n } from '@/lib/lang-context'
 import { type TraditionEntry } from '@/lib/tradition-config'
 import { posts } from '@/lib/posts'
 import { books } from '@/lib/books'
@@ -9,7 +9,8 @@ import NotifyForm from './NotifyForm'
 
 // ─── Sub-components ───────────────────────────────────────────
 
-function TraditionHero({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function TraditionHero({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   return (
     <section
       className="relative border-b border-white/5 overflow-hidden"
@@ -90,7 +91,8 @@ function TraditionHero({ t, entry }: { t: ReturnType<typeof useTranslations>; en
   )
 }
 
-function ArchiveSection({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function ArchiveSection({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   if (entry.primaryTexts.length === 0 && entry.commentaryAndSources.length === 0) return null
 
   return (
@@ -160,7 +162,8 @@ function ArchiveSection({ t, entry }: { t: ReturnType<typeof useTranslations>; e
   )
 }
 
-function ModesSection({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function ModesSection({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   if (entry.keyModes.length === 0) return null
 
   const modeDetails: Record<string, { description: string; example: string }> = {
@@ -237,7 +240,8 @@ function ModesSection({ t, entry }: { t: ReturnType<typeof useTranslations>; ent
   )
 }
 
-function SampleExchange({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function SampleExchange({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   if (!entry.sampleExchange) return null
 
   const { user, oracle, tags } = entry.sampleExchange
@@ -317,7 +321,8 @@ function SampleExchange({ t, entry }: { t: ReturnType<typeof useTranslations>; e
   )
 }
 
-function CorrespondencesSection({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function CorrespondencesSection({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   if (entry.relatedCorrespondences.length === 0) return null
 
   return (
@@ -354,7 +359,8 @@ function CorrespondencesSection({ t, entry }: { t: ReturnType<typeof useTranslat
   )
 }
 
-function ScrollsSection({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function ScrollsSection({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   const relatedPosts = posts.filter((p) => entry.relatedScrollSlugs.includes(p.slug))
   if (relatedPosts.length === 0) return null
 
@@ -400,7 +406,8 @@ function ScrollsSection({ t, entry }: { t: ReturnType<typeof useTranslations>; e
   )
 }
 
-function LibrarySection({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function LibrarySection({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   const relatedBooks = books.filter((b) => entry.relatedLibrarySlugs.includes(b.id))
   if (relatedBooks.length === 0) return null
 
@@ -450,7 +457,8 @@ function LibrarySection({ t, entry }: { t: ReturnType<typeof useTranslations>; e
   )
 }
 
-function VoiceSection({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function VoiceSection({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   if (!entry.voiceDescription || entry.status !== 'live') return null
 
   return (
@@ -474,7 +482,8 @@ function VoiceSection({ t, entry }: { t: ReturnType<typeof useTranslations>; ent
   )
 }
 
-function ComingSoonSection({ t, entry }: { t: ReturnType<typeof useTranslations>; entry: TraditionEntry }) {
+function ComingSoonSection({ entry }: { entry: TraditionEntry }) {
+  const { t } = useSiteI18n()
   return (
     <section className="border-b border-white/5">
       <div className="mx-auto max-w-3xl px-6 py-20 text-center">
@@ -498,7 +507,7 @@ function ComingSoonSection({ t, entry }: { t: ReturnType<typeof useTranslations>
           <p className="mb-4 text-xs uppercase tracking-widest text-[#9B93AB]">
             {t('tradition.coming.meanwhile')}
           </p>
-          <ScrollsSection t={t} entry={entry} />
+          <ScrollsSection entry={entry} />
         </div>
       </div>
     </section>
@@ -508,30 +517,30 @@ function ComingSoonSection({ t, entry }: { t: ReturnType<typeof useTranslations>
 // ─── Main Page ───────────────────────────────────────────────
 
 export default function TraditionDetailContent({ tradition: entry }: { tradition: TraditionEntry }) {
-  const t = useTranslations()
+  const { t } = useSiteI18n()
 
   return (
     <main className="min-h-screen bg-[#0a0a10]">
-      <TraditionHero t={t} entry={entry} />
+      <TraditionHero entry={entry} />
 
       {entry.status === 'live' ? (
         <>
-          <VoiceSection t={t} entry={entry} />
-          <ArchiveSection t={t} entry={entry} />
-          <ModesSection t={t} entry={entry} />
-          <SampleExchange t={t} entry={entry} />
-          <CorrespondencesSection t={t} entry={entry} />
-          <ScrollsSection t={t} entry={entry} />
-          <LibrarySection t={t} entry={entry} />
+          <VoiceSection entry={entry} />
+          <ArchiveSection entry={entry} />
+          <ModesSection entry={entry} />
+          <SampleExchange entry={entry} />
+          <CorrespondencesSection entry={entry} />
+          <ScrollsSection entry={entry} />
+          <LibrarySection entry={entry} />
 
           {/* Final CTA */}
           <section className="py-20 text-center">
             <div className="mx-auto max-w-2xl px-6">
               <h2 className="font-serif text-4xl text-[#E8E0F0] mb-4">
-                {t('tradition.final.title', { name: entry.name })}
+                {t('tradition.final.title').replace('{name}', entry.name)}
               </h2>
               <p className="text-[#9B93AB] mb-8 leading-7">
-                {t('tradition.final.body', { source: entry.primaryTexts[0]?.title || t('tradition.final.default_source') })}
+                {t('tradition.final.body').replace('{source}', entry.primaryTexts[0]?.title || t('tradition.final.default_source'))}
               </p>
               <Link
                 href={entry.oracleLink}
@@ -547,7 +556,7 @@ export default function TraditionDetailContent({ tradition: entry }: { tradition
           </section>
         </>
       ) : (
-        <ComingSoonSection t={t} entry={entry} />
+        <ComingSoonSection entry={entry} />
       )}
     </main>
   )
