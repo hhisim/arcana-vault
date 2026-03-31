@@ -208,7 +208,7 @@ export default function CategoryPage({
                   {t('agora.pagination.prev')}
                 </button>
                 <div className="flex items-center gap-2 text-xs text-[#9B93AB]">
-                  {t('agora.pagination.page_of', { page, total: totalPages })}
+                  {t('agora.pagination.page_of').replace('{page}', String(page)).replace('{total}', String(totalPages))}
                 </div>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}

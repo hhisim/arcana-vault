@@ -73,7 +73,7 @@ function TraditionHero({ entry }: { entry: TraditionEntry }) {
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-md text-sm font-bold uppercase tracking-wider text-[#0A0A10] transition-all duration-200 hover:shadow-[0_0_24px_rgba(0,0,0,0.3)]"
               style={{ backgroundColor: entry.color }}
             >
-              {t('tradition.cta.enter', { name: entry.name })}
+              {t('tradition.cta.enter').replace('{name}', entry.name)}
               <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -167,7 +167,7 @@ function ModesSection({ entry }: { entry: TraditionEntry }) {
   if (entry.keyModes.length === 0) return null
 
   const modeDetails: Record<string, { description: string; example: string }> = {
-    Oracle: { description: t('tradition.mode.oracle.desc'), example: t('tradition.mode.oracle.example', { name: entry.name.split(' ')[0], domain: entry.domains[0] || 'my current situation' }) },
+    Oracle: { description: t('tradition.mode.oracle.desc'), example: t('tradition.mode.oracle.example').replace('{name}', entry.name.split(' ')[0]).replace('{domain}', entry.domains[0] || 'my current situation') },
     'I Ching Consultation': { description: t('tradition.mode.i_ching.desc'), example: t('tradition.mode.i_ching.example') },
     'Wu Wei Guidance': { description: t('tradition.mode.wu_wei.desc'), example: t('tradition.mode.wu_wei.example') },
     'Deep Study': { description: t('tradition.mode.deep_study.desc'), example: t('tradition.mode.deep_study.example') },
