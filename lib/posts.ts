@@ -106,7 +106,7 @@ export const posts = [
     "publishedAt": "2026-03-19",
     "readTime": "18 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/dmt-hyperbolic-mind/cover.png",
+    "hero": "/images/blog/dmt-and-the-hyperbolic-mind/cover.png",
     "excerpt": "An exhaustive algorithmic and geometric analysis of DMT-induced states of consciousness, drawing on 'DMT: The Spirit Molecule,' ancient mystery schools, and primary textual analysis from the Arcana Vault archives.",
     "tags": ["DMT", "Hyperbolic Geometry", "Consciousness", "Qualia", "Symmetry", "Terence McKenna", "Rick Strassman"]
   },
