@@ -104,10 +104,14 @@ function getDestinationName(type: LinkTarget['type']): string {
 
 // ─── Core injection function ─────────────────────────────────────────────────
 /**
- * Injects cross-links into markdown/HTML content.
+ * Injects cross-links into markdown content.
  * Only the FIRST occurrence of each glossary term gets linked.
  *
- * @param content  - The markdown or HTML content to process
+ * CRITICAL: Markdown headings (lines starting with #) are protected from
+ * injection so that cross-link HTML never ends up inside heading text,
+ * which would break the heading's markdown parsing.
+ *
+ * @param content  - The markdown content to process
  * @param gloss    - The glossary object (defaults to the site's glossary)
  * @param currentSlug - Slug of the current essay (so we don't self-link)
  * @param maxLinks  - Maximum number of links to inject (default 10)
@@ -121,18 +125,26 @@ export function injectCrossLinks(
   const aliasList = buildAliasList(gloss)
   const linkedTerms = new Set<string>()
   let linkCount = 0
-  let result = content
+
+  // ── Step 1: Protect markdown headings from injection ──────────────────────
+  // Replace heading lines with placeholders so cross-link HTML never gets
+  // injected into heading text (which would corrupt heading structure).
+  const headingPlaceholders: string[] = []
+  const headingRegex = /^(#{1,6}\s+[^\n]+)$/gm
+  const contentWithPlaceholders = content.replace(headingRegex, (match) => {
+    const idx = headingPlaceholders.length
+    headingPlaceholders.push(match)
+    return `\x00HEADING_PLACEHOLDER_${idx}\x00`
+  })
+
+  // ── Step 2: Inject cross-links into the body (no headings to corrupt) ───
+  let result = contentWithPlaceholders
 
   for (const { alias, key, entry } of aliasList) {
     if (linkCount >= maxLinks) break
     if (linkedTerms.has(key)) continue
 
-    // Build a case-insensitive regex that matches the alias as a whole word
-    // and is NOT already inside an HTML tag or link
     const escapedAlias = escapeRegex(alias)
-    // Negative lookbehind: not preceded by < or a word character (to avoid matching inside tags)
-    // Negative lookahead: not followed by > (to avoid matching inside tags)
-    // We also need to avoid matching inside existing cross-links
     const regex = new RegExp(
       `(?<![<\\w/])\\b(${escapedAlias})\\b(?![^<]*>)`,
       'i'
@@ -148,6 +160,11 @@ export function injectCrossLinks(
         linkCount++
       }
     }
+  }
+
+  // ── Step 3: Restore heading lines ────────────────────────────────────────
+  for (let i = 0; i < headingPlaceholders.length; i++) {
+    result = result.replace(`\x00HEADING_PLACEHOLDER_${i}\x00`, headingPlaceholders[i])
   }
 
   return result

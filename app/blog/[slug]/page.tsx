@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import React from 'react';
 import matter from 'gray-matter';
+import { cookies } from 'next/headers';
 import { posts } from '@/lib/posts';
 import BlogContent from '@/components/BlogContent';
 import BlogReturnButton from '@/components/BlogReturnButton';
@@ -112,9 +113,19 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       fmI18n.ru = { title: ruFm.title as string, excerpt: ruFm.excerpt as string };
     } catch (e) {}
 
-    // Default English frontmatter
+    // Determine language server-side from cookies — prevents hydration mismatch
+    const cookieStore = await cookies();
+    const lang = cookieStore.get('NEXT_LOCALE')?.value || cookieStore.get('lang')?.value || 'en';
+
+    // Resolve the correct i18n title (server-side, no client patching needed)
     const defaultTitle = (frontmatter.title as string) || 'Untitled Scroll';
-    const defaultExcerpt = (frontmatter.excerpt as string) || '';
+    const resolvedTitle =
+      lang === 'tr' && fmI18n.tr?.title
+        ? fmI18n.tr.title
+        : lang === 'ru' && fmI18n.ru?.title
+        ? fmI18n.ru.title
+        : defaultTitle;
+
     const tradition = (frontmatter.tradition as string) || 'Ancient';
     const heroImage = frontmatter.hero as string | undefined;
     const inlineImages = (frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [];
@@ -163,9 +174,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             <span className="inline-block px-4 py-1 rounded-full bg-[#7B5EA7]/20 text-[#C9A84C] text-[10px] uppercase font-bold tracking-[0.3em] mb-8 border border-[#7B5EA7]/30">
               {tradition} tradition
             </span>
-            {/* Title and excerpt injected via hidden elements — BlogContent client reads them */}
+            {/* Title rendered server-side with correct i18n language */}
             <h1 className="font-cinzel text-5xl md:text-7xl text-[#E8E0F0] mb-10 leading-tight" id="blog-post-title">
-              {defaultTitle}
+              {resolvedTitle}
             </h1>
             <div className="flex items-center justify-center gap-6 text-[#9B93AB] text-xs uppercase tracking-[0.2em] opacity-60">
               <span>{(frontmatter.author as string) || 'The Oracle'}</span>
@@ -182,7 +193,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <div className="w-full h-[520px] overflow-hidden border-b border-white/8 relative bg-[#0A0A0F]">
             <img
               src={heroImage}
-              alt={defaultTitle}
+              alt={resolvedTitle}
               className="w-full h-full object-contain"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-transparent to-transparent opacity-30 pointer-events-none" />
@@ -196,7 +207,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           slug={slug}
           translations={translations}
           fmI18n={fmI18n}
-          defaultTitle={defaultTitle}
+          defaultTitle={resolvedTitle}
           images={inlineImages}
         />
 

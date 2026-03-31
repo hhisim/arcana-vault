@@ -146,18 +146,6 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
     [imageProcessedBody, slug]
   )
 
-  const title = (lang === 'tr' && fmI18n?.tr?.title)
-    ? fmI18n.tr.title
-    : (lang === 'ru' && fmI18n?.ru?.title)
-    ? fmI18n.ru.title
-    : defaultTitle
-
-  // Inject translated title into the DOM (blog post header reads it via useEffect)
-  React.useEffect(() => {
-    const el = document.getElementById('blog-post-title')
-    if (el && title) el.textContent = title
-  }, [lang, title])
-
   const labelTR = 'Türkçe'
   const labelRU = 'Русский'
   const labelEN = 'English'
@@ -295,23 +283,28 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
   )
 
   // Custom image component — renders images full-width with proper styling
-  // Also overrides paragraph to skip wrapper when child is an image
-  const ImageComponent = ({ src, alt, ...props }: any) => (
-    <figure className="my-8 w-full">
-      <img
-        src={src}
-        alt={alt || ''}
-        className="w-full rounded-xl border border-white/8 object-cover"
-        loading="lazy"
-        {...props}
-      />
-      {alt && alt !== '' && (
-        <figcaption className="mt-3 text-center text-[#9B93AB] text-sm italic">
-          {alt}
-        </figcaption>
-      )}
-    </figure>
-  )
+  // Graceful fallback when image fails to load (broken src, 404, etc.)
+  const ImageComponent = ({ src, alt, ...props }: any) => {
+    const [imgError, setImgError] = React.useState(false);
+    if (!src || imgError) return null;
+    return (
+      <figure className="my-8 w-full">
+        <img
+          src={src}
+          alt={alt || ''}
+          className="w-full rounded-xl border border-white/8 object-cover"
+          loading="lazy"
+          onError={() => setImgError(true)}
+          {...props}
+        />
+        {alt && alt !== '' && (
+          <figcaption className="mt-3 text-center text-[#9B93AB] text-sm italic">
+            {alt}
+          </figcaption>
+        )}
+      </figure>
+    );
+  }
 
   const CodeComponent = ({ node, inline, className, children, ...props }: any) => {
     if (inline) {

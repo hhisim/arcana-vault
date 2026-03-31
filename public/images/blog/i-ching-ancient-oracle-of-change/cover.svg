@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bg3" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0f1a14"/>
+      <stop offset="100%" stop-color="#0A0A0F"/>
+    </radialGradient>
+    <radialGradient id="water3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2d5a3d" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#2d5a3d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg3)"/>
+  <!-- 8 trigrams arranged in bagua circle -->
+  <g transform="translate(600,300)" opacity="0.4">
+    <!-- Outer ring -->
+    <circle r="250" fill="none" stroke="#2d5a3d" stroke-width="0.5"/>
+    <circle r="200" fill="none" stroke="#2d5a3d" stroke-width="0.5"/>
+    <!-- Bagua trigram positions (8 points) -->
+    <g font-family="serif" font-size="28" fill="#3d8a5a" text-anchor="middle">
+      <!-- ☰ Heaven (North) -->
+      <text x="0" y="-215">☰</text>
+      <!-- ☱ Lake (Northeast) -->
+      <text x="153" y="-153">☱</text>
+      <!-- ☲ Fire (East) -->
+      <text x="215" y="0">☲</text>
+      <!-- ☳ Thunder (Southeast) -->
+      <text x="153" y="153">☳</text>
+      <!-- ☴ Wind (South) -->
+      <text x="0" y="215">☴</text>
+      <!-- ☵ Water (Southwest) -->
+      <text x="-153" y="153">☵</text>
+      <!-- ☶ Mountain (West) -->
+      <text x="-215" y="0">☶</text>
+      <!-- ☷ Earth (Northwest) -->
+      <text x="-153" y="-153">☷</text>
+    </g>
+    <!-- Connecting lines to center -->
+    <line x1="0" y1="-200" x2="0" y2="-80" stroke="#3d8a5a" stroke-width="0.5" opacity="0.5"/>
+    <line x1="200" y1="0" x2="80" y2="0" stroke="#3d8a5a" stroke-width="0.5" opacity="0.5"/>
+    <line x1="0" y1="200" x2="0" y2="80" stroke="#3d8a5a" stroke-width="0.5" opacity="0.5"/>
+    <line x1="-200" y1="0" x2="-80" y2="0" stroke="#3d8a5a" stroke-width="0.5" opacity="0.5"/>
+  </g>
+  <!-- Yin-yang at center -->
+  <g transform="translate(600,300)">
+    <circle r="70" fill="none" stroke="#3d8a5a" stroke-width="1" opacity="0.3"/>
+    <circle r="50" fill="none" stroke="#3d8a5a" stroke-width="0.5" opacity="0.2"/>
+    <!-- Simplified yin-yang -->
+    <path d="M0,-40 A40,40 0 0,1 0,40 A40,40 0 0,1 0,-40" fill="#3d8a5a" opacity="0.3"/>
+    <path d="M0,40 A40,40 0 0,1 0,-40 A40,40 0 0,1 0,40" fill="#1a1a2e" opacity="0.5"/>
+  </g>
+  <!-- 64 hexagram grid hint (small dots) -->
+  <g transform="translate(600,540)" opacity="0.1">
+    <text font-family="serif" font-size="9" fill="#3d8a5a" text-anchor="middle" letter-spacing="2">64 HEXAGRAMS · 8 TRIGRAMS · 3,000 YEARS</text>
+  </g>
+  <text x="600" y="60" text-anchor="middle" font-family="serif" font-size="11" fill="#3d8a5a" opacity="0.6" letter-spacing="4">✦ I CHING ✦</text>
+</svg>
