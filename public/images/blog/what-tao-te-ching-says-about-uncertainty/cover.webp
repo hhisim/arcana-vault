@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bg11" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0a0f0a"/>
+      <stop offset="100%" stop-color="#0A0A0F"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg11)"/>
+  <!-- Taoist Wu Wei — flowing water and mountain -->
+  <g transform="translate(600,315)" opacity="0.3">
+    <circle r="220" fill="none" stroke="#2d5a3d" stroke-width="0.5"/>
+    <circle r="180" fill="none" stroke="#2d5a3d" stroke-width="0.5"/>
+    <circle r="140" fill="none" stroke="#2d5a3d" stroke-width="0.5"/>
+  </g>
+  <!-- Mountain silhouette -->
+  <g transform="translate(600,400)" opacity="0.2">
+    <polygon points="-200,80 0,-120 200,80" fill="#1a2a1a" stroke="#2d5a3d" stroke-width="0.5"/>
+    <polygon points="-100,80 50,-60 200,80" fill="#0f1a0f" stroke="#2d5a3d" stroke-width="0.3"/>
+  </g>
+  <!-- Flowing water lines -->
+  <g stroke="#2d5a3d" stroke-width="0.8" opacity="0.2" fill="none">
+    <path d="M200,500 Q400,450 600,480 Q800,510 1000,460"/>
+    <path d="M200,530 Q400,480 600,510 Q800,540 1000,490"/>
+    <path d="M200,560 Q400,510 600,540 Q800,570 1000,520"/>
+  </g>
+  <!-- Wu Wei symbol — empty circle -->
+  <g transform="translate(600,280)" opacity="0.4">
+    <circle r="60" fill="none" stroke="#2d5a3d" stroke-width="1.5"/>
+    <circle r="40" fill="none" stroke="#2d5a3d" stroke-width="0.5"/>
+    <!-- Calligraphy-like Tao symbol -->
+    <path d="M-10,-20 Q0,-5 -15,5 Q-20,15 0,20 Q20,15 15,5 Q0,-5 10,-20 Q5,-10 0,-10 Q-5,-10 -10,-20" fill="#2d5a3d" opacity="0.4"/>
+  </g>
+  <text x="600" y="50" text-anchor="middle" font-family="serif" font-size="11" fill="#2d5a3d" opacity="0.7" letter-spacing="4">✦ WU WEI ✦</text>
+  <text x="600" y="590" text-anchor="middle" font-family="serif" font-size="9" fill="#9B93AB" opacity="0.4" letter-spacing="2">Tao Te Ching · Non-Action · The Uncarved Block · Flow</text>
+</svg>

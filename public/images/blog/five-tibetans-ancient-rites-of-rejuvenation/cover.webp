@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bg1" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a1030"/>
+      <stop offset="100%" stop-color="#0A0A0F"/>
+    </radialGradient>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#7B5EA7"/>
+    </linearGradient>
+    <filter id="glow-filter">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg1)"/>
+  <!-- Mandala-like circles representing the 5 Tibetans/yoga -->
+  <g transform="translate(600,315)" opacity="0.15">
+    <circle r="260" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <circle r="220" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <circle r="180" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <circle r="140" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <circle r="100" fill="none" stroke="#7B5EA7" stroke-width="1"/>
+    <!-- 5 points for 5 Tibetans -->
+    <g filter="url(#glow-filter)">
+      <circle cx="0" cy="-200" r="12" fill="#C9A84C" opacity="0.8"/>
+      <circle cx="190" cy="-62" r="12" fill="#C9A84C" opacity="0.8"/>
+      <circle cx="118" cy="162" r="12" fill="#C9A84C" opacity="0.8"/>
+      <circle cx="-118" cy="162" r="12" fill="#C9A84C" opacity="0.8"/>
+      <circle cx="-190" cy="-62" r="12" fill="#C9A84C" opacity="0.8"/>
+    </g>
+    <!-- Connecting lines -->
+    <polygon points="0,-200 190,-62 118,162 -118,162 -190,-62" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+  </g>
+  <!-- Central torus/dharma wheel symbol -->
+  <g transform="translate(600,315)" opacity="0.6">
+    <circle r="55" fill="none" stroke="url(#gold1)" stroke-width="2"/>
+    <circle r="45" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+    <!-- 8-spoke dharma wheel (8 trigrams in I Ching = 8 spokes) -->
+    <g stroke="#C9A84C" stroke-width="1.5" opacity="0.7">
+      <line x1="0" y1="-40" x2="0" y2="-55"/>
+      <line x1="28" y1="-28" x2="39" y2="-39"/>
+      <line x1="40" y1="0" x2="55" y2="0"/>
+      <line x1="28" y1="28" x2="39" y2="39"/>
+      <line x1="0" y1="40" x2="0" y2="55"/>
+      <line x1="-28" y1="28" x2="-39" y2="39"/>
+      <line x1="-40" y1="0" x2="-55" y2="0"/>
+      <line x1="-28" y1="-28" x2="-39" y2="-39"/>
+    </g>
+  </g>
+  <!-- Corner ornaments -->
+  <g stroke="#C9A84C" stroke-width="1" opacity="0.3">
+    <path d="M40,40 L80,40 L80,45 L45,45 L45,80 L40,80 Z" fill="none"/>
+    <path d="M1160,40 L1120,40 L1120,45 L1155,45 L1155,80 L1160,80 Z" fill="none"/>
+    <path d="M40,590 L80,590 L80,585 L45,585 L45,550 L40,550 Z" fill="none"/>
+    <path d="M1160,590 L1120,590 L1120,585 L1155,585 L1155,550 L1160,550 Z" fill="none"/>
+  </g>
+</svg>

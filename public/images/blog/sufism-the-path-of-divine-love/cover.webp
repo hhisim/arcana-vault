@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bg5" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a0a0a"/>
+      <stop offset="100%" stop-color="#0A0A0F"/>
+    </radialGradient>
+    <radialGradient id="heart5" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#e74c3c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="whirl5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#e74c3c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg5)"/>
+  <!-- Sacred geometry — intersecting circles (Unity of Being) -->
+  <g transform="translate(600,300)" opacity="0.3">
+    <circle r="180" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <circle r="150" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <circle r="120" fill="none" stroke="#e74c3c" stroke-width="1"/>
+    <!-- Flower of Life pattern -->
+    <circle cx="0" cy="-90" r="90" fill="none" stroke="#C9A84C" stroke-width="0.3"/>
+    <circle cx="78" cy="-45" r="90" fill="none" stroke="#C9A84C" stroke-width="0.3"/>
+    <circle cx="78" cy="45" r="90" fill="none" stroke="#C9A84C" stroke-width="0.3"/>
+    <circle cx="0" cy="90" r="90" fill="none" stroke="#C9A84C" stroke-width="0.3"/>
+    <circle cx="-78" cy="45" r="90" fill="none" stroke="#C9A84C" stroke-width="0.3"/>
+    <circle cx="-78" cy="-45" r="90" fill="none" stroke="#C9A84C" stroke-width="0.3"/>
+  </g>
+  <!-- Heart center (Divine Love) -->
+  <circle cx="600" cy="300" r="60" fill="url(#heart5)"/>
+  <g transform="translate(600,300)" opacity="0.7">
+    <path d="M0,-25 C-10,-40 -35,-30 -35,-10 C-35,15 0,35 0,35 C0,35 35,15 35,-10 C35,-30 10,-40 0,-25" fill="none" stroke="#e74c3c" stroke-width="1.5"/>
+  </g>
+  <!-- Rumi quote symbol — whirling dervish suggestion -->
+  <g transform="translate(600,300)" opacity="0.15">
+    <path d="M0,-60 Q40,-30 0,0 Q-40,30 0,60" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <path d="M-60,0 Q-30,40 0,0 Q30,-40 60,0" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+    <circle r="20" fill="none" stroke="#e74c3c" stroke-width="1"/>
+  </g>
+  <text x="600" y="50" text-anchor="middle" font-family="serif" font-size="11" fill="#e74c3c" opacity="0.7" letter-spacing="4">✦ SUFISM ✦</text>
+  <text x="600" y="585" text-anchor="middle" font-family="serif" font-size="9" fill="#C9A84C" opacity="0.4" letter-spacing="3">HAQiqa · MA'RIFA · IHSAN</text>
+</svg>

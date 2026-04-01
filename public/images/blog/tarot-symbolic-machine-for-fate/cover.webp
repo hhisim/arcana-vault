@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bg8" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a0a20"/>
+      <stop offset="100%" stop-color="#0A0A0F"/>
+    </radialGradient>
+    <linearGradient id="major8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#7B5EA7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg8)"/>
+  <!-- Tarot card outline (suggestive) -->
+  <g transform="translate(600,300)" opacity="0.3">
+    <rect x="-120" y="-180" width="240" height="320" rx="12" fill="none" stroke="#C9A84C" stroke-width="1"/>
+    <rect x="-110" y="-170" width="220" height="300" rx="8" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.5"/>
+    <!-- Arcana symbol at top -->
+    <text x="0" y="-130" text-anchor="middle" font-family="serif" font-size="36" fill="#C9A84C" opacity="0.6">X</text>
+  </g>
+  <!-- 78 paths of the Tree of Life (simplified) -->
+  <g transform="translate(600,300)" opacity="0.2">
+    <!-- 10 sephiroth circles -->
+    <g fill="#C9A84C" opacity="0.4">
+      <circle cx="0" cy="-200" r="8"/>  <!-- Kether -->
+      <circle cx="-100" cy="-120" r="6"/>  <!-- Chokhmah -->
+      <circle cx="100" cy="-120" r="6"/>  <!-- Binah -->
+      <circle cx="-150" cy="-30" r="6"/>  <!-- Chesed -->
+      <circle cx="0" cy="-30" r="6"/>  <!-- Tiferet -->
+      <circle cx="150" cy="-30" r="6"/>  <!-- Gevurah -->
+      <circle cx="-150" cy="80" r="6"/>  <!-- Hod -->
+      <circle cx="0" cy="80" r="6"/>  <!-- Yesod -->
+      <circle cx="150" cy="80" r="6"/>  <!-- Netzach -->
+      <circle cx="0" cy="200" r="8"/>  <!-- Malkuth -->
+    </g>
+    <!-- Paths connecting them -->
+    <g stroke="#C9A84C" stroke-width="0.5" fill="none" opacity="0.3">
+      <line x1="0" y1="-192" x2="-94" y2="-126"/>
+      <line x1="0" y1="-192" x2="94" y2="-126"/>
+      <line x1="-94" y1="-126" x2="94" y2="-126"/>
+      <line x1="-94" y1="-126" x2="-150" y2="-30"/>
+      <line x1="94" y1="-126" x2="150" y2="-30"/>
+      <line x1="-150" y1="-30" x2="0" y2="-30"/>
+      <line x1="150" y1="-30" x2="0" y2="-30"/>
+      <line x1="0" y1="-30" x2="0" y2="80"/>
+      <line x1="-150" y1="-30" x2="-150" y2="80"/>
+      <line x1="150" y1="-30" x2="150" y2="80"/>
+      <line x1="-150" y1="80" x2="0" y2="80"/>
+      <line x1="150" y1="80" x2="0" y2="80"/>
+      <line x1="0" y1="80" x2="0" y2="192"/>
+    </g>
+  </g>
+  <text x="600" y="50" text-anchor="middle" font-family="serif" font-size="11" fill="#C9A84C" opacity="0.7" letter-spacing="4">✦ TAROT · THE GREAT WORK ✦</text>
+  <text x="600" y="585" text-anchor="middle" font-family="serif" font-size="9" fill="#9B93AB" opacity="0.4" letter-spacing="2">78 Cards · Major · Minor · The Fool's Journey</text>
+</svg>
