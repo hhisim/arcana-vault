@@ -2,7 +2,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "functions": {
-    "app/api/oracle/ask/route.ts": {
+    "app/api/oracle/ask/route": {
       "maxDuration": 60
     }
   },
