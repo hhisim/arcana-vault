@@ -6,6 +6,8 @@ import { useSiteI18n } from '@/lib/site-i18n'
 import { useAuth } from '@/components/auth/AuthProvider'
 import BookPreview from '@/components/library/BookPreview'
 
+// VOA Library — archive.org IDs verified 2026-04-01 (all 22 returned 200)
+
 type Tradition = 'Tao' | 'Tarot' | 'Tantra' | 'Entheogens' | 'Sufism' | 'Dream' | 'Qabalah' | 'Spiritual Sovereignty' | 'All'
 
 interface Book {
