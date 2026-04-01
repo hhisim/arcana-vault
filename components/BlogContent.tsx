@@ -86,6 +86,7 @@ function injectImages(body: string, images: InlineImage[] = []): string {
   const headingRegex = /^(#{1,3}) ([^\n]+)/gm
   type Section = { level: number; text: string; start: number; end: number }
   const sections: Section[] = []
+  let match: RegExpExecArray | null
 
   while ((match = headingRegex.exec(body)) !== null) {
     const level = match[1].length
