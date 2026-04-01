@@ -11,6 +11,7 @@ const featuredBooks = [
     gradient: "linear-gradient(135deg, #1a1a3e 0%, #0f0f2a 50%, #0a0a0f 100%)",
     symbolColor: "#C9A84C",
     excerpt: "The seven universal principles underlying all existence — Mentalism, Correspondence, Vibration, Polarity, Rhythm, Causation, and Gender.",
+    coverImage: "/images/library/kybalion.jpg",
   },
   {
     title: "The Corpus Hermeticum",
@@ -19,6 +20,7 @@ const featuredBooks = [
     gradient: "linear-gradient(135deg, #065f46 0%, #034e34 50%, #0a0a0f 100%)",
     symbolColor: "#C9A84C",
     excerpt: "The divine dialogues on the nature of the One — seventeen treatises on mind, cosmos, and the path of return to divine consciousness.",
+    coverImage: "/images/library/corpus-hermeticum.jpg",
   },
   {
     title: "Tao Te Ching",
@@ -27,6 +29,7 @@ const featuredBooks = [
     gradient: "linear-gradient(135deg, #0f4a3e 0%, #08332a 50%, #0a0a0f 100%)",
     symbolColor: "#4ECDC4",
     excerpt: "Lao Tzu's 81 verses on the uncarved block — the effortless path of water, stillness, and returning to the source.",
+    coverImage: "/images/library/tao-te-ching.jpg",
   },
   {
     title: "The Book of the Law",
@@ -35,6 +38,7 @@ const featuredBooks = [
     gradient: "linear-gradient(135deg, #5c1a1a 0%, #2d0a0a 50%, #0a0a0f 100%)",
     symbolColor: "#C9A84C",
     excerpt: "Aleister Crowley's reception text on divine selfhood — 'Do what thou wilt shall be the whole of the law.'",
+    coverImage: "/images/library/book-of-the-law.jpg",
   },
   {
     title: "The Bhagavad Gita",
@@ -43,6 +47,7 @@ const featuredBooks = [
     gradient: "linear-gradient(135deg, #6b2d0a 0%, #3d1a05 50%, #0a0a0f 100%)",
     symbolColor: "#E8722A",
     excerpt: "The eternal song of the Self on the battlefield of dharma — Krishna's teaching to Arjuna on action, devotion, and the nature of consciousness.",
+    coverImage: "/images/library/bhagavad-gita.jpg",
   },
   {
     title: "The Epic of Gilgamesh",
@@ -51,11 +56,12 @@ const featuredBooks = [
     gradient: "linear-gradient(135deg, #4a3a1a 0%, #2a1f0a 50%, #0a0a0f 100%)",
     symbolColor: "#D4A84C",
     excerpt: "Humanity's oldest story of seeking immortality — the Sumerian king's journey through grief, friendship, and the limits of mortal ambition.",
+    coverImage: "/images/library/epic-of-gilgamesh.jpg",
   },
 ];
 
 // SVG symbols for each tradition
-function BookSymbol({ tradition, color }: { tradition: string; color: string }) {
+function BookSymbol({ tradition, color, coverImage }: { tradition: string; color: string; coverImage?: string }) {
   if (tradition === 'Hermetic Philosophy' || tradition === 'Hermeticism') {
     // Eye of Hermes
     return (
@@ -154,7 +160,16 @@ export default function BookPreview() {
               >
                 <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/dark-matter.png")' }} />
                 <div className="relative transform group-hover:scale-110 transition-transform duration-700">
-                  <BookSymbol tradition={book.tradition} color={book.symbolColor} />
+                  {book.coverImage ? (
+                    <img
+                      src={book.coverImage}
+                      alt={book.title}
+                      className="w-32 h-48 object-cover rounded-lg opacity-90 group-hover:opacity-100 transition-opacity shadow-xl"
+                      style={{ boxShadow: `0 0 30px ${book.symbolColor}40` }}
+                    />
+                  ) : (
+                    <BookSymbol tradition={book.tradition} color={book.symbolColor} />
+                  )}
                 </div>
                 {/* Tradition badge */}
                 <div className="absolute top-4 right-4 rounded-full border border-white/15 bg-black/30 backdrop-blur-sm px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/70">

@@ -388,6 +388,11 @@ export const FOLLOWUPS: Record<OraclePack, Record<UiLang, string[]>> = {
     tr: ['Hayat Ağacına daha derine in.', 'Bana bir Sephirah meditasyonu ver.', 'Bunun gematriyasını açıkla.', 'Kabalistik ve Hermetik yaklaşımları karşılaştır.'],
     ru: ['Углубись в Древо Жизни.', 'Дай мне медитацию на Сефиру.', 'Объясни гематрию этого.', 'Сравни каббалистический и герметический подходы.'],
   },
+  'chaos-magick': {
+    en: ['Make this more practical.', 'Give me a sigil to work with.', 'How do I engineer a paradigm shift around this?', 'Turn this into a servitor goal.'],
+    tr: ['Bunu daha pratik hale getir.', 'Bana çalışmam gereken bir sigil ver.', 'Bunun etrafında paradigma kaymasını nasıl mühendislik yaparım?', 'Bunu bir servitor hedefine dönüştür.'],
+    ru: ['Сделай это более практичным.', 'Дай мне сигел для работы.', 'Как инженерить парадигмальный сдвиг вокруг этого?', 'Преврати это в цель сервитора.'],
+  },
 }
 
 
