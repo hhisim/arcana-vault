@@ -63,35 +63,22 @@ export function getBestLinkTarget(
   return null
 }
 
-// ─── Build a cross-link using markdown link syntax ───────────────────────────
-// Using [text](url) instead of raw <a> tags — ReactMarkdown parses this
-// correctly and passes the result to our LinkComponent as a real <a> element,
-// bypassing the double-encoding issue entirely.
+// ─── Build a cross-link HTML string ──────────────────────────────────────────
 export function buildCrossLink(
   originalText: string,
   entry: GlossaryEntry,
   target: LinkTarget,
   glossaryKey: string
 ): string {
-  // Encode target URL for use in markdown link
-  // The icon is appended after the link text inside the link label
-  const icon = getLinkIconPlain(target.type)
-  // URL-encode the glossary key and type as query params so LinkComponent can read them
-  // This avoids needing HTML attributes which get double-encoded
-  const separator = target.url.includes('?') ? '&' : '?'
-  const enhancedUrl = `${target.url}${separator}__gk=${encodeURIComponent(glossaryKey)}&__gkt=${encodeURIComponent(target.type)}`
-  return `[${originalText}${icon}](${enhancedUrl})`
-}
+  const typeClass = `cross-link-${target.type}`
+  const icon = getLinkIcon(target.type)
 
-// Plain text icon (no HTML tags — for use in markdown link labels)
-function getLinkIconPlain(type: LinkTarget['type']): string {
-  switch (type) {
-    case 'codex':   return ' ◈'
-    case 'oracle':  return ' ✦'
-    case 'scroll':  return ' ↗'
-    case 'library': return ' 📖'
-    default:        return ''
-  }
+  return `<a href="${target.url}"
+    class="cross-link ${typeClass}"
+    data-glossary-key="${glossaryKey}"
+    title="Explore ${entry.label} in the ${getDestinationName(target.type)}"
+    rel="noopener noreferrer"
+  >${originalText}${icon}</a>`
 }
 
 // ─── Link type icons ─────────────────────────────────────────────────────────
@@ -151,9 +138,6 @@ export function injectCrossLinks(
   })
 
   // ── Step 2: Inject cross-links into the body (no headings to corrupt) ───
-  // We operate on contentWithPlaceholders, which has heading lines replaced with
-  // \x00HEADING_PLACEHOLDER_N\x00 markers. Since those markers contain no glossary
-  // terms, and the rest of the content has no headings, this step is safe.
   let result = contentWithPlaceholders
 
   for (const { alias, key, entry } of aliasList) {
@@ -161,17 +145,11 @@ export function injectCrossLinks(
     if (linkedTerms.has(key)) continue
 
     const escapedAlias = escapeRegex(alias)
-    // Only match terms that are NOT inside a heading placeholder marker
-    // The placeholder markers are \x00HEADING_PLACEHOLDER_N\x00 — they contain no
-    // glossary terms, and importantly: \x00 is not word-char, so \b won't bridge
-    // from outside into the marker. But we also guard with a negative lookbehind
-    // against matching inside HTML tags already in the content.
     const regex = new RegExp(
       `(?<![<\\w/])\\b(${escapedAlias})\\b(?![^<]*>)`,
       'i'
     )
 
-    // Replace FIRST occurrence only (consistent behavior)
     const match = result.match(regex)
     if (match) {
       const target = getBestLinkTarget(entry, currentSlug)

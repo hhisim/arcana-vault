@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useEffect, useRef } from 'react'
+import React, { useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useSiteI18n } from '@/lib/site-i18n'
@@ -130,30 +130,6 @@ function injectImages(body: string, images: InlineImage[] = []): string {
 export default function BlogContent({ body, translations, fmI18n, defaultTitle = '', images = [], slug = '' }: BlogContentProps) {
   const { lang } = useSiteI18n()
   const { titleToSlug } = useMemo(() => buildSlugMap(), [])
-  const articleRef = useRef<HTMLElement>(null)
-
-  // Convert <span class="cross-link-marker"> to real <a> tags after mount
-  // This avoids ReactMarkdown's double-encoding of <a> elements
-  useEffect(() => {
-    if (!articleRef.current) return
-    const markers = articleRef.current.querySelectorAll('.cross-link-marker')
-    markers.forEach((marker) => {
-      const el = marker as HTMLElement
-      try {
-        const { url, title, type } = JSON.parse(decodeURIComponent(el.dataset.link || '{}'))
-        const anchor = document.createElement('a')
-        anchor.href = url
-        anchor.className = `cross-link ${type}`
-        anchor.dataset.glossaryKey = el.dataset.glossaryKey || ''
-        anchor.title = title
-        anchor.rel = 'noopener noreferrer'
-        anchor.innerHTML = el.innerHTML
-        el.replaceWith(anchor)
-      } catch (e) {
-        // Leave marker in place if decode fails
-      }
-    })
-  }, [])
 
   const langBody = (lang === 'tr' && translations?.tr)
     ? translations.tr
@@ -259,16 +235,14 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
     <h4 className="font-cinzel text-xl md:text-2xl mt-8 mb-3 text-[#4ECDC4] uppercase tracking-wider" {...props} />
   )
 
-  const ParagraphComponent = ({ node, children, ...props }: any) => {
+  const ParagraphComponent = ({ node, ...props }: any) => {
     // If inside a blockquote, render gold text
     const isInsideBlockquote = node?.parent?.tagName === 'BLOCKQUOTE'
     return (
       <p
         className={`mb-6 text-[17px] leading-8 group ${isInsideBlockquote ? 'text-[#C9A84C] italic' : 'text-[#B8B0CC]'}`}
         {...props}
-      >
-        {children}
-      </p>
+      />
     )
   }
 
@@ -348,7 +322,7 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
   }
 
   return (
-    <article ref={articleRef} className="mx-auto max-w-4xl px-6 py-12">
+    <article className="mx-auto max-w-4xl px-6 py-12">
       {/* Language switcher */}
       {translations && (
         <div className="mb-12 flex items-center gap-3 text-xs">

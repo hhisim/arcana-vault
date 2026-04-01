@@ -1,4 +1,16 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "functions": {
+    "app/api/oracle/ask/route.ts": {
+      "maxDuration": 60
+    }
+  },
+  "redirects": [
+    {
+      "source": "/forum",
+      "destination": "/agora",
+      "permanent": true
+    }
+  ]
 }
