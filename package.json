@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.9.0",
+    "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.99.3",
     "@vercel/analytics": "^1.6.1",
     "gray-matter": "^4.0.3",
