@@ -1,11 +1,4 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "redirects": [
-    {
-      "source": "/forum",
-      "destination": "/agora",
-      "permanent": true
-    }
-  ]
+  "outputDirectory": ".next"
 }
