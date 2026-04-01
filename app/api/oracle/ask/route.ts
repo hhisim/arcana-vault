@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { buildGateMessage, canUseTradition, getEntitlement, recordUsage } from '@/lib/account'
 import { PlanId, TraditionId } from '@/lib/plans'
 
+export const maxDuration = 60
+
 const ALLOWED_ORIGINS = [
   'https://www.vaultofarcana.com',
   'https://vaultofarcana.com',
