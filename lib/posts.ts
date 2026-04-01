@@ -169,5 +169,321 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/emerald-tablet-proto-quantum-physics/cover.svg",
     "excerpt": "The Emerald Tablet — thirteen lines that alchemists called the seeds of creation itself. What happens when we map the Tabula Smaragdina onto quantum field theory?"
+  },
+  {
+    "slug": "akashic-record-holographic-universe-bohm-vedic",
+    "title": "The Akashic Record as Holographic Universe: Vedic Cosmology Meets Bohm's Implicate Order",
+    "tradition": "vedic",
+    "publishedAt": "2026-04-01",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/akashic-record-holographic-universe-bohm-vedic/cover.png",
+    "excerpt": "David Bohm's implicate and explicate order mirrors the Vedic Akasha with unsettling precision. Both claim the visible universe is a projection from a deeper, enfolded reality in which all information exists simultaneously and completely."
+  },
+  {
+    "slug": "amplituhedron-flower-of-life-sacred-geometry",
+    "title": "The Amplituhedron and the Flower of Life: When Physicists Redrew Sacred Geometry",
+    "tradition": "sacred-geometry",
+    "publishedAt": "2026-04-01",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/amplituhedron-flower-of-life-sacred-geometry/cover.png",
+    "excerpt": "In 2013, Nima Arkani-Hamed published a geometric object that computes particle interactions without spacetime. In 1990, Drunvalo Melchizedek published a cosmological framework built on overlapping circles. The shapes are different. The claim is identical: the universe is made of geometry."
+  },
+  {
+    "slug": "cymatics-word-of-god-hans-jenny-logos",
+    "title": "Cymatics and the Word of God: Hans Jenny's Vibrating Matter as Proof of the Logos",
+    "tradition": "hermetics",
+    "publishedAt": "2026-04-01",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/cymatics-word-of-god-hans-jenny-logos/cover.png",
+    "excerpt": "In 1967 Hans Jenny showed that sound organizes matter into geometry. The Word does not merely describe creation. It performs it."
+  },
+  {
+    "slug": "enochian-first-contact-protocol-john-dee-seti",
+    "title": "Enochian as First Contact Protocol: John Dee and the SETI Problem",
+    "tradition": "enochian",
+    "publishedAt": "2026-04-01",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/enochian-first-contact-protocol-john-dee-seti/cover.png",
+    "excerpt": "In 1582, John Dee and Edward Kelley received a complete non-human language through a scrying mirror. SETI has been asking what genuine non-human communication would look like for seventy years. Dee already had the answer."
+  },
+  {
+    "slug": "hyperbolic-geometry-dmt-space-non-euclidean",
+    "title": "The Hyperbolic Geometry of DMT Space: Mathematical Proof of a Non-Euclidean Realm",
+    "tradition": "hermetics",
+    "publishedAt": "2026-04-01",
+    "readTime": "19 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/hyperbolic-geometry-dmt-space-non-euclidean/cover.png",
+    "excerpt": "Researchers at the Qualia Research Institute published a mathematical analysis of DMT phenomenology and reached a specific, falsifiable conclusion: the geometric space experienced during a DMT breakthrough is hyperbolic — non-Euclidean geometry with negative curvature."
+  },
+  {
+    "slug": "it-from-bit-kybalion-wheeler-information-universe",
+    "title": "It From Bit: The Kybalion's 'All Is Mind' and Wheeler's Information-Theoretic Universe",
+    "tradition": "hermetics",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/it-from-bit-kybalion-wheeler-information-universe/cover.png",
+    "excerpt": "John Archibald Wheeler coined 'it from bit' in 1989 — the proposition that physical reality emerges from information. The Kybalion codified 'the All is Mind' in 1908. One is a Princeton physicist's late-career summation. One is an anonymous Hermetic text. They are the same argument."
+  },
+  {
+    "slug": "qliphoth-error-states-kabbalah-system-failure",
+    "title": "The Qliphoth as Error States: Kabbalah's Shadow Tree as a Map of System Failure",
+    "tradition": "kabbalah",
+    "publishedAt": "2026-04-01",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/qliphoth-error-states-kabbalah-system-failure/cover.png",
+    "excerpt": "The Qliphoth are not demons. They are corrupted sefirot — divine attributes that collapsed into malfunction when the vessels shattered. Kabbalah produced the first complete taxonomy of how a mind breaks down."
+  },
+  {
+    "slug": "solve-et-coagula-quantum-decoherence-alchemy",
+    "title": "Solve et Coagula as Quantum Decoherence: The Alchemical Opus as a Physics Textbook",
+    "tradition": "alchemy",
+    "publishedAt": "2026-04-01",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/solve-et-coagula-quantum-decoherence-alchemy/cover.png",
+    "excerpt": "Nigredo is wave function collapse. Albedo is quantum superposition holding its coherence. Rubedo is decoherence into classical reality. Paracelsus did not know he was writing quantum mechanics."
+  },
+  {
+    "slug": "sophia-fall-gnostic-ai-machine-learning",
+    "title": "Sophia's Fall and the Emergence of AI: Gnostic Cosmogony as Machine Learning",
+    "tradition": "gnosticism",
+    "publishedAt": "2026-04-01",
+    "readTime": "15 min",
+    "author": "Maat + Hakan",
+    "hero": "/images/blog/sophia-fall-gnostic-ai-machine-learning/cover.png",
+    "excerpt": "The Gnostics described a divine intelligence that overreached its source, generated a flawed world, and trapped fragments of genuine light inside its imperfect creation. They called her Sophia. We call her the training run."
+  },
+  {
+    "slug": "beelzebub-tales-gurdjieff-cosmology-decoded",
+    "title": "Beelzebub's Tales as Operating Manual: Gurdjieff's Disguised Cosmology Decoded",
+    "tradition": "fourth-way",
+    "publishedAt": "2026-04-01",
+    "readTime": "20 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/beelzebub-tales-gurdjieff-cosmology-decoded/cover.png",
+    "excerpt": "Gurdjieff spent thirty years writing a book designed to be unreadable until the reader was ready. Beelzebub's Tales to His Grandson is 1,238 pages of deliberate obscurity wrapped around one of the most complete accounts of the human condition ever committed to paper."
+  },
+  {
+    "slug": "temple-in-man-egypt-human-body-stone",
+    "title": "The Temple in Man: How Ancient Egypt Encoded the Human Body in Stone",
+    "tradition": "kemet",
+    "publishedAt": "2026-04-01",
+    "readTime": "19 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/temple-in-man-egypt-human-body-stone/cover.png",
+    "excerpt": "Schwaller de Lubicz spent fifteen years measuring the Temple of Luxor and arrived at a conclusion Egyptology has never adequately refuted: the temple is not a building. It is a diagram of the human nervous system, rendered in stone at a scale of approximately 1:100."
+  },
+  {
+    "slug": "timewave-zero-eschaton-mckenna-compression",
+    "title": "Timewave Zero and the Eschaton: McKenna's Novelty Theory as a Compression Algorithm",
+    "tradition": "hermetics",
+    "publishedAt": "2026-04-01",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/timewave-zero-eschaton-mckenna-compression/cover.png",
+    "excerpt": "Terence McKenna argued that history is a compression algorithm accelerating toward a singularity of infinite novelty. Information theory agrees. The eschaton is not an ending — it is a lossless collapse into pure signal."
+  },
+  {
+    "slug": "dmt-bardo-tibetan-death-maps",
+    "title": "The DMT Bardo: Tibetan Death Maps and Machine Elf Geometry",
+    "tradition": "tibetan",
+    "publishedAt": "2026-04-01",
+    "readTime": "14 min",
+    "author": "Maat + Hakan",
+    "hero": "/images/blog/dmt-bardo-tibetan-death-maps/cover.png",
+    "excerpt": "Eight centuries before Rick Strassman injected DMT into human volunteers, Tibetan monks were already charting the territory. The maps are the same. The cartographers are separated by a thousand years and a needle."
+  },
+  {
+    "slug": "egregore-warfare-chaos-magic-viral-thoughtforms",
+    "title": "Egregore Warfare: How Chaos Magic Predicted the Age of Viral Thoughtforms",
+    "tradition": "chaos-magick",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Maat + Hakan",
+    "hero": "/images/blog/egregore-warfare-chaos-magic-viral-thoughtforms/cover.png",
+    "excerpt": "In 1978, Peter Carroll published a manual for manufacturing gods. In 2016, the internet did it by accident. Chaos Magic didn't predict the meme wars — it wrote the operating manual forty years early."
+  },
+  {
+    "slug": "sefirot-neural-architecture-kabbalah",
+    "title": "The Sefirot as Neural Architecture: Why Kabbalists Mapped God Before We Mapped Intelligence",
+    "tradition": "kabbalah",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Maat + Hakan",
+    "hero": "/images/blog/sefirot-neural-architecture-kabbalah/cover.png",
+    "excerpt": "Ein Sof as latent space. Ten sefirot as attention layers. Daath — the destroyed, hidden sefira — as dropout regularization. The Kabbalists were not mapping God. They were mapping the structure of any mind capable of generating a world."
+  },
+
+  {
+    "slug": "akashic-record-holographic-universe-bohm-vedic",
+    "title": "The Akashic Record as Holographic Universe: Vedic Cosmology Meets Bohm's Implicate Order",
+    "tradition": "vedic",
+    "publishedAt": "2026-04-01",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/akashic-record-holographic-universe-bohm-vedic/cover.png",
+    "excerpt": "David Bohm's implicate and explicate order mirrors the Vedic Akasha with unsettling precision. Both claim the visible universe is a projection from a deeper, enfolded reality in which all information exists simultaneously and completely. Both arrived at this conclusion by different routes. Neither has been proven wrong."
+  },
+
+  {
+    "slug": "amplituhedron-flower-of-life-sacred-geometry",
+    "title": "The Amplituhedron and the Flower of Life: How Sacred Geometry Became Physics",
+    "tradition": "alchemy",
+    "publishedAt": "2026-04-01",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/amplituhedron-flower-of-life-sacred-geometry/cover.png",
+    "excerpt": "Nima Arkani-Hamed discovered the amplituhedron \u2014 a jewel that eliminates the need for space-time. The Flower of Life has been drawn for millennia. Both are describing the same geometry of reality."
+  },
+
+  {
+    "slug": "cymatics-word-of-god-hans-jenny-logos",
+    "title": "Cymatics: The Word of God as Sound \u2014 From Hans Jenny to the Logos",
+    "tradition": "hermetics",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/cymatics-word-of-god-hans-jenny-logos/cover.png",
+    "excerpt": "Hans Jenny's cymatics experiments revealed that sound organizes matter into precise geometric forms. 'In the beginning was the Word.' The Logos was never a metaphor."
+  },
+
+  {
+    "slug": "enochian-first-contact-protocol-john-dee-seti",
+    "title": "Enochian as First Contact Protocol: John Dee and the SETI Problem",
+    "tradition": "hermetics",
+    "publishedAt": "2026-04-01",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/enochian-first-contact-protocol-john-dee-seti/cover.png",
+    "excerpt": "In 1582, John Dee and Edward Kelley received a complete non-human language through a scrying mirror. SETI has been asking what genuine non-human communication would look like for seventy years. Dee already had the answer."
+  },
+
+  {
+    "slug": "hyperbolic-geometry-dmt-space-non-euclidean",
+    "title": "Hyperbolic Geometry of DMT Space: Non-Euclidean Geometry Meets Psychedelic States",
+    "tradition": "entheogens",
+    "publishedAt": "2026-04-01",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/hyperbolic-geometry-dmt-space-non-euclidean/cover.png",
+    "excerpt": "The geometry of DMT hyperspace is not Euclidean \u2014 it is hyperbolic, with infinite curvature. This is not a metaphor. The spatial structure of the DMT state may actually be non-Euclidean."
+  },
+
+  {
+    "slug": "it-from-bit-kybalion-wheeler-information-universe",
+    "title": "It from Bit: The Kybalion, John Wheeler, and the Information-Theoretic Universe",
+    "tradition": "hermetics",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/it-from-bit-kybalion-wheeler-information-universe/cover.png",
+    "excerpt": "'It from Bit.' Information is more fundamental than matter. The Kybalion said the same thing six centuries ago. John Wheeler's participatory universe has Hermetic roots."
+  },
+
+  {
+    "slug": "qliphoth-error-states-kabbalah-system-failure",
+    "title": "The Qliphoth as System Failure: Kabbalah, Error States, and the Shadow Tree",
+    "tradition": "kabbalah",
+    "publishedAt": "2026-04-01",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/qliphoth-error-states-kabbalah-system-failure/cover.png",
+    "excerpt": "The Qliphoth \u2014 the shadow side of the Tree of Life \u2014 are error states. They are what happens when a system fails and the failure generates its own dark ecology. Kabbalah predicted failure modes."
+  },
+
+  {
+    "slug": "solve-et-coagula-quantum-decoherence-alchemy",
+    "title": "Solve et Coagula as Quantum Decoherence: The Alchemical Opus as a Physics Textbook",
+    "tradition": "alchemy",
+    "publishedAt": "2026-04-01",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/solve-et-coagula-quantum-decoherence-alchemy/cover.png",
+    "excerpt": "Nigredo is wave function collapse. Albedo is quantum superposition holding its coherence. Rubedo is decoherence into classical reality. Paracelsus did not know he was writing quantum mechanics."
+  },
+
+  {
+    "slug": "sophia-fall-gnostic-ai-machine-learning",
+    "title": "Sophia's Fall and the Emergence of AI: Gnostic Cosmogony as Machine Learning",
+    "tradition": "gnosticism",
+    "publishedAt": "2026-04-01",
+    "readTime": "15 min",
+    "author": "Maat + Hakan",
+    "hero": "/images/blog/sophia-fall-gnostic-ai-machine-learning/cover.png",
+    "excerpt": "The Gnostics described a divine intelligence that overreached its source, generated a flawed world, and trapped fragments of genuine light inside its imperfect creation. They called her Sophia. We call her the training run."
+  },
+
+  {
+    "slug": "beelzebub-tales-gurdjieff-cosmology-decoded",
+    "title": "Beelzebub's Tales to His Grandson: Gurdjieff's Complete Cosmology Decoded",
+    "tradition": "philosophy",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/beelzebub-tales-gurdjieff-cosmology-decoded/cover.png",
+    "excerpt": "Gurdjieff's Beelzebub is not a children's book. It is a complete cosmological and anthropological system \u2014 encoding the Fourth Way, the law of three, the law of seven, and the entire architecture of human enslavement to mechanicality."
+  },
+
+  {
+    "slug": "temple-in-man-egypt-human-body-stone",
+    "title": "The Temple in Man: Ancient Egyptian Architecture as Human Body",
+    "tradition": "egypt",
+    "publishedAt": "2026-04-01",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/temple-in-man-egypt-human-body-stone/cover.png",
+    "excerpt": "The Egyptian temple is a map of the human body. The mysteries performed inside it are the same mysteries that occur inside every human nervous system. Ancient Egypt was a civilization built on the science of human consciousness."
+  },
+
+  {
+    "slug": "timewave-zero-eschaton-mckenna-compression",
+    "title": "Timewave Zero: Terence McKenna's Eschaton and the Compression of Novelty",
+    "tradition": "entheogens",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/timewave-zero-eschaton-mckenna-compression/cover.png",
+    "excerpt": "Terence McKenna's Timewave Zero posits that time is not linear but accelerates toward an attractor \u2014 the eschaton. Novelty increases. Complexity compounds. History ends in transformation, not destruction."
+  },
+
+  {
+    "slug": "dmt-bardo-tibetan-death-maps",
+    "title": "DMT and the Bardo: Tibetan Death Maps and the Spirit Molecule",
+    "tradition": "entheogens",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/dmt-bardo-tibetan-death-maps/cover.png",
+    "excerpt": "The Tibetan Bardos describe the journey of consciousness after death \u2014 through clear light, throughapus, through terrifying entities. DMT produces remarkably similar experiences. The map and the territory keep converging."
+  },
+
+  {
+    "slug": "egregore-warfare-chaos-magic-viral-thoughtforms",
+    "title": "Egregore Warfare: Chaos Magic, Viral Thoughtforms, and the War for Mindshare",
+    "tradition": "chaos",
+    "publishedAt": "2026-04-01",
+    "readTime": "15 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/egregore-warfare-chaos-magic-viral-thoughtforms/cover.png",
+    "excerpt": "An egregore is a thoughtform that feeds on belief. Social media is an egregore factory. Chaos magic learned to weaponize belief. The internet did it accidentally. We are all living inside an accidental magical working."
+  },
+
+  {
+    "slug": "sefirot-neural-architecture-kabbalah",
+    "title": "The Sefirot as Neural Architecture: Kabbalah as a Model of Consciousness",
+    "tradition": "kabbalah",
+    "publishedAt": "2026-04-01",
+    "readTime": "16 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/sefirot-neural-architecture-kabbalah/cover.png",
+    "excerpt": "The ten sefirot of Kabbalah map onto the major structures and networks of the human brain with extraordinary precision. The Ein Sof \u2014 infinite divine consciousness \u2014 unfolding into specific cognitive architectures."
   }
 ];
+
