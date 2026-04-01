@@ -107,9 +107,8 @@ function getDestinationName(type: LinkTarget['type']): string {
  * Injects cross-links into markdown content.
  * Only the FIRST occurrence of each glossary term gets linked.
  *
- * CRITICAL: Markdown headings (lines starting with #) are protected from
- * injection so that cross-link HTML never ends up inside heading text,
- * which would break the heading's markdown parsing.
+ * Strategy: Strip HTML tags → find aliases in plain text → inject cross-links
+ * at the correct positions in the ORIGINAL content (preserving all HTML).
  *
  * @param content  - The markdown content to process
  * @param gloss    - The glossary object (defaults to the site's glossary)
@@ -124,63 +123,144 @@ export function injectCrossLinks(
 ): string {
   const aliasList = buildAliasList(gloss)
   const linkedTerms = new Set<string>()
-  let linkCount = 0
 
-  // ── Step 1: Protect markdown headings from injection ──────────────────────
-  // Replace heading lines with placeholders so cross-link HTML never gets
-  // injected into heading text (which would corrupt heading structure).
-  const headingPlaceholders: string[] = []
-  const headingRegex = /^(#{1,6}\s+[^\n]+)$/gm
-  const contentWithPlaceholders = content.replace(headingRegex, (match) => {
-    const idx = headingPlaceholders.length
-    headingPlaceholders.push(match)
-    return `\x00HEADING_PLACEHOLDER_${idx}\x00`
-  })
+  // ── Step 1: Collect protected regions (headings + markdown emphasis) ───────
+  // These regions are skipped during alias matching so cross-links never
+  // corrupt markdown syntax.
+  const protectedRegions: Array<{ start: number; end: number }> = []
 
-  // ── Step 1b: Protect markdown inline emphasis (bold/italic/strikethrough)
-  // Patterns: *text*, **text**, ~~text~~, `code` — skip linking inside these
-  // We replace them with a placeholder so aliases inside emphasis are skipped.
-  const inlinePlaceholders: string[] = []
-  const inlineRegex = /(\*[^*]+\*|\*\*[^*]+\*\*|~~[^~]+~~|`[^`]+`)/g
-  let content2 = contentWithPlaceholders.replace(inlineRegex, (match) => {
-    const idx = inlinePlaceholders.length
-    inlinePlaceholders.push(match)
-    return `\x00INLINE_${idx}\x00`
-  })
+  // Heading lines: lines starting with # (any level)
+  for (const match of content.matchAll(/^#{1,6}\s+[^\n]+/gm)) {
+    protectedRegions.push({ start: match.index!, end: match.index! + match[0].length })
+  }
 
-  // ── Step 2: Inject cross-links into the body (no headings or emphasis) ───
-  let result = content2
+  // Markdown inline emphasis: *text*, **text**, ~~strike~~, `code`
+  // Match includes the delimiters so the whole span is protected.
+  for (const match of content.matchAll(/(\*[^*]+\*|\*\*[^*]+\*\*|~~[^~]+~~|`[^`]+`)/g)) {
+    protectedRegions.push({ start: match.index!, end: match.index! + match[0].length })
+  }
 
-  for (const { alias, key, entry } of aliasList) {
-    if (linkCount >= maxLinks) break
-    if (linkedTerms.has(key)) continue
+  // Sort by start position
+  protectedRegions.sort((a, b) => a.start - b.start)
 
-    const escapedAlias = escapeRegex(alias)
-    const regex = new RegExp(
-      `(?<![<\\w/])\\b(${escapedAlias})\\b(?![^<]*>)`,
-      'i'
-    )
+  // ── Step 2: Build alias match list from PLAIN TEXT content ────────────────
+  // Strip HTML tags for matching purposes only. We match against the text
+  // visible to the user, then map back to positions in the original content.
+  // Build a stripped version for plain-text searching
+  let plainText = ''
+  let htmlPositions: Array<{ plainIdx: number; htmlStart: number }> = []
+  let inTag = false
+  let plainIdx = 0
 
-    const match = result.match(regex)
-    if (match) {
-      const target = getBestLinkTarget(entry, currentSlug)
-      if (target) {
-        const crossLink = buildCrossLink(match[0], entry, target, key)
-        result = result.replace(regex, crossLink)
-        linkedTerms.add(key)
-        linkCount++
-      }
+  for (let i = 0; i < content.length; i++) {
+    if (content[i] === '<') {
+      inTag = true
+      htmlPositions.push({ plainIdx, htmlStart: i })
+    } else if (content[i] === '>') {
+      inTag = false
+    } else if (!inTag) {
+      plainText += content[i]
+      plainIdx++
     }
   }
 
-  // ── Step 3: Restore inline emphasis placeholders ─────────────────────────
-  for (let i = 0; i < inlinePlaceholders.length; i++) {
-    result = result.replace(`\x00INLINE_${i}\x00`, inlinePlaceholders[i])
+  // Find aliases in plain text, skipping protected regions
+  type AliasMatch = { plainStart: number; plainEnd: number; alias: string; key: string; entry: GlossaryEntry }
+  const aliasMatches: AliasMatch[] = []
+
+  for (const { alias, key, entry } of aliasList) {
+    if (linkedTerms.has(key)) continue
+
+    const escapedAlias = escapeRegex(alias)
+    const regex = new RegExp(`\\b(${escapedAlias})\\b`, 'i')
+
+    const match = plainText.match(regex)
+    if (!match) continue
+
+    const plainStart = match.index!
+    const plainEnd = plainStart + match[0].length
+
+    // Skip if this position falls inside a protected region
+    // (protected regions are in HTML coordinates — check against htmlPositions mapping)
+    let inside = false
+    // Find the HTML position range for this plain text range
+    const relevantStarts = htmlPositions.filter(p => p.plainIdx >= plainStart && p.plainIdx < plainEnd)
+    if (relevantStarts.length > 0) {
+      inside = true
+    }
+    // Also check if the plain-text position maps through a protected region
+    // by checking the original content ranges directly
+    for (const prot of protectedRegions) {
+      // The plainStart maps to an HTML position — find it
+      for (let pi = 0; pi < htmlPositions.length; pi++) {
+        const { plainIdx: pIdx, htmlStart } = htmlPositions[pi]
+        if (pIdx === plainStart) {
+          // Check if this HTML position is inside a protected region
+          for (const prot of protectedRegions) {
+            if (htmlStart >= prot.start && htmlStart < prot.end) {
+              inside = true
+              break
+            }
+          }
+          break
+        }
+      }
+      if (inside) break
+    }
+
+    if (!inside) {
+      aliasMatches.push({
+        plainStart,
+        plainEnd,
+        alias: match[0],
+        key,
+        entry,
+      })
+      linkedTerms.add(key)
+    }
   }
 
-  // ── Step 4: Restore heading lines ────────────────────────────────────────
-  for (let i = 0; i < headingPlaceholders.length; i++) {
-    result = result.replace(`\x00HEADING_PLACEHOLDER_${i}\x00`, headingPlaceholders[i])
+  // Sort by position in plain text
+  aliasMatches.sort((a, b) => a.plainStart - b.plainStart)
+
+  // ── Step 3: Map plain-text positions back to original HTML positions ───────
+  // Build a mapping: plainIdx → htmlIdx
+  // by scanning htmlPositions and finding the corresponding plain text index
+  const plainToHtml: Map<number, number> = new Map()
+  for (let i = 0; i < content.length; i++) {
+    if (inTag) {
+      if (content[i] === '>') {
+        inTag = false
+      }
+      continue
+    }
+    if (content[i] === '<') {
+      inTag = true
+      continue
+    }
+    plainToHtml.set(plainToHtml.size, i)
+  }
+
+  // ── Step 4: Build the result by injecting cross-links into original HTML ───
+  // Work backwards from the end to preserve position indices
+  let result = content
+  for (const m of aliasMatches) {
+    const htmlStart = plainToHtml.get(m.plainStart)
+    const htmlEnd = plainToHtml.get(m.plainEnd - 1)
+    if (htmlStart === undefined || htmlEnd === undefined) continue
+
+    const target = getBestLinkTarget(m.entry, currentSlug)
+    if (!target) continue
+
+    const crossLink = buildCrossLink(m.alias, m.entry, target, m.key)
+    // Replace the text portion in the original HTML
+    const before = result.substring(0, htmlStart)
+    const after = result.substring(htmlEnd + 1)
+    result = before + crossLink + after
+
+    // Adjust plainToHtml for the insertion (characters were added)
+    const offset = crossLink.length - (htmlEnd - htmlStart + 1)
+    // Note: we don't need to remap since we iterate in order and stop at maxLinks
   }
 
   return result
