@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { posts } from '@/lib/posts'
 import ScrollCTA from '@/components/ScrollCTA'
@@ -390,6 +391,7 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
       ">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
           components={{
             h1: H1Component,
             h2: H2Component,

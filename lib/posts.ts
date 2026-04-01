@@ -36,7 +36,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "11 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/five-tibetans-ancient-rites-of-rejuvenation/cover.webp",
+    "hero": "/images/blog/five-tibetans-ancient-rites-of-rejuvenation/cover.png",
     "excerpt": "Five exercises claimed to reverse aging, attributed to Tibetan lamas. But what's actually in the ancient texts, and what did Western Orientalists invent?"
   },
   {
@@ -46,7 +46,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "12 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/gnosticism-archive-of-light-architecture-divine-spark/cover.webp",
+    "hero": "/images/blog/gnosticism-archive-of-light-architecture-divine-spark/cover.png",
     "excerpt": "Beyond the material prison lies the Pleroma — the Fullness. Gnosticism maps the descent of the soul into matter and the technical protocols for its liberation through Gnosis (Direct Knowledge)."
   },
   {
@@ -56,7 +56,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "12 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/i-ching-ancient-oracle-of-change/cover.webp",
+    "hero": "/images/blog/i-ching-ancient-oracle-of-change/cover.png",
     "excerpt": "3000 years of oracular wisdom from the Yijing — 8 trigrams, 64 hexagrams, the oldest systematic divination system on Earth, rooted in Taoist cosmology."
   },
   {
@@ -66,7 +66,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "12 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/kundalini-shakti-serpent-power-western-science/cover.webp",
+    "hero": "/images/blog/kundalini-shakti-serpent-power-western-science/cover.png",
     "excerpt": "Seven chakras. Seven seals. Seven levels of consciousness encoded in geometry, sound, and fire. The kundalini tradition maps the entire architecture of human awakening."
   },
   {
@@ -76,7 +76,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "12 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/sufism-the-path-of-divine-love/cover.webp",
+    "hero": "/images/blog/sufism-the-path-of-divine-love/cover.png",
     "excerpt": "From Rumi's whirling dervishes to Ibn Arabi's Unity of Being, Sufism is the mystical dimension of Islam — a tradition of love, longing, and radical self-annihilation in the divine."
   },
   {
@@ -86,7 +86,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "13 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/tarot-symbolic-machine-for-fate/cover.webp",
+    "hero": "/images/blog/tarot-symbolic-machine-for-fate/cover.png",
     "excerpt": "From 15th-century playing cards to a profound system of archetypal psychological initiation, the Tarot is a 78-card alphabet that maps the entire human journey."
   },
   {
@@ -117,7 +117,7 @@ export const posts = [
     "publishedAt": "2026-03-18",
     "readTime": "12 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/sexual-alchemy-taoist-tradition-nei-dan/cover.webp",
+    "hero": "/images/blog/sexual-alchemy-taoist-tradition-nei-dan/cover.png",
     "excerpt": "In the esoteric tradition of Taoism, sexual energy is not merely a biological impulse; it is the fundamental fuel of existence. Explore the Internal Elixir (Nei Dan) and the refinement of Jing."
   },
   {
@@ -127,7 +127,7 @@ export const posts = [
     "publishedAt": "2026-03-18",
     "readTime": "10 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/taoism-quantum-physics-real-parallels/cover.webp",
+    "hero": "/images/blog/taoism-quantum-physics-real-parallels/cover.png",
     "excerpt": "Fritjof Capra suggested quantum physics merely validated ancient Taoist worldviews. We separate meaningful metaphysical resonance from the pitfalls of pop-spirituality."
   },
   {
@@ -137,7 +137,7 @@ export const posts = [
     "publishedAt": "2025-03-15",
     "readTime": "8 min",
     "author": "The Tao Oracle",
-    "hero": "/images/blog/what-tao-te-ching-says-about-uncertainty/cover.webp",
+    "hero": "/images/blog/what-tao-te-ching-says-about-uncertainty/cover.png",
     "excerpt": "In an era of relentless optimization, the ancient Taoist concept of non-action offers a radical strategy for high-stakes decision making."
   },
   {
@@ -147,7 +147,7 @@ export const posts = [
     "publishedAt": "2025-03-12",
     "readTime": "10 min",
     "author": "Hermetic Oracle",
-    "hero": "/images/blog/seven-hermetic-principles-silicon-valley/cover.webp",
+    "hero": "/images/blog/seven-hermetic-principles-silicon-valley/cover.png",
     "excerpt": "From systems thinking to recursive algorithms, the Seven Hermetic Principles provide a ancient framework for the digital age."
   },
   {
@@ -167,7 +167,7 @@ export const posts = [
     "publishedAt": "2026-04-01",
     "readTime": "11 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/emerald-tablet-proto-quantum-physics/cover.webp",
+    "hero": "/images/blog/emerald-tablet-proto-quantum-physics/cover.png",
     "excerpt": "The Emerald Tablet — thirteen lines that alchemists called the seeds of creation itself. What happens when we map the Tabula Smaragdina onto quantum field theory?"
   },
   {
