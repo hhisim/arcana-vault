@@ -137,8 +137,19 @@ export function injectCrossLinks(
     return `\x00HEADING_PLACEHOLDER_${idx}\x00`
   })
 
-  // ── Step 2: Inject cross-links into the body (no headings to corrupt) ───
-  let result = contentWithPlaceholders
+  // ── Step 1b: Protect markdown inline emphasis (bold/italic/strikethrough)
+  // Patterns: *text*, **text**, ~~text~~, `code` — skip linking inside these
+  // We replace them with a placeholder so aliases inside emphasis are skipped.
+  const inlinePlaceholders: string[] = []
+  const inlineRegex = /(\*[^*]+\*|\*\*[^*]+\*\*|~~[^~]+~~|`[^`]+`)/g
+  let content2 = contentWithPlaceholders.replace(inlineRegex, (match) => {
+    const idx = inlinePlaceholders.length
+    inlinePlaceholders.push(match)
+    return `\x00INLINE_${idx}\x00`
+  })
+
+  // ── Step 2: Inject cross-links into the body (no headings or emphasis) ───
+  let result = content2
 
   for (const { alias, key, entry } of aliasList) {
     if (linkCount >= maxLinks) break
@@ -162,7 +173,12 @@ export function injectCrossLinks(
     }
   }
 
-  // ── Step 3: Restore heading lines ────────────────────────────────────────
+  // ── Step 3: Restore inline emphasis placeholders ─────────────────────────
+  for (let i = 0; i < inlinePlaceholders.length; i++) {
+    result = result.replace(`\x00INLINE_${i}\x00`, inlinePlaceholders[i])
+  }
+
+  // ── Step 4: Restore heading lines ────────────────────────────────────────
   for (let i = 0; i < headingPlaceholders.length; i++) {
     result = result.replace(`\x00HEADING_PLACEHOLDER_${i}\x00`, headingPlaceholders[i])
   }
