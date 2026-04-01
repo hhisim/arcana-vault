@@ -56,72 +56,77 @@ function toKebabCase(text: string): string {
 }
 
 // Inject inline images into body sections by matching anchor headings.
-// Handles all heading levels (## and ###) — matches the nearest preceding
-// heading at any level, not just H2.
+// Handles positions: "after-<anchor>", "top", "end"
+// "top" places images at the very start of the body.
+// "end" appends images at the very end.
+// Anchor keys are computed by toKebabCase(heading text) which strips
+// Roman numerals, special chars, and converts spaces to hyphens.
 function injectImages(body: string, images: InlineImage[] = []): string {
   if (!images || images.length === 0) return body
 
-  // Group images by their anchor heading key (strip "after-" prefix)
+  // Separate top, end, and anchor-keyed images
   const byAnchor: Record<string, InlineImage[]> = {}
+  const topImages: InlineImage[] = []
+  const endImages: InlineImage[] = []
+
   for (const img of images) {
-    if (!img.position?.startsWith('after-')) continue
-    const anchor = toKebabCase(img.position.replace('after-', ''))
-    if (!byAnchor[anchor]) byAnchor[anchor] = []
-    byAnchor[anchor].push(img)
+    if (!img.position) continue
+    if (img.position === 'top') {
+      topImages.push(img)
+    } else if (img.position === 'end') {
+      endImages.push(img)
+    } else if (img.position.startsWith('after-')) {
+      const anchor = toKebabCase(img.position.replace('after-', ''))
+      if (!byAnchor[anchor]) byAnchor[anchor] = []
+      byAnchor[anchor].push(img)
+    }
   }
 
-  // Collect images that go at the end
-  const endImages: InlineImage[] = images.filter(img => img.position === 'end')
-
   // Split body by any heading (## or ###)
-  // We use a marker approach: find all headings and their positions
   const headingRegex = /^(#{1,3}) ([^\n]+)/gm
   type Section = { level: number; text: string; start: number; end: number }
   const sections: Section[] = []
-  let lastEnd = 0
-  let match
 
   while ((match = headingRegex.exec(body)) !== null) {
     const level = match[1].length
     const text = match[2].trim()
     const start = match.index
-    // Previous section ends before this heading
     if (sections.length > 0) {
       sections[sections.length - 1].end = start
     }
     sections.push({ level, text, start, end: body.length })
-    lastEnd = start
   }
 
-  // If no headings at all, just return body + end images
-  if (sections.length === 0) {
-    return endImages.length > 0
-      ? body + '\n\n' + endImages.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n')
-      : body
-  }
-
-  // Build the output by walking through sections and injecting images
   const resultParts: string[] = []
-  for (let i = 0; i < sections.length; i++) {
-    const section = sections[i]
-    const nextSection = sections[i + 1]
-    const sectionBody = body.slice(section.start, nextSection ? nextSection.start : body.length)
-    const headingKey = toKebabCase(section.text)
 
-    resultParts.push(sectionBody)
+  // 1. Top images — before everything
+  if (topImages.length > 0) {
+    resultParts.push(topImages.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n'))
+    resultParts.push('\n')
+  }
 
-    // Inject images keyed to this heading
-    const imgs = byAnchor[headingKey]
-    if (imgs && imgs.length > 0) {
-      const imgMarkdown = '\n\n' + imgs.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n') + '\n'
-      resultParts.push(imgMarkdown)
+  // 2. Body sections with anchor-matched images
+  if (sections.length === 0) {
+    resultParts.push(body)
+  } else {
+    for (let i = 0; i < sections.length; i++) {
+      const section = sections[i]
+      const nextSection = sections[i + 1]
+      const sectionBody = body.slice(section.start, nextSection ? nextSection.start : body.length)
+      const headingKey = toKebabCase(section.text)
+
+      resultParts.push(sectionBody)
+
+      const imgs = byAnchor[headingKey]
+      if (imgs && imgs.length > 0) {
+        resultParts.push('\n\n' + imgs.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n') + '\n')
+      }
     }
   }
 
-  // Append end-position images at the very end
+  // 3. End images
   if (endImages.length > 0) {
-    const endMarkdown = '\n\n' + endImages.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n') + '\n'
-    resultParts.push(endMarkdown)
+    resultParts.push('\n\n' + endImages.map(img => `![${img.caption || ''}](${img.src})`).join('\n\n'))
   }
 
   return resultParts.join('')
