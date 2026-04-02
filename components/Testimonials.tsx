@@ -2,19 +2,34 @@
 
 const testimonials = [
   {
-    quote: "The Tao oracle doesn't answer—it dissolves the question entirely. My practice has transformed.",
-    author: "M.C.",
-    role: "Zen Practitioner"
+    quote: "This is pretty rare and unique! This not like GPT or Gemini, its the real deal! I get unique gems dropped in every session. I love the Journal remembers all my entries, answers and studies... Priceless!",
+    author: "Koray",
+    role: "Member"
   },
   {
-    quote: "Researching tarot used to take hours. Now I have a conversational guide to the archetypes.",
-    author: "J.R.",
-    role: "Astrologer"
+    quote: "The Correspondence Codex is the bomb! Its crazy that thing is free! I have never seen anything like that in my life...",
+    author: "Stephen D.",
+    role: "Member"
   },
   {
-    quote: "The entheogen bot spoke to experiences I had no language for. Profoundly helpful.",
-    author: "A.L.",
-    role: "Seeker"
+    quote: "Grounded and Adept are words that come to mind in my experience here so far, the sovereign approach to metaphysics is pretty rare to come by these days.",
+    author: "Zach",
+    role: "Member"
+  },
+  {
+    quote: "Very insightful, actionable wisdom... I just wish it was on app store lol!",
+    author: "Steph",
+    role: "Member"
+  },
+  {
+    quote: "Vault of Arcana feels like having a wise mentor available at any hour. The depth and accuracy of the responses are unlike anything I've encountered in AI assistants.",
+    author: "Tufan S.",
+    role: "Member"
+  },
+  {
+    quote: "The Daily Practice feature keeps me grounded in ritual every morning. It's become an essential part of my spiritual routine.",
+    author: "Alex",
+    role: "Member"
   }
 ];
 
@@ -25,7 +40,7 @@ export default function Testimonials() {
         <h2 className="font-cinzel text-3xl md:text-4xl text-center text-[#E8E0F0] mb-16 animate-fade-in-up">
           What Seekers Say
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {testimonials.map((t, i) => (
             <div
               key={i}
