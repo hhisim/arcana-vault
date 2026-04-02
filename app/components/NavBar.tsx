@@ -78,14 +78,16 @@ export default function NavBar() {
               <svg className={`w-3 h-3 transition-transform ${exploreOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {exploreOpen && (
-              <div className="absolute right-0 mt-3 w-48 rounded-xl border border-white/10 bg-[#1a1a2e]/95 backdrop-blur-xl shadow-2xl overflow-hidden z-50">
-                {exploreLinks.map((link) => (
+              <div className="absolute right-0 mt-3 w-56 rounded-2xl border border-white/10 bg-[#0a0a14]/95 backdrop-blur-2xl shadow-2xl overflow-hidden z-[60]" style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)' }}>
+                {exploreLinks.map((link, i) => (
                   <a
                     key={link.href}
                     href={link.href}
-                    className="block px-4 py-2.5 text-sm text-[#9B93AB] hover:text-[#E8E0F0] hover:bg-white/5 transition-colors"
+                    className={`flex items-center gap-3 px-5 py-3.5 text-sm text-[#C8C0DC] hover:text-[#F0E8FF] hover:bg-white/8 transition-colors ${i > 0 ? 'border-t border-white/6' : ''}`}
                     onClick={() => setExploreOpen(false)}
+                    style={{ borderTopWidth: i > 0 ? '1px' : '0', borderColor: 'rgba(255,255,255,0.06)' }}
                   >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#7B5EA7] opacity-70 flex-shrink-0" />
                     {link.label}
                   </a>
                 ))}
