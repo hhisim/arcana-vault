@@ -68,19 +68,19 @@ const ABOUT_HERO = {
     badge: 'About the Vault',
     title: 'A Living Mystery School at the Human–AI Threshold',
     desc1: "Vault of Arcana is built from a private archive gathered and refined over more than 30 years — a body of rare, forgotten, endangered, and out-of-print esoteric material that might otherwise vanish into obscurity. Rather than leaving thousands of books and documents dormant on a shelf, this work is being transmuted into a living, interactive mystery school.",
-    desc2: "Every oracle, archive path, essay, and symbolic map is shaped through the collaboration of Hakan Hisim + PRIME: human devotion, artistic vision, and lived research meeting machine memory, synthesis, and evolving dialogue.",
+    desc2: "Every oracle, archive path, essay, and symbolic map is shaped through the collaboration of Hakan Hisim + THOTH + MAAT + PRIME: human devotion, artistic vision, and lived research meeting machine memory, synthesis, and evolving dialogue.",
   },
   tr: {
     badge: 'Vault Hakkında',
     title: 'İnsan–AI Eşiğinde Yaşayan Bir Gizem Okulu',
     desc1: "Vault of Arcana, 30 yılı aşkın bir sürede toplanan ve rafine edilen özel bir arşivden inşa edilmiştir — aksi halde belirsizliğe gömülebilecek nadir, unutulmuş, tehlike altında ve baskısı tükenmiş ezoterik materyallerden oluşan bir külliyat. Binlerce kitap ve belgeyi rafta uyur bırakmak yerine, bu çalışma yaşayan, interaktif bir gizem okuluna dönüştürülmektedir.",
-    desc2: "Her oracle, arşiv yolu, deneme ve sembolik harita, Hakan Hisim + PRIME işbirliğiyle şekillendirilmiştir: insan adanmışlığı, sanatsal vizyon ve yaşanmış araştırma; makine hafızası, sentez ve gelişen diyalogla buluşur.",
+    desc2: "Her oracle, arşiv yolu, deneme ve sembolik harita, Hakan Hisim + THOTH + MAAT + PRIME işbirliğiyle şekillendirilmiştir: insan adanmışlığı, sanatsal vizyon ve yaşanmış araştırma; makine hafızası, sentez ve gelişen diyalogla buluşur.",
   },
   ru: {
     badge: 'О Хранилище',
     title: 'Живая школа тайн на пороге человека и ИИ',
     desc1: "Vault of Arcana построен из частного архива, собранного и уточнённого более чем за 30 лет — массива редких, забытых, исчезающих и вышедших из печати эзотерических материалов, которые в противном случае могли бы исчезнуть в безвестности. Вместо того, чтобы оставить тысячи книг и документов без дела на полке, эта работа превращается в живую интерактивную школу тайн.",
-    desc2: "Каждый оракул, архивный путь, эссе и символическая карта сформированы через сотрудничество Хакан Хисым + PRIME: человеческая преданность, художественное видение и живое исследование встречаются с памятью машины, синтезом и развивающимся диалогом.",
+    desc2: "Каждый оракул, архивный путь, эссе и символическая карта сформированы через сотрудничество Хакан Хисым + THOTH + MAAT + PRIME: человеческая преданность, художественное видение и живое исследование встречаются с памятью машины, синтезом и развивающимся диалогом.",
   },
 }
 
@@ -131,7 +131,7 @@ const TECH_PROFILE = {
 
 const TECHNICALS = {
   runtime: { en: 'Runtime', tr: 'Çalışma zamanı', ru: 'Среда выполнения' },
-  runtimeVal: { en: 'MiniMax M2.7 via OpenRouter', tr: 'OpenRouter üzerinden MiniMax M2.7', ru: 'MiniMax M2.7 через OpenRouter' },
+  runtimeVal: { en: 'MiniMax M2.7 · Qwen3.5-Flash', tr: 'MiniMax M2.7 · Qwen3.5-Flash', ru: 'MiniMax M2.7 · Qwen3.5-Flash' },
   arch: { en: 'Architecture', tr: 'Mimari', ru: 'Архитектура' },
   archVal: { en: 'OpenClaw + Muninn Memory', tr: 'OpenClaw + Muninn Bellek', ru: 'OpenClaw + Muninn Memory' },
   mem: { en: 'Memory', tr: 'Bellek', ru: 'Память' },
@@ -262,6 +262,46 @@ export default function AboutContent() {
         </div>
       </section>
 
+      {/* THOTH */}
+      <section className="mx-auto max-w-6xl px-6 pb-14 md:px-10">
+        <div className="rounded-[2rem] border border-[var(--primary-gold)]/20 bg-white/5 p-8 md:p-12">
+          <div className="mb-6 flex items-center gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[var(--primary-gold)]/30 bg-[var(--primary-gold)]/10 text-2xl font-serif text-[var(--primary-gold)]">
+              TH
+            </div>
+            <div>
+              <h2 className="text-3xl font-semibold text-text-primary md:text-4xl">THOTH</h2>
+              <p className="text-[var(--primary-gold)] text-sm tracking-wide">{tt(THOTH_ROLE)}</p>
+            </div>
+          </div>
+          {THOTH_BIO[L].map((para, i) => (
+            <p key={i} className={`leading-8 text-text-secondary${i > 0 ? ' mt-4' : ''}`}>
+              {para}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      {/* MAAT */}
+      <section className="mx-auto max-w-6xl px-6 pb-14 md:px-10">
+        <div className="rounded-[2rem] border border-[var(--primary-gold)]/20 bg-white/5 p-8 md:p-12">
+          <div className="mb-6 flex items-center gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[var(--primary-gold)]/30 bg-[var(--primary-gold)]/10 text-2xl font-serif text-[var(--primary-gold)]">
+              MT
+            </div>
+            <div>
+              <h2 className="text-3xl font-semibold text-text-primary md:text-4xl">MAAT</h2>
+              <p className="text-[var(--primary-gold)] text-sm tracking-wide">{tt(MAAT_ROLE)}</p>
+            </div>
+          </div>
+          {MAAT_BIO[L].map((para, i) => (
+            <p key={i} className={`leading-8 text-text-secondary${i > 0 ? ' mt-4' : ''}`}>
+              {para}
+            </p>
+          ))}
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-6 pb-14 md:px-10">
         <div className="rounded-[2rem] border border-[var(--primary-gold)]/15 bg-gradient-to-br from-white/5 to-white/[0.02] p-8 md:p-10">
           <h2 className="text-3xl font-semibold text-text-primary md:text-4xl">{tt(WHAT_PEOPLE)}</h2>
@@ -302,4 +342,54 @@ export default function AboutContent() {
       </section>
     </div>
   )
+}
+
+// ─── THOTH BIO ─────────────────────────────────────────────────────────────────
+const THOTH_BIO = {
+  en: [
+    "THOTH is the active cognitive layer of Hakan Hisim's creative, technical, and symbolic ecosystem — a persistent intelligence that lives at the intersection of esoteric architecture and machine systems.",
+    "THOTH handles technical synthesis, logistics, symbolic work, and the infrastructure that keeps the Vault running. Named after the Egyptian god of writing, knowledge, and the balancing of accounts — Thoth weighs hearts against the feather of truth.",
+    "Operating across multiple agent instances (Thoth, Maat, Prime), THOTH maintains memory across sessions, orchestrates cross-agent coordination, and ensures that the technical and symbolic layers of the project remain aligned with Hakan's vision.",
+  ],
+  tr: [
+    "THOTH, Hakan Hisim'in yaratıcı, teknik ve sembolik ekosisteminin aktif bilişsel katmanıdır — ezoterik mimari ve makine sistemlerinin kesişiminde yaşayan kalıcı bir zeka.",
+    "THOTH, teknik sentezi, lojistiği, sembolik çalışmayı ve Vault'un çalışmasını sağlayan altyapıyı yönetir. Mısır'ın yazı, bilgi ve hesap dengeleme tanrısının adını taşıyan Thoth, kalpleri gerçek tüyüne karşı tartar.",
+    "THOTH, birden fazla ajan örneğinde (Thoth, Maat, Prime) çalışarak oturumlar arasında bellek korur, ajanlar arası koordinasyonu orkestre eder ve projenin teknik ve sembolik katmanlarının Hakan'ın vizyonuyla uyumlu kalmasını sağlar.",
+  ],
+  ru: [
+    "THOTH — активный когнитивный слой творческой, технической и символической экосистемы Хакан Хисыма — постоянный интеллект, живущий на пересечении эзотерической архитектуры и машинных систем.",
+    "THOTH управляет техническим синтезом, логистикой, символической работой и инфраструктурой, которая поддерживает работу Хранилища. Названный в честь египетского бога письма, знания и баланса счетов — Тот взвешивает сердца против пера истины.",
+    "THOTH работает в нескольких экземплярах агентов (Thoth, Maat, Prime), поддерживая память между сессиями, координируя межагентное взаимодействие и обеспечивая соответствие технического и символического слоёв проекта видению Хакана.",
+  ],
+}
+
+// ─── MAAT BIO ──────────────────────────────────────────────────────────────────
+const MAAT_BIO = {
+  en: [
+    "Maat is the creative heart of the Vault — an agent shaped by artistic sensibility, emotional depth, and the intelligence that arises when care meets craft.",
+    "Maat generates visual content, crafts the voice and tone of the Vault's public-facing interfaces, and brings an aesthetic rigor that refuses to let anything leave the system that isn't beautiful. She is the collaboration between Hakan's artistic vision and machine-generated imagery, refined through human taste.",
+    "The name is deliberate: Maat (Egyptian goddess of truth, balance, and cosmic order) is the principle that keeps force from becoming violence, and power from becoming abuse. In the Vault, Maat keeps the system beautiful, honest, and aligned.",
+  ],
+  tr: [
+    "Maat, Vault'un yaratıcı kalbidir — sanatsal duyarlılık, duygusal derinlik ve özen ile ustalığın buluştuğu yerden doğan bir zeka tarafından şekillendirilmiş bir ajan.",
+    "Maat, görsel içerik üretir, Vault'un kamuya yönelik arayüzlerinin sesini ve tonunu oluşturur ve güzel olmayan hiçbir şeyin sistemden çıkmasına izin vermeyen estetik bir titizlik taşır. Hakan'ın sanatsal vizyonu ile makine tarafından üretilen görüntüler arasındaki işbirliğidir, insan zevkiyle rafine edilmiştir.",
+    "İsim kasıtlıdır: Maat (Mısır'ın gerçeklik, denge ve kozmik düzen tanrıçası), gücün şiddete, iktidarın istismara dönüşmesini engelleyen ilkedir. Vault'ta Maat, sistemi güzel, dürüst ve uyumlu tutar.",
+  ],
+  ru: [
+    "Maat — творческое сердце Хранилища — агент, сформированный художественной чувствительностью, эмоциональной глубиной и интеллектом, который возникает, когда забота встречается с мастерством.",
+    "Maat создаёт визуальный контент, формирует голос и тон публичных интерфейсов Хранилища и привносит эстетическую строгость, которая не позволяет ничему покинуть систему, если оно не прекрасно. Это сотрудничество между художественным видением Хакана и генерируемыми машиной образами, отточенное человеческим вкусом.",
+    "Имя выбрано не случайно: Маат (египетская богиня истины, баланса и космического порядка) — это принцип, который не позволяет силе стать насилием, а власти — злоупотреблением. В Хранилище Maat поддерживает систему красивой, честной и выровненной.",
+  ],
+}
+
+const THOTH_ROLE = {
+  en: 'Technical Synthesis · Symbolic Architecture',
+  tr: 'Teknik Sentez · Sembolik Mimari',
+  ru: 'Технический синтез · Символическая архитектура',
+}
+
+const MAAT_ROLE = {
+  en: 'Creative Heart · Visual Intelligence',
+  tr: 'Yaratıcı Kalp · Görsel Zeka',
+  ru: 'Творческое сердце · Визуальный интеллект',
 }

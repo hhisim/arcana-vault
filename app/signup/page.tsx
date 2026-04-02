@@ -228,9 +228,9 @@ function SignupForm() {
         return
       }
 
-      pushDebug('Free plan — going to /account')
+      pushDebug('Free plan — going to /inquiry')
       redirecting.current = true
-      router.push('/account')
+      router.push('/inquiry')
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       pushDebug(`UNHANDLED: ${msg}`)
