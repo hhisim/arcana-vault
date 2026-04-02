@@ -158,8 +158,8 @@ export default function JournalPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
+      <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] flex items-center justify-center px-6 pt-20">
+        <div className="text-center max-w-md pt-20">
           <div className="text-5xl mb-6">📓</div>
           <h1 className="font-cinzel text-3xl text-[#E8E0F0] mb-4">{t(SITEDICT.nav.journal.guest_title)}</h1>
           <p className="text-[#9B93AB] mb-8 leading-relaxed">
@@ -177,9 +177,9 @@ export default function JournalPage() {
   if (viewingConv) {
     const tInfo = TRADITION_LABELS[viewingConv.tradition] || { icon: '✨', label: viewingConv.tradition, color: '#9B93AB' }
     return (
-      <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased">
-        {/* Header */}
-        <div className="sticky top-0 z-10 border-b border-white/8 bg-[#0A0A0F]/95 backdrop-blur-xl px-6 py-4 flex items-center justify-between gap-4">
+      <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pt-20">
+        {/* Sticky filter bar */}
+        <div className="sticky top-20 z-10 border-b border-white/8 bg-[#0A0A0F]/95 backdrop-blur-xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button onClick={() => setViewingConv(null)} className="text-[#9B93AB] hover:text-[#E8E0F0] transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
@@ -261,7 +261,7 @@ export default function JournalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pb-20">
+    <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pt-16 pb-20">
       {/* Hero */}
       <section className="border-b border-white/8 bg-gradient-to-b from-[#1a0f2e]/40 to-transparent">
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">

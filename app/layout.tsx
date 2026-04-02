@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-deep text-text-primary font-sans antialiased">
         <Providers>
           <NavBar />
-          <main className="pt-2">{children}</main>
+          <main className="pt-20">{children}</main>
           <Footer />
           <StickyCTA />
         </Providers>

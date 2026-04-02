@@ -36,7 +36,7 @@ export default function InquiryPage() {
   const { t } = useSiteI18n()
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pb-24">
+    <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pb-24 pt-16">
       {/* Hero */}
       <section className="relative py-24 px-6 text-center border-b border-white/8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a0f2e]/60 via-[#0A0A0F] to-[#0A0A0F]" />

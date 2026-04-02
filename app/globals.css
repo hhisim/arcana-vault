@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  scroll-padding-top: 64px; /* matches h-16 navbar height */
+  scroll-padding-top: 80px; /* matches h-20 navbar height */
 }
 
 :root {
