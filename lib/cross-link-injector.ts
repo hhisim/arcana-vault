@@ -172,7 +172,9 @@ export function injectCrossLinks(
     if (linkedTerms.has(key)) continue
 
     const escapedAlias = escapeRegex(alias)
-    const regex = new RegExp(`\\b(${escapedAlias})\\b`, 'i')
+    // Use negative lookbehind/lookahead for non-word characters instead of \b
+    // \b only works for ASCII word chars; ◈ and other Unicode chars break it
+    const regex = new RegExp(`(?<![\\w◈§†‡°◦⁕≋∫∂√∞≠≤≥≈±])(${escapedAlias})(?![\\w◈§†‡°◦⁕≋∫∂√∞≠≤≥≈±])`, 'i')
 
     const match = plainText.match(regex)
     if (!match) continue

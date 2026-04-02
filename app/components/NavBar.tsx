@@ -40,11 +40,11 @@ export default function NavBar() {
   ]
 
   const exploreLinks = [
-    { href: '/daily', label: t(SITEDICT.nav.daily) },
-    { href: '/journal', label: t(SITEDICT.nav.journal) },
-    { href: '/inquiry', label: t(SITEDICT.nav.inquiry) },
-    { href: '/correspondence-engine', label: t(SITEDICT.nav.codex) },
-    { href: '/agora', label: t(SITEDICT.nav.agora) },
+    { href: '/daily', label: t('nav.daily') },
+    { href: '/journal', label: t('nav.journal') },
+    { href: '/inquiry', label: t('nav.inquiry') },
+    { href: '/correspondence-engine', label: t('nav.codex') },
+    { href: '/agora', label: t('nav.agora') },
   ]
 
   const planName = auth.isAuthenticated ? PLAN_CONFIG[auth.plan]?.name : null
