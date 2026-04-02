@@ -4,22 +4,21 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useSiteI18n } from '@/lib/site-i18n';
 
-const FALLBACK_QUESTION = 'What is the first teaching of the Tao Te Ching about yielding?';
-const FALLBACK_ANSWER = "The Tao Te Ching opens with what may be the most profound single line ever written: 'The Tao that can be told is not the eternal Tao.' But the second verse cuts deeper still — 'Yield and survive. Bend and remain straight. Emptiness holds everything. Stillness returns to its nature. The soft overcomes the hard. The yielding overcomes the hard. Wu wei — not by pushing, but by learning the shape of what already wants to move. The river does not force its path. It finds it. This is the first teaching: not action, but alignment.";
-
-const PRESET_QUESTIONS = [
-  'What is the first teaching of the Tao Te Ching about yielding?',
-  'What does the Tarot reveal about new beginnings?',
-  'How does the Enneagram describe the path to liberation?',
-  'What is the heart of Sufi mystical practice?',
-  'How does Kabbalah describe the path between death and rebirth?',
+// FALLBACK_QUESTION and PRESET_QUESTIONS are now translated via messages/*.json
+// Using empty strings as defaults — will be replaced by t() at render time
+const PRESET_KEYS = [
+  'home.demo.preset_0',
+  'home.demo.preset_1',
+  'home.demo.preset_2',
+  'home.demo.preset_3',
+  'home.demo.preset_4',
 ];
 
 export default function DemoOracle() {
   const { t } = useSiteI18n();
   const [status, setStatus] = useState<'loading' | 'demo' | 'fallback'>('loading');
-  const [answer, setAnswer] = useState(FALLBACK_ANSWER);
-  const [question, setQuestion] = useState(FALLBACK_QUESTION);
+  const [answer, setAnswer] = useState('');
+  const [question, setQuestion] = useState('');
   const [tradition, setTradition] = useState('Taoism');
   const [inputValue, setInputValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,14 +27,21 @@ export default function DemoOracle() {
   const [showInput, setShowInput] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // Initialize translated fallback strings after mount
+  useEffect(() => {
+    setAnswer(t('home.demo.fallback_answer'));
+    setQuestion(t('home.demo.fallback_question'));
+    setTradition(t('home.demo.tradition_tao') || 'Taoism');
+  }, [t]);
+
   useEffect(() => {
     fetch('/api/demo-oracle')
       .then(r => r.json())
       .then(d => {
         if (d.answer) {
           setAnswer(d.answer);
-          setQuestion(d.question || FALLBACK_QUESTION);
-          setTradition(d.tradition || 'Taoism');
+          setQuestion(d.question || t('home.demo.fallback_question'));
+          setTradition(d.tradition || t('home.demo.tradition_tao') || 'Taoism');
           setStatus('demo');
         } else {
           setStatus('fallback');
@@ -81,7 +87,7 @@ export default function DemoOracle() {
         if (data.remaining !== undefined) setRemaining(data.remaining);
       }
     } catch {
-      setError('Connection failed — the oracle is unreachable right now.');
+      setError(t('home.demo.error_connection'));
     }
 
     setIsSubmitting(false);
@@ -120,7 +126,7 @@ export default function DemoOracle() {
               </div>
               <div>
                 <p className="text-sm font-medium text-[#E8E0F0]">{t('home.demo.oracle_label')}</p>
-                <p className="text-xs text-[#9B93AB]">{tradition} · Vault of Arcana</p>
+                <p className="text-xs text-[#9B93AB]">{t('home.demo.oracle_subtitle', '').replace('{tradition}', tradition)}</p>
               </div>
             </div>
 
@@ -132,7 +138,7 @@ export default function DemoOracle() {
                 </div>
               )}
               {remaining !== null && remaining < 3 && (
-                <span className="text-xs text-[#9B93AB] mr-2">{remaining}/3 left</span>
+                <span className="text-xs text-[#9B93AB] mr-2">{t('home.demo.remaining', '').replace('{remaining}', String(remaining))}</span>
               )}
               <span className="rounded-full bg-[rgba(123,94,167,0.2)] border border-[rgba(123,94,167,0.4)] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#7B5EA7]">
                 {t('home.demo.status_demo')}
@@ -143,15 +149,18 @@ export default function DemoOracle() {
           {/* Preset questions */}
           <div className="px-6 pt-5 pb-0">
             <div className="flex flex-wrap gap-2">
-              {PRESET_QUESTIONS.map((pq, i) => (
-                <button
-                  key={i}
-                  onClick={() => handlePreset(pq)}
-                  className="text-left rounded-xl border border-[rgba(123,94,167,0.25)] bg-[rgba(123,94,167,0.08)] hover:bg-[rgba(123,94,167,0.18)] hover:border-[rgba(123,94,167,0.5)] px-3 py-2 text-xs text-[#C8C0D8] transition-all duration-200 cursor-pointer"
-                >
-                  {pq.length > 50 ? pq.slice(0, 50) + '…' : pq}
-                </button>
-              ))}
+              {PRESET_KEYS.map((key, i) => {
+                const pq = t(key)
+                return (
+                  <button
+                    key={i}
+                    onClick={() => handlePreset(pq)}
+                    className="text-left rounded-xl border border-[rgba(123,94,167,0.25)] bg-[rgba(123,94,167,0.08)] hover:bg-[rgba(123,94,167,0.18)] hover:border-[rgba(123,94,167,0.5)] px-3 py-2 text-xs text-[#C8C0D8] transition-all duration-200 cursor-pointer"
+                  >
+                    {pq.length > 50 ? pq.slice(0, 50) + '…' : pq}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
@@ -230,7 +239,7 @@ export default function DemoOracle() {
                     onClick={() => { setShowInput(false); setError(null); setInputValue(''); }}
                     className="rounded-xl border border-white/10 hover:border-white/20 px-4 py-2.5 text-sm text-[#9B93AB] transition-all duration-200 cursor-pointer"
                   >
-                    Cancel
+                    {t('home.demo.cancel')}
                   </button>
                 </div>
               </form>
@@ -250,7 +259,7 @@ export default function DemoOracle() {
               href="/chat"
               className="rounded-xl border border-[rgba(201,168,76,0.5)] bg-[rgba(201,168,76,0.1)] hover:bg-[rgba(201,168,76,0.2)] hover:border-[#C9A84C] px-4 py-2 text-xs font-bold text-[#C9A84C] transition-all duration-200"
             >
-              Full Oracle →
+              {t('home.demo.full_oracle')}
             </Link>
           </div>
         </div>

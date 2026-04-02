@@ -79,7 +79,7 @@ export default function ComparisonBlock() {
             <div className="mb-6">
               <p className="text-xs uppercase tracking-[0.3em] text-[#9B93AB] mb-2">{t('home.comparison.col_competitor') || 'Competitor'}</p>
               <h3 className="font-serif text-xl text-[#E8E0F0]">{t('home.comparison.col_generic')}</h3>
-              <p className="mt-2 text-sm text-[#9B93AB]">ChatGPT, Claude, Gemini</p>
+              <p className="mt-2 text-sm text-[#9B93AB]">{t('home.comparison.col_generic_products')}</p>
             </div>
 
             <div className="space-y-4">
@@ -130,7 +130,7 @@ export default function ComparisonBlock() {
             <div className="relative mb-6">
               <div className="flex items-center gap-2 mb-2">
                 <span className="flex h-2 w-2 rounded-full bg-[#C9A84C] animate-pulse"></span>
-                <p className="text-xs uppercase tracking-[0.3em] text-[#C9A84C] font-bold">Vault of Arcana</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-[#C9A84C] font-bold">{t('home.comparison.col_vault_label')}</p>
               </div>
               <h3 className="font-serif text-xl text-[#E8E0F0]">{t('home.comparison.col_vault')}</h3>
               <p className="mt-2 text-sm text-[#9B93AB]">{t('home.comparison.col_vault_sub')}</p>
