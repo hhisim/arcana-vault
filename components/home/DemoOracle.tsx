@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useSiteI18n } from '@/lib/site-i18n';
 
 const FALLBACK_QUESTION = 'What is the first teaching of the Tao Te Ching about yielding?';
 const FALLBACK_ANSWER = "The Tao Te Ching opens with what may be the most profound single line ever written: 'The Tao that can be told is not the eternal Tao.' But the second verse cuts deeper still — 'Yield and survive. Bend and remain straight. Emptiness holds everything. Stillness returns to its nature. The soft overcomes the hard. The yielding overcomes the hard. Wu wei — not by pushing, but by learning the shape of what already wants to move. The river does not force its path. It finds it. This is the first teaching: not action, but alignment.";
@@ -15,6 +16,7 @@ const PRESET_QUESTIONS = [
 ];
 
 export default function DemoOracle() {
+  const { t } = useSiteI18n();
   const [status, setStatus] = useState<'loading' | 'demo' | 'fallback'>('loading');
   const [answer, setAnswer] = useState(FALLBACK_ANSWER);
   const [question, setQuestion] = useState(FALLBACK_QUESTION);
@@ -61,9 +63,9 @@ export default function DemoOracle() {
 
       if (!res.ok) {
         if (res.status === 429) {
-          setError('Demo limit reached — visit /chat for unlimited access.');
+          setError(t('home.demo.error_limit'));
         } else {
-          setError(data.error || 'The oracle is in meditation. Please try again.');
+          setError(data.error || t('home.demo.error_default'));
         }
         setIsSubmitting(false);
         return;
@@ -96,10 +98,10 @@ export default function DemoOracle() {
       <div className="mx-auto max-w-[720px] px-6">
         <div className="text-center mb-8">
           <h2 className="font-serif text-3xl md:text-4xl text-[#E8E0F0]">
-            Experience the Oracle
+            {t('home.demo.title')}
           </h2>
           <p className="mt-3 text-[#9B93AB] text-base">
-            A glimpse into the living intelligence of the Vault
+            {t('home.demo.subtitle')}
           </p>
         </div>
 
@@ -117,7 +119,7 @@ export default function DemoOracle() {
                 </svg>
               </div>
               <div>
-                <p className="text-sm font-medium text-[#E8E0F0]">VAULT Oracle</p>
+                <p className="text-sm font-medium text-[#E8E0F0]">{t('home.demo.oracle_label')}</p>
                 <p className="text-xs text-[#9B93AB]">{tradition} · Vault of Arcana</p>
               </div>
             </div>
@@ -126,14 +128,14 @@ export default function DemoOracle() {
               {status === 'demo' && (
                 <div className="flex items-center gap-1.5 mr-3">
                   <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="text-xs text-emerald-400 font-medium">Demo</span>
+                  <span className="text-xs text-emerald-400 font-medium">{t('home.demo.status_demo')}</span>
                 </div>
               )}
               {remaining !== null && remaining < 3 && (
                 <span className="text-xs text-[#9B93AB] mr-2">{remaining}/3 left</span>
               )}
               <span className="rounded-full bg-[rgba(123,94,167,0.2)] border border-[rgba(123,94,167,0.4)] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#7B5EA7]">
-                Demo
+                {t('home.demo.status_demo')}
               </span>
             </div>
           </div>
@@ -201,7 +203,7 @@ export default function DemoOracle() {
                 onClick={() => { setShowInput(true); setError(null); setTimeout(() => inputRef.current?.focus(), 50); }}
                 className="w-full rounded-xl border border-[rgba(201,168,76,0.3)] bg-[rgba(201,168,76,0.05)] hover:bg-[rgba(201,168,76,0.12)] hover:border-[rgba(201,168,76,0.6)] py-3 text-sm text-[#C9A84C] transition-all duration-200 cursor-pointer"
               >
-                Ask your own question →
+                {t('home.demo.ask_own')} →
               </button>
             </div>
           ) : (
@@ -211,7 +213,7 @@ export default function DemoOracle() {
                   ref={inputRef}
                   value={inputValue}
                   onChange={e => setInputValue(e.target.value)}
-                  placeholder="Ask the oracle something…"
+                  placeholder={t('home.demo.input_placeholder')}
                   rows={3}
                   className="w-full rounded-xl border border-[rgba(123,94,167,0.3)] bg-[rgba(18,18,26,0.8)] px-4 py-3 text-sm text-[#E8E0F0] placeholder-[#6B6180] resize-none focus:outline-none focus:border-[rgba(123,94,167,0.7)] transition-colors"
                 />
@@ -221,7 +223,7 @@ export default function DemoOracle() {
                     disabled={!inputValue.trim() || isSubmitting}
                     className="flex-1 rounded-xl bg-[rgba(123,94,167,0.3)] hover:bg-[rgba(123,94,167,0.5)] disabled:opacity-40 disabled:cursor-not-allowed border border-[rgba(123,94,167,0.5)] py-2.5 text-sm font-medium text-[#E8E0F0] transition-all duration-200 cursor-pointer"
                   >
-                    {isSubmitting ? 'Consulting…' : 'Consult the Oracle'}
+                    {isSubmitting ? t('home.demo.submit_consulting') : t('home.demo.submit_consult')}
                   </button>
                   <button
                     type="button"
@@ -241,7 +243,7 @@ export default function DemoOracle() {
               <svg className="w-3 h-3 text-[#7B5EA7]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
-              <span>Demo — Full Oracle at /chat</span>
+              <span>{t('home.demo.footer_note')}</span>
             </div>
 
             <Link

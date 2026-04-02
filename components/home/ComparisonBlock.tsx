@@ -2,70 +2,16 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useSiteI18n } from '@/lib/site-i18n';
 
-interface FeatureRow {
+interface FeatureRowData {
   label: string;
-  generic: string | boolean;
-  basic: string | boolean;
-  vault: string | boolean;
+  generic: string;
+  basic: string;
+  vault: string;
 }
 
-const features: FeatureRow[] = [
-  {
-    label: 'Training data',
-    generic: 'Generic internet scrape — no lineage, no verification',
-    basic: 'Few PDFs, shallow coverage',
-    vault: 'Curated rare archive, 30+ years of verified sources',
-  },
-  {
-    label: 'Memory',
-    generic: 'Wiped after every session',
-    basic: 'None',
-    vault: 'Full session context + vault memory',
-  },
-  {
-    label: 'Sources cited',
-    generic: 'Hallucinated — no real citations',
-    basic: 'Unverified, often wrong',
-    vault: 'Real texts, real traditions, real lineages',
-  },
-  {
-    label: 'Tradition depth',
-    generic: 'Generic spiritual platitudes',
-    basic: 'Surface-level, no deep context',
-    vault: 'Deep tradition-specific pathways and archetypes',
-  },
-  {
-    label: 'Correspondence system',
-    generic: 'None',
-    basic: 'None',
-    vault: '577 nodes, 12 dimensions — unique to the Vault',
-  },
-  {
-    label: 'Privacy',
-    generic: 'Your data is their product',
-    basic: 'Unknown, often shared',
-    vault: 'Private by design — nothing trained on',
-  },
-];
-
-function Cell({ value, highlight = false }: { value: string | boolean; highlight?: boolean }) {
-  if (typeof value === 'boolean') {
-    return value ? (
-      <span className="text-emerald-400 font-bold">✓</span>
-    ) : (
-      <span className="text-red-400 font-bold">✗</span>
-    );
-  }
-
-  if (typeof value === 'string' && (value.startsWith('From') || value.includes('/'))) {
-    return (
-      <span className={`font-bold ${highlight ? 'text-[#C9A84C]' : 'text-[#E8E0F0]'}`}>
-        {value}
-      </span>
-    );
-  }
-
+function Cell({ value, highlight = false }: { value: string; highlight?: boolean }) {
   return (
     <span className={`text-sm ${highlight ? 'text-[#E8E0F0]' : 'text-[#9B93AB]'}`}>
       {value}
@@ -74,15 +20,56 @@ function Cell({ value, highlight = false }: { value: string | boolean; highlight
 }
 
 export default function ComparisonBlock() {
+  const { t } = useSiteI18n();
+
+  const features: FeatureRowData[] = [
+    {
+      label: t('home.comparison.row_label') || 'Features',
+      generic: t('home.comparison.row_training_generic'),
+      basic: t('home.comparison.row_training_basic'),
+      vault: t('home.comparison.row_training_vault'),
+    },
+    {
+      label: t('home.comparison.row_label_memory') || 'Memory',
+      generic: t('home.comparison.row_memory_generic'),
+      basic: t('home.comparison.row_memory_basic'),
+      vault: t('home.comparison.row_memory_vault'),
+    },
+    {
+      label: t('home.comparison.row_label_sources') || 'Sources cited',
+      generic: t('home.comparison.row_sources_generic'),
+      basic: t('home.comparison.row_sources_basic'),
+      vault: t('home.comparison.row_sources_vault'),
+    },
+    {
+      label: t('home.comparison.row_label_depth') || 'Tradition depth',
+      generic: t('home.comparison.row_depth_generic'),
+      basic: t('home.comparison.row_depth_basic'),
+      vault: t('home.comparison.row_depth_vault'),
+    },
+    {
+      label: t('home.comparison.row_label_corr') || 'Correspondence system',
+      generic: t('home.comparison.row_corr_generic'),
+      basic: t('home.comparison.row_corr_basic'),
+      vault: t('home.comparison.row_corr_vault'),
+    },
+    {
+      label: t('home.comparison.row_label_privacy') || 'Privacy',
+      generic: t('home.comparison.row_privacy_generic'),
+      basic: t('home.comparison.row_privacy_basic'),
+      vault: t('home.comparison.row_privacy_vault'),
+    },
+  ];
+
   return (
     <section className="py-20 bg-deep border-y border-white/5">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl md:text-4xl text-[#E8E0F0]">
-            Not Just Another AI
+            {t('home.comparison.title')}
           </h2>
           <p className="mt-3 text-[#9B93AB] text-base max-w-2xl mx-auto">
-            See how the Vault of Arcana Oracle compares to generic AI and basic occult chatbots
+            {t('home.comparison.subtitle')}
           </p>
         </div>
 
@@ -90,8 +77,8 @@ export default function ComparisonBlock() {
           {/* Generic AI */}
           <div className="rounded-3xl border border-white/5 bg-white/[0.02] p-6 opacity-70">
             <div className="mb-6">
-              <p className="text-xs uppercase tracking-[0.3em] text-[#9B93AB] mb-2">Competitor</p>
-              <h3 className="font-serif text-xl text-[#E8E0F0]">Generic AI</h3>
+              <p className="text-xs uppercase tracking-[0.3em] text-[#9B93AB] mb-2">{t('home.comparison.col_competitor') || 'Competitor'}</p>
+              <h3 className="font-serif text-xl text-[#E8E0F0]">{t('home.comparison.col_generic')}</h3>
               <p className="mt-2 text-sm text-[#9B93AB]">ChatGPT, Claude, Gemini</p>
             </div>
 
@@ -105,8 +92,8 @@ export default function ComparisonBlock() {
 
               {/* Pricing row */}
               <div className="pt-2">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">Pricing</p>
-                <Cell value="Free — but generic, sourceless, not grounded in any tradition" />
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">{t('home.comparison.row_label_pricing') || 'Pricing'}</p>
+                <Cell value={t('home.comparison.row_pricing_generic')} />
               </div>
             </div>
           </div>
@@ -114,9 +101,9 @@ export default function ComparisonBlock() {
           {/* Basic Occult Bot */}
           <div className="rounded-3xl border border-white/5 bg-white/[0.02] p-6 opacity-80">
             <div className="mb-6">
-              <p className="text-xs uppercase tracking-[0.3em] text-[#9B93AB] mb-2">Competitor</p>
-              <h3 className="font-serif text-xl text-[#E8E0F0]">Basic Occult Bot</h3>
-              <p className="mt-2 text-sm text-[#9B93AB]">Generic spiritual chatbots</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-[#9B93AB] mb-2">{t('home.comparison.col_competitor') || 'Competitor'}</p>
+              <h3 className="font-serif text-xl text-[#E8E0F0]">{t('home.comparison.col_basic')}</h3>
+              <p className="mt-2 text-sm text-[#9B93AB]">{t('home.comparison.col_basic_sub') || 'Generic spiritual chatbots'}</p>
             </div>
 
             <div className="space-y-4">
@@ -129,8 +116,8 @@ export default function ComparisonBlock() {
 
               {/* Pricing row */}
               <div className="pt-2">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">Pricing</p>
-                <Cell value="$20–50/mo" />
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">{t('home.comparison.row_label_pricing') || 'Pricing'}</p>
+                <Cell value={t('home.comparison.row_pricing_basic')} />
               </div>
             </div>
           </div>
@@ -145,8 +132,8 @@ export default function ComparisonBlock() {
                 <span className="flex h-2 w-2 rounded-full bg-[#C9A84C] animate-pulse"></span>
                 <p className="text-xs uppercase tracking-[0.3em] text-[#C9A84C] font-bold">Vault of Arcana</p>
               </div>
-              <h3 className="font-serif text-xl text-[#E8E0F0]">The Oracle</h3>
-              <p className="mt-2 text-sm text-[#9B93AB]">Curated esoteric intelligence</p>
+              <h3 className="font-serif text-xl text-[#E8E0F0]">{t('home.comparison.col_vault')}</h3>
+              <p className="mt-2 text-sm text-[#9B93AB]">{t('home.comparison.col_vault_sub')}</p>
             </div>
 
             <div className="relative space-y-4">
@@ -159,8 +146,8 @@ export default function ComparisonBlock() {
 
               {/* Pricing row */}
               <div className="pt-2">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">Pricing</p>
-                <Cell value="From $8/mo" highlight />
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#9B93AB] mb-1.5">{t('home.comparison.row_label_pricing') || 'Pricing'}</p>
+                <Cell value={t('home.comparison.row_pricing_vault')} highlight />
               </div>
             </div>
 
@@ -169,7 +156,7 @@ export default function ComparisonBlock() {
                 href="/chat"
                 className="block w-full rounded-xl bg-[#C9A84C] hover:bg-[#B8963F] py-3 text-sm font-bold text-black text-center transition-all duration-200 hover:shadow-[0_0_25px_rgba(201,168,76,0.3)]"
               >
-                Try Free →
+                {t('home.comparison.cta')} →
               </Link>
             </div>
           </div>
