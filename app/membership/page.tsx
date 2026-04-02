@@ -87,9 +87,14 @@ function MembershipContent() {
           </Link>
         )}
 
-        <div className="grid sm:grid-cols-2 gap-4 pt-2">
+        <div className="grid sm:grid-cols-3 gap-4 pt-2">
           <Link href="/chat" className="rounded-2xl bg-[var(--primary-gold)] px-6 py-4 text-center text-black font-bold hover:shadow-[0_0_20px_rgba(201,168,76,0.3)] transition-all">
             🔮 Enter the Oracle
+          </Link>
+          <Link href="/journal" className="rounded-2xl border border-[#7B5EA7]/40 bg-[#7B5EA7]/8 px-6 py-4 text-center hover:border-[#7B5EA7]/60 hover:bg-[#7B5EA7]/12 transition-all">
+            <div className="text-lg mb-1">📓</div>
+            <div className="text-sm font-medium text-[var(--text-primary)]">Your Journal</div>
+            <div className="text-[10px] text-[var(--text-secondary)] mt-0.5">Sessions &amp; memories</div>
           </Link>
           <Link href="/library" className="rounded-2xl border border-white/10 px-6 py-4 text-center text-[var(--text-primary)] hover:bg-white/5 transition-all">
             📚 Browse the Library

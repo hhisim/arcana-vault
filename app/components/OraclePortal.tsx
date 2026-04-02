@@ -199,6 +199,7 @@ export default function OraclePortal() {
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [showHistory, setShowHistory] = useState(false)
+  const [conversationError, setConversationError] = useState<string | null>(null)
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
 
@@ -265,6 +266,18 @@ export default function OraclePortal() {
     void loadUser()
   }, [pack])
 
+  // Load ALL conversations (all traditions) when history panel opens
+  const loadAllConversations = async () => {
+    if (!userId) return
+    try {
+      const res = await fetch('/api/conversations')
+      if (res.ok) {
+        const data = await res.json()
+        setConversations(data as Conversation[])
+      }
+    } catch {}
+  }
+
   useEffect(() => {
     let alive = true
     const ping = async () => {
@@ -323,9 +336,17 @@ export default function OraclePortal() {
         if (res.ok) {
           const conv = await res.json() as Conversation
           setConversationId(conv.id)
+          setConversationError(null)
           activeConvId = conv.id
+        } else {
+          const err = await res.text()
+          console.error('[OraclePortal] createConversation failed:', res.status, err)
+          setConversationError('Failed to start session. Please refresh and try again.')
         }
-      } catch {}
+      } catch (e) {
+        console.error('[OraclePortal] createConversation exception:', e)
+        setConversationError('Failed to start session. Check your connection and try again.')
+      }
     }
 
     const saveMessage = async (role: 'user' | 'assistant' | 'system', content: string) => {
@@ -564,7 +585,10 @@ export default function OraclePortal() {
               </div>
               <button type="button" onClick={async () => { setMessages([]); setLastContext({}); setConversationId(null); if (userId && conversationId) { try { await fetch(`/api/conversations/${conversationId}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ is_archived: true }) }); setConversations(prev => prev.filter(c => c.id !== conversationId)) } catch {} } }} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
               {userId && (
-                <button type="button" onClick={() => setShowHistory(v => !v)} className={`rounded-full border px-3 py-1.5 text-xs transition ${showHistory ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>History</button>
+                <button type="button" onClick={async () => {
+                  if (!showHistory) await loadAllConversations()
+                  setShowHistory(v => !v)
+                }} className={`rounded-full border px-3 py-1.5 text-xs transition ${showHistory ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>History</button>
               )}
             </div>
           </div>
@@ -614,11 +638,14 @@ export default function OraclePortal() {
             <div>
               <div className="mb-3 flex items-center justify-between gap-2">
                 <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-gold)]">Practice Journal</div>
-                <button type="button" onClick={() => setShowHistory(false)} className="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">← Menu</button>
+                <div className="flex items-center gap-1">
+                  <Link href="/journal" className="text-[10px] text-[var(--primary-gold)] hover:underline">All →</Link>
+                  <button type="button" onClick={() => setShowHistory(false)} className="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">← Menu</button>
+                </div>
               </div>
               {conversations.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-white/10 p-4 text-center text-xs text-[var(--text-secondary)]">
-                  No sessions yet in {currentPack.title[lang]}.<br />Start a conversation to begin your journal.
+                  No sessions yet.<br />Start a conversation to begin your journal.
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -640,7 +667,7 @@ export default function OraclePortal() {
                                   id: uid(),
                                   role: m.role === 'assistant' ? 'oracle' : (m.role as 'user' | 'system'),
                                   text: m.content,
-                                  pack,
+                                  pack: conv.tradition as OraclePack,
                                   mode: conv.mode as OracleMode,
                                 }))
                                 setMessages(loaded.reverse())
@@ -651,8 +678,8 @@ export default function OraclePortal() {
                             }}
                             className="flex-1 text-left"
                           >
-                            <div className="text-xs font-medium leading-snug text-text-primary line-clamp-2">{conv.title ?? `${currentPack.emoji} Session`}</div>
-                            <div className="mt-0.5 text-[10px] text-[var(--text-secondary)]">{date} · {conv.message_count} msg{conv.message_count !== 1 ? 's' : ''}</div>
+                            <div className="text-xs font-medium leading-snug text-text-primary line-clamp-2">{conv.title ?? `${ORACLE_CONFIG[conv.tradition as OraclePack]?.emoji ?? '✨'} Session`}</div>
+                            <div className="mt-0.5 text-[10px] text-[var(--text-secondary)]">{ORACLE_CONFIG[conv.tradition as OraclePack]?.emoji ?? ''} {date} · {conv.message_count} msg{conv.message_count !== 1 ? 's' : ''}</div>
                           </button>
                           <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button

@@ -1,12 +1,17 @@
 'use client'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/components/auth/AuthProvider'
 
 export default function LoginPage() {
   const router = useRouter()
+  const auth = useAuth()
   useEffect(() => {
-    // Redirect to the combined auth page in login mode
-    router.replace('/signup?mode=login')
-  }, [router])
+    if (auth.isAuthenticated) {
+      router.replace('/account')
+    } else {
+      router.replace('/signup?mode=login')
+    }
+  }, [router, auth.isAuthenticated])
   return null
 }

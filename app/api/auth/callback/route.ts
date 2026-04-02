@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   const promoDays = Math.min(Number(requestUrl.searchParams.get('days')) || 30, 90)
 
   if (code) {
-    const redirectTo = promo ? '/account' : '/account'
+    const redirectTo = promo ? '/account' : '/inquiry'
     const response = NextResponse.redirect(new URL(redirectTo, req.url))
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

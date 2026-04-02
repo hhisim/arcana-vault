@@ -99,7 +99,9 @@ function SignupForm() {
   const params = useSearchParams()
   const { t } = useSiteI18n()
 
-  const [mode, setMode] = useState<'login' | 'signup'>('signup')
+  const [mode, setMode] = useState<'login' | 'signup'>(
+    params.get('mode') === 'login' ? 'login' : 'signup'
+  )
   const planParam = params.get('plan') as PlanId | null
   const pendingPlan: PlanId = (planParam && planParam in PLAN_CONFIG) ? planParam : 'free'
 

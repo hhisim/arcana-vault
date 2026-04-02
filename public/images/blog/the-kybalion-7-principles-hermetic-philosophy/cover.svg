@@ -6,30 +6,25 @@
     </radialGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg10)"/>
-  <!-- Hermetic pyramid / Emerald Tablet style -->
   <g transform="translate(600,315)" opacity="0.3">
-    <!-- Triangle 1 -->
     <polygon points="0,-200 -180,100 180,100" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
-    <!-- Triangle 2 (inverted) -->
     <polygon points="0,150 -120,-50 120,-50" fill="none" stroke="#7B5EA7" stroke-width="0.5"/>
-    <!-- 7 Hermetic principle circles -->
     <g font-family="serif" font-size="9" fill="#C9A84C" opacity="0.6" text-anchor="middle">
-      <circle cx="0" cy="-200" r="5"/>  <!-- Mentalism -->
+      <circle cx="0" cy="-200" r="5"/>
       <text x="0" y="-215">I</text>
-      <circle cx="-80" cy="-70" r="5"/>  <!-- Correspondence -->
+      <circle cx="-80" cy="-70" r="5"/>
       <text x="-80" y="-85">II</text>
-      <circle cx="80" cy="-70" r="5"/>  <!-- Vibration -->
+      <circle cx="80" cy="-70" r="5"/>
       <text x="80" y="-85">III</text>
-      <circle cx="-130" cy="60" r="5"/>  <!-- Polarity -->
+      <circle cx="-130" cy="60" r="5"/>
       <text x="-130" y="45">IV</text>
-      <circle cx="0" cy="60" r="5"/>  <!-- Rhythm -->
+      <circle cx="0" cy="60" r="5"/>
       <text x="0" y="45">V</text>
-      <circle cx="130" cy="60" r="5"/>  <!-- Causation -->
+      <circle cx="130" cy="60" r="5"/>
       <text x="130" y="45">VI</text>
-      <circle cx="0" cy="150" r="6"/>  <!-- Gender -->
+      <circle cx="0" cy="150" r="6"/>
       <text x="0" y="170">VII</text>
     </g>
-    <!-- Central eye -->
     <g opacity="0.5">
       <circle r="30" fill="none" stroke="#C9A84C" stroke-width="1"/>
       <circle r="15" fill="none" stroke="#C9A84C" stroke-width="0.5"/>

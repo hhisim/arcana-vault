@@ -75,6 +75,7 @@ export default function JournalPage() {
   const { t } = useLang()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loading, setLoading] = useState(true)
+  const [authLoading, setAuthLoading] = useState(true)
   const [traditionFilter, setTraditionFilter] = useState<string>('all')
   const [modeFilter, setModeFilter] = useState<string>('all')
   const [starredOnly, setStarredOnly] = useState(false)
@@ -82,6 +83,12 @@ export default function JournalPage() {
   const [viewingConv, setViewingConv] = useState<Conversation | null>(null)
   const [convMessages, setConvMessages] = useState<any[]>([])
   const [loadingMessages, setLoadingMessages] = useState(false)
+  const [expandedQAs, setExpandedQAs] = useState<Set<number>>(new Set())
+
+  // Auth state
+  useEffect(() => {
+    setAuthLoading(false)
+  }, [isAuthenticated])
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -156,6 +163,17 @@ export default function JournalPage() {
     } catch {} finally { setLoadingMessages(false) }
   }
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] flex items-center justify-center px-6 pt-20">
+        <div className="text-center">
+          <div className="text-4xl mb-4 animate-pulse">📓</div>
+          <p className="text-[#5A5470] text-sm">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] flex items-center justify-center px-6 pt-20">
@@ -222,29 +240,62 @@ export default function JournalPage() {
             <div className="text-center py-20 text-[#5A5470]">{t(SITEDICT.nav.journal.loading_conv)}</div>
           ) : (
             <div className="space-y-4">
-              {convMessages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] rounded-2xl px-5 py-4 ${
-                    msg.role === 'user'
-                      ? 'bg-[#7B5EA7]/20 border border-[#7B5EA7]/30'
-                      : msg.role === 'system'
-                      ? 'bg-[#E05C5C]/10 border border-[#E05C5C]/20'
-                      : 'bg-[#0f0f1a] border border-white/8'
-                  }`}>
-                    <div className="text-[10px] uppercase tracking-widest text-[#5A5470] mb-1.5">
-                      {msg.role === 'user' ? t(SITEDICT.nav.journal.you_label) : msg.role === 'system' ? t(SITEDICT.nav.journal.system_label) : tInfo.label}
+              {/* Collapsible Q&A pairs */}
+              {convMessages.map((msg, i) => {
+                if (msg.role === 'user') {
+                  // Find next oracle/system message as the answer
+                  const answer = convMessages[i + 1]
+                  const qaIndex = i
+                  const isExpanded = expandedQAs.has(qaIndex)
+                  return (
+                    <div key={i} className="rounded-2xl border transition-all" style={{ borderColor: isExpanded ? tInfo.color + '60' : 'rgba(255,255,255,0.08)', backgroundColor: isExpanded ? tInfo.color + '08' : '#0f0f1a' }}>
+                      {/* Question row */}
+                      <button
+                        className="w-full text-left px-5 py-4 flex items-start gap-3"
+                        onClick={() => {
+                          setExpandedQAs(prev => {
+                            const next = new Set(prev)
+                            if (next.has(qaIndex)) next.delete(qaIndex)
+                            else next.add(qaIndex)
+                            return next
+                          })
+                        }}
+                      >
+                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#7B5EA7]/20 border border-[#7B5EA7]/30 flex items-center justify-center text-xs text-[#7B5EA7] mt-0.5">Q</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs text-[#9B93AB] mb-1 line-clamp-2">{msg.content}</div>
+                          {answer && !isExpanded && (
+                            <div className="text-[10px] text-[#3A3550] mt-1">Tap to expand answer →</div>
+                          )}
+                        </div>
+                        <span className="flex-shrink-0 text-[#5A5470] text-sm mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(90deg)' : 'none' }}>›</span>
+                      </button>
+                      {/* Expanded answer */}
+                      {isExpanded && answer && (
+                        <div className="px-5 pb-5 pt-0 border-t" style={{ borderColor: tInfo.color + '30' }}>
+                          <div className="pt-4 space-y-3">
+                            <div className="flex items-start gap-3">
+                              <span className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs mt-0.5" style={{ backgroundColor: tInfo.color + '18', border: `1px solid ${tInfo.color}30`, color: tInfo.color }}>
+                                {answer.role === 'system' ? '◆' : 'A'}
+                              </span>
+                              <p className="text-sm text-[#E8E0F0] leading-relaxed whitespace-pre-wrap flex-1">{answer.content}</p>
+                            </div>
+                            {answer.metadata?.cards && (
+                              <div className="flex flex-wrap gap-1 ml-10">
+                                {answer.metadata.cards.map((card: string, ci: number) => (
+                                  <span key={ci} className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 text-[#9B93AB]">{card}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <p className="text-sm text-[#E8E0F0] leading-relaxed whitespace-pre-wrap">{msg.content}</p>
-                    {msg.metadata?.cards && (
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {msg.metadata.cards.map((card: string, ci: number) => (
-                          <span key={ci} className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 text-[#9B93AB]">{card}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                  )
+                }
+                // Skip non-user messages not preceded by user (they're already shown in expanded answers)
+                return null
+              })}
             </div>
           )}
           <div className="mt-10 text-center">
