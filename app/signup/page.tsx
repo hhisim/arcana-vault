@@ -99,6 +99,7 @@ function SignupForm() {
   const params = useSearchParams()
   const { t } = useSiteI18n()
 
+  const [mode, setMode] = useState<'login' | 'signup'>('signup')
   const planParam = params.get('plan') as PlanId | null
   const pendingPlan: PlanId = (planParam && planParam in PLAN_CONFIG) ? planParam : 'free'
 
@@ -161,6 +162,58 @@ function SignupForm() {
     }
   }
 
+  /* ─── Login handler ─── */
+  const onLogin = async (e: FormEvent) => {
+    e.preventDefault()
+    if (inFlight.current || loading) return
+    inFlight.current = true
+    setLoading(true)
+    setError('')
+    debugLog.length = 0
+    setDebugLines([])
+
+    if (!email.trim()) { setError('Please enter your email.'); setLoading(false); inFlight.current = false; return }
+    if (!password) { setError('Please enter your password.'); setLoading(false); inFlight.current = false; return }
+
+    pushDebug(`signIn: email=${email}`)
+    try {
+      const supabase = getBrowserSupabase()
+      const { error: signInError, data: signInData } = await supabase.auth.signInWithPassword({ email, password })
+
+      if (signInError) {
+        pushDebug(`signIn error: ${signInError.message}`)
+        setError(signInError.message)
+        return
+      }
+
+      pushDebug(`signIn OK: user=${signInData.user?.id?.substring(0, 8)}`)
+
+      const accessToken = signInData.session?.access_token
+      const refreshToken = signInData.session?.refresh_token
+
+      pushDebug('Syncing session cookies...')
+      try {
+        await fetch('/api/auth/sync-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
+        })
+      } catch (syncErr) {
+        pushDebug(`sync-session failed (non-fatal): ${syncErr instanceof Error ? syncErr.message : String(syncErr)}`)
+      }
+
+      redirecting.current = true
+      router.push('/inquiry')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      pushDebug(`UNHANDLED: ${msg}`)
+      setError(`Something went wrong: ${msg}`)
+    } finally {
+      if (!redirecting.current) setLoading(false)
+      inFlight.current = false
+    }
+  }
+
   /* ─── Signup handler ─── */
   const onSignup = async (e: FormEvent) => {
     e.preventDefault()
@@ -205,8 +258,8 @@ function SignupForm() {
       }
 
       // Session exists — sync cookies and proceed
-      const accessToken = signUpData.session.access_token
-      const refreshToken = signUpData.session.refresh_token
+      const accessToken = signUpData.session?.access_token
+      const refreshToken = signUpData.session?.refresh_token
 
       pushDebug('Syncing session cookies...')
       try {
@@ -269,7 +322,7 @@ function SignupForm() {
       }
 
       redirecting.current = true
-      window.location.href = '/account'
+      window.location.href = '/inquiry'
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
     } finally {
@@ -315,11 +368,66 @@ function SignupForm() {
     )
   }
 
+  // ── Login step ──
+  if (mode === 'login') {
+    return (
+      <section className="mx-auto max-w-xl px-6 py-20">
+        <div className="glass-card p-8 space-y-6">
+          <div>
+            <h1 className="font-serif text-4xl text-[var(--text-primary)]">Welcome back</h1>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">Sign in to your Vault of Arcana account</p>
+          </div>
+          <form onSubmit={onLogin} className="space-y-4">
+            <input
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none"
+              placeholder={t('auth.email')}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+            <PasswordInput
+              placeholder={t('auth.password')}
+              value={password}
+              onChange={setPassword}
+            />
+            {error && <div className="rounded-xl bg-red-900/50 border border-red-500 p-4 text-red-200 text-sm">{error}</div>}
+            {debugPanel}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50"
+            >
+              {loading ? 'Signing in…' : 'Sign in'}
+            </button>
+          </form>
+          <div className="text-center space-y-2">
+            <p className="text-sm text-[var(--text-secondary)]">
+              New to the Vault?{' '}
+              <button onClick={() => { setMode('signup'); setError(''); }} className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
+                Create an account
+              </button>
+            </p>
+            <p className="text-xs text-[var(--text-secondary)]">
+              Not sure what to ask?{' '}
+              <a href="/inquiry" className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
+                See example prompts
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   // ── Signup step ──
   return (
     <section className="mx-auto max-w-xl px-6 py-20">
       <div className="glass-card p-8 space-y-6">
-        <h1 className="font-serif text-4xl text-[var(--text-primary)]">{t('auth.signup.title')}</h1>
+        <div>
+          <h1 className="font-serif text-4xl text-[var(--text-primary)]">Begin your journey</h1>
+          <p className="mt-2 text-sm text-[var(--text-secondary)]">Create your Vault of Arcana account</p>
+        </div>
         {pendingPlan !== 'free' && (
           <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">
             Signing up for {PLAN_CONFIG[pendingPlan]?.name || pendingPlan} (${PLAN_CONFIG[pendingPlan]?.priceMonthly}/mo)
@@ -363,6 +471,20 @@ function SignupForm() {
             {loading ? 'Processing — do not close this page…' : t('auth.submit')}
           </button>
         </form>
+        <div className="text-center space-y-2">
+          <p className="text-sm text-[var(--text-secondary)]">
+            Already have an account?{' '}
+            <button onClick={() => { setMode('login'); setError(''); }} className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
+              Sign in
+            </button>
+          </p>
+          <p className="text-xs text-[var(--text-secondary)]">
+            Not sure what to ask?{' '}
+            <a href="/inquiry" className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
+              See example prompts
+            </a>
+          </p>
+        </div>
       </div>
     </section>
   )
