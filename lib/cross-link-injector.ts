@@ -73,12 +73,7 @@ export function buildCrossLink(
   const typeClass = `cross-link-${target.type}`
   const icon = getLinkIcon(target.type)
 
-  return `<a href="${target.url}"
-    class="cross-link ${typeClass}"
-    data-glossary-key="${glossaryKey}"
-    title="Explore ${entry.label} in the ${getDestinationName(target.type)}"
-    rel="noopener noreferrer"
-  >${originalText}${icon}</a>`
+  return `<a href="${target.url}" class="cross-link ${typeClass}" data-glossary-key="${glossaryKey}" title="Explore ${entry.label} in the ${getDestinationName(target.type)}" rel="noopener noreferrer">${originalText}${icon}</a>`
 }
 
 // ─── Link type icons ─────────────────────────────────────────────────────────
