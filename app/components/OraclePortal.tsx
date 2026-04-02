@@ -199,6 +199,13 @@ export default function OraclePortal() {
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [showHistory, setShowHistory] = useState(false)
+
+  // When history panel opens, load ALL user sessions (all traditions)
+  useEffect(() => {
+    if (showHistory && userId) {
+      void loadAllConversations()
+    }
+  }, [showHistory, userId])
   const [conversationError, setConversationError] = useState<string | null>(null)
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])

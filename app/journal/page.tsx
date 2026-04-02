@@ -46,12 +46,13 @@ type Conversation = {
 }
 
 const TRADITION_LABELS: Record<string, { label: string; icon: string; color: string }> = {
-  tao:      { label: 'Tao Oracle',     icon: '☯',  color: '#4ECDC4' },
-  tarot:    { label: 'Tarot Oracle',    icon: '🌟', color: '#7B5EA7' },
-  tantra:   { label: 'Tantra Oracle',   icon: '🔮', color: '#E87EA1' },
-  entheogen:{ label: 'Entheogen Oracle', icon: '🧬', color: '#2D5A4A' },
-  sufi:     { label: 'Sufi Oracle',     icon: '🌀', color: '#D4A574' },
-  dreamwalker:{ label: 'Dreamwalker',    icon: '🌙', color: '#5C8FE0' },
+  tao:         { label: 'Tao Oracle',         icon: '☯',  color: '#4ECDC4' },
+  tarot:       { label: 'Tarot Oracle',        icon: '🌟', color: '#7B5EA7' },
+  tantra:      { label: 'Tantra Oracle',       icon: '🔮', color: '#E87EA1' },
+  entheogen:   { label: 'Entheogen Oracle',    icon: '🧬', color: '#2D5A4A' },
+  sufi:        { label: 'Sufi Oracle',         icon: '🌀', color: '#D4A574' },
+  dreamwalker: { label: 'Dreamwalker',          icon: '🌙', color: '#5C8FE0' },
+  'chaos-magick': { label: 'Paradigm Hacker',  icon: '✴',  color: '#E83E8C' },
 }
 
 const MODE_LABELS: Record<string, string> = {
@@ -71,11 +72,10 @@ function formatTime(iso: string) {
 }
 
 export default function JournalPage() {
-  const { isAuthenticated, user } = useAuth()
+  const { isAuthenticated, user, loading: authLoading } = useAuth()
   const { t } = useLang()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loading, setLoading] = useState(true)
-  const [authLoading, setAuthLoading] = useState(true)
   const [traditionFilter, setTraditionFilter] = useState<string>('all')
   const [modeFilter, setModeFilter] = useState<string>('all')
   const [starredOnly, setStarredOnly] = useState(false)
@@ -85,14 +85,8 @@ export default function JournalPage() {
   const [loadingMessages, setLoadingMessages] = useState(false)
   const [expandedQAs, setExpandedQAs] = useState<Set<number>>(new Set())
 
-  // Auth state
-  useEffect(() => {
-    setAuthLoading(false)
-  }, [isAuthenticated])
-
   useEffect(() => {
     if (!isAuthenticated) {
-      // Load from localStorage for guests
       const localConvs = lsGetConversations().filter(c => !c.is_archived)
       setConversations(localConvs as unknown as Conversation[])
       setLoading(false)
@@ -107,14 +101,8 @@ export default function JournalPage() {
           .eq('is_archived', false)
           .order('last_message_at', { ascending: false })
           .limit(100)
-        console.log('[Journal] Conversations query result:', res)
-        if (res.data) {
-          console.log('[Journal] Loaded', res.data.length, 'conversations')
-          setConversations(res.data as Conversation[])
-        }
-        if (res.error) {
-          console.error('[Journal] Conversations query error:', res.error)
-        }
+        if (res.data) setConversations(res.data as Conversation[])
+        if (res.error) console.error('[Journal] Conversations query error:', res.error)
       } catch (e: any) {
         console.error('[Journal] Load failed:', e)
       } finally { setLoading(false) }
@@ -359,10 +347,10 @@ export default function JournalPage() {
               {/* Filter rows */}
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-[10px] uppercase tracking-widest text-[#5A5470] mr-1">{t(SITEDICT.nav.journal.filter_tradition)}</span>
-                {['all', 'tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker'].map(f => (
+                {['all', ...Object.keys(TRADITION_LABELS)].map(f => (
                   <button key={f} onClick={() => setTraditionFilter(f)}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${traditionFilter === f ? 'bg-[#7B5EA7] text-white' : 'border border-white/10 text-[#9B93AB] hover:text-[#E8E0F0]'}`}>
-                    {f === 'all' ? t(SITEDICT.nav.journal.filter_all) : (TRADITION_LABELS[f]?.icon + ' ' + f)}
+                    {f === 'all' ? t(SITEDICT.nav.journal.filter_all) : (TRADITION_LABELS[f] ? TRADITION_LABELS[f].icon + ' ' + f : f)}
                   </button>
                 ))}
               </div>
