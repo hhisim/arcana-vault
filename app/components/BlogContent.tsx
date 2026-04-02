@@ -3,6 +3,7 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 type BlogContentProps = { body: string; tradition: string; translations?: { tr?: string; ru?: string } }
 
@@ -10,7 +11,7 @@ export default function BlogContent({ body }: BlogContentProps) {
   return (
     <article className="mx-auto max-w-4xl">
       <div className="prose prose-invert max-w-none prose-headings:font-cinzel prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-p:leading-8 prose-strong:text-[var(--text-primary)] prose-a:text-[var(--primary-gold)] prose-blockquote:border-[var(--primary-gold)]/40 prose-blockquote:text-[var(--text-primary)] prose-li:text-[var(--text-secondary)] prose-hr:border-[rgba(255,255,255,0.08)] prose-code:text-[var(--primary-gold)] prose-pre:bg-black/30 prose-pre:border prose-pre:border-white/8 prose-table:text-[var(--text-secondary)]">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}
           components={{
             h1: ({node,...props}) => <h1 className="font-cinzel text-4xl md:text-5xl mb-6" {...props} />,
             h2: ({node,...props}) => <h2 className="font-cinzel text-3xl md:text-4xl mt-14 mb-5" {...props} />,

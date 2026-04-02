@@ -224,21 +224,25 @@ export function injectCrossLinks(
   aliasMatches.sort((a, b) => a.plainStart - b.plainStart)
 
   // ── Step 3: Map plain-text positions back to original HTML positions ───────
-  // Build a mapping: plainIdx → htmlIdx
-  // by scanning htmlPositions and finding the corresponding plain text index
+  // Build a mapping: plainIdx → htmlIdx and plainIdx → inTag status
+  // by scanning content and tracking whether we're inside a tag
   const plainToHtml: Map<number, number> = new Map()
+  const plainInTag: Map<number, boolean> = new Map()
+  let _inTag = false
   for (let i = 0; i < content.length; i++) {
-    if (inTag) {
-      if (content[i] === '>') {
-        inTag = false
-      }
-      continue
-    }
     if (content[i] === '<') {
-      inTag = true
+      _inTag = true
       continue
     }
-    plainToHtml.set(plainToHtml.size, i)
+    if (content[i] === '>') {
+      _inTag = false
+      continue
+    }
+    if (!_inTag) {
+      const nextIdx = plainToHtml.size
+      plainToHtml.set(nextIdx, i)
+      plainInTag.set(nextIdx, _inTag)
+    }
   }
 
   // ── Step 4: Build the result by injecting cross-links into original HTML ───
@@ -249,6 +253,14 @@ export function injectCrossLinks(
     const htmlEnd = plainToHtml.get(m.plainEnd - 1)
     if (htmlStart === undefined || htmlEnd === undefined) continue
 
+    // Skip if this match falls inside an HTML tag attribute — prevents double-linking
+    // when a previous cross-link injection put this text inside data-glossary-key=""
+    let insideTag = false
+    for (let pi = m.plainStart; pi < m.plainEnd; pi++) {
+      if (plainInTag.get(pi)) { insideTag = true; break }
+    }
+    if (insideTag) continue
+
     const target = getBestLinkTarget(m.entry, currentSlug)
     if (!target) continue
 
@@ -257,10 +269,6 @@ export function injectCrossLinks(
     const before = result.substring(0, htmlStart)
     const after = result.substring(htmlEnd + 1)
     result = before + crossLink + after
-
-    // Adjust plainToHtml for the insertion (characters were added)
-    const offset = crossLink.length - (htmlEnd - htmlStart + 1)
-    // Note: we don't need to remap since we iterate in order and stop at maxLinks
   }
 
   return result
