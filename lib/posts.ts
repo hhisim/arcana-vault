@@ -96,7 +96,7 @@ export const posts = [
     "publishedAt": "2026-03-21",
     "readTime": "11 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/the-kybalion-7-principles-hermetic-philosophy/cover.webp",
+    "hero": "/images/blog/the-kybalion-7-principles-hermetic-philosophy/cover.png",
     "excerpt": "Published in 1908 by 'Three Initiates,' the Kybalion distills the foundational axioms of Hermetic philosophy into seven principles that sound strikingly like modern physics, psychology, and systems theory."
   },
   {
