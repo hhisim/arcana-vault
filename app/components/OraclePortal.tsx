@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import {
@@ -18,6 +19,7 @@ import {
 import { getMenuScreen, MenuAction, TAROT_ALL_CARDS } from '@/lib/oracle-menu'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import type { Conversation } from '@/lib/supabase/conversations'
+import CrossRefPanel from '@/components/CrossRefPanel'
 
 type VoiceStyle = 'female' | 'male'
 type ContextState = { userVisible: string; prompt: string; answer: string }
@@ -199,6 +201,7 @@ export default function OraclePortal() {
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [showHistory, setShowHistory] = useState(false)
+  const [rightPanelTab, setRightPanelTab] = useState<'menu' | 'crossref'>('menu')
 
   // When history panel opens, load ALL user sessions (all traditions)
   useEffect(() => {
@@ -206,6 +209,13 @@ export default function OraclePortal() {
       void loadAllConversations()
     }
   }, [showHistory, userId])
+
+  // When messages change significantly, offer crossref tab
+  useEffect(() => {
+    if (messages.length > 2) {
+      setRightPanelTab('crossref')
+    }
+  }, [messages.length])
   const [conversationError, setConversationError] = useState<string | null>(null)
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
@@ -255,6 +265,7 @@ export default function OraclePortal() {
           if (res.ok) {
             const data = await res.json()
             setConversations(data as Conversation[])
+            setConversationError(null)
           }
         } else {
           // Browser session stale — try token-bridge recovery via server
@@ -265,13 +276,46 @@ export default function OraclePortal() {
             if (res.ok) {
               const data = await res.json()
               setConversations(data as Conversation[])
+              setConversationError(null)
             }
           }
         }
-      } catch {}
+      } catch (e) {
+        console.error('[OraclePortal] loadUser failed:', e)
+      }
     }
     void loadUser()
   }, [pack])
+
+  // ── Load conversation from ?conversation= URL param on mount ────────────────
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const convId = params.get('conversation')
+    if (!convId) return
+    const loadConversation = async () => {
+      try {
+        const res = await fetch(`/api/conversations/${convId}/messages`)
+        if (res.ok) {
+          const data = await res.json()
+          // Expected shape: { messages: ChatMessage[] } — map to local state
+          if (Array.isArray(data)) {
+            setMessages(data as ChatMessage[])
+          } else if (data?.messages && Array.isArray(data.messages)) {
+            setMessages(data.messages as ChatMessage[])
+          }
+          setConversationId(convId)
+          // Clean URL param after loading so it doesn't persist in history
+          window.history.replaceState(null, '', window.location.pathname)
+        } else {
+          console.error('[OraclePortal] loadConversation failed:', res.status)
+        }
+      } catch (e) {
+        console.error('[OraclePortal] loadConversation exception:', e)
+      }
+    }
+    void loadConversation()
+  }, [])
 
   // Load ALL conversations (all traditions) when history panel opens
   const loadAllConversations = async () => {
@@ -281,8 +325,16 @@ export default function OraclePortal() {
       if (res.ok) {
         const data = await res.json()
         setConversations(data as Conversation[])
+        setConversationError(null)
+      } else {
+        const err = await res.text()
+        console.error('[OraclePortal] loadAllConversations failed:', res.status, err)
+        setConversationError('Failed to load sessions. Please try again.')
       }
-    } catch {}
+    } catch (e) {
+      console.error('[OraclePortal] loadAllConversations exception:', e)
+      setConversationError('Failed to load sessions. Check your connection and try again.')
+    }
   }
 
   useEffect(() => {
@@ -638,8 +690,49 @@ export default function OraclePortal() {
           </div>
         </div>
 
-        {/* RIGHT: Menu / History panel */}
-        <aside className="glass-card order-3 voa-scrollbar hidden h-full overflow-y-auto p-4 lg:block">
+        {/* RIGHT: Menu / History / CrossRef panel */}
+        <aside className="glass-card order-3 voa-scrollbar hidden h-full flex-col overflow-y-auto p-0 lg:flex">
+          {/* Tab bar */}
+          <div className="flex flex-shrink-0 border-b border-white/6">
+            <button
+              type="button"
+              onClick={() => { setRightPanelTab('menu'); setShowHistory(false) }}
+              className={`flex-1 px-3 py-3 text-center text-xs font-medium transition ${
+                rightPanelTab === 'menu' && !showHistory
+                  ? 'border-b-2 border-[var(--primary-gold)] text-text-primary bg-[rgba(201,168,76,0.06)]'
+                  : 'text-[var(--text-secondary)] hover:text-text-primary'
+              }`}
+            >
+              Menu
+            </button>
+            <button
+              type="button"
+              onClick={() => { setRightPanelTab('crossref'); setShowHistory(false) }}
+              className={`flex-1 px-3 py-3 text-center text-xs font-medium transition ${
+                rightPanelTab === 'crossref'
+                  ? 'border-b-2 border-[var(--primary-gold)] text-text-primary bg-[rgba(201,168,76,0.06)]'
+                  : 'text-[var(--text-secondary)] hover:text-text-primary'
+              }`}
+            >
+              ✦ Cross Refs
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                if (!showHistory) await loadAllConversations()
+                setShowHistory(v => !v)
+              }}
+              className={`flex-1 px-3 py-3 text-center text-xs font-medium transition ${
+                showHistory
+                  ? 'border-b-2 border-[var(--primary-gold)] text-text-primary bg-[rgba(201,168,76,0.06)]'
+                  : 'text-[var(--text-secondary)] hover:text-text-primary'
+              }`}
+            >
+              History
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto">
           {showHistory ? (
             /* ── History panel ── */
             <div>
@@ -713,9 +806,12 @@ export default function OraclePortal() {
                 </div>
               )}
             </div>
+          ) : rightPanelTab === 'crossref' ? (
+            /* ── Cross References panel ── */
+            <CrossRefPanel messages={messages} indexReady={!status.loading && !status.error} />
           ) : (
             /* ── Menu panel ── */
-            <>
+            <div className="p-4">
               <div className="mb-3 flex items-center justify-between gap-2">
                 <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">{t(lang, menu.title)}</div>
                 {messages.length > 3 && (
@@ -733,8 +829,9 @@ export default function OraclePortal() {
                   </button>
                 ))}
               </div>
-            </>
+            </div>
           )}
+          </div>
         </aside>
       </div>
     </section>

@@ -6,6 +6,8 @@ import { useAuth } from '@/components/auth/AuthProvider'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useLang } from '@/lib/lang-context'
 import { SITEDICT } from '@/lib/dictionary'
+import CrossRefPanel from '@/components/CrossRefPanel'
+import type { ChatMessage } from '@/lib/oracle-ui'
 
 type LocalConversation = {
   id: string
@@ -86,18 +88,24 @@ export default function JournalPage() {
   const [expandedQAs, setExpandedQAs] = useState<Set<number>>(new Set())
 
   useEffect(() => {
+    // Wait for auth to fully resolve before loading conversations.
+    // isAuthenticated can be true while user is still null on first load
+    // due to async /api/account/me call in AuthProvider.
+    if (authLoading) return
     if (!isAuthenticated) {
       const localConvs = lsGetConversations().filter(c => !c.is_archived)
       setConversations(localConvs as unknown as Conversation[])
       setLoading(false)
       return
     }
+    if (!user) return
     const load = async () => {
       try {
         const supabase = getBrowserSupabase()
         const res = await supabase
           .from('conversations')
           .select('*')
+          .eq('user_id', user.id)
           .eq('is_archived', false)
           .order('last_message_at', { ascending: false })
           .limit(100)
@@ -108,7 +116,7 @@ export default function JournalPage() {
       } finally { setLoading(false) }
     }
     void load()
-  }, [isAuthenticated])
+  }, [isAuthenticated, user, authLoading])
 
   const filtered = conversations.filter(c => {
     if (starredOnly && !c.is_starred) return false
@@ -145,8 +153,14 @@ export default function JournalPage() {
     try {
       const res = await fetch(`/api/conversations/${conv.id}/messages`)
       if (res.ok) {
-        const msgs = await res.json()
-        setConvMessages(msgs.reverse())
+        const raw = await res.json()
+        // Map 'assistant' → 'oracle' for CrossRefPanel compatibility
+        const mapped: ChatMessage[] = raw.map((m: any) => ({
+          id: m.id,
+          role: m.role === 'assistant' ? 'oracle' : m.role as 'user' | 'oracle' | 'system',
+          text: m.content,
+        }))
+        setConvMessages(mapped.reverse())
       }
     } catch {} finally { setLoadingMessages(false) }
   }

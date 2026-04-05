@@ -124,7 +124,14 @@ export async function getEntitlement(): Promise<Entitlement> {
   /* ═══════════════════════════════════════════════════════════
    * TRIAL EXPIRY: auto-downgrade if trial has ended
    * ═══════════════════════════════════════════════════════════ */
-  let plan = (profile.plan || 'guest') as PlanId
+  // Normalize plan — handle display names ('Magister') vs PlanIds ('full')
+  const PLAN_DISPLAY_TO_ID: Record<string, PlanId> = {
+    guest: 'guest', free: 'free', seeker: 'seeker', adept: 'adept',
+    full: 'full', magister: 'full',  // 'Magister' display name → 'full' PlanId
+    seeker_display: 'seeker', adept_display: 'adept',
+  }
+  const rawPlan = profile.plan || 'guest'
+  let plan = PLAN_DISPLAY_TO_ID[rawPlan] ?? 'guest'
   let isTrial = false
   let trialEndsAt: string | null = profile.trial_ends_at ?? null
   let trialDaysRemaining: number | null = null

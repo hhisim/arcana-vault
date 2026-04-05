@@ -567,7 +567,7 @@ export const SITEDICT = {
       tr: 'Yazıt',
       ru: 'Свиток',
     },
-    journal: {
+    journalNav: {
       en: 'Journal',
       tr: 'Günlük',
       ru: 'Дневник',

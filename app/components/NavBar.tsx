@@ -9,8 +9,6 @@ import { PLAN_CONFIG } from '@/lib/plans'
 
 export default function NavBar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [exploreOpen, setExploreOpen] = useState(false)
-  const exploreRef = useRef<HTMLDivElement>(null)
   const { lang, setLang, t } = useLang()
   const auth = useAuth()
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -22,8 +20,8 @@ export default function NavBar() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false)
       }
-      if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
-        setExploreOpen(false)
+      if (libraryRef.current && !libraryRef.current.contains(e.target as Node)) {
+        setLibraryOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -34,18 +32,20 @@ export default function NavBar() {
     { href: '/', label: t(SITEDICT.nav.home) },
     { href: '/chat', label: t(SITEDICT.nav.chat) },
     { href: '/traditions', label: t(SITEDICT.nav.traditions) },
-    { href: '/library', label: t(SITEDICT.nav.library) },
     { href: '/blog', label: t(SITEDICT.nav.scroll) },
+    { href: '/correspondence-engine', label: t(SITEDICT.nav.codex) },
     { href: '/pricing', label: t(SITEDICT.nav.pricing) },
   ]
 
-  const exploreLinks = [
-    { href: '/daily', label: t('nav.daily') },
-    { href: '/journal', label: t('nav.journal') },
-    { href: '/inquiry', label: t('nav.inquiry') },
-    { href: '/correspondence-engine', label: t('nav.codex') },
-    { href: '/agora', label: t('nav.agora') },
+  const dailyPracticeLinks = [
+    { href: '/daily', label: t(SITEDICT.nav.daily) },
+    { href: '/journal', label: t(SITEDICT.nav.journalNav) },
+    { href: '/inquiry', label: t(SITEDICT.nav.inquiry) },
+    { href: '/agora', label: t(SITEDICT.nav.agora) },
   ]
+
+  const [libraryOpen, setLibraryOpen] = useState(false)
+  const libraryRef = useRef<HTMLDivElement>(null)
 
   const planName = auth.isAuthenticated ? PLAN_CONFIG[auth.plan]?.name : null
   const user = auth.user
@@ -68,23 +68,23 @@ export default function NavBar() {
               {link.label}
             </a>
           ))}
-          {/* Explore dropdown */}
-          <div className="relative" ref={exploreRef}>
+          {/* Daily Practice dropdown */}
+          <div className="relative" ref={libraryRef}>
             <button
-              onClick={() => setExploreOpen(!exploreOpen)}
+              onClick={() => setLibraryOpen(!libraryOpen)}
               className="text-[#9B93AB] hover:text-[#E8E0F0] transition-colors duration-200 text-sm font-medium focus:outline-none flex items-center gap-1"
             >
-              {t(SITEDICT.nav.explore)}
-              <svg className={`w-3 h-3 transition-transform ${exploreOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              {t(SITEDICT.nav.daily)}
+              <svg className={`w-3 h-3 transition-transform ${libraryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
-            {exploreOpen && (
+            {libraryOpen && (
               <div className="absolute right-0 mt-3 w-56 rounded-2xl border border-white/10 bg-[#0a0a14]/95 backdrop-blur-2xl shadow-2xl overflow-hidden z-[60]" style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)' }}>
-                {exploreLinks.map((link, i) => (
+                {dailyPracticeLinks.map((link, i) => (
                   <a
                     key={link.href}
                     href={link.href}
                     className={`flex items-center gap-3 px-5 py-3.5 text-sm text-[#C8C0DC] hover:text-[#F0E8FF] hover:bg-white/8 transition-colors ${i > 0 ? 'border-t border-white/6' : ''}`}
-                    onClick={() => setExploreOpen(false)}
+                    onClick={() => setLibraryOpen(false)}
                     style={{ borderTopWidth: i > 0 ? '1px' : '0', borderColor: 'rgba(255,255,255,0.06)' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-[#7B5EA7] opacity-70 flex-shrink-0" />
@@ -237,8 +237,8 @@ export default function NavBar() {
               </a>
             ))}
             <div className="border-t border-white/10 pt-3 mt-1">
-              <div className="text-xs text-[#9B93AB] uppercase tracking-wider mb-2">{t(SITEDICT.nav.explore)}</div>
-              {exploreLinks.map((link) => (
+              <div className="text-xs text-[#9B93AB] uppercase tracking-wider mb-2">{t(SITEDICT.nav.daily)}</div>
+              {dailyPracticeLinks.map((link) => (
                 <a key={link.href} href={link.href} className="block text-[#9B93AB] hover:text-[#E8E0F0] py-1.5 text-sm transition-colors" onClick={() => setMobileOpen(false)}>
                   {link.label}
                 </a>
