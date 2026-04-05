@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { useAuth } from '@/components/auth/AuthProvider'
 import CategoryCard from '@/components/forum/CategoryCard'
@@ -22,45 +21,23 @@ interface Category {
 export default function AgoraPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const { t, lang } = useSiteI18n()
   const { user } = useAuth()
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const supabase = getBrowserSupabase()
-      const { data, error } = await supabase
-        .from('forum_categories')
-        .select('*')
-        .eq('is_active', true)
-        .order('sort_order', { ascending: true })
-
-      if (data) {
-        // Fetch post counts
-        const { count } = await supabase
-          .from('forum_posts')
-          .select('category_slug', { count: 'exact', head: true })
-          .eq('is_deleted', false)
-
-        const countMap: Record<string, number> = {}
-        if (count) {
-          // Group by category_slug manually since we need a raw query
-          const { data: allPosts } = await supabase
-            .from('forum_posts')
-            .select('category_slug')
-            .eq('is_deleted', false)
-          allPosts?.forEach((p: any) => {
-            countMap[p.category_slug] = (countMap[p.category_slug] || 0) + 1
-          })
-        }
-
-        setCategories(
-          (data as Category[]).map((c) => ({
-            ...c,
-            post_count: countMap[c.slug] || 0,
-          }))
-        )
+      try {
+        const res = await fetch('/api/forum/categories')
+        if (!res.ok) throw new Error('Failed to load categories')
+        const data = await res.json()
+        setCategories(data)
+      } catch (err) {
+        console.error('[Agora] fetch error:', err)
+        setError('Could not load the Agora. Please try again.')
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     }
     fetchCategories()
   }, [])
@@ -121,6 +98,11 @@ export default function AgoraPage() {
           <div className="flex flex-col items-center justify-center py-24 space-y-4">
             <div className="voa-dots text-3xl text-[#C9A84C]">●●●</div>
             <p className="text-sm text-[#9B93AB] uppercase tracking-widest">{t('agora.loading')}</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-24 glass-card rounded-3xl border border-[rgba(255,100,100,0.15)]">
+            <div className="text-4xl mb-4 text-red-400/60">⚠</div>
+            <p className="text-[#9B93AB] font-serif text-lg">{error}</p>
           </div>
         ) : categories.length === 0 ? (
           <div className="text-center py-24 glass-card rounded-3xl border border-[rgba(255,255,255,0.06)]">

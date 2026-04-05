@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSupabase } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function GET(
   req: NextRequest,
@@ -7,25 +12,22 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    const supabase = getServerSupabase()
 
-    // Increment view count
-    await supabase.rpc('increment_view_count', { post_id: id }).catch(() => {
-      // Fallback: direct update if RPC doesn't exist
-      return supabase
-        .from('forum_posts')
-        .select('view_count')
-        .eq('id', id)
-        .single()
-        .then(({ data }) => {
-          if (data) {
-            return supabase
-              .from('forum_posts')
-              .update({ view_count: data.view_count + 1 })
-              .eq('id', id)
-          }
-        })
-    })
+    // Increment view count (fire-and-forget)
+    supabase
+      .from('forum_posts')
+      .select('view_count')
+      .eq('id', id)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          return supabase
+            .from('forum_posts')
+            .update({ view_count: data.view_count + 1 })
+            .eq('id', id)
+        }
+      })
+      .catch(() => {})
 
     const { data: thread, error } = await supabase
       .from('forum_posts')

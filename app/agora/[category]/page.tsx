@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, use } from 'react'
 import Link from 'next/link'
-import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { useAuth } from '@/components/auth/AuthProvider'
 import ThreadRow from '@/components/forum/ThreadRow'
@@ -59,27 +58,25 @@ export default function CategoryPage({
 
   useEffect(() => {
     const fetchData = async () => {
-      const supabase = getBrowserSupabase()
+      try {
+        const [catRes, threadsRes] = await Promise.all([
+          fetch('/api/forum/categories'),
+          fetch(`/api/forum/threads?category=${encodeURIComponent(categorySlug)}&page=${page}&limit=${limit}`),
+        ])
 
-      const [{ data: catData }, { data: threadData, count }] = await Promise.all([
-        supabase.from('forum_categories').select('*').eq('slug', categorySlug).single(),
-        supabase
-          .from('forum_posts')
-          .select('*', { count: 'exact' })
-          .eq('category_slug', categorySlug)
-          .eq('is_deleted', false)
-          .order('is_pinned', { ascending: false })
-          .order('last_reply_at', { ascending: false })
-          .order('created_at', { ascending: false })
-          .range((page - 1) * limit, page * limit - 1),
-      ])
+        if (!catRes.ok || !threadsRes.ok) throw new Error('Failed to load')
 
-      if (catData) setCategory(catData)
-      if (threadData) {
-        setThreads(threadData as Thread[])
-        setTotal(count || 0)
+        const [allCategories, threadsData] = await Promise.all([catRes.json(), threadsRes.json()])
+
+        const cat = allCategories.find((c: any) => c.slug === categorySlug)
+        if (cat) setCategory(cat)
+        setThreads(threadsData.threads || [])
+        setTotal(threadsData.total || 0)
+      } catch (err) {
+        console.error('[CategoryPage] fetch error:', err)
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     }
     fetchData()
   }, [categorySlug, page])
@@ -185,7 +182,6 @@ export default function CategoryPage({
                   title={thread.title}
                   authorName={thread.author_name}
                   replyCount={thread.reply_count}
-                  viewCount={thread.view_count}
                   createdAt={thread.created_at}
                   isPinned={thread.is_pinned}
                   isLocked={thread.is_locked}
