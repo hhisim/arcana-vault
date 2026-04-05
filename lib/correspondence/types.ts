@@ -34,12 +34,27 @@ export interface CorrespondenceEntry {
 export interface CorrespondenceIndex {
   version: string
   generated: string
-  families: Array<{
+  /** Root-level families array (v2.x format) */
+  families?: Array<{
     key: string
     label: string
     icon: string
     count?: number
   }>
+  /** Meta wrapper containing families (v2.0.0+ format) */
+  meta?: {
+    version: string
+    generatedAt?: string
+    generated?: string
+    total?: number
+    families?: Array<{
+      key: string
+      label: string
+      icon: string
+      count?: number
+    }>
+    [key: string]: any
+  }
   entries: CorrespondenceEntry[]
 }
 

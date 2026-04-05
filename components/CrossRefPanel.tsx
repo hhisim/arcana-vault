@@ -56,8 +56,9 @@ export default function CrossRefPanel({ messages, indexReady }: CrossRefPanelPro
         if (cancelled) return
 
         const index = buildCodexIndex(data.entries)
-        // Build families map from index meta
-        const meta = extractFamilyMeta(data.families || [])
+        // Build families map — index.json v2.0.0+ uses data.meta.families
+        const families = data.meta?.families ?? data.families ?? []
+        const meta = extractFamilyMeta(families)
         setFamilyMeta(meta)
         setCodexIndex(index)
       } catch (err) {

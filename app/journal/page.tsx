@@ -86,6 +86,7 @@ export default function JournalPage() {
   const [convMessages, setConvMessages] = useState<any[]>([])
   const [loadingMessages, setLoadingMessages] = useState(false)
   const [expandedQAs, setExpandedQAs] = useState<Set<number>>(new Set())
+  const [rightPanelTab, setRightPanelTab] = useState<'messages' | 'crossref'>('messages')
 
   useEffect(() => {
     // Wait for auth to fully resolve before loading conversations.
@@ -98,7 +99,11 @@ export default function JournalPage() {
       setLoading(false)
       return
     }
-    if (!user) return
+    if (!user) {
+      // isAuthenticated is true but user not yet populated — stay in loading
+      // state and let the re-render when user resolves trigger the fetch.
+      return
+    }
     const load = async () => {
       try {
         const supabase = getBrowserSupabase()
@@ -201,7 +206,7 @@ export default function JournalPage() {
         {/* Sticky filter bar */}
         <div className="sticky top-20 z-10 border-b border-white/8 bg-[#0A0A0F]/95 backdrop-blur-xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <button onClick={() => setViewingConv(null)} className="text-[#9B93AB] hover:text-[#E8E0F0] transition-colors">
+            <button onClick={() => { setViewingConv(null); setRightPanelTab('messages') }} className="text-[#9B93AB] hover:text-[#E8E0F0] transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
             </button>
             <div>
@@ -228,85 +233,117 @@ export default function JournalPage() {
           </div>
         </div>
 
-        {/* Messages */}
-        <div className="max-w-3xl mx-auto px-6 py-8">
-          {viewingConv.title && (
-            <div className="mb-8 text-center">
-              <h1 className="font-cinzel text-xl text-[#E8E0F0] mb-2">{viewingConv.title}</h1>
-              {viewingConv.summary && (
-                <p className="text-sm text-[#6B6382] italic leading-relaxed">{viewingConv.summary}</p>
+        {/* Tab bar */}
+        <div className="sticky top-[72px] z-10 border-b border-white/8 bg-[#0A0A0F]/90 backdrop-blur-xl px-6 flex items-center gap-0">
+          <button
+            onClick={() => setRightPanelTab('messages')}
+            className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors ${
+              rightPanelTab === 'messages'
+                ? 'border-[#C9A84C] text-[#C9A84C]'
+                : 'border-transparent text-[#5A5470] hover:text-[#9B93AB]'
+            }`}
+          >
+            Messages
+          </button>
+          <button
+            onClick={() => setRightPanelTab('crossref')}
+            className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors ${
+              rightPanelTab === 'crossref'
+                ? 'border-[#C9A84C] text-[#C9A84C]'
+                : 'border-transparent text-[#5A5470] hover:text-[#9B93AB]'
+            }`}
+          >
+            Cross References
+          </button>
+        </div>
+
+        {/* Split content */}
+        <div className="flex h-[calc(100vh-144px)]">
+          {/* Left: Messages */}
+          <div className={`flex-1 overflow-y-auto px-6 py-8 ${rightPanelTab === 'crossref' ? 'hidden md:block' : ''}`}>
+            <div className="max-w-3xl mx-auto">
+              {viewingConv.title && (
+                <div className="mb-8 text-center">
+                  <h1 className="font-cinzel text-xl text-[#E8E0F0] mb-2">{viewingConv.title}</h1>
+                  {viewingConv.summary && (
+                    <p className="text-sm text-[#6B6382] italic leading-relaxed">{viewingConv.summary}</p>
+                  )}
+                </div>
               )}
-            </div>
-          )}
-          {loadingMessages ? (
-            <div className="text-center py-20 text-[#5A5470]">{t(SITEDICT.nav.journal.loading_conv)}</div>
-          ) : (
-            <div className="space-y-4">
-              {/* Collapsible Q&A pairs */}
-              {convMessages.map((msg, i) => {
-                if (msg.role === 'user') {
-                  // Find next oracle/system message as the answer
-                  const answer = convMessages[i + 1]
-                  const qaIndex = i
-                  const isExpanded = expandedQAs.has(qaIndex)
-                  return (
-                    <div key={i} className="rounded-2xl border transition-all" style={{ borderColor: isExpanded ? tInfo.color + '60' : 'rgba(255,255,255,0.08)', backgroundColor: isExpanded ? tInfo.color + '08' : '#0f0f1a' }}>
-                      {/* Question row */}
-                      <button
-                        className="w-full text-left px-5 py-4 flex items-start gap-3"
-                        onClick={() => {
-                          setExpandedQAs(prev => {
-                            const next = new Set(prev)
-                            if (next.has(qaIndex)) next.delete(qaIndex)
-                            else next.add(qaIndex)
-                            return next
-                          })
-                        }}
-                      >
-                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#7B5EA7]/20 border border-[#7B5EA7]/30 flex items-center justify-center text-xs text-[#7B5EA7] mt-0.5">Q</span>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs text-[#9B93AB] mb-1 line-clamp-2">{msg.content}</div>
-                          {answer && !isExpanded && (
-                            <div className="text-[10px] text-[#3A3550] mt-1">Tap to expand answer →</div>
+              {loadingMessages ? (
+                <div className="text-center py-20 text-[#5A5470]">{t(SITEDICT.nav.journal.loading_conv)}</div>
+              ) : (
+                <div className="space-y-4">
+                  {convMessages.map((msg, i) => {
+                    if (msg.role === 'user') {
+                      const answer = convMessages[i + 1]
+                      const qaIndex = i
+                      const isExpanded = expandedQAs.has(qaIndex)
+                      return (
+                        <div key={i} className="rounded-2xl border transition-all" style={{ borderColor: isExpanded ? tInfo.color + '60' : 'rgba(255,255,255,0.08)', backgroundColor: isExpanded ? tInfo.color + '08' : '#0f0f1a' }}>
+                          <button
+                            className="w-full text-left px-5 py-4 flex items-start gap-3"
+                            onClick={() => {
+                              setExpandedQAs(prev => {
+                                const next = new Set(prev)
+                                if (next.has(qaIndex)) next.delete(qaIndex)
+                                else next.add(qaIndex)
+                                return next
+                              })
+                            }}
+                          >
+                            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#7B5EA7]/20 border border-[#7B5EA7]/30 flex items-center justify-center text-xs text-[#7B5EA7] mt-0.5">Q</span>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-xs text-[#9B93AB] mb-1 line-clamp-2">{msg.content}</div>
+                              {answer && !isExpanded && (
+                                <div className="text-[10px] text-[#3A3550] mt-1">Tap to expand answer →</div>
+                              )}
+                            </div>
+                            <span className="flex-shrink-0 text-[#5A5470] text-sm mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(90deg)' : 'none' }}>›</span>
+                          </button>
+                          {isExpanded && answer && (
+                            <div className="px-5 pb-5 pt-0 border-t" style={{ borderColor: tInfo.color + '30' }}>
+                              <div className="pt-4 space-y-3">
+                                <div className="flex items-start gap-3">
+                                  <span className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs mt-0.5" style={{ backgroundColor: tInfo.color + '18', border: `1px solid ${tInfo.color}30`, color: tInfo.color }}>
+                                    {answer.role === 'system' ? '◆' : 'A'}
+                                  </span>
+                                  <p className="text-sm text-[#E8E0F0] leading-relaxed whitespace-pre-wrap flex-1">{answer.content}</p>
+                                </div>
+                                {answer.metadata?.cards && (
+                                  <div className="flex flex-wrap gap-1 ml-10">
+                                    {answer.metadata.cards.map((card: string, ci: number) => (
+                                      <span key={ci} className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 text-[#9B93AB]">{card}</span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
                           )}
                         </div>
-                        <span className="flex-shrink-0 text-[#5A5470] text-sm mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(90deg)' : 'none' }}>›</span>
-                      </button>
-                      {/* Expanded answer */}
-                      {isExpanded && answer && (
-                        <div className="px-5 pb-5 pt-0 border-t" style={{ borderColor: tInfo.color + '30' }}>
-                          <div className="pt-4 space-y-3">
-                            <div className="flex items-start gap-3">
-                              <span className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs mt-0.5" style={{ backgroundColor: tInfo.color + '18', border: `1px solid ${tInfo.color}30`, color: tInfo.color }}>
-                                {answer.role === 'system' ? '◆' : 'A'}
-                              </span>
-                              <p className="text-sm text-[#E8E0F0] leading-relaxed whitespace-pre-wrap flex-1">{answer.content}</p>
-                            </div>
-                            {answer.metadata?.cards && (
-                              <div className="flex flex-wrap gap-1 ml-10">
-                                {answer.metadata.cards.map((card: string, ci: number) => (
-                                  <span key={ci} className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 text-[#9B93AB]">{card}</span>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )
-                }
-                // Skip non-user messages not preceded by user (they're already shown in expanded answers)
-                return null
-              })}
+                      )
+                    }
+                    return null
+                  })}
+                </div>
+              )}
+              <div className="mt-10 text-center">
+                <Link
+                  href={`/chat?conversation=${viewingConv.id}`}
+                  className="inline-block px-8 py-4 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm uppercase tracking-widest hover:bg-[#B1933E] transition-colors"
+                >
+                  {t(SITEDICT.nav.journal.continue_conv)}
+                </Link>
+              </div>
             </div>
-          )}
-          <div className="mt-10 text-center">
-            <Link
-              href={`/chat?conversation=${viewingConv.id}`}
-              className="inline-block px-8 py-4 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm uppercase tracking-widest hover:bg-[#B1933E] transition-colors"
-            >
-              {t(SITEDICT.nav.journal.continue_conv)}
-            </Link>
+          </div>
+
+          {/* Right: CrossRefPanel */}
+          <div className={`w-full md:w-[380px] border-l border-white/8 overflow-hidden flex-shrink-0 ${rightPanelTab === 'crossref' ? '' : 'hidden md:block'}`}>
+            <CrossRefPanel
+              messages={convMessages.map(m => ({ role: m.role, text: m.content }))}
+              indexReady={!loadingMessages && convMessages.length > 0}
+            />
           </div>
         </div>
       </div>
