@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@/components/auth/AuthProvider'
+import React, { useState } from 'react'
 import { getBrowserSupabase } from '@/lib/supabase/client'
+import { useAuth } from '@/components/auth/AuthProvider'
+import { useSiteI18n } from '@/lib/site-i18n'
 
 interface Category {
   slug: string
@@ -23,10 +23,11 @@ export default function ThreadForm({ defaultCategory = '', onSuccess, onCancel }
   const router = useRouter()
   const { user } = useAuth()
   const [categories, setCategories] = useState<Category[]>([])
-  const [title, setTitle] = useState('')
+  const [tags, setTags] = useState('')
+  const { t } = useSiteI18n()
   const [content, setContent] = useState('')
   const [categorySlug, setCategorySlug] = useState(defaultCategory)
-  const [tags, setTags] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
 

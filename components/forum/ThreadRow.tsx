@@ -9,7 +9,6 @@ interface ThreadRowProps {
   authorName: string
   authorBadge?: string
   replyCount: number
-  viewCount: number
   createdAt: string
   isPinned?: boolean
   isLocked?: boolean

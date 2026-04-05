@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server'
-import { getTodayContent } from '@/lib/daily-content'
+import { getTodayContent, generateTodayContent } from '@/lib/daily-content'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
     const content = await getTodayContent()
-    if (!content) {
-      return NextResponse.json({ date: new Date().toISOString().slice(0, 10), entries: {} })
+    // If no content exists for today, generate it on demand
+    if (!content || Object.keys(content.entries).length === 0) {
+      const generated = await generateTodayContent()
+      return NextResponse.json(generated)
     }
     return NextResponse.json(content)
   } catch (error) {

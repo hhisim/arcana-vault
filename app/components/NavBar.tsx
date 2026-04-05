@@ -33,12 +33,13 @@ export default function NavBar() {
     { href: '/chat', label: t(SITEDICT.nav.chat) },
     { href: '/traditions', label: t(SITEDICT.nav.traditions) },
     { href: '/blog', label: t(SITEDICT.nav.scroll) },
-    { href: '/correspondence-engine', label: t(SITEDICT.nav.codex) },
+    { href: '/correspondence-engine', label: 'Codex' },
     { href: '/pricing', label: t(SITEDICT.nav.pricing) },
+    { href: '/daily', label: t(SITEDICT.nav.daily) },
   ]
 
-  const dailyPracticeLinks = [
-    { href: '/daily', label: t(SITEDICT.nav.daily) },
+  const libraryDropdownLinks = [
+    { href: '/library', label: t(SITEDICT.nav.library) },
     { href: '/journal', label: t(SITEDICT.nav.journalNav) },
     { href: '/inquiry', label: t(SITEDICT.nav.inquiry) },
     { href: '/agora', label: t(SITEDICT.nav.agora) },
@@ -68,18 +69,18 @@ export default function NavBar() {
               {link.label}
             </a>
           ))}
-          {/* Daily Practice dropdown */}
+          {/* Library dropdown */}
           <div className="relative" ref={libraryRef}>
             <button
               onClick={() => setLibraryOpen(!libraryOpen)}
               className="text-[#9B93AB] hover:text-[#E8E0F0] transition-colors duration-200 text-sm font-medium focus:outline-none flex items-center gap-1"
             >
-              {t(SITEDICT.nav.daily)}
+              {t(SITEDICT.nav.library)}
               <svg className={`w-3 h-3 transition-transform ${libraryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {libraryOpen && (
               <div className="absolute right-0 mt-3 w-56 rounded-2xl border border-white/10 bg-[#0a0a14]/95 backdrop-blur-2xl shadow-2xl overflow-hidden z-[60]" style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)' }}>
-                {dailyPracticeLinks.map((link, i) => (
+                {libraryDropdownLinks.map((link, i) => (
                   <a
                     key={link.href}
                     href={link.href}
@@ -237,8 +238,8 @@ export default function NavBar() {
               </a>
             ))}
             <div className="border-t border-white/10 pt-3 mt-1">
-              <div className="text-xs text-[#9B93AB] uppercase tracking-wider mb-2">{t(SITEDICT.nav.daily)}</div>
-              {dailyPracticeLinks.map((link) => (
+              <div className="text-xs text-[#9B93AB] uppercase tracking-wider mb-2">{t(SITEDICT.nav.library)}</div>
+              {libraryDropdownLinks.map((link) => (
                 <a key={link.href} href={link.href} className="block text-[#9B93AB] hover:text-[#E8E0F0] py-1.5 text-sm transition-colors" onClick={() => setMobileOpen(false)}>
                   {link.label}
                 </a>

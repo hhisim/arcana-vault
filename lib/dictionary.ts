@@ -553,9 +553,9 @@ export const SITEDICT = {
       ru: 'Библиотека',
     },
     codex: {
-      en: 'Correspondence Codex',
-      tr: 'Tekabülât Kodeksi',
-      ru: 'Кодекс Соответствий',
+      en: 'Codex',
+      tr: 'Kodeks',
+      ru: 'Кодекс',
     },
     agora: {
       en: 'Agora',

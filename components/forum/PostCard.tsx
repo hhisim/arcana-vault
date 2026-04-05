@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useAuth } from '@/components/auth/AuthProvider'
+import { useSiteI18n } from '@/lib/site-i18n'
 
 function YouTubeEmbed({ content }: { content: string }) {
   const YOUTUBE_REGEX = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})[^\s<]*/gi
@@ -94,11 +95,13 @@ export default function PostCard({
   onReplyAdded,
 }: PostCardProps) {
   const { user } = useAuth()
+  const { t } = useSiteI18n()
   const supabase = getBrowserSupabase()
 
   const [hasUpvoted, setHasUpvoted] = useState(false)
   const [upvoteCount, setUpvoteCount] = useState(post?.upvotes ?? reply?.upvotes ?? 0)
   const [showReplyForm, setShowReplyForm] = useState(false)
+  const [reactionsLoaded, setReactionsLoaded] = useState(false)
   const [replyText, setReplyText] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -110,17 +113,27 @@ export default function PostCard({
   const createdAt = post?.created_at || reply?.created_at || new Date().toISOString()
 
   useEffect(() => {
-    if (!user || !targetId) return
-    const checkVote = async () => {
-      const { data } = await supabase
-        .from('forum_reactions')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq(targetType === 'post' ? 'post_id' : 'reply_id', targetId)
-        .maybeSingle()
-      if (data) setHasUpvoted(true)
+    if (!targetId) return
+    const fetchReactionData = async () => {
+      // Fetch total upvote count and user's reaction in parallel
+      const [countResult, userResult] = await Promise.all([
+        supabase
+          .from('forum_reactions')
+          .select('id', { count: 'exact', head: true })
+          .eq(targetType === 'post' ? 'post_id' : 'reply_id', targetId)
+          .eq('reaction_type', 'upvote'),
+        user ? supabase
+          .from('forum_reactions')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq(targetType === 'post' ? 'post_id' : 'reply_id', targetId)
+          .maybeSingle() : Promise.resolve({ data: null }),
+      ])
+      if (countResult.count !== null) setUpvoteCount(countResult.count)
+      if (userResult.data) setHasUpvoted(true)
+      setReactionsLoaded(true)
     }
-    checkVote()
+    fetchReactionData()
   }, [user, targetId, targetType])
 
   const handleUpvote = async () => {
@@ -176,7 +189,7 @@ export default function PostCard({
       `}>
         {post?.is_pinned && (
           <div className="px-5 pt-3 flex items-center gap-2 text-xs text-[#C9A84C] font-bold uppercase tracking-widest">
-            📌 Pinned Thread
+            📌 {t('agora.thread.pinned')}
           </div>
         )}
 
@@ -197,7 +210,7 @@ export default function PostCard({
               {post?.view_count !== undefined && (
                 <>
                   <span className="text-xs text-[#9B93AB]">•</span>
-                  <span className="text-xs text-[#9B93AB]">{post.view_count} views</span>
+                  <span className="text-xs text-[#9B93AB]">{t('agora.thread.views', { count: post.view_count })}</span>
                 </>
               )}
             </div>
@@ -265,16 +278,16 @@ export default function PostCard({
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
               </svg>
-              Reply
+              {t('agora.thread.reply')}
             </button>
           )}
           {isLocked && (
             <span className="text-xs font-bold uppercase tracking-widest text-[#9B93AB]/60 flex items-center gap-1.5">
-              🔒 Thread Locked
+              🔒 {t('agora.thread.locked')}
             </span>
           )}
           {!user && (
-            <span className="text-xs text-[#9B93AB]/60 italic">Sign in to reply</span>
+            <span className="text-xs text-[#9B93AB]/60 italic">{t('agora.thread.sign_in_to_reply')}</span>
           )}
         </div>
 
@@ -297,14 +310,14 @@ export default function PostCard({
                 onClick={() => { setShowReplyForm(false); setReplyText('') }}
                 className="px-4 py-2 rounded-lg border border-[rgba(255,255,255,0.08)] text-xs font-bold uppercase tracking-widest text-[#9B93AB] hover:text-[#E8E0F0] transition-colors"
               >
-                Cancel
+                {t('agora.category.cancel')}
               </button>
               <button
                 onClick={handleSubmitReply}
                 disabled={!replyText.trim() || isSubmitting}
                 className="px-5 py-2 rounded-lg bg-[#C9A84C] text-[#0A0A0F] text-xs font-bold uppercase tracking-widest hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(201,168,76,0.15)]"
               >
-                {isSubmitting ? 'Posting...' : 'Post Reply'}
+                {isSubmitting ? t('agora.thread.posting') : t('agora.thread.post_reply')}
               </button>
             </div>
           </div>

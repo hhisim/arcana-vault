@@ -14,7 +14,7 @@ const dictionaries = { en, tr, ru } as const
 type I18nCtx = {
   lang: SiteLang
   setLang: (lang: SiteLang) => void
-  t: (keyOrObj: any, fallback?: string) => string
+  t: (keyOrObj: any, fallback?: string, vars?: Record<string, string | number>) => string
   tArray: (key: string) => string[]
   tObj: (key: string) => Record<string, string>
 }
@@ -64,18 +64,25 @@ export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<I18nCtx>(() => ({
     lang,
     setLang,
-    t: (keyOrObj, fallback) => {
+    t: (keyOrObj, fallback, vars?: Record<string, string | number>) => {
       if (typeof keyOrObj === 'object' && keyOrObj !== null) {
         const obj = keyOrObj as Record<string, string>
-        return obj[lang] ?? obj.en ?? fallback ?? ''
+        let result = obj[lang] ?? obj.en ?? fallback ?? ''
+        if (vars) result = result.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? `{${k}}`))
+        return result
       }
       const dict = dictionaries[lang] as Record<string, unknown>
       const val = dict[keyOrObj as string]
-      if (typeof val === 'string') return val
-      if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
-        return (val as Record<string, string>)[lang] ?? (val as Record<string, string>).en ?? fallback ?? keyOrObj as string
+      let result: string
+      if (typeof val === 'string') {
+        result = val
+      } else if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+        result = (val as Record<string, string>)[lang] ?? (val as Record<string, string>).en ?? fallback ?? keyOrObj as string
+      } else {
+        result = fallback ?? keyOrObj as string
       }
-      return fallback ?? keyOrObj as string
+      if (vars) result = result.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? `{${k}}`))
+      return result
     },
     tArray: (key) => {
       const dict = dictionaries[lang] as Record<string, unknown>

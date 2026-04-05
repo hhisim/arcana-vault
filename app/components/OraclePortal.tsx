@@ -298,11 +298,27 @@ export default function OraclePortal() {
         const res = await fetch(`/api/conversations/${convId}/messages`)
         if (res.ok) {
           const data = await res.json()
-          // Expected shape: { messages: ChatMessage[] } — map to local state
+          // API returns Message[] with {content} field — map to ChatMessage {text}
           if (Array.isArray(data)) {
-            setMessages(data as ChatMessage[])
+            const mapped: ChatMessage[] = data.map((m: any) => ({
+              id: m.id,
+              role: m.role === 'assistant' ? 'oracle' : (m.role as 'user' | 'oracle' | 'system'),
+              text: m.content,
+              audioUrl: m.audioUrl ?? null,
+              mode: m.mode as OracleMode | undefined,
+              pack: m.pack as OraclePack | undefined,
+            }))
+            setMessages(mapped)
           } else if (data?.messages && Array.isArray(data.messages)) {
-            setMessages(data.messages as ChatMessage[])
+            const mapped: ChatMessage[] = data.messages.map((m: any) => ({
+              id: m.id,
+              role: m.role === 'assistant' ? 'oracle' : (m.role as 'user' | 'oracle' | 'system'),
+              text: m.content,
+              audioUrl: m.audioUrl ?? null,
+              mode: m.mode as OracleMode | undefined,
+              pack: m.pack as OraclePack | undefined,
+            }))
+            setMessages(mapped)
           }
           setConversationId(convId)
           // Clean URL param after loading so it doesn't persist in history
@@ -315,7 +331,7 @@ export default function OraclePortal() {
       }
     }
     void loadConversation()
-  }, [])
+  }, [pack])
 
   // Load ALL conversations (all traditions) when history panel opens
   const loadAllConversations = async () => {
