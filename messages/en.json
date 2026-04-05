@@ -578,5 +578,7 @@
   "home.demo.fallback_question": "What is the first teaching of the Tao Te Ching about yielding?",
   "home.demo.fallback_answer": "The Tao Te Ching opens with what may be the most profound single line ever written: 'The Tao that can be told is not the eternal Tao.' But the second verse cuts deeper still — 'Yield and survive. Bend and remain straight. Emptiness holds everything. Stillness returns to its nature. The soft overcomes the hard. The yielding overcomes the hard. Wu wei — not by pushing, but by learning the shape of what already wants to move. The river does not force its path. It finds it. This is the first teaching: not action, but alignment.",
   "home.comparison.col_generic_products": "ChatGPT, Claude, Gemini",
-  "home.comparison.col_vault_label": "Vault of Arcana"
+  "home.comparison.col_vault_label": "Vault of Arcana",
+  "agora.thread.locked": "Thread locked",
+  "agora.thread.add_reply": "Add your reply"
 }
