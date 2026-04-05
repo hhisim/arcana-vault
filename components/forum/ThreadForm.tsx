@@ -28,7 +28,6 @@ export default function ThreadForm({ defaultCategory = '', onSuccess, onCancel }
   const [content, setContent] = useState('')
   const [categorySlug, setCategorySlug] = useState(defaultCategory)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
