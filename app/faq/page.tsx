@@ -1,3 +1,11 @@
+export const metadata = {
+  title: 'FAQ — Frequently Asked Questions | Vault of Arcana',
+  description: 'Answers to common questions about Vault of Arcana — membership, Oracle access, Codex redemption, traditions, and more.',
+  alternates: {
+    canonical: 'https://www.vaultofarcana.com/faq',
+  },
+}
+
 export default function FAQPage() {
   const faqs = [
     {

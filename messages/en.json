@@ -580,5 +580,7 @@
   "home.comparison.col_generic_products": "ChatGPT, Claude, Gemini",
   "home.comparison.col_vault_label": "Vault of Arcana",
   "agora.thread.locked": "Thread locked",
-  "agora.thread.add_reply": "Add your reply"
+  "agora.thread.add_reply": "Add your reply",
+  "home.demo.status_demo": "Demo",
+  "home.demo.tradition_tao": "Taoism"
 }

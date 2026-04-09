@@ -16,6 +16,33 @@ export async function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const post = posts.find((p) => p.slug === params.slug);
+  if (!post) return {};
+  const meta = essayMeta[params.slug] || {};
+  const title = post.title || params.slug.replace(/-/g, ' ');
+  return {
+    title,
+    description: meta.description,
+    keywords: meta.keywords,
+    alternates: {
+      canonical: `https://www.vaultofarcana.com/blog/${params.slug}`,
+    },
+    openGraph: {
+      title: `${title} | Vault of Arcana`,
+      description: meta.description,
+      url: `https://www.vaultofarcana.com/blog/${params.slug}`,
+      type: 'article',
+      images: [{ url: `/images/blog/${params.slug}/cover.png`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | Vault of Arcana`,
+      description: meta.description,
+    },
+  };
+}
+
 const essayMeta: Record<string, { description: string; keywords: string[] }> = {
   'dmt-hyperbolic-mind': {
     description: 'Explore the geometry of DMT hyperspace — hyperbolic manifolds, entity encounters, and the mathematics of visionary states. A treatise from Vault of Arcana.',

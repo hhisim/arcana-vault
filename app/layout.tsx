@@ -7,10 +7,14 @@ import StickyCTA from './components/StickyCTA'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
-  title: 'Vault of Arcana',
+  metadataBase: new URL('https://www.vaultofarcana.com'),
+  title: {
+    default: 'Vault of Arcana — Living Mystery School',
+    template: '%s | Vault of Arcana',
+  },
   description: 'A living mystery school built from rare archives, curated datasets, symbolic intelligence, and the collaboration of Hakan Hisim + PRIME.',
   openGraph: {
-    title: 'Vault of Arcana',
+    title: 'Vault of Arcana — Living Mystery School',
     description: 'A living mystery school built from 30 years of esoteric archives, curated datasets, and symbolic intelligence.',
     url: 'https://www.vaultofarcana.com',
     siteName: 'Vault of Arcana',
