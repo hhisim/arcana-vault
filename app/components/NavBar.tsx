@@ -40,7 +40,7 @@ export default function NavBar() {
 
   const libraryDropdownLinks = [
     { href: '/library', label: t(SITEDICT.nav.library) },
-    { href: '/journal', label: t(SITEDICT.nav.journalNav) },
+    { href: '/journal', label: t(SITEDICT.nav.journal) },
     { href: '/inquiry', label: t(SITEDICT.nav.inquiry) },
     { href: '/agora', label: t(SITEDICT.nav.agora) },
   ]
