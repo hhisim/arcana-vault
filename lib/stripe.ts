@@ -1,16 +1,3 @@
-import Stripe from 'stripe'
-
-let stripeClient: Stripe | null = null
-
-export function getStripe() {
-  if (!stripeClient) {
-    if (!process.env.STRIPE_SECRET_KEY) throw new Error('STRIPE_SECRET_KEY missing')
-    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2025-02-24.acacia' as Stripe.LatestApiVersion,
-      // Use fetch instead of Node's http module — fixes "connection to Stripe"
-      // errors in Vercel serverless functions.
-      httpClient: Stripe.createFetchHttpClient(),
-    })
-  }
-  return stripeClient
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const stripe: any = null;
+export const getStripe = () => stripe;
