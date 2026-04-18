@@ -230,7 +230,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(201,168,76,0.05),transparent_60%)]"></div>
               <div className="relative">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#c9a84c]/30 bg-[#c9a84c]/10 px-3 py-1 text-xs uppercase tracking-widest text-[#c9a84c]">
-                  Alchemy
+                  {tt({ en:'Alchemy', tr:'Simya', ru:'Алхимия' })}
                 </div>
                 <h3 className="mt-3 font-serif text-3xl text-text-primary">
                   {tt({ en:'Alchemical Philosophy', tr:'Simyasal Felsefe', ru:'Алхимическая философия'})}
@@ -253,7 +253,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(123,94,167,0.05),transparent_60%)]"></div>
               <div className="relative">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#7B5EA7]/30 bg-[#7B5EA7]/10 px-3 py-1 text-xs uppercase tracking-widest text-[#7B5EA7]">
-                  Paradigm Hacker
+                  {tt({ en:'Paradigm Hacker', tr:'Paradigma Korsanı', ru:'Хакер Парадигмы' })}
                 </div>
                 <h3 className="mt-3 font-serif text-3xl text-text-primary">
                   {tt({ en:'Chaos Magick', tr:'Kaos Büyüsü', ru:'Хаосомагия'})}
