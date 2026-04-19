@@ -155,7 +155,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     const tradition = (frontmatter.tradition as string) || 'Ancient';
     const heroImage = frontmatter.hero as string | undefined;
-    const inlineImages = (frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [];
+    const inlineImages = (((frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [])
+      .filter((image): image is { src: string; caption?: string; position?: string } => Boolean(image?.src)));
 
     // Look up post and meta for JSON-LD
     const post = posts.find((p) => p.slug === slug);

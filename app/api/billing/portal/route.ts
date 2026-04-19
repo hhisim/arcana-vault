@@ -10,7 +10,7 @@ function getSiteUrl(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await getCurrentUserLite()
+  const user = await getCurrentUserLite(req.headers.get('Authorization'))
   if (!user) return NextResponse.json({ detail: 'Authentication required' }, { status: 401 })
   const profile = await ensureProfile(user)
   if (!profile.stripe_customer_id) return NextResponse.json({ detail: 'No billing customer found' }, { status: 400 })

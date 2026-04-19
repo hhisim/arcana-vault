@@ -572,11 +572,6 @@ export const SITEDICT = {
       tr: 'Günlük',
       ru: 'Дневник',
     },
-    journal: {
-      en: 'Journal',
-      tr: 'Günlük',
-      ru: 'Дневник',
-    },
     traditions: {
       en: 'Traditions',
       tr: 'Gelenekler',

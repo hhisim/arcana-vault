@@ -14,20 +14,22 @@ export async function GET(
     const { id } = await params
 
     // Increment view count (fire-and-forget)
-    supabase
-      .from('forum_posts')
-      .select('view_count')
-      .eq('id', id)
-      .single()
-      .then(({ data }) => {
+    void (async () => {
+      try {
+        const { data } = await supabase
+          .from('forum_posts')
+          .select('view_count')
+          .eq('id', id)
+          .single()
+
         if (data) {
-          return supabase
+          await supabase
             .from('forum_posts')
             .update({ view_count: data.view_count + 1 })
             .eq('id', id)
         }
-      })
-      .catch(() => {})
+      } catch {}
+    })()
 
     const { data: thread, error } = await supabase
       .from('forum_posts')

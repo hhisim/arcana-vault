@@ -14,6 +14,7 @@ const TRADITION_LABELS: Record<TraditionId, string> = {
   entheogen: 'Esoteric Entheogen',
   sufi: 'Sufi Mystic',
   dreamwalker: 'Dreamwalker',
+  'chaos-magick': 'Chaos Magick',
 }
 
 function MembershipContent() {

@@ -158,7 +158,7 @@ export async function generateTodayContent(): Promise<DailyContent> {
   const content: DailyContent = { date, entries }
 
   // Persist
-  store[date] = { entries }
+  store[date] = { date, entries }
   await writeStore(store)
 
   return content

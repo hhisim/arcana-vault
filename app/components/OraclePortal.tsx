@@ -73,6 +73,7 @@ const WELCOME_MESSAGES: Record<OraclePack, string> = {
   sufi: `Welcome. The Sufi Oracle draws from Rumi, Ibn Arabi, Hafiz, Attar, and the living stream of Islamic mysticism.\n\nYou may ask freely. Or begin with:\n\n**Daily verse** — A verse or hadith illuminated for today.\n**Mystical inquiry** — Questions about tasawwuf, fana, maqam, or the heart's journey.\n**Poetry reflection** — Bring a verse or poem for commentary.\n**Comparative study** — Sufism in dialogue with other mystical traditions.\n\nWhat would you like to explore?`,
   dreamwalker: `Welcome. The Dreamwalker Oracle holds the keys to lucid dreaming, astral projection, and the landscapes between sleep and waking.\n\nYou may ask freely. Or begin with:\n\n**Dream interpretation** — Recall a dream and receive its symbolic reading.\n**Lucid living** — Questions about maintaining awareness through daily life.\n**Astral navigation** — Exploration of non-physical states and their terrain.\n**Shadow integration** — Bringing dreamwork into waking psychological practice.\n\nWhat would you like to explore?`,
   kabbalah: `Welcome. The Kabbalist Oracle draws from over 1,600 texts — Zohar, Sefer Yetzirah, Lurianic Kabbalah, Hermetic Qabalah, the 72 Names, gematria, and the scholarship of Scholem, Idel, and Wolfson.\n\nYou may ask freely. Or begin with:\n\n**Daily Wisdom** — A contemplative piece drawn from the Zohar, the Ari, or the Sefer Yetzirah.\n**Tree of Life** — The ten Sephiroth, the three pillars, and the 22 paths.\n**Gematria** — The numerical structure of Hebrew letters and their hidden meanings.\n**72 Names** — The Shem HaMephorash and its angelic keys.\n**Lurianic System** — Tzimtzum, Shevirat HaKelim, and Tikkun.\n**Meditation** — Hitbodedut, letter permutation, and the Middle Pillar.\n**Hermetic Qabalah** — Golden Dawn, Crowley, Dion Fortune, and B.O.T.A.\n\nWhere shall we begin?`,
+  'chaos-magick': `Welcome. The Chaos Magick Oracle works with sigils, servitors, paradigm shifting, magical record-keeping, and the pragmatic current of modern sorcery.\n\nYou may ask freely. Or begin with:\n\n**Sigil Workshop** — Turn a desire into a compact magical statement and charging approach.\n**Paradigm Shift** — Explore how belief, symbol, and ritual alter perception.\n**Practice Diagnostics** — Bring a working, block, or strange result from your magical experiments.\n**Lineage Study** — Austin Osman Spare, Phil Hine, Peter Carroll, Discordian currents, and adjacent systems.\n\nWhat experiment are you running?`,
 }
 
 const SPREADS: Record<string, { label: string; positions: string[] }> = {
@@ -824,7 +825,7 @@ export default function OraclePortal() {
             </div>
           ) : rightPanelTab === 'crossref' ? (
             /* ── Cross References panel ── */
-            <CrossRefPanel messages={messages} indexReady={!status.loading && !status.error} />
+            <CrossRefPanel messages={messages} indexReady={true} />
           ) : (
             /* ── Menu panel ── */
             <div className="p-4">

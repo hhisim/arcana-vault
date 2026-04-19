@@ -43,7 +43,7 @@ function buildSlugMap() {
 
 // Check if a URL is an internal blog link (no protocol = relative path like /blog/slug)
 function isInternalLink(href: string): boolean {
-  return href && !href.startsWith('http') && !href.startsWith('mailto:')
+  return Boolean(href) && !href.startsWith('http') && !href.startsWith('mailto:')
 }
 
 // Convert heading text to kebab-case anchor key

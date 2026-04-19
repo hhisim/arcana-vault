@@ -13,6 +13,7 @@ const labels: Record<TraditionId, string> = {
   entheogen: 'Esoteric Entheogen',
   sufi: 'Sufi Mystic',
   dreamwalker: 'Dreamwalker',
+  'chaos-magick': 'Chaos Magick',
 }
 
 export default function AccountClient() {
@@ -134,7 +135,7 @@ export default function AccountClient() {
               <button onClick={activateFree} className="rounded-full bg-[var(--primary-gold)] px-4 py-2 text-black">{t('pricing.free.activate')}</button>
             )}
             <button onClick={() => router.push('/pricing')} className="rounded-full border border-white/10 px-4 py-2 text-[var(--text-primary)]">{t('nav.pricing')}</button>
-            {(auth.plan === 'seeker' || auth.plan === 'full') && (
+            {(auth.plan === 'seeker' || auth.plan === 'adept' || auth.plan === 'full') && (
               <button onClick={openPortal} className="rounded-full border border-white/10 px-4 py-2 text-[var(--text-primary)]">{t('account.portal')}</button>
             )}
           </div>

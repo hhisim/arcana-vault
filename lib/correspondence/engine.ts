@@ -9,6 +9,7 @@
  */
 
 import type { CorrespondenceEntry, CrossRefByFamily } from './types'
+export type { CrossRefByFamily } from './types'
 
 // ── Symbolic stopwords (common English + esoteric filler) ──────────────────────
 const STOPWORDS = new Set([
@@ -110,7 +111,6 @@ const TERM_ALIASES: Record<string, string[]> = {
   'caduceus': ['caduceus', 'mercury', 'serpent', 'rod'],
   'ankh': ['ankh', 'life', 'egypt', 'crux'],
   'pentagram': ['pentagram', 'pentacle', 'five elements', 'star'],
-  'hexagram': ['hexagram', 'six', 'macrocosm', 'solomon'],
   'merkaba': ['merkaba', 'merkabah', 'light body', 'chariot'],
   'torus': ['torus', 'donut', 'flow', 'energy flow'],
   'vortex': ['vortex', 'spiral', 'energy', 'dynamic'],

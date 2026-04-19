@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useAuth } from '@/components/auth/AuthProvider'
 import { useSiteI18n } from '@/lib/site-i18n'
@@ -23,6 +24,7 @@ export default function ThreadForm({ defaultCategory = '', onSuccess, onCancel }
   const router = useRouter()
   const { user } = useAuth()
   const [categories, setCategories] = useState<Category[]>([])
+  const [title, setTitle] = useState('')
   const [tags, setTags] = useState('')
   const { t } = useSiteI18n()
   const [content, setContent] = useState('')
@@ -179,7 +181,7 @@ export default function ThreadForm({ defaultCategory = '', onSuccess, onCancel }
       {/* Actions */}
       <div className="flex items-center justify-between pt-2">
         <div className="text-xs text-[#9B93AB]/60 italic">
-          {user ? `Posting as ${user.user_metadata?.full_name || user.email?.split('@')[0] || 'Seeker'}` : 'Sign in to post'}
+          {user ? `Posting as ${user.full_name || user.email?.split('@')[0] || 'Seeker'}` : 'Sign in to post'}
         </div>
         <div className="flex gap-3">
           {onCancel && (

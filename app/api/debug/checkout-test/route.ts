@@ -103,6 +103,7 @@ export async function GET(req: NextRequest) {
   if (!cfg?.stripePriceId) issues.push(`stripePriceId is undefined for plan "${plan}" — NEXT_PUBLIC_STRIPE_PRICE_*_MONTHLY env vars may not be set at BUILD TIME on Vercel`)
   if (cfg?.stripePriceId && !cfg.stripePriceId.startsWith('price_')) issues.push(`stripePriceId "${cfg.stripePriceId}" doesn't start with "price_" — might be base64-encoded or wrong value`)
   if (!process.env.STRIPE_SECRET_KEY) issues.push('STRIPE_SECRET_KEY is missing')
+  if ((results.stripe as { connected?: boolean } | undefined)?.connected === false) issues.push('Stripe client connection failed')
   if (!process.env.NEXT_PUBLIC_SITE_URL) issues.push('NEXT_PUBLIC_SITE_URL is not set')
   if (process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('vaultofarcana') && !process.env.NEXT_PUBLIC_SITE_URL.includes('codexoracle')) {
     issues.push(`NEXT_PUBLIC_SITE_URL is "${process.env.NEXT_PUBLIC_SITE_URL}" — make sure this matches your actual domain`)

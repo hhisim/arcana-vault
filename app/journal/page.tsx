@@ -18,6 +18,7 @@ type LocalConversation = {
   last_message_at: string
   message_count: number
   is_starred: boolean
+  is_archived?: boolean
 }
 
 function lsGet<T>(key: string, fallback: T): T {
@@ -341,7 +342,7 @@ export default function JournalPage() {
           {/* Right: CrossRefPanel */}
           <div className={`w-full md:w-[380px] border-l border-white/8 overflow-hidden flex-shrink-0 ${rightPanelTab === 'crossref' ? '' : 'hidden md:block'}`}>
             <CrossRefPanel
-              messages={convMessages.map(m => ({ role: m.role, text: m.content }))}
+              messages={convMessages.map((m, index) => ({ id: m.id ?? `journal-${index}`, role: m.role, text: m.content ?? m.text ?? '' }))}
               indexReady={!loadingMessages && convMessages.length > 0}
             />
           </div>
@@ -486,7 +487,7 @@ export default function JournalPage() {
   }
 }
 
-function ConvCard({ conv, onOpen, onToggleStar, t }: { conv: Conversation; onOpen: (c: Conversation) => void; onToggleStar: () => void; t: ReturnType<typeof useLang> }) {
+function ConvCard({ conv, onOpen, onToggleStar, t }: { conv: Conversation; onOpen: (c: Conversation) => void; onToggleStar: () => void; t: (keyOrObj: any, fallback?: string, vars?: Record<string, string | number>) => string }) {
   const tInfo = TRADITION_LABELS[conv.tradition] || { icon: '✨', label: conv.tradition, color: '#9B93AB' }
   const dateStr = formatDate(conv.started_at)
   const timeStr = formatTime(conv.started_at)

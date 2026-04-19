@@ -20,8 +20,24 @@ export type Entitlement = {
   trialEndsAt: string | null
   trialDaysRemaining: number | null
   promoSource: string | null
-  // Test mode
+  // Reserved for internal diagnostics; always false in production.
   isTestMode: boolean
+}
+
+const PLAN_ALIASES: Record<string, PlanId> = {
+  guest: 'guest',
+  free: 'free',
+  seeker: 'seeker',
+  adept: 'adept',
+  full: 'full',
+  magister: 'full',
+  seeker_display: 'seeker',
+  adept_display: 'adept',
+}
+
+function normalizePlan(rawPlan: unknown): PlanId {
+  const normalized = String(rawPlan ?? 'guest').trim().toLowerCase().replace(/\s+/g, '_')
+  return PLAN_ALIASES[normalized] ?? 'guest'
 }
 
 function todayRange() {
@@ -78,32 +94,6 @@ export async function ensureProfile(user: { id: string; email?: string | null; u
 export async function getEntitlement(): Promise<Entitlement> {
   const cookieStore = await cookies()
 
-  /* ═══════════════════════════════════════════════════════════
-   * TEST MODE: ?testmode=arcana sets cookie, returns full access
-   * ═══════════════════════════════════════════════════════════ */
-  const isTestMode = cookieStore.get('voa_test_mode')?.value === 'arcana'
-  if (isTestMode) {
-    const user = await getCurrentUserLite()
-    return {
-      isAuthenticated: !!user,
-      userId: user?.id ?? null,
-      email: user?.email ?? null,
-      displayName: null,
-      plan: 'full',
-      selectedTraditions: TRADITIONS,
-      usageUsed: 0,
-      usageLimit: 'unlimited',
-      usageRemaining: 'unlimited',
-      guestTotalUsed: 0,
-      guestTotalRemaining: 999,
-      isTrial: false,
-      trialEndsAt: null,
-      trialDaysRemaining: null,
-      promoSource: null,
-      isTestMode: true,
-    }
-  }
-
   const user = await getCurrentUserLite()
   const admin = getAdminSupabase()
   const guestUsed = Number(cookieStore.get('voa_guest_questions_total')?.value || 0)
@@ -124,14 +114,7 @@ export async function getEntitlement(): Promise<Entitlement> {
   /* ═══════════════════════════════════════════════════════════
    * TRIAL EXPIRY: auto-downgrade if trial has ended
    * ═══════════════════════════════════════════════════════════ */
-  // Normalize plan — handle display names ('Magister') vs PlanIds ('full')
-  const PLAN_DISPLAY_TO_ID: Record<string, PlanId> = {
-    guest: 'guest', free: 'free', seeker: 'seeker', adept: 'adept',
-    full: 'full', magister: 'full',  // 'Magister' display name → 'full' PlanId
-    seeker_display: 'seeker', adept_display: 'adept',
-  }
-  const rawPlan = profile.plan || 'guest'
-  let plan = PLAN_DISPLAY_TO_ID[rawPlan] ?? 'guest'
+  let plan = normalizePlan(profile.plan)
   let isTrial = false
   let trialEndsAt: string | null = profile.trial_ends_at ?? null
   let trialDaysRemaining: number | null = null

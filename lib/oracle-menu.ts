@@ -10,9 +10,11 @@ export interface MenuAction {
   label: Localized
   kind: MenuActionKind
   nextMenu?: string
+  afterMenu?: string
   prompt?: string
   mode?: OracleMode
   displayText?: Localized
+  description?: Localized
 }
 
 export interface MenuScreen {

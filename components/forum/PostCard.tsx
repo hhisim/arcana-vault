@@ -43,7 +43,7 @@ interface PostCardProps {
     title: string
     content: string
     author_name: string
-    author_id?: string
+    author_id?: string | null
     created_at: string
     upvotes: number
     reply_count: number
@@ -56,7 +56,7 @@ interface PostCardProps {
     id: string
     content: string
     author_name: string
-    author_id?: string
+    author_id?: string | null
     created_at: string
     upvotes: number
   }
@@ -210,7 +210,7 @@ export default function PostCard({
               {post?.view_count !== undefined && (
                 <>
                   <span className="text-xs text-[#9B93AB]">•</span>
-                  <span className="text-xs text-[#9B93AB]">{t('agora.thread.views', { count: post.view_count })}</span>
+                  <span className="text-xs text-[#9B93AB]">{`${post.view_count} views`}</span>
                 </>
               )}
             </div>

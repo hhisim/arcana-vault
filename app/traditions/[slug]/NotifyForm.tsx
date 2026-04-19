@@ -1,6 +1,6 @@
 'use client'
 
-export default function NotifyForm({ traditionName }: { traditionName: string }) {
+export default function NotifyForm({ traditionName }: { traditionName: string; color?: string }) {
   return (
     <form
       onSubmit={(e) => e.preventDefault()}

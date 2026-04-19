@@ -6,6 +6,7 @@ import { useAuth } from '@/components/auth/AuthProvider'
 interface ReplyFormProps {
   postId: string
   onReplyPosted?: (reply: any) => void
+  onSuccess?: () => void
   onCancel?: () => void
   placeholder?: string
   autoFocus?: boolean
@@ -15,6 +16,7 @@ export default function ReplyForm({
   postId,
   onReplyPosted,
   onCancel,
+  onSuccess,
   placeholder = 'Add your voice to this thread...',
   autoFocus = false,
 }: ReplyFormProps) {
@@ -42,6 +44,7 @@ export default function ReplyForm({
       const reply = await res.json()
       setContent('')
       onReplyPosted?.(reply)
+      onSuccess?.()
     } catch (err: any) {
       setError(err.message || 'Something went wrong')
     } finally {
@@ -75,7 +78,7 @@ export default function ReplyForm({
 
       <div className="flex items-center justify-between">
         <div className="text-xs text-[#9B93AB]/60 italic">
-          {user ? `Posting as ${user.user_metadata?.full_name || user.email?.split('@')[0] || 'Seeker'}` : 'Sign in to reply'}
+          {user ? `Posting as ${user.full_name || user.email?.split('@')[0] || 'Seeker'}` : 'Sign in to reply'}
         </div>
         <div className="flex gap-3">
           {onCancel && (

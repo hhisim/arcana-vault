@@ -97,24 +97,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let mounted = true
     const supabase = getBrowserSupabase()
 
-    // ── Test mode: ?testmode=arcana sets cookie, ?testmode=off clears ──
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search)
-      const tm = params.get('testmode')
-      if (tm === 'arcana') {
-        document.cookie = 'voa_test_mode=arcana; path=/; max-age=86400; samesite=lax'
-        // Clean the URL
-        params.delete('testmode')
-        const clean = params.toString()
-        window.history.replaceState({}, '', window.location.pathname + (clean ? '?' + clean : ''))
-      } else if (tm === 'off') {
-        document.cookie = 'voa_test_mode=; path=/; max-age=0'
-        params.delete('testmode')
-        const clean = params.toString()
-        window.history.replaceState({}, '', window.location.pathname + (clean ? '?' + clean : ''))
-      }
-    }
-
     void refresh()
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (!mounted) return
