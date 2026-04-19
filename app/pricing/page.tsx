@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthProvider'
-import { PLAN_CONFIG, PlanId } from '@/lib/plans'
+import { PLAN_CONFIG, PlanId, LAUNCH_DISCOUNT_PERCENT, getLaunchPrice, formatUsd } from '@/lib/plans'
 import { useSiteI18n } from '@/lib/site-i18n'
 
 async function postJson(url: string, body?: unknown) {
@@ -81,7 +81,7 @@ export default function PricingPage() {
       <div className="mb-8 rounded-2xl border border-[var(--primary-gold)]/30 bg-[var(--primary-gold)]/5 p-6 text-center">
         <p className="text-[var(--primary-gold)] text-sm uppercase tracking-widest mb-2">{t('pricing.launch.banner')}</p>
         <p className="text-[var(--text-primary)] text-2xl font-serif">{t('pricing.launch.headline')}</p>
-        <p className="text-[var(--text-secondary)] mt-2">{t('pricing.launch.code')} <span className="text-[var(--primary-gold)] font-mono font-bold">LAUNCH30</span> {t('pricing.launch.at_checkout')}</p>
+        <p className="text-[var(--text-secondary)] mt-2">{t('pricing.launch.code')} <span className="text-[var(--primary-gold)] font-mono font-bold">LAUNCH30</span> {t('pricing.launch.at_checkout')} — {LAUNCH_DISCOUNT_PERCENT}% off your first 3 months.</p>
       </div>
 
       {/* Feature comparison table */}
@@ -91,9 +91,9 @@ export default function PricingPage() {
             <tr className="border-b border-white/10">
               <th className="text-left py-3 pr-4 text-[#9B93AB] font-medium">Feature</th>
               <th className="text-center py-3 px-4 text-[#9B93AB] font-medium">Free</th>
-              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Seeker $8</th>
-              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Adept $19</th>
-              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Magister $29</th>
+              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Seeker {formatUsd(getLaunchPrice(PLAN_CONFIG.seeker.priceMonthly))}</th>
+              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Adept {formatUsd(getLaunchPrice(PLAN_CONFIG.adept.priceMonthly))}</th>
+              <th className="text-center py-3 px-4 text-[var(--primary-gold)] font-medium">Magister {formatUsd(getLaunchPrice(PLAN_CONFIG.full.priceMonthly))}</th>
             </tr>
           </thead>
           <tbody className="text-[var(--text-secondary)]">
@@ -123,10 +123,20 @@ export default function PricingPage() {
                 </div>
               )}
               <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">{label.name}</div>
-              <div className="flex items-baseline gap-1">
-                <span className="font-serif text-3xl text-[var(--text-primary)]">{cfg.priceMonthly ? `$${cfg.priceMonthly}` : t('plans.free', 'Free')}</span>
-                {cfg.priceMonthly && <span className="text-[var(--text-secondary)] text-sm">/month</span>}
+              <div className="flex items-baseline gap-2 flex-wrap">
+                {cfg.priceMonthly ? (
+                  <>
+                    <span className="font-serif text-3xl text-[var(--text-primary)]">{formatUsd(getLaunchPrice(cfg.priceMonthly))}</span>
+                    <span className="text-[var(--text-secondary)] text-sm">/month</span>
+                    <span className="text-xs text-[var(--text-secondary)] line-through opacity-70">{formatUsd(cfg.priceMonthly)}</span>
+                  </>
+                ) : (
+                  <span className="font-serif text-3xl text-[var(--text-primary)]">{t('plans.free', 'Free')}</span>
+                )}
               </div>
+              {cfg.priceMonthly && (
+                <div className="text-xs text-[var(--primary-gold)]">Launch price with code LAUNCH30 for the first 3 months.</div>
+              )}
               <div className="text-[var(--text-secondary)] leading-7">{label.desc}</div>
               <div className="text-sm text-[var(--text-primary)]">
                 {cfg.slots === 'all'

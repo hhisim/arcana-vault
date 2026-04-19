@@ -56,7 +56,7 @@ export default function RedeemEtsyPage() {
         password,
         options: {
           data: { full_name: name },
-          emailRedirectTo: `${window.location.origin}/auth/callback?promo=etsy&plan=seeker&days=30`,
+          emailRedirectTo: `${window.location.origin}/api/auth/callback?promo=etsy&plan=seeker&days=30`,
         },
       })
 

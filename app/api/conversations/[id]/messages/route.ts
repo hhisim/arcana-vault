@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminSupabase } from '@/lib/supabase/admin'
+import { getServerSupabase } from '@/lib/supabase/server'
 import { addMessage, getConversationWithMessages, updateConversation } from '@/lib/supabase/conversations'
 
 type RouteContext = { params: Promise<{ id: string }> }
 
 export async function GET(_request: NextRequest, context: RouteContext) {
-  const supabase = getAdminSupabase()
+  const supabase = await getServerSupabase()
 
   // Get authenticated user from session cookie
   const { data: { user }, error: authErr } = await supabase.auth.getUser()
@@ -27,7 +27,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 }
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  const supabase = getAdminSupabase()
+  const supabase = await getServerSupabase()
 
   // Get authenticated user from session cookie
   const { data: { user }, error: authErr } = await supabase.auth.getUser()

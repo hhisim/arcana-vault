@@ -12,6 +12,18 @@ export type PlanConfig = {
   priceMonthly?: number
 }
 
+export const LAUNCH_DISCOUNT_PERCENT = 30
+
+export function getLaunchPrice(priceMonthly?: number) {
+  if (!priceMonthly) return null
+  return Number((priceMonthly * (1 - LAUNCH_DISCOUNT_PERCENT / 100)).toFixed(2))
+}
+
+export function formatUsd(amount?: number | null) {
+  if (amount == null) return null
+  return `$${amount.toFixed(2)}`
+}
+
 export const TRADITIONS: TraditionId[] = ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker', 'chaos-magick']
 
 // New V2 env vars (set on Vercel) > hardcoded fallback > old env vars

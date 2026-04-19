@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useSiteI18n } from '@/lib/site-i18n'
 import TraditionPicker from '@/app/components/TraditionPicker'
-import { PLAN_CONFIG, PlanId, TraditionId } from '@/lib/plans'
+import { PLAN_CONFIG, PlanId, TraditionId, getLaunchPrice, formatUsd } from '@/lib/plans'
 
 /* ─── Password visibility toggle ─────────────────────────── */
 function EyeIcon({ open }: { open: boolean }) {
@@ -432,7 +432,7 @@ function SignupForm() {
         </div>
         {pendingPlan !== 'free' && (
           <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">
-            Signing up for {PLAN_CONFIG[pendingPlan]?.name || pendingPlan} (${PLAN_CONFIG[pendingPlan]?.priceMonthly}/mo)
+            Signing up for {PLAN_CONFIG[pendingPlan]?.name || pendingPlan} ({formatUsd(getLaunchPrice(PLAN_CONFIG[pendingPlan]?.priceMonthly))}/mo with LAUNCH30)
           </div>
         )}
         <form onSubmit={onSignup} className="space-y-4">

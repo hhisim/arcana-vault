@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminSupabase } from '@/lib/supabase/admin'
+import { getServerSupabase } from '@/lib/supabase/server'
 import { createConversation, getUserConversations } from '@/lib/supabase/conversations'
 
 export async function GET(request: NextRequest) {
-  const supabase = getAdminSupabase()
+  const supabase = await getServerSupabase()
 
   // Get authenticated user from session cookie
   const { data: { user }, error: authErr } = await supabase.auth.getUser()
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = getAdminSupabase()
+  const supabase = await getServerSupabase()
 
   // Get authenticated user from session cookie
   const { data: { user }, error: authErr } = await supabase.auth.getUser()

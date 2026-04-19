@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminSupabase } from '@/lib/supabase/admin'
-import { updateConversation } from '@/lib/supabase/conversations'
+import { getServerSupabase } from '@/lib/supabase/server'
+import { getConversationWithMessages, updateConversation } from '@/lib/supabase/conversations'
 
 type RouteContext = { params: Promise<{ id: string }> }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
-  const supabase = getAdminSupabase()
+  const supabase = await getServerSupabase()
 
   const { data: { user }, error: authErr } = await supabase.auth.getUser()
   if (authErr || !user) {
@@ -13,6 +13,15 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   }
 
   const { id } = await context.params
+
+  try {
+    const result = await getConversationWithMessages(id)
+    if (!result || result.conversation.user_id !== user.id) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+  } catch {
+    return NextResponse.json({ error: 'Conversation not found' }, { status: 404 })
+  }
 
   let body: Record<string, unknown>
   try {
