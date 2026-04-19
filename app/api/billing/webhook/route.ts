@@ -4,7 +4,6 @@ import { getAdminSupabase } from '@/lib/supabase/admin'
 import { planFromPriceId, PlanId } from '@/lib/plans'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-02-25.clover',
   httpClient: Stripe.createFetchHttpClient(),
 })
 
