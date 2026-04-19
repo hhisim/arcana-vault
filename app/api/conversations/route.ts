@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSupabase } from '@/lib/supabase/server'
 import { createConversation, getUserConversations } from '@/lib/supabase/conversations'
+import { ensureProfile } from '@/lib/account'
 
 export async function GET(request: NextRequest) {
   const supabase = await getServerSupabase()
@@ -44,6 +45,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    await ensureProfile(user)
     const conversation = await createConversation(user.id, tradition, mode, { title, summary, daily_type })
     return NextResponse.json(conversation, { status: 201 })
   } catch (err: any) {
