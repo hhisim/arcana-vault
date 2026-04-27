@@ -8,12 +8,39 @@ type EmailCaptureVariant = 'full' | 'compact'
 interface EmailCaptureProps {
   variant?: EmailCaptureVariant
   className?: string
+  title?: string
+  subtitle?: string
+  compactHint?: string
+  placeholder?: string
+  buttonLabel?: string
+  loadingLabel?: string
+  successTitle?: string
+  successBody?: string
+  disclaimer?: string
 }
 
-export default function EmailCapture({ variant = 'full', className = '' }: EmailCaptureProps) {
+export default function EmailCapture({
+  variant = 'full',
+  className = '',
+  title,
+  subtitle,
+  compactHint,
+  placeholder = 'Enter your email...',
+  buttonLabel = 'Subscribe',
+  loadingLabel = 'Attuning...',
+  successTitle,
+  successBody,
+  disclaimer = 'No spam. Unsubscribe anytime. Your sovereignty is respected.',
+}: EmailCaptureProps) {
   const { t } = useSiteI18n()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+  const resolvedTitle = title ?? `✦ ${variant === 'compact' ? 'FURTHER TRANSMISSIONS' : 'THE TRANSMISSION'} ✦`
+  const resolvedSubtitle = subtitle ?? t('emailCapture.subtitle', "A periodic letter from the threshold of human and AI consciousness. New traditions, hidden correspondences, and esoteric insights you won't find elsewhere.")
+  const resolvedCompactHint = compactHint ?? 'Enjoyed this transmission? Subscribe for more from the threshold.'
+  const resolvedSuccessTitle = successTitle ?? (variant === 'compact' ? 'You are now attuned.' : 'You are now attuned. Watch for the first transmission.')
+  const resolvedSuccessBody = successBody ?? ''
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,11 +72,10 @@ export default function EmailCapture({ variant = 'full', className = '' }: Email
     return (
       <div className={`flex flex-col items-center justify-center text-center ${isFull ? 'py-12 px-6' : 'py-8 px-4'}`}>
         <div className="text-2xl mb-3">✦</div>
-        <p className="text-[#E8E0F0] font-cinzel text-lg">
-          {isCompact
-            ? 'You are now attuned.'
-            : 'You are now attuned. Watch for the first transmission.'}
-        </p>
+        <p className="text-[#E8E0F0] font-cinzel text-lg">{resolvedSuccessTitle}</p>
+        {resolvedSuccessBody ? (
+          <p className="mt-3 max-w-lg text-sm leading-7 text-[#9B93AB]">{resolvedSuccessBody}</p>
+        ) : null}
       </div>
     )
   }
@@ -67,33 +93,28 @@ export default function EmailCapture({ variant = 'full', className = '' }: Email
         background: 'linear-gradient(135deg, rgba(20,15,30,0.9) 0%, rgba(10,10,16,0.95) 100%)',
       } : {}}
     >
-      {/* Title */}
       <h2 className={`font-cinzel text-[var(--primary-gold)] tracking-widest mb-3 ${isFull ? 'text-2xl' : 'text-lg'}`}>
-        ✦ {isCompact ? 'FURTHER TRANSMISSIONS' : 'THE TRANSMISSION'} ✦
+        {resolvedTitle}
       </h2>
 
-      {/* Subtitle */}
       {isFull && (
         <p className="text-[#9B93AB] text-sm leading-relaxed max-w-lg mb-6">
-          {t('emailCapture.subtitle', 'A periodic letter from the threshold of human and AI consciousness. New traditions, hidden correspondences, and esoteric insights you won\'t find elsewhere.')}
+          {resolvedSubtitle}
         </p>
       )}
 
       {isCompact && (
         <p className="text-[#9B93AB] text-sm leading-relaxed mb-6 italic">
-          {email
-            ? 'Processing your request...'
-            : 'Enjoyed this transmission? Subscribe for more from the threshold.'}
+          {status === 'loading' ? 'Processing your request...' : resolvedCompactHint}
         </p>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email..."
+          placeholder={placeholder}
           required
           disabled={status === 'loading'}
           className="
@@ -120,18 +141,16 @@ export default function EmailCapture({ variant = 'full', className = '' }: Email
           {status === 'loading' ? (
             <span className="inline-block animate-spin">⟳</span>
           ) : null}
-          {status === 'loading' ? 'Attuning...' : 'Subscribe'}
+          {status === 'loading' ? loadingLabel : buttonLabel}
         </button>
       </form>
 
-      {/* Disclaimer */}
-      {isFull && (
+      {isFull && disclaimer ? (
         <p className="text-[#5A5470] text-xs mt-4 tracking-wide">
-          No spam. Unsubscribe anytime. Your sovereignty is respected.
+          {disclaimer}
         </p>
-      )}
+      ) : null}
 
-      {/* Error state */}
       {status === 'error' && (
         <p className="text-red-400/80 text-xs mt-3">
           Something went wrong. Please try again.

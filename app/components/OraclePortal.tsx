@@ -20,6 +20,7 @@ import { getMenuScreen, MenuAction, TAROT_ALL_CARDS } from '@/lib/oracle-menu'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import type { Conversation } from '@/lib/supabase/conversations'
 import CrossRefPanel from '@/components/CrossRefPanel'
+import GrowthFunnelCta from '@/components/GrowthFunnelCta'
 
 type VoiceStyle = 'female' | 'male'
 type ContextState = { userVisible: string; prompt: string; answer: string }
@@ -226,6 +227,8 @@ export default function OraclePortal() {
   const menu = useMemo(() => getMenuScreen(pack, menuKey), [pack, menuKey])
   const visibleMessages = showOlder ? messages : messages.slice(0, 3)
   const hiddenCount = Math.max(messages.length - visibleMessages.length, 0)
+  const latestOracleIndex = visibleMessages.findIndex((message) => message.role === 'oracle')
+  const oracleMessageCount = messages.filter((message) => message.role === 'oracle').length
 
   useEffect(() => {
     if (typeof navigator === 'undefined') return
@@ -695,13 +698,24 @@ export default function OraclePortal() {
               </div>
             ) : (
               <div className="space-y-4">
-                {visibleMessages.map((message) => message.role === 'user' ? (
-                  <div key={message.id} className="user-bubble ml-auto max-w-[85%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--primary-gold)]">You</div><div className="whitespace-pre-wrap text-sm text-text-primary">{message.text}</div></div>
-                ) : message.role === 'system' ? (
-                  <div key={message.id} className="oracle-bubble max-w-[85%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">System</div><div className="italic text-sm text-[#E05C5C]">{normalizeError(message.text)}</div></div>
-                ) : (
-                  <div key={message.id} className="oracle-bubble max-w-[90%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">{currentPack.title[lang]}</div><OracleMarkdown text={message.text} />{message.audioUrl ? <AudioBubble src={message.audioUrl} /> : null}</div>
-                ))}
+                {visibleMessages.map((message, index) => {
+                  if (message.role === 'user') {
+                    return <div key={message.id} className="user-bubble ml-auto max-w-[85%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--primary-gold)]">You</div><div className="whitespace-pre-wrap text-sm text-text-primary">{message.text}</div></div>
+                  }
+
+                  if (message.role === 'system') {
+                    return <div key={message.id} className="oracle-bubble max-w-[85%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">System</div><div className="italic text-sm text-[#E05C5C]">{normalizeError(message.text)}</div></div>
+                  }
+
+                  const shouldShowGrowthCta = index === latestOracleIndex && (!userId || oracleMessageCount === 1)
+
+                  return (
+                    <div key={message.id}>
+                      <div className="oracle-bubble max-w-[90%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">{currentPack.title[lang]}</div><OracleMarkdown text={message.text} />{message.audioUrl ? <AudioBubble src={message.audioUrl} /> : null}</div>
+                      {shouldShowGrowthCta ? <GrowthFunnelCta className="max-w-[90%]" /> : null}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>

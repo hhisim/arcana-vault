@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useSiteI18n } from '@/lib/site-i18n';
+import GrowthFunnelCta from '@/components/GrowthFunnelCta';
 
 // FALLBACK_QUESTION and PRESET_QUESTIONS are now translated via messages/*.json
 // Using empty strings as defaults — will be replaced by t() at render time
@@ -245,6 +246,12 @@ export default function DemoOracle() {
               </form>
             </div>
           )}
+
+          {(status === 'demo' || status === 'fallback') && !isSubmitting && !error ? (
+            <div className="px-6 pb-2">
+              <GrowthFunnelCta />
+            </div>
+          ) : null}
 
           {/* Footer */}
           <div className="px-6 py-4 border-t border-white/5 flex items-center justify-between">
