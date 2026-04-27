@@ -69,25 +69,24 @@ function addDebug(msg: string) {
 
 /* ─── Email verification banner ──────────────────────────── */
 function VerifyEmailBanner({ email }: { email: string }) {
+  const { t } = useSiteI18n()
   return (
     <section className="mx-auto max-w-xl px-6 py-20">
       <div className="glass-card p-8 space-y-6 text-center">
         <div className="text-5xl">✉</div>
-        <h1 className="font-serif text-3xl text-[var(--text-primary)]">Check Your Email</h1>
+        <h1 className="font-serif text-3xl text-[var(--text-primary)]">{t({ en: 'Check Your Email', tr: 'E-postanı kontrol et', ru: 'Проверьте свою почту' })}</h1>
         <p className="text-[var(--text-secondary)] leading-7">
-          We sent a verification link to <span className="text-[var(--text-primary)] font-medium">{email}</span>.
-          Click the link in the email to activate your account, then come back and log in.
+          {t({ en: 'We sent a verification link to', tr: 'Doğrulama bağlantısını şu adrese gönderdik:', ru: 'Мы отправили ссылку для подтверждения на адрес' })} <span className="text-[var(--text-primary)] font-medium">{email}</span>.
+          {t({ en: 'Click the link in the email to activate your account, then come back and log in.', tr: 'Hesabını etkinleştirmek için e-postadaki bağlantıya tıkla, sonra geri dönüp giriş yap.', ru: 'Нажмите ссылку в письме, чтобы активировать аккаунт, затем вернитесь и войдите.' })}
         </p>
         <div className="text-[var(--text-secondary)] text-sm space-y-2">
-          <p>The link will expire in 24 hours.</p>
-          <p>If you don't see it, check your spam folder.</p>
+          <p>{t({ en: 'The link will expire in 24 hours.', tr: 'Bağlantı 24 saat içinde sona erecek.', ru: 'Ссылка истечёт через 24 часа.' })}</p>
+          <p>{t({ en: "If you don't see it, check your spam folder.", tr: 'Görmüyorsan spam klasörünü kontrol et.', ru: 'Если письмо не видно, проверьте папку спам.' })}</p>
         </div>
         <a
           href="/login"
           className="inline-block rounded-full bg-[var(--primary-gold)] px-6 py-3 text-black font-medium"
-        >
-          Go to Login
-        </a>
+        >{t({ en: 'Go to Login', tr: 'Girişe git', ru: 'Перейти ко входу' })}</a>
       </div>
     </section>
   )
@@ -124,7 +123,7 @@ function SignupForm() {
   const cfg = PLAN_CONFIG[pendingPlan]
   const maxSlots = cfg?.slots === 'all' ? 99 : (cfg?.slots ?? 1)
   const isFreePlan = pendingPlan === 'free'
-  const sourceLabel = source === 'oracle-reading' ? 'Save this reading and keep the thread alive.' : source === 'daily-questions' ? 'Start the free daily-practice path.' : source === 'arcana-initiation' ? 'Turn the initiation into an ongoing practice.' : 'Create your free Vault and continue daily.'
+  const sourceLabel = source === 'oracle-reading' ? t({ en: 'Save this reading and keep the thread alive.', tr: 'Bu okumayı kaydet ve izi canlı tut.', ru: 'Сохраните это чтение и удерживайте нить живой.' }) : source === 'daily-questions' ? t({ en: 'Start the free daily-practice path.', tr: 'Ücretsiz günlük pratik yoluna başla.', ru: 'Начните бесплатный путь ежедневной практики.' }) : source === 'arcana-initiation' ? t({ en: 'Turn the initiation into an ongoing practice.', tr: 'İnisiyasyonu sürekli bir pratiğe dönüştür.', ru: 'Превратите инициацию в постоянную практику.' }) : t({ en: 'Create your free Vault and continue daily.', tr: 'Ücretsiz Vault’unu oluştur ve günlük devam et.', ru: 'Создайте своё бесплатное Хранилище и продолжайте ежедневно.' })
 
   const pushDebug = useCallback((msg: string) => {
     addDebug(msg)
@@ -177,8 +176,8 @@ function SignupForm() {
     debugLog.length = 0
     setDebugLines([])
 
-    if (!email.trim()) { setError('Please enter your email.'); setLoading(false); inFlight.current = false; return }
-    if (!password) { setError('Please enter your password.'); setLoading(false); inFlight.current = false; return }
+    if (!email.trim()) { setError(t({ en: 'Please enter your email.', tr: 'Lütfen e-postanı gir.', ru: 'Пожалуйста, введите email.' })); setLoading(false); inFlight.current = false; return }
+    if (!password) { setError(t({ en: 'Please enter your password.', tr: 'Lütfen şifreni gir.', ru: 'Пожалуйста, введите пароль.' })); setLoading(false); inFlight.current = false; return }
 
     pushDebug(`signIn: email=${email}`)
     try {
@@ -230,10 +229,10 @@ function SignupForm() {
     setDebugLines([])
 
     // Client-side validation
-    if (!name.trim()) { setError('Please enter your name.'); setLoading(false); inFlight.current = false; return }
-    if (!email.trim()) { setError('Please enter your email.'); setLoading(false); inFlight.current = false; return }
-    if (password.length < 6) { setError('Password must be at least 6 characters.'); setLoading(false); inFlight.current = false; return }
-    if (password !== confirmPassword) { setError('Passwords do not match.'); setLoading(false); inFlight.current = false; return }
+    if (!name.trim()) { setError(t({ en: 'Please enter your name.', tr: 'Lütfen adını gir.', ru: 'Пожалуйста, введите имя.' })); setLoading(false); inFlight.current = false; return }
+    if (!email.trim()) { setError(t({ en: 'Please enter your email.', tr: 'Lütfen e-postanı gir.', ru: 'Пожалуйста, введите email.' })); setLoading(false); inFlight.current = false; return }
+    if (password.length < 6) { setError(t({ en: 'Password must be at least 6 characters.', tr: 'Şifre en az 6 karakter olmalı.', ru: 'Пароль должен содержать не менее 6 символов.' })); setLoading(false); inFlight.current = false; return }
+    if (password !== confirmPassword) { setError(t({ en: 'Passwords do not match.', tr: 'Şifreler eşleşmiyor.', ru: 'Пароли не совпадают.' })); setLoading(false); inFlight.current = false; return }
 
     pushDebug(`signUp: plan=${pendingPlan}, email=${email}`)
 
@@ -359,14 +358,14 @@ function SignupForm() {
           <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">{t('plans.' + pendingPlan)}</div>
           <h1 className="font-serif text-4xl text-[var(--text-primary)]">{t('traditionsPicker.title')}</h1>
           <p className="text-[var(--text-secondary)] text-sm">
-            Choose up to {maxSlots} tradition{maxSlots > 1 ? 's' : ''} for your {t('plans.' + pendingPlan)} plan.
+            {t({ en: `Choose up to ${maxSlots} tradition${maxSlots > 1 ? 's' : ''} for your ${t('plans.' + pendingPlan)} plan.`, tr: `${t('plans.' + pendingPlan)} planın için en fazla ${maxSlots} gelenek seç.`, ru: `Выберите до ${maxSlots} традиций для плана ${t('plans.' + pendingPlan)}.` })}
           </p>
           <TraditionPicker selected={selectedTraditions} onChange={setSelectedTraditions} max={maxSlots} />
           {error && <div className="rounded-xl bg-red-900/50 border border-red-500 p-4 text-red-200 text-sm">{error}</div>}
           {debugPanel}
           <button onClick={onSaveAndCheckout} disabled={loading}
             className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50">
-            {loading ? 'Processing…' : pendingPlan !== 'free' ? t('pricing.checkout') : t('account.save')}
+            {loading ? t({ en: 'Processing…', tr: 'İşleniyor…', ru: 'Обрабатывается…' }) : pendingPlan !== 'free' ? t('pricing.checkout') : t('account.save')}
           </button>
         </div>
       </section>
@@ -379,8 +378,8 @@ function SignupForm() {
       <section className="mx-auto max-w-xl px-6 py-20">
         <div className="glass-card p-8 space-y-6">
           <div>
-            <h1 className="font-serif text-4xl text-[var(--text-primary)]">Welcome back</h1>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">Sign in to reopen your Vault, recover saved transmissions, and continue your daily questions.</p>
+            <h1 className="font-serif text-4xl text-[var(--text-primary)]">{t({ en: 'Welcome back', tr: 'Tekrar hoş geldin', ru: 'С возвращением' })}</h1>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">{t({ en: 'Sign in to reopen your Vault, recover saved transmissions, and continue your daily questions.', tr: 'Vault’unu yeniden açmak, kayıtlı aktarımları geri almak ve günlük sorularına devam etmek için giriş yap.', ru: 'Войдите, чтобы снова открыть своё Хранилище, вернуть сохранённые передачи и продолжить ежедневные вопросы.' })}</p>
           </div>
           <form onSubmit={onLogin} className="space-y-4">
             <input
@@ -403,20 +402,20 @@ function SignupForm() {
               disabled={loading}
               className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50"
             >
-              {loading ? 'Signing in…' : 'Sign in'}
+              {loading ? t({ en: 'Signing in…', tr: 'Giriş yapılıyor…', ru: 'Выполняется вход…' }) : t({ en: 'Sign in', tr: 'Giriş yap', ru: 'Войти' })}
             </button>
           </form>
           <div className="text-center space-y-2">
             <p className="text-sm text-[var(--text-secondary)]">
-              New to the Vault?{' '}
+              {t({ en: 'New to the Vault?', tr: 'Vault’ta yeni misin?', ru: 'Вы впервые в Vault?' })}{' '}
               <button onClick={() => { setMode('signup'); setError(''); }} className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
-                Create an account
+                {t({ en: 'Create an account', tr: 'Hesap oluştur', ru: 'Создать аккаунт' })}
               </button>
             </p>
             <p className="text-xs text-[var(--text-secondary)]">
-              Not sure what to ask?{' '}
+              {t({ en: 'Not sure what to ask?', tr: 'Ne soracağını bilmiyor musun?', ru: 'Не уверены, что спросить?' })}{' '}
               <a href="/inquiry" className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
-                See example prompts
+                {t({ en: 'See example prompts', tr: 'Örnek soruları gör', ru: 'Посмотреть примеры prompts' })}
               </a>
             </p>
           </div>
@@ -430,22 +429,22 @@ function SignupForm() {
     <section className="mx-auto max-w-xl px-6 py-20">
       <div className="glass-card p-8 space-y-6">
         <div>
-          <h1 className="font-serif text-4xl text-[var(--text-primary)]">Begin your journey</h1>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">Create your Vault of Arcana account</p>
+          <h1 className="font-serif text-4xl text-[var(--text-primary)]">{t({ en: 'Create your free Vault', tr: 'Ücretsiz Vault’unu oluştur', ru: 'Создайте своё бесплатное Хранилище' })}</h1>
+          <p className="mt-2 text-sm text-[var(--text-secondary)]">{sourceLabel}</p>
         </div>
         {isFreePlan && (
           <div className="rounded-2xl border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.06)] p-4 text-sm leading-7 text-[#D7CEE8]">
-            <p className="font-medium text-[#E8E0F0]">Free account unlocks the real path:</p>
+            <p className="font-medium text-[#E8E0F0]">{t({ en: 'Free account unlocks the real path:', tr: 'Ücretsiz hesap asıl yolu açar:', ru: 'Бесплатный аккаунт открывает настоящий путь:' })}</p>
             <ul className="mt-2 space-y-1">
-              <li>• save this transmission to your Vault</li>
-              <li>• receive 12 daily questions in your chosen tradition</li>
-              <li>• return to Tarot, Tao, Tantra, dreams, symbols, names, and the Correspondence Codex without starting from zero</li>
+              <li>• {t({ en: 'save this transmission to your Vault', tr: 'bu aktarımı Vault’una kaydet', ru: 'сохраните эту передачу в своё Хранилище' })}</li>
+              <li>• {t({ en: 'receive 12 daily questions in your chosen tradition', tr: 'seçtiğin gelenekte 12 günlük soru al', ru: 'получайте 12 ежедневных вопросов в выбранной традиции' })}</li>
+              <li>• {t({ en: 'return to Tarot, Tao, Tantra, dreams, symbols, names, and the Correspondence Codex without starting from zero', tr: 'Tarot, Tao, Tantra, rüyalar, semboller, isimler ve Correspondence Codex’e sıfırdan başlamadan geri dön', ru: 'возвращайтесь к Таро, Дао, Тантре, снам, символам, именам и Кодексу Соответствий без старта с нуля' })}</li>
             </ul>
           </div>
         )}
         {pendingPlan !== 'free' && (
           <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">
-            Signing up for {PLAN_CONFIG[pendingPlan]?.name || pendingPlan} ({formatUsd(getLaunchPrice(PLAN_CONFIG[pendingPlan]?.priceMonthly))}/mo with LAUNCH30)
+            {t({ en: `Signing up for ${PLAN_CONFIG[pendingPlan]?.name || pendingPlan} (${formatUsd(getLaunchPrice(PLAN_CONFIG[pendingPlan]?.priceMonthly))}/mo with LAUNCH30)`, tr: `${PLAN_CONFIG[pendingPlan]?.name || pendingPlan} için kayıt oluyorsun (${formatUsd(getLaunchPrice(PLAN_CONFIG[pendingPlan]?.priceMonthly))}/ay, LAUNCH30 ile)`, ru: `Регистрация на план ${PLAN_CONFIG[pendingPlan]?.name || pendingPlan} (${formatUsd(getLaunchPrice(PLAN_CONFIG[pendingPlan]?.priceMonthly))}/мес с LAUNCH30)` })}
           </div>
         )}
         <form onSubmit={onSignup} className="space-y-4">
@@ -470,12 +469,12 @@ function SignupForm() {
             onChange={setPassword}
           />
           <PasswordInput
-            placeholder="Confirm password"
+            placeholder={t({ en: 'Confirm password', tr: 'Şifreyi onayla', ru: 'Подтвердите пароль' })}
             value={confirmPassword}
             onChange={setConfirmPassword}
           />
           {password && confirmPassword && password !== confirmPassword && (
-            <div className="text-[#E05C5C] text-sm">Passwords do not match</div>
+            <div className="text-[#E05C5C] text-sm">{t({ en: 'Passwords do not match', tr: 'Şifreler eşleşmiyor', ru: 'Пароли не совпадают' })}</div>
           )}
           {error && <div className="rounded-xl bg-red-900/50 border border-red-500 p-4 text-red-200 text-sm">{error}</div>}
           {debugPanel}
@@ -483,20 +482,20 @@ function SignupForm() {
             disabled={loading || (!!confirmPassword && password !== confirmPassword)}
             className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50"
           >
-            {loading ? 'Processing — do not close this page…' : t('auth.submit')}
+            {loading ? t({ en: 'Opening your Vault — do not close this page…', tr: 'Vault’un açılıyor — bu sayfayı kapatma…', ru: 'Ваше Хранилище открывается — не закрывайте эту страницу…' }) : isFreePlan ? t({ en: 'Create free account', tr: 'Ücretsiz hesap oluştur', ru: 'Создать бесплатный аккаунт' }) : t('auth.submit')}
           </button>
         </form>
         <div className="text-center space-y-2">
           <p className="text-sm text-[var(--text-secondary)]">
-            Already have an account?{' '}
+            {t({ en: 'Already have an account?', tr: 'Zaten hesabın var mı?', ru: 'Уже есть аккаунт?' })}{' '}
             <button onClick={() => { setMode('login'); setError(''); }} className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
-              Sign in
+              {t({ en: 'Sign in', tr: 'Giriş yap', ru: 'Войти' })}
             </button>
           </p>
           <p className="text-xs text-[var(--text-secondary)]">
-            Not sure what to ask?{' '}
+            {t({ en: 'Not sure what to ask?', tr: 'Ne soracağını bilmiyor musun?', ru: 'Не уверены, что спросить?' })}{' '}
             <a href="/inquiry" className="text-[var(--primary-gold)] underline underline-offset-2 hover:text-white transition-colors">
-              See example prompts
+              {t({ en: 'See example prompts', tr: 'Örnek soruları gör', ru: 'Посмотреть примеры prompts' })}
             </a>
           </p>
         </div>

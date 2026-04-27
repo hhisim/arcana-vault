@@ -44,12 +44,20 @@ export default function Footer() {
         <div className="mt-10">
           <EmailCapture
             variant="full"
-            title="✦ JOIN THE 7-DAY ARCANA INITIATION ✦"
-            subtitle="Free daily mystery-school prompts + Oracle access. Better than subscribing cold: enter through a living practice."
-            buttonLabel="Join free"
-            loadingLabel="Opening..."
-            successTitle="You are now inside the Initiation."
-            successBody="Your first daily prompt is on its way. Bring it back to the Oracle and save what matters."
+            title={t({ en: '✦ JOIN THE 7-DAY ARCANA INITIATION ✦', tr: '✦ 7 GÜNLÜK ARCANA İNİSİYASYONUNA KATIL ✦', ru: '✦ ПРИСОЕДИНЯЙТЕСЬ К 7-ДНЕВНОЙ ИНИЦИАЦИИ АРКАНЫ ✦' })}
+            subtitle={t({
+              en: 'Free daily mystery-school prompts + Oracle access. Better than subscribing cold: enter through a living practice.',
+              tr: 'Ücretsiz günlük mystery-school soruları + Oracle erişimi. Soğuk abonelik yerine yaşayan bir pratiğin içinden gir.',
+              ru: 'Бесплатные ежедневные prompts школы мистерий + доступ к Оракулу. Лучше, чем подписываться вслепую: входите через живую практику.',
+            })}
+            buttonLabel={t({ en: 'Join free', tr: 'Ücretsiz katıl', ru: 'Присоединиться бесплатно' })}
+            loadingLabel={t({ en: 'Opening...', tr: 'Açılıyor...', ru: 'Открывается...' })}
+            successTitle={t({ en: 'You are now inside the Initiation.', tr: 'Artık İnisiyasyonun içindesin.', ru: 'Теперь вы внутри Инициации.' })}
+            successBody={t({
+              en: 'Your first daily prompt is on its way. Bring it back to the Oracle and save what matters.',
+              tr: 'İlk günlük sorun yolda. Onu Oracle’a geri getir ve önemli olanı kaydet.',
+              ru: 'Ваш первый ежедневный prompt уже в пути. Верните его к Оракулу и сохраните то, что действительно важно.',
+            })}
             apiPayload={{ listKey: 'arcana-initiation', source: 'footer' }}
           />
         </div>
