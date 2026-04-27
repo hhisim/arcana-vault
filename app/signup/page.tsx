@@ -104,6 +104,7 @@ function SignupForm() {
   )
   const planParam = params.get('plan') as PlanId | null
   const pendingPlan: PlanId = (planParam && planParam in PLAN_CONFIG) ? planParam : 'free'
+  const source = params.get('source') || ''
 
   const [step, setStep] = useState<'signup' | 'traditions' | 'verify'>(
     params.get('step') === 'traditions' ? 'traditions' : 'signup'
@@ -122,6 +123,8 @@ function SignupForm() {
 
   const cfg = PLAN_CONFIG[pendingPlan]
   const maxSlots = cfg?.slots === 'all' ? 99 : (cfg?.slots ?? 1)
+  const isFreePlan = pendingPlan === 'free'
+  const sourceLabel = source === 'oracle-reading' ? 'Save this reading and keep the thread alive.' : source === 'daily-questions' ? 'Start the free daily-practice path.' : source === 'arcana-initiation' ? 'Turn the initiation into an ongoing practice.' : 'Create your free Vault and continue daily.'
 
   const pushDebug = useCallback((msg: string) => {
     addDebug(msg)
@@ -377,7 +380,7 @@ function SignupForm() {
         <div className="glass-card p-8 space-y-6">
           <div>
             <h1 className="font-serif text-4xl text-[var(--text-primary)]">Welcome back</h1>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">Sign in to your Vault of Arcana account</p>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">Sign in to reopen your Vault, recover saved transmissions, and continue your daily questions.</p>
           </div>
           <form onSubmit={onLogin} className="space-y-4">
             <input
@@ -430,6 +433,16 @@ function SignupForm() {
           <h1 className="font-serif text-4xl text-[var(--text-primary)]">Begin your journey</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">Create your Vault of Arcana account</p>
         </div>
+        {isFreePlan && (
+          <div className="rounded-2xl border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.06)] p-4 text-sm leading-7 text-[#D7CEE8]">
+            <p className="font-medium text-[#E8E0F0]">Free account unlocks the real path:</p>
+            <ul className="mt-2 space-y-1">
+              <li>• save this transmission to your Vault</li>
+              <li>• receive 12 daily questions in your chosen tradition</li>
+              <li>• return to Tarot, Tao, Tantra, dreams, symbols, names, and the Correspondence Codex without starting from zero</li>
+            </ul>
+          </div>
+        )}
         {pendingPlan !== 'free' && (
           <div className="text-xs uppercase tracking-[0.25em] text-[var(--primary-gold)]">
             Signing up for {PLAN_CONFIG[pendingPlan]?.name || pendingPlan} ({formatUsd(getLaunchPrice(PLAN_CONFIG[pendingPlan]?.priceMonthly))}/mo with LAUNCH30)

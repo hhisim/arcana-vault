@@ -17,6 +17,7 @@ interface EmailCaptureProps {
   successTitle?: string
   successBody?: string
   disclaimer?: string
+  apiPayload?: Record<string, string>
 }
 
 export default function EmailCapture({
@@ -31,6 +32,7 @@ export default function EmailCapture({
   successTitle,
   successBody,
   disclaimer = 'No spam. Unsubscribe anytime. Your sovereignty is respected.',
+  apiPayload,
 }: EmailCaptureProps) {
   const { t } = useSiteI18n()
   const [email, setEmail] = useState('')
@@ -52,7 +54,7 @@ export default function EmailCapture({
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, ...(apiPayload || {}) }),
       })
       const data = await res.json()
       if (data.success) {

@@ -13,7 +13,7 @@ function isValidEmail(email: string): boolean {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email } = body
+    const { email, listKey, source } = body
 
     if (!email || typeof email !== 'string') {
       return NextResponse.json({ success: false, error: 'Email is required.' }, { status: 400 })
@@ -28,14 +28,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Email service is not configured.' }, { status: 500 })
     }
 
-    if (!BREVO_LIST_ID) {
-      console.error('[subscribe] BREVO_LIST_ID is not set in environment variables.')
+    const listEnvMap: Record<string, string | undefined> = {
+      default: BREVO_LIST_ID,
+      'arcana-initiation': process.env.BREVO_ARCANA_INITIATION_LIST_ID || BREVO_LIST_ID,
+    }
+
+    const resolvedListKey = typeof listKey === 'string' && listKey in listEnvMap ? listKey : 'default'
+    const resolvedListId = listEnvMap[resolvedListKey]
+
+    if (!resolvedListId) {
+      console.error('[subscribe] No Brevo list configured for list key:', resolvedListKey)
       return NextResponse.json({ success: false, error: 'Email list is not configured.' }, { status: 500 })
     }
 
-    const listId = parseInt(BREVO_LIST_ID, 10)
+    const listId = parseInt(resolvedListId, 10)
     if (isNaN(listId)) {
-      console.error('[subscribe] BREVO_LIST_ID is not a valid number:', BREVO_LIST_ID)
+      console.error('[subscribe] Resolved Brevo list ID is not a valid number:', resolvedListId)
       return NextResponse.json({ success: false, error: 'Email list ID is misconfigured.' }, { status: 500 })
     }
 
@@ -54,6 +62,8 @@ export async function POST(request: NextRequest) {
     })
 
     const data = await response.json()
+
+    console.log('[subscribe] contact upsert request', { listKey: resolvedListKey, source: typeof source === 'string' ? source : undefined })
 
     if (!response.ok) {
       console.error('[subscribe] Brevo API error:', data)

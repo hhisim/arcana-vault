@@ -42,7 +42,16 @@ export default function Footer() {
         </div>
 
         <div className="mt-10">
-          <EmailCapture variant="full" />
+          <EmailCapture
+            variant="full"
+            title="✦ JOIN THE 7-DAY ARCANA INITIATION ✦"
+            subtitle="Free daily mystery-school prompts + Oracle access. Better than subscribing cold: enter through a living practice."
+            buttonLabel="Join free"
+            loadingLabel="Opening..."
+            successTitle="You are now inside the Initiation."
+            successBody="Your first daily prompt is on its way. Bring it back to the Oracle and save what matters."
+            apiPayload={{ listKey: 'arcana-initiation', source: 'footer' }}
+          />
         </div>
 
         <div className="mt-10 border-t border-white/8 pt-6 text-sm text-text-secondary">
