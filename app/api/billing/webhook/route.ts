@@ -29,7 +29,6 @@ async function syncSubscriptionToProfile(subscription: Stripe.Subscription) {
     subscription_status: subscription.status,
     stripe_customer_id: customerId,
     stripe_subscription_id: subscription.id,
-    trial_ends_at: null,
   }
 
   const userId = subscription.metadata?.user_id
