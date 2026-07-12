@@ -1,12 +1,16 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthProvider'
 
 export default function StickyCTA() {
   const auth = useAuth()
+  const pathname = usePathname()
 
-  if (auth.isAuthenticated) return null
+  // The visitor is already at the primary conversion surface; a fixed duplicate CTA
+  // competes with the question input and obscures the lower chat controls.
+  if (auth.isAuthenticated || pathname === '/chat') return null
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 glass-card border-t border-[rgba(201,168,76,0.2)] px-4 py-3 md:py-4">

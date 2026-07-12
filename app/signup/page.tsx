@@ -6,6 +6,7 @@ import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useSiteI18n } from '@/lib/site-i18n'
 import TraditionPicker from '@/app/components/TraditionPicker'
 import { PLAN_CONFIG, PlanId, TraditionId, getLaunchPrice, formatUsd } from '@/lib/plans'
+import { normalizePendingPlan } from '@/lib/billing-flow'
 
 /* ─── Password visibility toggle ─────────────────────────── */
 function EyeIcon({ open }: { open: boolean }) {
@@ -101,8 +102,8 @@ function SignupForm() {
   const [mode, setMode] = useState<'login' | 'signup'>(
     params.get('mode') === 'login' ? 'login' : 'signup'
   )
-  const planParam = params.get('plan') as PlanId | null
-  const pendingPlan: PlanId = (planParam && planParam in PLAN_CONFIG) ? planParam : 'free'
+  const planParam = params.get('plan')
+  const pendingPlan: PlanId = normalizePendingPlan(planParam)
   const source = params.get('source') || ''
 
   const [step, setStep] = useState<'signup' | 'traditions' | 'verify'>(
@@ -238,11 +239,13 @@ function SignupForm() {
 
     try {
       const supabase = getBrowserSupabase()
+      const confirmationRedirect = `${window.location.origin}/api/auth/callback?plan=${encodeURIComponent(pendingPlan)}`
       const { error: signUpError, data: signUpData } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: { full_name: name },
+          emailRedirectTo: confirmationRedirect,
         },
       })
 
@@ -261,7 +264,7 @@ function SignupForm() {
         return
       }
 
-      // Session exists — sync cookies and proceed
+      // Session exists — sync cookies, then let every new member choose traditions before activation or checkout.
       const accessToken = signUpData.session?.access_token
       const refreshToken = signUpData.session?.refresh_token
 
@@ -277,17 +280,7 @@ function SignupForm() {
       }
 
       await new Promise(r => setTimeout(r, 100))
-
-      if (pendingPlan !== 'free') {
-        pushDebug(`Checkout for plan=${pendingPlan}`)
-        const redirected = await doCheckout(accessToken, pendingPlan)
-        if (redirected) return
-        return
-      }
-
-      pushDebug('Free plan — going to /inquiry')
-      redirecting.current = true
-      router.push('/inquiry')
+      setStep('traditions')
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       pushDebug(`UNHANDLED: ${msg}`)
@@ -301,6 +294,10 @@ function SignupForm() {
   /* ─── Save traditions + checkout ─── */
   const onSaveAndCheckout = async () => {
     if (inFlight.current || loading) return
+    if (maxSlots !== 99 && selectedTraditions.length === 0) {
+      setError(t({ en: 'Choose at least one tradition before continuing.', tr: 'Devam etmeden önce en az bir gelenek seç.', ru: 'Выберите хотя бы одну традицию, чтобы продолжить.' }))
+      return
+    }
     inFlight.current = true
     setLoading(true)
     setError('')
@@ -309,19 +306,38 @@ function SignupForm() {
       const supabase = getBrowserSupabase()
       const { data: sessionData } = await supabase.auth.getSession()
       const accessToken = sessionData?.session?.access_token
+      if (!accessToken) {
+        setError(t({ en: 'Your session has expired. Please sign in again.', tr: 'Oturumun sona erdi. Lütfen tekrar giriş yap.', ru: 'Сеанс истёк. Пожалуйста, войдите снова.' }))
+        return
+      }
 
-      await fetch('/api/account/traditions', {
+      const traditionsResponse = await fetch('/api/account/traditions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
+          'Authorization': `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ traditions: selectedTraditions }),
+        body: JSON.stringify({ traditions: selectedTraditions, pendingPlan }),
       })
+      if (!traditionsResponse.ok) {
+        const data = await traditionsResponse.json().catch(() => ({}))
+        setError((data as { detail?: string }).detail || 'Could not save your traditions. Please try again.')
+        return
+      }
 
-      if (pendingPlan !== 'free' && accessToken) {
+      if (pendingPlan !== 'free') {
         const redirected = await doCheckout(accessToken, pendingPlan)
         if (redirected) return
+        return
+      }
+
+      const freeResponse = await fetch('/api/billing/activate-free', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${accessToken}` },
+      })
+      if (!freeResponse.ok) {
+        const data = await freeResponse.json().catch(() => ({}))
+        setError((data as { detail?: string }).detail || 'Could not activate your free plan. Please try again.')
         return
       }
 
@@ -429,7 +445,11 @@ function SignupForm() {
     <section className="mx-auto max-w-xl px-6 py-20">
       <div className="glass-card p-8 space-y-6">
         <div>
-          <h1 className="font-serif text-4xl text-[var(--text-primary)]">{t({ en: 'Create your free Vault', tr: 'Ücretsiz Vault’unu oluştur', ru: 'Создайте своё бесплатное Хранилище' })}</h1>
+          <h1 className="font-serif text-4xl text-[var(--text-primary)]">
+            {isFreePlan
+              ? t({ en: 'Create your free Vault', tr: 'Ücretsiz Vault’unu oluştur', ru: 'Создайте своё бесплатное Хранилище' })
+              : t({ en: `Create your ${PLAN_CONFIG[pendingPlan].name} account`, tr: `${PLAN_CONFIG[pendingPlan].name} hesabını oluştur`, ru: `Создайте аккаунт ${PLAN_CONFIG[pendingPlan].name}` })}
+          </h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">{sourceLabel}</p>
         </div>
         {isFreePlan && (
@@ -482,7 +502,11 @@ function SignupForm() {
             disabled={loading || (!!confirmPassword && password !== confirmPassword)}
             className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50"
           >
-            {loading ? t({ en: 'Opening your Vault — do not close this page…', tr: 'Vault’un açılıyor — bu sayfayı kapatma…', ru: 'Ваше Хранилище открывается — не закрывайте эту страницу…' }) : isFreePlan ? t({ en: 'Create free account', tr: 'Ücretsiz hesap oluştur', ru: 'Создать бесплатный аккаунт' }) : t('auth.submit')}
+            {loading
+              ? t({ en: 'Opening your Vault — do not close this page…', tr: 'Vault’un açılıyor — bu sayfayı kapatma…', ru: 'Ваше Хранилище открывается — не закрывайте эту страницу…' })
+              : isFreePlan
+                ? t({ en: 'Create free account', tr: 'Ücretsiz hesap oluştur', ru: 'Создать бесплатный аккаунт' })
+                : t({ en: 'Continue to choose traditions', tr: 'Gelenekleri seçmeye devam et', ru: 'Продолжить к выбору традиций' })}
           </button>
         </form>
         <div className="text-center space-y-2">

@@ -33,14 +33,27 @@ async function syncSubscriptionToProfile(subscription: Stripe.Subscription) {
 
   const userId = subscription.metadata?.user_id
   if (userId) {
-    const { error } = await admin.from('profiles').update(update).eq('user_id', userId)
-    if (!error) return
-    console.error('Webhook profile update by user_id failed:', error.message)
+    const { data, error } = await admin
+      .from('profiles')
+      .update(update)
+      .eq('user_id', userId)
+      .select('user_id')
+    if (error) {
+      console.error('Webhook profile update by user_id failed:', error.message)
+    } else if (data?.length) {
+      return
+    } else {
+      console.error('Webhook profile update by user_id matched no profile:', userId)
+    }
   }
 
-  const { error } = await admin.from('profiles').update(update).eq('stripe_customer_id', customerId)
-  if (error) {
-    throw new Error(`Webhook profile sync failed: ${error.message}`)
+  const { data, error } = await admin
+    .from('profiles')
+    .update(update)
+    .eq('stripe_customer_id', customerId)
+    .select('user_id')
+  if (error || !data?.length) {
+    throw new Error(`Webhook profile sync failed: ${error?.message || 'no matching profile'}`)
   }
 }
 
