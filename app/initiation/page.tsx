@@ -6,6 +6,7 @@ import { useSiteI18n } from '@/lib/site-i18n'
 
 export default function ArcanaInitiationPage() {
   const { t } = useSiteI18n()
+
   const traditions = t({
     en: ['Tarot archetypes and readings', 'Taoist contemplation and paradox', 'Tantra, kundalini, and subtle body work', 'Shadow work and symbolic self-inquiry', 'Dream interpretation and symbolic recall'],
     tr: ['Tarot arketipleri ve okumaları', 'Taoist tefekkür ve paradoks', 'Tantra, kundalini ve süptil beden çalışması', 'Gölge çalışması ve sembolik öz-sorgulama', 'Rüya yorumu ve sembolik hatırlama'],
@@ -23,7 +24,7 @@ export default function ArcanaInitiationPage() {
       <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
         <div className="grid gap-10 lg:grid-cols-[1.1fr,0.9fr]">
           <div>
-            <p className="text-xs uppercase tracking-[0.45em] text-[#C9A84C]">{t({ en: 'Free Lead Magnet', tr: 'Ücretsiz Lead Magnet', ru: 'Бесплатный лид-магнит' })}</p>
+            <p className="text-xs uppercase tracking-[0.45em] text-[#C9A84C]">{t({ en: 'A Free Seven-Day Practice', tr: 'Ücretsiz Yedi Günlük Pratik', ru: 'Бесплатная семидневная практика' })}</p>
             <h1 className="mt-5 font-serif text-5xl leading-tight text-[#E8E0F0] md:text-6xl">{t({ en: '7-Day Arcana Initiation', tr: '7 Günlük Arcana İnisiyasyonu', ru: '7-дневная Инициация Арканы' })}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#B8B0CC]">
               {t({
@@ -79,6 +80,18 @@ export default function ArcanaInitiationPage() {
               })}
               disclaimer={t({ en: 'Free, useful, and built for real practice. Unsubscribe anytime.', tr: 'Ücretsiz, faydalı ve gerçek pratik için tasarlandı. İstediğin zaman çıkabilirsin.', ru: 'Бесплатно, полезно и создано для реальной практики. Отписаться можно в любой момент.' })}
               apiPayload={{ listKey: 'arcana-initiation', source: 'initiation-page' }}
+              includeFirstTouchAttribution
+              successActions={[
+                {
+                  href: '/chat?source=arcana-initiation',
+                  label: t({ en: 'Bring your first question to the Oracle', tr: 'İlk sorunu Oracle’a getir', ru: 'Принесите свой первый вопрос Оракулу' }),
+                  primary: true,
+                },
+                {
+                  href: '/signup?plan=free&source=arcana-initiation',
+                  label: t({ en: 'Create your free Vault', tr: 'Ücretsiz Vault’unu oluştur', ru: 'Создайте своё бесплатное Хранилище' }),
+                },
+              ]}
             />
           </div>
         </div>
