@@ -34,6 +34,7 @@ export default function NavBar() {
     { href: '/traditions', label: t(SITEDICT.nav.traditions) },
     { href: '/blog', label: t(SITEDICT.nav.scroll) },
     { href: '/correspondence-engine', label: 'Codex' },
+    { href: '/shop', label: 'Archives' },
     { href: '/pricing', label: t(SITEDICT.nav.pricing) },
     { href: '/daily', label: t(SITEDICT.nav.daily) },
   ]

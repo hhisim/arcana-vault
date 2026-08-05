@@ -2,6 +2,8 @@ import Stripe from 'stripe'
 import { NextResponse } from 'next/server'
 import { getAdminSupabase } from '@/lib/supabase/admin'
 import { planFromPriceId, PlanId } from '@/lib/plans'
+import { packFromSku, buildAccessTxt } from '@/lib/shop'
+import { sendAccessEmail } from '@/lib/brevo'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   httpClient: Stripe.createFetchHttpClient(),
@@ -44,6 +46,45 @@ async function syncSubscriptionToProfile(subscription: Stripe.Subscription) {
   }
 }
 
+async function handleOneTimePurchase(session: Stripe.Checkout.Session) {
+  const sku = session.metadata?.sku
+  const pack = packFromSku(sku)
+  if (!pack) {
+    console.warn('[webhook] one-time session without known sku:', session.id)
+    return
+  }
+  const customer =
+    typeof session.customer === 'object' && session.customer !== null && 'email' in session.customer
+      ? (session.customer as Stripe.Customer)
+      : undefined
+  const email = session.customer_details?.email || customer?.email
+  if (!email) {
+    console.warn('[webhook] one-time session missing email:', session.id)
+    return
+  }
+  const admin = getAdminSupabase()
+  const row = {
+    session_id: session.id,
+    user_id: session.metadata?.user_id || null,
+    email,
+    sku: pack.sku,
+    pack_title: pack.title,
+    amount_total: session.amount_total ?? null,
+    currency: session.currency || 'usd',
+    status: 'pending_access',
+  }
+  const { error } = await admin.from('purchases').upsert(row, { onConflict: 'session_id' })
+  if (error) {
+    console.error('[webhook] purchases upsert failed:', error.message)
+    throw error
+  }
+  console.log('[webhook] one-time purchase recorded:', session.id, pack.sku, email)
+
+  const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.vaultofarcana.com'
+  const txt = buildAccessTxt({ pack, email, accessLink: null, siteUrl: site, status: 'pending_access' })
+  await sendAccessEmail({ to: email, packTitle: pack.title, txt }).catch(() => {})
+}
+
 export async function POST(req: Request) {
   const body = await req.text()
   const signature = req.headers.get('stripe-signature')
@@ -69,6 +110,9 @@ export async function POST(req: Request) {
       if (session.mode === 'subscription' && typeof session.subscription === 'string') {
         const subscription = await stripe.subscriptions.retrieve(session.subscription)
         await syncSubscriptionToProfile(subscription)
+      }
+      if (session.mode === 'payment') {
+        await handleOneTimePurchase(session)
       }
     }
 

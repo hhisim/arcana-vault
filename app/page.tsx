@@ -10,6 +10,7 @@ import ComparisonBlock from '@/components/home/ComparisonBlock'
 import CodexShowcase from '@/components/CodexShowcase'
 import LiveAgoraFeed from '@/components/LiveAgoraFeed'
 import BookPreview from '@/components/library/BookPreview'
+import ShopArchives from '@/components/home/ShopArchives'
 
 type Lang = 'en' | 'tr' | 'ru'
 
@@ -119,6 +120,9 @@ export default function HomePage() {
       </section>
 
       <DemoOracle />
+
+      {/* SHOP THE ARCHIVES */}
+      <ShopArchives />
 
       {/* HOW THIS DIFFERS FROM CHATGPT */}
       <section className="border-b border-white/5 bg-[#0a0a10]">
