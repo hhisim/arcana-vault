@@ -30,12 +30,26 @@ export default function FAQPage() {
     },
     {
       q: 'What is the Correspondence Codex?',
-      a: 'The Codex is a unique symbolic reference system mapping 577 nodes across 12 dimensional categories — cross-referencing symbols, archetypes, practices, and concepts across all traditions. It is one of the Vault\'s most distinctive features and is freely available to all accounts.',
+      a: "The Codex is a unique symbolic reference system mapping 577 nodes across 12 dimensional categories — cross-referencing symbols, archetypes, practices, and concepts across all traditions. It is one of the Vault's most distinctive features and is freely available to all accounts.",
     },
   ]
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  }
+
   return (
     <div className="mx-auto max-w-4xl px-6 py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <h1 className="font-serif text-5xl text-[var(--text-primary)] mb-4">FAQ</h1>
       <p className="text-[var(--text-secondary)] mb-12">Common questions about the Vault of Arcana.</p>
 

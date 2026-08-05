@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ShopPack, heroImage, formatUsd } from '@/lib/packs'
+import { ShopPack, heroImage, formatUsd, isBestseller } from '@/lib/packs'
 import { getPackRating } from '@/lib/reviews'
 import BuyButton from '@/components/shop/BuyButton'
 import ShopRating from '@/components/ShopRating'
@@ -15,10 +15,16 @@ export default function ProductCard({ pack }: { pack: ShopPack }) {
   const img = heroImage(pack)
   const detailHref = `/shop/${pack.sku}`
   const rating = getPackRating(pack.sku)
+  const best = isBestseller(pack.sku)
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0d0d15] transition-all duration-300 hover:-translate-y-1 hover:border-amber-400/50 hover:shadow-[0_14px_44px_-12px_rgba(201,168,76,0.28)]">
       <Link href={detailHref} className="relative block overflow-hidden">
+        {best && (
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-gradient-to-r from-amber-400 to-amber-300 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a1206] shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+            Bestseller
+          </span>
+        )}
         {/* Hero image — 50% opacity base, brightens on hover */}
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           {img ? (

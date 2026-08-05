@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       card: 'summary_large_image',
       title: `${title} | Vault of Arcana`,
       description: meta.description,
+      images: [{ url: `/images/blog/${params.slug}/cover.png`, width: 1200, height: 630 }],
     },
   };
 }
@@ -188,6 +189,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       },
       articleSection: post.tradition,
       keywords: meta.keywords.join(', '),
+      image: `https://www.vaultofarcana.com/images/blog/${slug}/cover.png`,
     } : null;
 
     return (

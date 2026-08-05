@@ -21,15 +21,18 @@ export default async function ShopThanksPage({
   let amountCents: number | null = null
   let purchaseId: string | null = null
   let status = 'pending_access'
+  let currency = 'usd'
+  let sku: string | null = null
 
   try {
     const stripe = getStripe()
     const session = await stripe.checkout.sessions.retrieve(sessionId as string)
-    const sku = session.metadata?.sku
+    sku = session.metadata?.sku ?? null
     const pack = packFromSku(sku)
     packTitle = pack?.title ?? 'Archive access'
     email = session.customer_details?.email || ''
     amountCents = session.amount_total ?? amountCents
+    currency = session.currency || 'usd'
 
     const admin = getAdminSupabase()
     const row = {
@@ -58,6 +61,22 @@ export default async function ShopThanksPage({
 
   return (
     <main className="min-h-[70vh] mx-auto max-w-2xl px-4 py-16 text-center">
+      {amountCents != null && purchaseId && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'window.dataLayer = window.dataLayer || [];' +
+              "dataLayer.push({event:'purchase', ecommerce:{" +
+              'transaction_id:' + JSON.stringify(purchaseId) + ',' +
+              'value:' + (amountCents / 100) + ',' +
+              'currency:' + JSON.stringify(currency) + ',' +
+              'items:[{item_id:' + JSON.stringify(sku) +
+              ',item_name:' + JSON.stringify(packTitle) +
+              ',quantity:1,price:' + (amountCents / 100) + '}]' +
+              '}});',
+          }}
+        />
+      )}
       <h1 className="text-3xl font-serif mb-3">Thank you</h1>
       <p className="text-zinc-300 mb-2">Your purchase is confirmed:</p>
       <p className="text-amber-200 font-medium mb-6">{packTitle}</p>

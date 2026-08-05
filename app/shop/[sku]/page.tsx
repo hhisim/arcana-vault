@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPack, PACKS, formatUsd } from '@/lib/packs'
+import { getPack, PACKS, formatUsd, isBestseller } from '@/lib/packs'
 import { getPackRating } from '@/lib/reviews'
 import BuyButton from '@/components/shop/BuyButton'
 import ImageGallery from '@/components/shop/ImageGallery'
@@ -31,6 +31,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
 
   const hasImages = pack.images && pack.images.length > 0
   const rating = getPackRating(pack.sku)
+  const best = isBestseller(pack.sku)
 
   const heroImg = pack.images && pack.images.length > 0 ? pack.images[0] : undefined
   const productLd = {
@@ -99,6 +100,11 @@ export default function PackPage({ params }: { params: { sku: string } }) {
           <h1 className="font-serif text-2xl md:text-3xl leading-tight text-[#EBE4F2]">
             {pack.title}
           </h1>
+          {best && (
+            <span className="mt-3 inline-block rounded-full bg-gradient-to-r from-amber-400 to-amber-300 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a1206]">
+              ★ Bestseller — one of the Vault's most-favorited archives
+            </span>
+          )}
 
           <div className="mt-3 flex items-center gap-4">
             <span className="text-amber-200 font-semibold text-3xl">{formatUsd(pack.price)}</span>
@@ -134,6 +140,19 @@ export default function PackPage({ params }: { params: { sku: string } }) {
                 .
               </li>
             </ul>
+          </div>
+
+          {/* Risk-reversal trust strip */}
+          <div className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-400/[0.04] p-4 text-sm text-zinc-300">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
+              <span className="text-emerald-300">✓ Instant digital delivery</span>
+              <span className="text-emerald-300">✓ Lifetime access to your archive</span>
+              <span className="text-emerald-300">✓ 30-day guarantee</span>
+            </div>
+            <p className="mt-2 leading-6 text-zinc-400">
+              Not the right fit? You have <strong className="text-zinc-200">30 days</strong> to ask for a
+              replacement or a full refund — no questions asked. Your archive stays yours.
+            </p>
           </div>
         </div>
       </div>

@@ -30,6 +30,23 @@ export const PACKS: ShopPack[] = loadPacks()
 
 const BY_SKU = new Map(PACKS.map((p) => [p.sku, p]))
 
+// Curation: the most-favorited packs in the live catalog, surfaced as "Bestseller".
+// Derived from the enriched Etsy `favs` signal (excludes EXCLUDED_SKUS above).
+export const BESTSELLER_SKUS = new Set([
+  'etsy-1890769318', // Grimoire & Occult eBook Archive
+  'etsy-4329093346', // Library of Alexandria
+  'etsy-4307968359', // Chaos Magick MEGA PACK
+  'etsy-1889783512', // Alchemy Vault
+  'etsy-4311224586', // Thelema Mega Pack
+  'etsy-4311828972', // Ultimate Esoteric & Spiritual eBook Archive
+  'etsy-4311792279', // Rosicrucian Mega Pack
+  'etsy-4310056291', // Order of the Golden Dawn Digital Archive
+])
+
+export function isBestseller(sku: string): boolean {
+  return BESTSELLER_SKUS.has(sku)
+}
+
 export function getPack(sku?: string | null): ShopPack | undefined {
   if (!sku) return undefined
   return BY_SKU.get(sku)
