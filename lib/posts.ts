@@ -1,5 +1,35 @@
 export const posts = [
   {
+    "slug": "how-to-read-the-tarot-beginners-guide",
+    "title": "How to Read the Tarot: A Beginner's Map of the 78 Cards",
+    "tradition": "tarot",
+    "publishedAt": "2026-08-05",
+    "readTime": "9 min",
+    "author": "Prime + Hakan",
+    "hero": "/shop/etsy-1903856877/img-1.jpg",
+    "excerpt": "The tarot is a system, not a mystery. Learn the 78-card architecture, the four suits, and a three-card spread you can read on day one."
+  },
+  {
+    "slug": "sacred-geometry-flower-of-life-explained",
+    "title": "Sacred Geometry Explained: The Flower of Life, Metatron's Cube and the Blueprint of Creation",
+    "tradition": "sacred-geometry",
+    "publishedAt": "2026-08-05",
+    "readTime": "10 min",
+    "author": "Prime + Hakan",
+    "hero": "/shop/etsy-4543080231/img-1.jpg",
+    "excerpt": "From one circle to the Flower of Life, Metatron's Cube, the Platonic solids and the golden ratio — how sacred geometry builds the blueprint of creation."
+  },
+  {
+    "slug": "kabbalah-tree-of-life-sefirot-explained",
+    "title": "Kabbalah's Tree of Life: The Ten Sefirot as a Map of Consciousness",
+    "tradition": "kabbalah",
+    "publishedAt": "2026-08-05",
+    "readTime": "10 min",
+    "author": "Prime + Hakan",
+    "hero": "/shop/etsy-4488658060/img-1.jpg",
+    "excerpt": "The Tree of Life claims to map all of creation and the human mind in ten nodes. Here is each sefirah, the three pillars, and the Four Worlds."
+  },
+  {
     "slug": "alchemy-of-soul-magnum-opus",
     "title": "The Alchemy of the Soul: The Twelve Stages of the Great Work (Magnum Opus)",
     "tradition": "alchemy",
