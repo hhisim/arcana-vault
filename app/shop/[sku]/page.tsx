@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPack, PACKS, formatUsd } from '@/lib/packs'
+import { getPackRating } from '@/lib/reviews'
 import BuyButton from '@/components/shop/BuyButton'
 import ImageGallery from '@/components/shop/ImageGallery'
 import DescriptionText from '@/components/shop/DescriptionText'
+import ShopRating from '@/components/ShopRating'
 
 export const dynamicParams = true
 
@@ -25,6 +27,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
   if (!pack) notFound()
 
   const hasImages = pack.images && pack.images.length > 0
+  const rating = getPackRating(pack.sku)
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-14">
@@ -56,6 +59,13 @@ export default function PackPage({ params }: { params: { sku: string } }) {
               {pack.favs > 0 && <span> · {pack.favs} favorites</span>}
             </span>
           </div>
+
+          {rating && (
+            <div className="mt-3 flex items-center gap-2">
+              <ShopRating rating={rating.rating} count={rating.count} />
+              <span className="text-xs text-zinc-500">from Etsy customers</span>
+            </div>
+          )}
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <BuyButton sku={pack.sku} price={formatUsd(pack.price)} />

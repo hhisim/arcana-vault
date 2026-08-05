@@ -18,7 +18,7 @@ const TRADITION_RECS: Record<string, string[]> = {
   sufism: ['etsy-4488453137', 'etsy-4330541166'],
   gnosticism: ['etsy-4306241391', 'etsy-4491083373', 'etsy-1890769318'],
   entheogens: ['etsy-4489018852', 'etsy-1888639622', 'etsy-4543166138'],
-  'sacred-geometry': ['etsy-634858175', 'etsy-4516425177', 'etsy-4543080231'],
+  'sacred-geometry': ['etsy-4543080231', 'etsy-4516425177', 'etsy-4329093346'],
   vedic: ['etsy-4329093346', 'etsy-1906631935'],
   'fourth-way': ['etsy-4329093346', 'etsy-1890769318'],
   kemet: ['etsy-4323025629', 'etsy-4543086125', 'etsy-4491083373'],
@@ -31,7 +31,7 @@ const TRADITION_RECS: Record<string, string[]> = {
   science: ['etsy-4329093346', 'etsy-4513179705'],
   linguistics: ['etsy-4308981590', 'etsy-4329093346'],
   'sacred sound': ['etsy-1886869572', 'etsy-1888639622'],
-  'hermetics-cymatics': ['etsy-634858175', 'etsy-1886869572', 'etsy-4543080231'],
+  'hermetics-cymatics': ['etsy-4543080231', 'etsy-1886869572', 'etsy-4516425177'],
 }
 
 /** Flagship general archives shown when the topic has no specific pack of its own. */
@@ -39,8 +39,8 @@ const FALLBACK = ['etsy-4329093346', 'etsy-4311828972', 'etsy-1890769318']
 
 // Extra per-slug overrides for posts whose tradition field is too broad.
 const SLUG_OVERRIDES: Record<string, string[]> = {
-  'amplituhedron-flower-of-life-sacred-geometry': ['etsy-634858175', 'etsy-4516425177', 'etsy-4543080231'],
-  'cymatics-word-of-god-hans-jenny-logos': ['etsy-634858175', 'etsy-1886869572', 'etsy-4543080231'],
+  'amplituhedron-flower-of-life-sacred-geometry': ['etsy-4543080231', 'etsy-4516425177', 'etsy-4329093346'],
+  'cymatics-word-of-god-hans-jenny-logos': ['etsy-4543080231', 'etsy-1886869572', 'etsy-4516425177'],
   'tarot-and-tree-of-life': ['etsy-4545842201', 'etsy-4543079786', 'etsy-4488658060'],
   'kundalini-shakti-serpent-power-western-science': ['etsy-4543075975', 'etsy-1886869572'],
   'hyperbolic-geometry-dmt-space-non-euclidean': ['etsy-4543166138', 'etsy-4489018852'],

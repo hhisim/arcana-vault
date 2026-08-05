@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { PACKS } from '@/lib/packs'
+import { SHOP_RATING } from '@/lib/reviews'
 import ProductCard from '@/components/shop/ProductCard'
+import ShopRating from '@/components/ShopRating'
 
 export const metadata = {
   title: 'The Archives — Vault of Arcana',
@@ -21,6 +23,10 @@ export default function ShopPage({ searchParams }: { searchParams?: { cancelled?
           Curated esoteric study packs — tarot, sacred geometry, grimoires, alchemy, and more.
           One-time purchase. Delivered as <strong>Google Drive access</strong> to your own archive.
         </p>
+        <div className="mt-4 flex items-center justify-center gap-2">
+          <ShopRating rating={SHOP_RATING.rating} count={SHOP_RATING.count} size={18} />
+          <span className="text-xs text-zinc-500">from Etsy customers</span>
+        </div>
         <p className="text-zinc-500 text-sm mt-3">
           {total} packs · Admin authorizes your Drive access within a few hours of purchase
         </p>

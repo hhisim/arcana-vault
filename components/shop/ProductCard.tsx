@@ -2,7 +2,9 @@
 
 import Link from 'next/link'
 import { ShopPack, heroImage, formatUsd } from '@/lib/packs'
+import { getPackRating } from '@/lib/reviews'
 import BuyButton from '@/components/shop/BuyButton'
+import ShopRating from '@/components/ShopRating'
 
 /**
  * Vault product card. The pack's hero image sits as a dimmed (50% opacity)
@@ -12,6 +14,7 @@ import BuyButton from '@/components/shop/BuyButton'
 export default function ProductCard({ pack }: { pack: ShopPack }) {
   const img = heroImage(pack)
   const detailHref = `/shop/${pack.sku}`
+  const rating = getPackRating(pack.sku)
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0d0d15] transition-all duration-300 hover:-translate-y-1 hover:border-amber-400/50 hover:shadow-[0_14px_44px_-12px_rgba(201,168,76,0.28)]">
@@ -36,11 +39,21 @@ export default function ProductCard({ pack }: { pack: ShopPack }) {
             <h3 className="font-serif text-base leading-snug text-[#EBE4F2] line-clamp-2">
               {pack.title}
             </h3>
+            <div className="mt-1.5">
+              {rating ? (
+                <ShopRating rating={rating.rating} count={rating.count} size={13} />
+              ) : (
+                <span className="text-[11px] text-zinc-400">
+                  {pack.views > 0 && <span>{pack.views.toLocaleString()} views</span>}
+                </span>
+              )}
+            </div>
             <div className="mt-1 flex items-center justify-between text-[11px] text-zinc-400">
-              <span>
-                {pack.views > 0 && <span>{pack.views.toLocaleString()} views</span>}
-                {pack.favs > 0 && <span> · {pack.favs} favorites</span>}
-              </span>
+              {rating ? (
+                <span>{pack.views > 0 && <span>{pack.views.toLocaleString()} views</span>}</span>
+              ) : (
+                <span>{pack.favs > 0 && <span>{pack.favs} favorites</span>}</span>
+              )}
               <span className="text-amber-300 underline-offset-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 Details →
               </span>

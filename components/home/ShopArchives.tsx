@@ -2,7 +2,9 @@
 
 import Link from 'next/link'
 import { PACKS } from '@/lib/packs'
+import { SHOP_RATING } from '@/lib/reviews'
 import ProductCard from '@/components/shop/ProductCard'
+import ShopRating from '@/components/ShopRating'
 
 const featured = [...PACKS]
   .sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
@@ -17,6 +19,10 @@ export default function ShopArchives() {
           One-time purchases of curated esoteric study packs — delivered as Google Drive access,
           authorized by an admin within a few hours.
         </p>
+        <div className="mt-4 flex items-center justify-center gap-2">
+          <ShopRating rating={SHOP_RATING.rating} count={SHOP_RATING.count} size={18} />
+          <span className="text-xs text-zinc-500">from Etsy customers</span>
+        </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
