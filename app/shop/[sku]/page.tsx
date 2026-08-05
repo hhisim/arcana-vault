@@ -9,6 +9,8 @@ import ShopRating from '@/components/ShopRating'
 
 export const dynamicParams = true
 
+const baseUrl = 'https://www.vaultofarcana.com'
+
 export function generateStaticParams() {
   return PACKS.map((p) => ({ sku: p.sku }))
 }
@@ -19,6 +21,7 @@ export function generateMetadata({ params }: { params: { sku: string } }) {
   return {
     title: `${pack.title} — Vault of Arcana`,
     description: `One-time purchase of "${pack.title}" — delivered as Google Drive access, authorized within a few hours.`,
+    alternates: { canonical: `/shop/${pack.sku}` },
   }
 }
 
@@ -29,8 +32,53 @@ export default function PackPage({ params }: { params: { sku: string } }) {
   const hasImages = pack.images && pack.images.length > 0
   const rating = getPackRating(pack.sku)
 
+  const heroImg = pack.images && pack.images.length > 0 ? pack.images[0] : undefined
+  const productLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: pack.title,
+    description: pack.description?.slice(0, 500) ?? `${pack.title} — one-time esoteric study pack.`,
+    image: heroImg ? `${baseUrl}${heroImg}` : undefined,
+    url: `${baseUrl}/shop/${pack.sku}`,
+    brand: { '@type': 'Brand', name: 'Vault of Arcana' },
+    offers: {
+      '@type': 'Offer',
+      url: `${baseUrl}/shop/${pack.sku}`,
+      priceCurrency: 'USD',
+      price: String(pack.price),
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+    ...(rating
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: rating.rating,
+            reviewCount: rating.count,
+            bestRating: 5,
+          },
+        }
+      : {}),
+  }
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'The Archives', item: `${baseUrl}/shop` },
+      { '@type': 'ListItem', position: 2, name: pack.title, item: `${baseUrl}/shop/${pack.sku}` },
+    ],
+  }
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-zinc-500">
         <Link href="/shop" className="hover:text-amber-300 transition-colors">

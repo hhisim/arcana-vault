@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { posts } from '@/lib/posts'
+import { PACKS } from '@/lib/packs'
 
 const BASE = 'https://www.vaultofarcana.com'
 
@@ -60,11 +61,20 @@ const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
   priority: 0.7,
 }))
 
+// Shop packs (the commerce pages!)
+const shopPages: MetadataRoute.Sitemap = PACKS.map((p) => ({
+  url: `${BASE}/shop/${p.sku}`,
+  lastModified: new Date(),
+  changeFrequency: 'weekly' as const,
+  priority: 0.8,
+}))
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticPages,
     ...sections,
     ...traditionPages,
     ...blogPages,
+    ...shopPages,
   ]
 }
