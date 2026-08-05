@@ -4,9 +4,10 @@ import React from 'react';
 import matter from 'gray-matter';
 import { cookies } from 'next/headers';
 import { posts } from '@/lib/posts';
-import BlogContent from '@/components/BlogContent';
-import BlogReturnButton from '@/components/BlogReturnButton';
-import EmailCaptureWrapper from '@/components/EmailCaptureWrapper';
+import BlogContent from '@/components/BlogContent'
+import BlogReturnButton from '@/components/BlogReturnButton'
+import EmailCaptureWrapper from '@/components/EmailCaptureWrapper'
+import BlogShopRecs from '@/components/BlogShopRecs'
 
 export const dynamic = 'force-static';
 
@@ -238,6 +239,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           defaultTitle={resolvedTitle}
           images={inlineImages}
         />
+
+        {/* Shop the Archives — relevant packs for this Scroll */}
+        <BlogShopRecs slug={slug} tradition={tradition} />
 
         {/* Email signup — compact variant */}
         <div className="max-w-4xl mx-auto px-6 pb-16">
