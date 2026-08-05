@@ -6,7 +6,7 @@ export const posts = [
     "publishedAt": "2026-08-05",
     "readTime": "14 min",
     "author": "Prime + Hakan",
-    "hero": "/shop/etsy-4543080231/img-1.jpg",
+    "hero": "/images/blog/metatrons-cube-tree-of-life-kabbalah-geometry/cover.png",
     "excerpt": "Two diagrams, two alphabets. The sacred geometry of Metatron's Cube and the Kabbalistic Tree of Life describe the same descent of unity into form — see them as one blueprint."
   },
   {
@@ -16,7 +16,7 @@ export const posts = [
     "publishedAt": "2026-08-05",
     "readTime": "14 min",
     "author": "Prime + Hakan",
-    "hero": "/shop/etsy-4489018852/img-1.jpg",
+    "hero": "/images/blog/entheogenic-dream-dmt-rem-visionary-states/cover.png",
     "excerpt": "Dreams and the entheogenic state are two doors into the same visionary architecture. DMT, REM, and the shared neural science of lifting the veil — an integration-first map."
   },
   {
@@ -26,7 +26,7 @@ export const posts = [
     "publishedAt": "2026-08-05",
     "readTime": "20 min",
     "author": "Prime + Hakan",
-    "hero": "/shop/etsy-1890769318/img-1.jpg",
+    "hero": "/images/blog/as-above-so-below-secret-thread-western-mysteries/cover.png",
     "excerpt": "Hermeticism, Kabbalah, the Tarot, alchemy, Enochian — underneath them all runs one secret thread: as above, so below, and the human as a lesser world that mirrors the greater."
   },
   {
@@ -36,7 +36,7 @@ export const posts = [
     "publishedAt": "2026-08-05",
     "readTime": "17 min",
     "author": "Prime + Hakan",
-    "hero": "/shop/etsy-1903856877/img-1.jpg",
+    "hero": "/images/blog/how-to-read-the-tarot-beginners-guide/cover.png",
     "excerpt": "The tarot is a system, not a mystery. From the 78-card architecture and the Fool's Journey to a three-card spread, learn to read the deck as a map of the soul."
   },
   {
@@ -46,7 +46,7 @@ export const posts = [
     "publishedAt": "2026-08-05",
     "readTime": "18 min",
     "author": "Prime + Hakan",
-    "hero": "/shop/etsy-4543080231/img-1.jpg",
+    "hero": "/images/blog/sacred-geometry-flower-of-life-explained/cover.png",
     "excerpt": "From one circle to the Flower of Life, Metatron's Cube, the Platonic solids and the golden ratio — how sacred geometry builds the blueprint of creation."
   },
   {
@@ -56,7 +56,7 @@ export const posts = [
     "publishedAt": "2026-08-05",
     "readTime": "16 min",
     "author": "Prime + Hakan",
-    "hero": "/shop/etsy-4488658060/img-1.jpg",
+    "hero": "/images/blog/kabbalah-tree-of-life-sefirot-explained/cover.png",
     "excerpt": "The Tree of Life claims to map all of creation and the human mind in ten nodes. Here is each sefirah, the three pillars, the 22 paths, and the Four Worlds."
   },
   {
