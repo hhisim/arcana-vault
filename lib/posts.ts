@@ -544,6 +544,16 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/sefirot-neural-architecture-kabbalah/cover.webp",
     "excerpt": "The ten sefirot of Kabbalah map onto the major structures and networks of the human brain with extraordinary precision. The Ein Sof \u2014 infinite divine consciousness \u2014 unfolding into specific cognitive architectures."
+  },
+  {
+    "slug": "sufism-hermeticism-as-above-so-below",
+    "title": "As Above, So Below: The Sufi Mirror and the Hermetic Principle \u2014 Two Traditions, One Alchemy",
+    "tradition": "hermetics",
+    "publishedAt": "2026-08-06",
+    "readTime": "17 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/sufism-hermeticism-as-above-so-below/cover.png",
+    "excerpt": "The Hermetic Principle of Correspondence ('as above, so below') and the Sufi teaching of the human as the mirror of the Divine say the same thing in two dialects \u2014 the cosmos is written in the soul, and the soul is written in the cosmos. Underneath both runs one alchemy: the false self must die before the true self can be realized."
   }
 ];
 
