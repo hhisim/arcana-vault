@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPack, PACKS, formatUsd, isBestseller } from '@/lib/packs'
 import { getPackRating } from '@/lib/reviews'
+import { getJournalLinks, journalUrl } from '@/lib/journal-links'
 import BuyButton from '@/components/shop/BuyButton'
 import ImageGallery from '@/components/shop/ImageGallery'
 import DescriptionText from '@/components/shop/DescriptionText'
@@ -32,6 +33,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
   const hasImages = pack.images && pack.images.length > 0
   const rating = getPackRating(pack.sku)
   const best = isBestseller(pack.sku)
+  const relatedJournal = getJournalLinks(pack.sku)
 
   const heroImg = pack.images && pack.images.length > 0 ? pack.images[0] : undefined
   const productLd = {
@@ -162,6 +164,37 @@ export default function PackPage({ params }: { params: { sku: string } }) {
         <section className="mt-12 max-w-3xl">
           <h2 className="font-serif text-xl text-[#EBE4F2] mb-4">About this archive</h2>
           <DescriptionText text={pack.description} />
+        </section>
+      )}
+
+      {/* Related journal transmissions (UT → VOA back-loop) */}
+      {relatedJournal.length > 0 && (
+        <section className="mt-12 max-w-3xl">
+          <h2 className="font-serif text-xl text-[#EBE4F2] mb-1">
+            Begin with the transmission
+          </h2>
+          <p className="text-sm text-zinc-400 mb-4">
+            This archive grows out of free essays in the Universal Transmissions
+            journal. Read the introduction for free, then go deeper here.
+          </p>
+          <div className="space-y-3">
+            {relatedJournal.map((j) => (
+              <a
+                key={j.slug}
+                href={journalUrl(j.slug)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block rounded-lg border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-amber-300/40 hover:bg-white/[0.04]"
+              >
+                <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                  Journal · {j.tradition}
+                </div>
+                <div className="mt-1 font-serif text-[#EBE4F2] group-hover:text-amber-200 transition-colors">
+                  {j.title}
+                </div>
+              </a>
+            ))}
+          </div>
         </section>
       )}
 
