@@ -554,6 +554,16 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/sufism-hermeticism-as-above-so-below/cover.png",
     "excerpt": "The Hermetic Principle of Correspondence ('as above, so below') and the Sufi teaching of the human as the mirror of the Divine say the same thing in two dialects \u2014 the cosmos is written in the soul, and the soul is written in the cosmos. Underneath both runs one alchemy: the false self must die before the true self can be realized."
+  },
+  {
+    "slug": "tantra-kabbalah-tree-of-life-and-the-body",
+    "title": "Tantra and Kabbalah: The Tree of Life and the Body of Light \u2014 Two Maps of the Inner Cosmos",
+    "tradition": "kabbalah",
+    "publishedAt": "2026-08-06",
+    "readTime": "19 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/tantra-kabbalah-tree-of-life-and-the-body/cover.png",
+    "excerpt": "Kundalini rising up the spine and the lightning-flash descending the Tree of Life are the same ascent in two dialects. Kashmir Shaivism and the Kabbalah both teach that the human body is a ladder \u2014 a microcosm that maps the whole of creation \u2014 and both place a feminine divine power at the hinge of the journey. This essay walks both maps side by side."
   }
 ];
 

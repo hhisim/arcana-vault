@@ -47,6 +47,7 @@ const SLUG_OVERRIDES: Record<string, string[]> = {
   'chaos-magick-not-what-you-think': ['etsy-4307968359', 'etsy-4489220708', 'etsy-4329093346'],
   'egregore-warfare-chaos-magic-viral-thoughtforms': ['etsy-4307968359', 'etsy-4489220708', 'etsy-4329093346'],
   'metatrons-cube-tree-of-life-kabbalah-geometry': ['etsy-4543080231', 'etsy-4488658060', 'etsy-4329093346'],
+  'tantra-kabbalah-tree-of-life-and-the-body': ['etsy-4543075975', 'etsy-4488658060', 'etsy-4302414623'],
   'entheogenic-dream-dmt-rem-visionary-states': ['etsy-4489018852', 'etsy-1888688570', 'etsy-1888639622'],
   'as-above-so-below-secret-thread-western-mysteries': ['etsy-4306241391', 'etsy-1890769318', 'etsy-4311828972'],
   'sufism-hermeticism-as-above-so-below': ['etsy-4488453137', 'etsy-1890769318', 'etsy-4311828972'],
