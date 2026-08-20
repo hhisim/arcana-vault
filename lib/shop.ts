@@ -17,6 +17,20 @@ export function formatUsd(dollars: number): string {
   return `$${dollars.toFixed(2)}`
 }
 
+export const ARCHIVE_PACK_DISCOUNT_PERCENT = 20
+
+export function archivePackSaleUnitAmountCents(dollars: number): number {
+  return Math.round(dollars * 100 * (100 - ARCHIVE_PACK_DISCOUNT_PERCENT) / 100)
+}
+
+export function archivePackSalePrice(dollars: number): number {
+  return archivePackSaleUnitAmountCents(dollars) / 100
+}
+
+export function formatArchiveSalePrice(dollars: number): string {
+  return formatUsd(archivePackSalePrice(dollars))
+}
+
 /**
  * The access file content handed to a buyer after purchase.
  * The GDrive link is included once an admin authorizes it; until then it
@@ -42,7 +56,7 @@ export function buildAccessTxt(opts: {
     '================================================================',
     '',
     `  Pack: ${opts.pack.title}`,
-    `  Price: ${formatUsd(opts.pack.price)}`,
+    `  Price: ${formatArchiveSalePrice(opts.pack.price)} (${ARCHIVE_PACK_DISCOUNT_PERCENT}% off; was ${formatUsd(opts.pack.price)})`,
     ...(opts.email ? [`  Purchased by: ${opts.email}`] : []),
     '',
     '--------------------------------------------------------------',

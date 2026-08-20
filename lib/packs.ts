@@ -1,5 +1,5 @@
 import packsJson from './shop-packs-enriched.json'
-import { SHOP_PACKS, packFromSku, formatUsd } from './shop'
+import { SHOP_PACKS, packFromSku, formatUsd, ARCHIVE_PACK_DISCOUNT_PERCENT, archivePackSalePrice, archivePackSaleUnitAmountCents, formatArchiveSalePrice } from './shop'
 
 export type ShopPack = {
   sku: string
@@ -56,4 +56,4 @@ export function heroImage(p: ShopPack): string | undefined {
   return p.images && p.images.length > 0 ? p.images[0] : undefined
 }
 
-export { formatUsd, packFromSku }
+export { ARCHIVE_PACK_DISCOUNT_PERCENT, archivePackSalePrice, archivePackSaleUnitAmountCents, formatArchiveSalePrice, formatUsd, packFromSku }

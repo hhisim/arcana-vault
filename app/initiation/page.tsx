@@ -23,7 +23,7 @@ export default function ArcanaInitiationPage() {
       <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
         <div className="grid gap-10 lg:grid-cols-[1.1fr,0.9fr]">
           <div>
-            <p className="text-xs uppercase tracking-[0.45em] text-[#C9A84C]">{t({ en: 'Free Lead Magnet', tr: 'Ücretsiz Lead Magnet', ru: 'Бесплатный лид-магнит' })}</p>
+            <p className="text-xs uppercase tracking-[0.45em] text-[#C9A84C]">{t({ en: 'Sacred Invitation', tr: 'Kutsal Davet', ru: 'Священное приглашение' })}</p>
             <h1 className="mt-5 font-serif text-5xl leading-tight text-[#E8E0F0] md:text-6xl">{t({ en: '7-Day Arcana Initiation', tr: '7 Günlük Arcana İnisiyasyonu', ru: '7-дневная Инициация Арканы' })}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#B8B0CC]">
               {t({

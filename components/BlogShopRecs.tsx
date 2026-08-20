@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { packsForPost } from '@/lib/pack-recs'
-import { heroImage, formatUsd } from '@/lib/packs'
+import { heroImage, formatUsd, formatArchiveSalePrice, ARCHIVE_PACK_DISCOUNT_PERCENT } from '@/lib/packs'
 
 /**
  * "Shop the Archives" strip — surfaces the shop packs relevant to a given
@@ -17,7 +17,7 @@ export default function BlogShopRecs({ slug, tradition }: { slug: string; tradit
         {/* Header */}
         <div className="px-7 pt-7 pb-5 border-b border-white/8">
           <p className="text-[10px] uppercase tracking-[0.35em] text-[#C9A84C] font-bold mb-2">
-            Deepen this study
+            Deepen this study · {ARCHIVE_PACK_DISCOUNT_PERCENT}% archive sale
           </p>
           <h2 className="font-cinzel text-2xl md:text-3xl text-[#E8E0F0]">
             Shop the Archives
@@ -54,8 +54,10 @@ export default function BlogShopRecs({ slug, tradition }: { slug: string; tradit
                 <h3 className="text-[#E8E0F0] font-medium leading-snug group-hover:text-[#C9A84C] transition-colors line-clamp-2 text-sm">
                   {p.title}
                 </h3>
-                <span className="text-[#C9A84C] text-xs font-semibold mt-2 inline-block">
-                  {formatUsd(p.price)} · View →
+                <span className="text-[#C9A84C] text-xs font-semibold mt-2 inline-flex items-center gap-2">
+                  <span>{formatArchiveSalePrice(p.price)}</span>
+                  <span className="text-[#6B6382] line-through">{formatUsd(p.price)}</span>
+                  <span>· View →</span>
                 </span>
               </Link>
             )

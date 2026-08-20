@@ -63,6 +63,7 @@ export const SHOP_PACKS: ShopPack[] = [
   { sku: "etsy-4543079786", etsyListingId: 4543079786, title: "Complete Tarot Grimoire | 331 PDF Tarot Library | Waite, Thoth, BOTA & Qabalah Study Archive | Instant Digital Download", price: 9.99, stripePriceId: "price_1U0p0MD1VUXAFjstMgMrChAv", views: 3, favs: 0 },
   { sku: "etsy-4547014447", etsyListingId: 4547014447, title: "Ayurveda & Natural Healing Study Library | 74 Files | 3.5 GB Books, Audio and Reference Archive", price: 23.95, stripePriceId: "price_1U0p0OD1VUXAFjstht2ZoTGv", views: 1, favs: 0 },
   { sku: "etsy-4547455025", etsyListingId: 4547455025, title: "Tarot Mega Bundle – 23GB Vault with 250+ Books, 260+ Decks, Videos, Spreads & More", price: 39.99, stripePriceId: "price_1U0p0QD1VUXAFjsthJmT4EvR", views: 0, favs: 0 },
+  { sku: "etsy-4552205423", etsyListingId: 4552205423, title: "Manifestation and Law of Attraction Mega Pack, 12GB Study Archive, 2400 Files, Abundance Meditation and New Thought Digital Library", price: 29.95, stripePriceId: "", views: 0, favs: 0 },
 ]
 
 export const PACK_BY_SKU: Record<string, ShopPack> = Object.fromEntries(

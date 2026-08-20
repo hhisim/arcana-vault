@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { PACKS } from '@/lib/packs'
+import { PACKS, ARCHIVE_PACK_DISCOUNT_PERCENT } from '@/lib/packs'
 import { SHOP_RATING } from '@/lib/reviews'
 import ProductCard from '@/components/shop/ProductCard'
 import ShopRating from '@/components/ShopRating'
@@ -18,10 +18,14 @@ export default function ShopPage({ searchParams }: { searchParams?: { cancelled?
   return (
     <main className="mx-auto max-w-6xl px-4 py-14">
       <header className="mb-10 text-center">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-emerald-300">
+          Archive sale · {ARCHIVE_PACK_DISCOUNT_PERCENT}% off every pack
+        </div>
         <h1 className="text-4xl font-serif mb-3">The Archives</h1>
         <p className="text-zinc-300 max-w-2xl mx-auto">
           Curated esoteric study packs — tarot, sacred geometry, grimoires, alchemy, and more.
           One-time purchase. Delivered as <strong>Google Drive access</strong> to your own archive.
+          <span className="mt-2 block text-emerald-300">Sale prices are charged at checkout; originals are shown crossed out.</span>
         </p>
         <div className="mt-4 flex items-center justify-center gap-2">
           <ShopRating rating={SHOP_RATING.rating} count={SHOP_RATING.count} size={18} />

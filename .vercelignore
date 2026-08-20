@@ -1,5 +1,5 @@
 node_modules
+.next
 .git
-*.md
-.env.local
-.env.production
+*.log
+hermes-data

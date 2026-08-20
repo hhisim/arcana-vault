@@ -51,6 +51,11 @@ const SLUG_OVERRIDES: Record<string, string[]> = {
   'entheogenic-dream-dmt-rem-visionary-states': ['etsy-4489018852', 'etsy-1888688570', 'etsy-1888639622'],
   'as-above-so-below-secret-thread-western-mysteries': ['etsy-4306241391', 'etsy-1890769318', 'etsy-4311828972'],
   'sufism-hermeticism-as-above-so-below': ['etsy-4488453137', 'etsy-1890769318', 'etsy-4311828972'],
+  'picatrix-technology-of-correspondence-astrological-magic': ['etsy-4543069477', 'etsy-1890769318', 'etsy-4310056291'],
+  'conference-of-the-birds-simurgh-map-of-self-recognition': ['etsy-4488453137', 'etsy-4330541166', 'etsy-4311828972'],
+  'corpus-hermeticum-poimandres-cosmic-human': ['etsy-1890769318', 'etsy-4543073329', 'etsy-4310056291'],
+  'sefer-yetzirah-32-paths-of-wisdom': ['etsy-4488658060', 'etsy-4302414623', 'etsy-4545842201'],
+  'kabbalah-tree-of-life-sefirot-explained': ['etsy-4488658060', 'etsy-4302414623', 'etsy-4545842201'],
 }
 
 /** Resolve packs for a post by slug, then tradition, with a flagSHip fallback. */

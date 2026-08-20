@@ -159,6 +159,13 @@ export function injectCrossLinks(
     }
   }
 
+  // Markdown links are already authored destinations. Protect their full
+  // `[label](url)` spans so glossary links cannot create invalid nested anchors.
+  const markdownLinkRegions: Array<{ start: number; end: number }> = []
+  for (const match of plainText.matchAll(/\[[^\]\n]+\]\([^\n)]*\)/g)) {
+    markdownLinkRegions.push({ start: match.index!, end: match.index! + match[0].length })
+  }
+
   // Find aliases in plain text, skipping protected regions
   type AliasMatch = { plainStart: number; plainEnd: number; alias: string; key: string; entry: GlossaryEntry }
   const aliasMatches: AliasMatch[] = []
@@ -205,7 +212,11 @@ export function injectCrossLinks(
       if (inside) break
     }
 
-    if (!inside) {
+    const overlapsMarkdownLink = markdownLinkRegions.some(
+      region => plainStart < region.end && plainEnd > region.start
+    )
+
+    if (!inside && !overlapsMarkdownLink) {
       aliasMatches.push({
         plainStart,
         plainEnd,
@@ -245,7 +256,9 @@ export function injectCrossLinks(
   // ── Step 4: Build the result by injecting cross-links into original HTML ───
   // Work backwards from the end to preserve position indices
   let result = content
-  for (const m of aliasMatches) {
+  // Apply replacements from right to left: offsets were calculated against the
+  // original content, so earlier insertions must not shift later positions.
+  for (const m of [...aliasMatches].reverse()) {
     const htmlStart = plainToHtml.get(m.plainStart)
     const htmlEnd = plainToHtml.get(m.plainEnd - 1)
     if (htmlStart === undefined || htmlEnd === undefined) continue

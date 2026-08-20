@@ -4,6 +4,7 @@ import { FormEvent, useState, useRef, Suspense, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useSiteI18n } from '@/lib/site-i18n'
+import { trackEvent } from '@/lib/analytics'
 import TraditionPicker from '@/app/components/TraditionPicker'
 import { PLAN_CONFIG, PlanId, TraditionId, getLaunchPrice, formatUsd } from '@/lib/plans'
 
@@ -130,6 +131,36 @@ function SignupForm() {
     if (!redirecting.current) setDebugLines([...debugLog])
   }, [])
 
+  const syncSignupLead = useCallback(async () => {
+    const signupSource = source || 'signup-page'
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name,
+          plan: pendingPlan,
+          source: signupSource,
+          context: 'account-signup',
+          metadata: {
+            mode,
+            currentStep: step,
+          },
+        }),
+      })
+
+      if (!res.ok) {
+        pushDebug(`marketing sync failed: status=${res.status}`)
+      } else {
+        pushDebug('marketing sync OK')
+      }
+    } catch (error) {
+      pushDebug(`marketing sync failed: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  }, [email, mode, name, pendingPlan, pushDebug, source, step])
+
   /* ─── Checkout helper ─── */
   const doCheckout = async (accessToken: string, plan: PlanId): Promise<boolean> => {
     pushDebug(`doCheckout: plan=${plan}`)
@@ -235,6 +266,11 @@ function SignupForm() {
     if (password !== confirmPassword) { setError(t({ en: 'Passwords do not match.', tr: 'Şifreler eşleşmiyor.', ru: 'Пароли не совпадают.' })); setLoading(false); inFlight.current = false; return }
 
     pushDebug(`signUp: plan=${pendingPlan}, email=${email}`)
+    trackEvent('signup_submit', {
+      plan: pendingPlan,
+      source: source || 'signup-page',
+      mode,
+    })
 
     try {
       const supabase = getBrowserSupabase()
@@ -248,11 +284,23 @@ function SignupForm() {
 
       if (signUpError) {
         pushDebug(`signUp error: ${signUpError.message}`)
+        trackEvent('signup_error', {
+          plan: pendingPlan,
+          source: source || 'signup-page',
+          mode,
+        })
         setError(signUpError.message)
         return
       }
 
       pushDebug(`signUp OK: user=${signUpData.user?.id?.substring(0, 8)}, session=${signUpData.session ? 'yes' : 'no'}`)
+      await syncSignupLead()
+      trackEvent('signup_success', {
+        plan: pendingPlan,
+        source: source || 'signup-page',
+        mode,
+        requires_verification: !signUpData.session,
+      })
 
       // If Supabase requires email confirmation, there's no session
       if (!signUpData.session) {
@@ -280,6 +328,11 @@ function SignupForm() {
 
       if (pendingPlan !== 'free') {
         pushDebug(`Checkout for plan=${pendingPlan}`)
+        trackEvent('signup_checkout_redirect', {
+          plan: pendingPlan,
+          source: source || 'signup-page',
+          mode,
+        })
         const redirected = await doCheckout(accessToken, pendingPlan)
         if (redirected) return
         return

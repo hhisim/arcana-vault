@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPack, PACKS, formatUsd, isBestseller } from '@/lib/packs'
+import { getPack, PACKS, formatUsd, formatArchiveSalePrice, ARCHIVE_PACK_DISCOUNT_PERCENT, isBestseller } from '@/lib/packs'
 import { getPackRating } from '@/lib/reviews'
 import { getJournalLinks, journalUrl } from '@/lib/journal-links'
 import BuyButton from '@/components/shop/BuyButton'
@@ -48,7 +48,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
       '@type': 'Offer',
       url: `${baseUrl}/shop/${pack.sku}`,
       priceCurrency: 'USD',
-      price: String(pack.price),
+      price: String(formatArchiveSalePrice(pack.price).replace('$', '')),
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
@@ -108,8 +108,12 @@ export default function PackPage({ params }: { params: { sku: string } }) {
             </span>
           )}
 
-          <div className="mt-3 flex items-center gap-4">
-            <span className="text-amber-200 font-semibold text-3xl">{formatUsd(pack.price)}</span>
+          <div className="mt-3 flex flex-wrap items-center gap-4">
+            <span className="text-amber-200 font-semibold text-3xl">{formatArchiveSalePrice(pack.price)}</span>
+            <span className="text-lg text-zinc-500 line-through decoration-red-400/80 decoration-2">{formatUsd(pack.price)}</span>
+            <span className="rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">
+              {ARCHIVE_PACK_DISCOUNT_PERCENT}% archive sale
+            </span>
             <span className="text-sm text-zinc-400">
               {pack.views > 0 && <span>{pack.views.toLocaleString()} views</span>}
               {pack.favs > 0 && <span> · {pack.favs} favorites</span>}
@@ -124,7 +128,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
           )}
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <BuyButton sku={pack.sku} price={formatUsd(pack.price)} />
+            <BuyButton sku={pack.sku} price={formatArchiveSalePrice(pack.price)} />
             <span className="text-xs text-zinc-500">One-time purchase · delivered as Google Drive access</span>
           </div>
 

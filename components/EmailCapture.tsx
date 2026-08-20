@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useSiteI18n } from '@/lib/site-i18n'
+import { trackEvent } from '@/lib/analytics'
 
 type EmailCaptureVariant = 'full' | 'compact'
 
@@ -48,22 +49,45 @@ export default function EmailCapture({
     e.preventDefault()
     if (!email) return
 
+    const listKey = apiPayload?.listKey || 'default'
+    const source = apiPayload?.source || 'unknown'
+
     setStatus('loading')
+    trackEvent('email_capture_submit', {
+      variant,
+      list_key: listKey,
+      source,
+    })
 
     try {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, ...(apiPayload || {}) }),
+        body: JSON.stringify({ email, context: 'email-capture', ...(apiPayload || {}) }),
       })
       const data = await res.json()
       if (data.success) {
         setStatus('success')
+        trackEvent('email_capture_success', {
+          variant,
+          list_key: listKey,
+          source,
+        })
       } else {
         setStatus('error')
+        trackEvent('email_capture_error', {
+          variant,
+          list_key: listKey,
+          source,
+        })
       }
     } catch {
       setStatus('error')
+      trackEvent('email_capture_error', {
+        variant,
+        list_key: listKey,
+        source,
+      })
     }
   }
 

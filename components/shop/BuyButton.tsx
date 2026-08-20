@@ -2,6 +2,34 @@
 
 import { useState } from 'react'
 
+function trackCheckoutStart(sku: string) {
+  try {
+    const payload = JSON.stringify({
+      tool: 'archive_shop',
+      action: 'checkout_started',
+      meta: {
+        sku,
+        href: typeof window !== 'undefined' ? window.location.pathname : undefined,
+      },
+      timestamp: new Date().toISOString(),
+    })
+
+    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+      const blob = new Blob([payload], { type: 'application/json' })
+      if (navigator.sendBeacon('/api/usage/track', blob)) return
+    }
+
+    void fetch('/api/usage/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload,
+      keepalive: true,
+    }).catch(() => {})
+  } catch {
+    // Analytics must never block checkout.
+  }
+}
+
 export default function BuyButton({ sku, price }: { sku: string; price: string }) {
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
@@ -11,6 +39,7 @@ export default function BuyButton({ sku, price }: { sku: string; price: string }
     setBusy(true)
     setErr('')
     try {
+      trackCheckoutStart(sku)
       const res = await fetch('/api/shop/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

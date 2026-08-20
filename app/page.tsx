@@ -119,10 +119,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <DemoOracle />
-
       {/* SHOP THE ARCHIVES */}
       <ShopArchives />
+
+      <DemoOracle />
 
       {/* HOW THIS DIFFERS FROM CHATGPT */}
       <section className="border-b border-white/5 bg-[#0a0a10]">

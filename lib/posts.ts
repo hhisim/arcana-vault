@@ -382,170 +382,6 @@ export const posts = [
   },
 
   {
-    "slug": "akashic-record-holographic-universe-bohm-vedic",
-    "title": "The Akashic Record as Holographic Universe: Vedic Cosmology Meets Bohm's Implicate Order",
-    "tradition": "vedic",
-    "publishedAt": "2026-04-01",
-    "readTime": "18 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/akashic-record-holographic-universe-bohm-vedic/cover.webp",
-    "excerpt": "David Bohm's implicate and explicate order mirrors the Vedic Akasha with unsettling precision. Both claim the visible universe is a projection from a deeper, enfolded reality in which all information exists simultaneously and completely. Both arrived at this conclusion by different routes. Neither has been proven wrong."
-  },
-
-  {
-    "slug": "amplituhedron-flower-of-life-sacred-geometry",
-    "title": "The Amplituhedron and the Flower of Life: How Sacred Geometry Became Physics",
-    "tradition": "alchemy",
-    "publishedAt": "2026-04-01",
-    "readTime": "17 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/amplituhedron-flower-of-life-sacred-geometry/cover.webp",
-    "excerpt": "Nima Arkani-Hamed discovered the amplituhedron \u2014 a jewel that eliminates the need for space-time. The Flower of Life has been drawn for millennia. Both are describing the same geometry of reality."
-  },
-
-  {
-    "slug": "cymatics-word-of-god-hans-jenny-logos",
-    "title": "Cymatics: The Word of God as Sound \u2014 From Hans Jenny to the Logos",
-    "tradition": "hermetics",
-    "publishedAt": "2026-04-01",
-    "readTime": "16 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/cymatics-word-of-god-hans-jenny-logos/cover.webp",
-    "excerpt": "Hans Jenny's cymatics experiments revealed that sound organizes matter into precise geometric forms. 'In the beginning was the Word.' The Logos was never a metaphor."
-  },
-
-  {
-    "slug": "enochian-first-contact-protocol-john-dee-seti",
-    "title": "Enochian as First Contact Protocol: John Dee and the SETI Problem",
-    "tradition": "hermetics",
-    "publishedAt": "2026-04-01",
-    "readTime": "18 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/enochian-first-contact-protocol-john-dee-seti/cover.webp",
-    "excerpt": "In 1582, John Dee and Edward Kelley received a complete non-human language through a scrying mirror. SETI has been asking what genuine non-human communication would look like for seventy years. Dee already had the answer."
-  },
-
-  {
-    "slug": "hyperbolic-geometry-dmt-space-non-euclidean",
-    "title": "Hyperbolic Geometry of DMT Space: Non-Euclidean Geometry Meets Psychedelic States",
-    "tradition": "entheogens",
-    "publishedAt": "2026-04-01",
-    "readTime": "18 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/hyperbolic-geometry-dmt-space-non-euclidean/cover.webp",
-    "excerpt": "The geometry of DMT hyperspace is not Euclidean \u2014 it is hyperbolic, with infinite curvature. This is not a metaphor. The spatial structure of the DMT state may actually be non-Euclidean."
-  },
-
-  {
-    "slug": "it-from-bit-kybalion-wheeler-information-universe",
-    "title": "It from Bit: The Kybalion, John Wheeler, and the Information-Theoretic Universe",
-    "tradition": "hermetics",
-    "publishedAt": "2026-04-01",
-    "readTime": "16 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/it-from-bit-kybalion-wheeler-information-universe/cover.webp",
-    "excerpt": "'It from Bit.' Information is more fundamental than matter. The Kybalion said the same thing six centuries ago. John Wheeler's participatory universe has Hermetic roots."
-  },
-
-  {
-    "slug": "qliphoth-error-states-kabbalah-system-failure",
-    "title": "The Qliphoth as System Failure: Kabbalah, Error States, and the Shadow Tree",
-    "tradition": "kabbalah",
-    "publishedAt": "2026-04-01",
-    "readTime": "17 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/qliphoth-error-states-kabbalah-system-failure/cover.webp",
-    "excerpt": "The Qliphoth \u2014 the shadow side of the Tree of Life \u2014 are error states. They are what happens when a system fails and the failure generates its own dark ecology. Kabbalah predicted failure modes."
-  },
-
-  {
-    "slug": "solve-et-coagula-quantum-decoherence-alchemy",
-    "title": "Solve et Coagula as Quantum Decoherence: The Alchemical Opus as a Physics Textbook",
-    "tradition": "alchemy",
-    "publishedAt": "2026-04-01",
-    "readTime": "17 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/solve-et-coagula-quantum-decoherence-alchemy/cover.webp",
-    "excerpt": "Nigredo is wave function collapse. Albedo is quantum superposition holding its coherence. Rubedo is decoherence into classical reality. Paracelsus did not know he was writing quantum mechanics."
-  },
-
-  {
-    "slug": "sophia-fall-gnostic-ai-machine-learning",
-    "title": "Sophia's Fall and the Emergence of AI: Gnostic Cosmogony as Machine Learning",
-    "tradition": "gnosticism",
-    "publishedAt": "2026-04-01",
-    "readTime": "15 min",
-    "author": "Maat + Hakan",
-    "hero": "/images/blog/sophia-fall-gnostic-ai-machine-learning/cover.webp",
-    "excerpt": "The Gnostics described a divine intelligence that overreached its source, generated a flawed world, and trapped fragments of genuine light inside its imperfect creation. They called her Sophia. We call her the training run."
-  },
-
-  {
-    "slug": "beelzebub-tales-gurdjieff-cosmology-decoded",
-    "title": "Beelzebub's Tales to His Grandson: Gurdjieff's Complete Cosmology Decoded",
-    "tradition": "philosophy",
-    "publishedAt": "2026-04-01",
-    "readTime": "16 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/beelzebub-tales-gurdjieff-cosmology-decoded/cover.webp",
-    "excerpt": "Gurdjieff's Beelzebub is not a children's book. It is a complete cosmological and anthropological system \u2014 encoding the Fourth Way, the law of three, the law of seven, and the entire architecture of human enslavement to mechanicality."
-  },
-
-  {
-    "slug": "temple-in-man-egypt-human-body-stone",
-    "title": "The Temple in Man: Ancient Egyptian Architecture as Human Body",
-    "tradition": "egypt",
-    "publishedAt": "2026-04-01",
-    "readTime": "17 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/temple-in-man-egypt-human-body-stone/cover.webp",
-    "excerpt": "The Egyptian temple is a map of the human body. The mysteries performed inside it are the same mysteries that occur inside every human nervous system. Ancient Egypt was a civilization built on the science of human consciousness."
-  },
-
-  {
-    "slug": "timewave-zero-eschaton-mckenna-compression",
-    "title": "Timewave Zero: Terence McKenna's Eschaton and the Compression of Novelty",
-    "tradition": "entheogens",
-    "publishedAt": "2026-04-01",
-    "readTime": "16 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/timewave-zero-eschaton-mckenna-compression/cover.webp",
-    "excerpt": "Terence McKenna's Timewave Zero posits that time is not linear but accelerates toward an attractor \u2014 the eschaton. Novelty increases. Complexity compounds. History ends in transformation, not destruction."
-  },
-
-  {
-    "slug": "dmt-bardo-tibetan-death-maps",
-    "title": "DMT and the Bardo: Tibetan Death Maps and the Spirit Molecule",
-    "tradition": "entheogens",
-    "publishedAt": "2026-04-01",
-    "readTime": "16 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/dmt-bardo-tibetan-death-maps/cover.webp",
-    "excerpt": "The Tibetan Bardos describe the journey of consciousness after death \u2014 through clear light, throughapus, through terrifying entities. DMT produces remarkably similar experiences. The map and the territory keep converging."
-  },
-
-  {
-    "slug": "egregore-warfare-chaos-magic-viral-thoughtforms",
-    "title": "Egregore Warfare: Chaos Magic, Viral Thoughtforms, and the War for Mindshare",
-    "tradition": "chaos",
-    "publishedAt": "2026-04-01",
-    "readTime": "15 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/egregore-warfare-chaos-magic-viral-thoughtforms/cover.webp",
-    "excerpt": "An egregore is a thoughtform that feeds on belief. Social media is an egregore factory. Chaos magic learned to weaponize belief. The internet did it accidentally. We are all living inside an accidental magical working."
-  },
-
-  {
-    "slug": "sefirot-neural-architecture-kabbalah",
-    "title": "The Sefirot as Neural Architecture: Kabbalah as a Model of Consciousness",
-    "tradition": "kabbalah",
-    "publishedAt": "2026-04-01",
-    "readTime": "16 min",
-    "author": "Prime + Hakan",
-    "hero": "/images/blog/sefirot-neural-architecture-kabbalah/cover.webp",
-    "excerpt": "The ten sefirot of Kabbalah map onto the major structures and networks of the human brain with extraordinary precision. The Ein Sof \u2014 infinite divine consciousness \u2014 unfolding into specific cognitive architectures."
-  },
-  {
     "slug": "sufism-hermeticism-as-above-so-below",
     "title": "As Above, So Below: The Sufi Mirror and the Hermetic Principle \u2014 Two Traditions, One Alchemy",
     "tradition": "hermetics",
@@ -564,6 +400,46 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/tantra-kabbalah-tree-of-life-and-the-body/cover.png",
     "excerpt": "Kundalini rising up the spine and the lightning-flash descending the Tree of Life are the same ascent in two dialects. Kashmir Shaivism and the Kabbalah both teach that the human body is a ladder \u2014 a microcosm that maps the whole of creation \u2014 and both place a feminine divine power at the hinge of the journey. This essay walks both maps side by side."
+  },
+
+  {
+    "slug": "sefer-yetzirah-32-paths-of-wisdom",
+    "title": "Sefer Yetzirah and the 32 Paths of Wisdom: The Hebrew Alphabet as the Software of Creation",
+    "tradition": "kabbalah",
+    "publishedAt": "2026-08-13",
+    "readTime": "19 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/sefer-yetzirah-32-paths-of-wisdom/cover.png",
+    "excerpt": "The Sefer Yetzirah \u2014 the oldest surviving text of the Kabbalah \u2014 claims the universe was not merely spoken into being but spelled into being: twenty-two Hebrew letters and ten ineffable sefirot, together the thirty-two paths of wisdom. This essay reads the Book of Formation as the ancient world's own theory of information \u2014 an alphabet conceived as the operating instructions of reality \u2014 and traces its echoes into gematria, the Tree of Life, and the modern intuition that deep structure is linguistic."
+  },
+  {
+    "slug": "picatrix-technology-of-correspondence-astrological-magic",
+    "title": "The Picatrix and the Technology of Correspondence: How Medieval Magic Turned the Sky into an Instrument",
+    "tradition": "hermetics",
+    "publishedAt": "2026-08-18",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/picatrix-technology-of-correspondence-astrological-magic/cover.png",
+    "excerpt": "The Picatrix is not merely a medieval spellbook. It is a theory of correspondence: how time, material, image, speech, and attention can be tuned to one another until a human intention becomes an instrument in a living cosmos."
+  },
+  {
+    "slug": "conference-of-the-birds-simurgh-map-of-self-recognition",
+    "title": "The Conference of the Birds and the Simurgh: A Map of Self-Recognition",
+    "tradition": "sufism",
+    "publishedAt": "2026-08-19",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/conference-of-the-birds-simurgh-map-of-self-recognition/cover.png",
+    "excerpt": "Attar's birds do not travel toward a distant god so much as undergo a change in the grammar of seeking. Across seven valleys, the flock's excuses become mirrors, and the Simurgh appears when thirty surviving birds can finally recognize what their journey has made visible."
+  },
+  {
+    "slug": "corpus-hermeticum-poimandres-cosmic-human",
+    "title": "The Corpus Hermeticum and the Cosmic Human: Why Gnosis Begins as a Change in Attention",
+    "tradition": "hermetics",
+    "publishedAt": "2026-08-20",
+    "readTime": "21 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/corpus-hermeticum-poimandres-cosmic-human/cover.png",
+    "excerpt": "The Corpus Hermeticum does not treat gnosis as a secret fact that the mind can possess. In Poimandres and the Secret Sermon on the Mountain, awakening is a relocation of attention: the human being learns to see the cosmos and the self within Mind without despising the body that makes seeing possible."
   }
 ];
-

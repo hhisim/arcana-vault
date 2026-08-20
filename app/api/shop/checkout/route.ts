@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { getCurrentUserLite } from '@/lib/account'
-import { packFromSku } from '@/lib/shop'
+import { archivePackSaleUnitAmountCents, packFromSku } from '@/lib/shop'
 
 // Force Node.js runtime — Edge can't reliably reach Stripe
 export const runtime = 'nodejs'
@@ -38,7 +38,19 @@ export async function POST(req: NextRequest) {
 
     const params: Stripe.Checkout.SessionCreateParams = {
       mode: 'payment',
-      line_items: [{ price: pack.stripePriceId, quantity: 1 }],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            unit_amount: archivePackSaleUnitAmountCents(pack.price),
+            product_data: {
+              name: pack.title,
+              metadata: { sku: pack.sku, etsy_listing_id: String(pack.etsyListingId) },
+            },
+          },
+          quantity: 1,
+        },
+      ],
       success_url: `${site}/shop/thanks?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${site}/shop?cancelled=1`,
       allow_promotion_codes: true,

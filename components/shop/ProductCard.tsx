@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ShopPack, heroImage, formatUsd, isBestseller } from '@/lib/packs'
+import { ShopPack, heroImage, formatUsd, formatArchiveSalePrice, ARCHIVE_PACK_DISCOUNT_PERCENT, isBestseller } from '@/lib/packs'
 import { getPackRating } from '@/lib/reviews'
 import BuyButton from '@/components/shop/BuyButton'
 import ShopRating from '@/components/ShopRating'
@@ -25,6 +25,9 @@ export default function ProductCard({ pack }: { pack: ShopPack }) {
             Bestseller
           </span>
         )}
+        <span className="absolute right-3 top-3 z-10 rounded-full border border-emerald-300/50 bg-emerald-400 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-[#06140c] shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+          {ARCHIVE_PACK_DISCOUNT_PERCENT}% off
+        </span>
         {/* Hero image — 50% opacity base, brightens on hover */}
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           {img ? (
@@ -69,9 +72,15 @@ export default function ProductCard({ pack }: { pack: ShopPack }) {
       </Link>
 
       {/* Price + buy bar */}
-      <div className="mt-auto flex items-center justify-between border-t border-white/10 px-4 py-3">
-        <span className="text-amber-200 font-semibold text-lg">{formatUsd(pack.price)}</span>
-        <BuyButton sku={pack.sku} price={formatUsd(pack.price)} />
+      <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/10 px-4 py-3">
+        <div className="leading-tight">
+          <div className="flex items-baseline gap-2">
+            <span className="text-amber-200 font-semibold text-lg">{formatArchiveSalePrice(pack.price)}</span>
+            <span className="text-xs text-zinc-500 line-through decoration-red-400/80 decoration-2">{formatUsd(pack.price)}</span>
+          </div>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300">Archive sale</div>
+        </div>
+        <BuyButton sku={pack.sku} price={formatArchiveSalePrice(pack.price)} />
       </div>
     </article>
   )

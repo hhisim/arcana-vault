@@ -15,6 +15,7 @@ const staticPages: MetadataRoute.Sitemap = [
   { url: `${BASE}/account`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
   { url: `${BASE}/membership`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
   { url: `${BASE}/faq`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
+  { url: `${BASE}/tarot-card-meanings`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   { url: `${BASE}/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
   { url: `${BASE}/redeem`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
 ]
