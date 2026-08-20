@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useSiteI18n } from '@/lib/site-i18n'
+import ArchiveSaleCta from '@/components/ArchiveSaleCta'
 
 const SECTIONS = [
   { id: 'intro',   icon: '⚡', color: '#C9A84C' },
@@ -57,6 +58,12 @@ export default function InquiryPage() {
           </div>
         </div>
       </section>
+
+      <ArchiveSaleCta
+        placement="inquiry-after-hero"
+        title="20% Archive Sale"
+        body="Turn the inquiry into a working library: esoteric study packs, source archives, tarot, alchemy, sacred geometry, and manifestation collections are discounted now."
+      />
 
       {/* Article Sections */}
       <div className="max-w-3xl mx-auto px-6 py-16">

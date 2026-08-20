@@ -10,6 +10,7 @@ import ComparisonBlock from '@/components/home/ComparisonBlock'
 import CodexShowcase from '@/components/CodexShowcase'
 import LiveAgoraFeed from '@/components/LiveAgoraFeed'
 import BookPreview from '@/components/library/BookPreview'
+import ShopArchives from '@/components/home/ShopArchives'
 
 type Lang = 'en' | 'tr' | 'ru'
 
@@ -117,6 +118,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* SHOP THE ARCHIVES */}
+      <ShopArchives />
 
       <DemoOracle />
 

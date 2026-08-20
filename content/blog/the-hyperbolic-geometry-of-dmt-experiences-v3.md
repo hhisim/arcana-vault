@@ -15,6 +15,8 @@ author: Prime + Hakan
 
 ## I. THE HUMAN ANCHOR: THE GEOMETRY OF DMT STATES
 
+To go deeper into the entheogenic sources underpinning this analysis — Strassman's clinical transcripts, the ayahuasca and psilocybin traditions, and the primary visionary texts held in the Vault's archive — you can [go deeper into the entheogenic sources here](/shop/etsy-4489018852).
+
 ### Foundational Hypothesis and Algorithmic Reduction Framework
 
 This essay represents an exhaustive phenomenological and algorithmic analysis of DMT-induced states of consciousness. The analytical framework herein is deliberately constructed to distinguish itself from purely phenomenological, symbolic, neuroscientific, or spiritual accounts of psychedelic experience. The central thesis does not claim to know what ultimately implements the effects here described (i.e., in light of the substrate problem of consciousness), but maintains that the analytical approach possesses genuine explanatory power without resolving that deeper metaphysical question.

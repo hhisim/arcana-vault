@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { posts } from '@/lib/posts'
+import { PACKS } from '@/lib/packs'
 
 const BASE = 'https://www.vaultofarcana.com'
 
@@ -14,6 +15,7 @@ const staticPages: MetadataRoute.Sitemap = [
   { url: `${BASE}/account`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
   { url: `${BASE}/membership`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
   { url: `${BASE}/faq`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
+  { url: `${BASE}/tarot-card-meanings`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   { url: `${BASE}/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
   { url: `${BASE}/redeem`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
 ]
@@ -60,11 +62,20 @@ const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
   priority: 0.7,
 }))
 
+// Shop packs (the commerce pages!)
+const shopPages: MetadataRoute.Sitemap = PACKS.map((p) => ({
+  url: `${BASE}/shop/${p.sku}`,
+  lastModified: new Date(),
+  changeFrequency: 'weekly' as const,
+  priority: 0.8,
+}))
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticPages,
     ...sections,
     ...traditionPages,
     ...blogPages,
+    ...shopPages,
   ]
 }

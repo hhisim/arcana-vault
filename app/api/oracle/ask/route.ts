@@ -72,8 +72,6 @@ export async function POST(req: NextRequest) {
 
   const params = new URLSearchParams({ q, pack: tradition, mode })
   if (targetLang) params.set('target_lang', targetLang)
-  const speed = body?.speed ? String(body.speed) : undefined
-  if (speed) params.set('speed', speed)
 
   try {
     const upstream = await fetch(`${base.replace(/\/$/, '')}/ask?${params.toString()}`, {

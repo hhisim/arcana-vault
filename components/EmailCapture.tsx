@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { getFirstTouchAttribution } from '@/lib/attribution'
 import { useSiteI18n } from '@/lib/site-i18n'
+import { trackEvent } from '@/lib/analytics'
 
 type EmailCaptureVariant = 'full' | 'compact'
 
@@ -18,9 +18,7 @@ interface EmailCaptureProps {
   successTitle?: string
   successBody?: string
   disclaimer?: string
-  apiPayload?: Record<string, unknown>
-  includeFirstTouchAttribution?: boolean
-  successActions?: Array<{ href: string; label: string; primary?: boolean }>
+  apiPayload?: Record<string, string>
 }
 
 export default function EmailCapture({
@@ -36,8 +34,6 @@ export default function EmailCapture({
   successBody,
   disclaimer = 'No spam. Unsubscribe anytime. Your sovereignty is respected.',
   apiPayload,
-  includeFirstTouchAttribution = false,
-  successActions,
 }: EmailCaptureProps) {
   const { t } = useSiteI18n()
   const [email, setEmail] = useState('')
@@ -53,26 +49,45 @@ export default function EmailCapture({
     e.preventDefault()
     if (!email) return
 
+    const listKey = apiPayload?.listKey || 'default'
+    const source = apiPayload?.source || 'unknown'
+
     setStatus('loading')
+    trackEvent('email_capture_submit', {
+      variant,
+      list_key: listKey,
+      source,
+    })
 
     try {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          ...(apiPayload || {}),
-          ...(includeFirstTouchAttribution ? { attribution: getFirstTouchAttribution() } : {}),
-        }),
+        body: JSON.stringify({ email, context: 'email-capture', ...(apiPayload || {}) }),
       })
       const data = await res.json()
       if (data.success) {
         setStatus('success')
+        trackEvent('email_capture_success', {
+          variant,
+          list_key: listKey,
+          source,
+        })
       } else {
         setStatus('error')
+        trackEvent('email_capture_error', {
+          variant,
+          list_key: listKey,
+          source,
+        })
       }
     } catch {
       setStatus('error')
+      trackEvent('email_capture_error', {
+        variant,
+        list_key: listKey,
+        source,
+      })
     }
   }
 
@@ -86,21 +101,6 @@ export default function EmailCapture({
         <p className="text-[#E8E0F0] font-cinzel text-lg">{resolvedSuccessTitle}</p>
         {resolvedSuccessBody ? (
           <p className="mt-3 max-w-lg text-sm leading-7 text-[#9B93AB]">{resolvedSuccessBody}</p>
-        ) : null}
-        {successActions?.length ? (
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {successActions.map((action) => (
-              <a
-                key={action.href}
-                href={action.href}
-                className={action.primary
-                  ? 'rounded-xl bg-[#C9A84C] px-5 py-3 text-sm font-bold text-[#0A0A10] transition hover:opacity-90'
-                  : 'rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-[#E8E0F0] transition hover:bg-white/10'}
-              >
-                {action.label}
-              </a>
-            ))}
-          </div>
         ) : null}
       </div>
     )

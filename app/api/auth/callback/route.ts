@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { getAdminSupabase } from '@/lib/supabase/admin'
-import { normalizePendingPlan } from '@/lib/billing-flow'
 
 export async function GET(req: NextRequest) {
   const requestUrl = new URL(req.url)
   const code = requestUrl.searchParams.get('code')
   const promo = requestUrl.searchParams.get('promo')
-  const pendingPlan = normalizePendingPlan(requestUrl.searchParams.get('plan'))
   const promoPlan = requestUrl.searchParams.get('plan') || 'seeker'
   const promoDays = Math.min(Number(requestUrl.searchParams.get('days')) || 30, 90)
 
   if (code) {
-    // A confirmed signup must return to tradition selection before it can activate a free plan
-    // or begin paid checkout. Promo links retain their separate account destination.
-    const redirectPath = promo ? '/account' : `/signup?plan=${pendingPlan}&step=traditions`
-    const response = NextResponse.redirect(new URL(redirectPath, req.url))
+    const redirectTo = promo ? '/account' : '/inquiry'
+    const response = NextResponse.redirect(new URL(redirectTo, req.url))
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

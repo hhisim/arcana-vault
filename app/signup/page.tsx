@@ -4,9 +4,9 @@ import { FormEvent, useState, useRef, Suspense, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useSiteI18n } from '@/lib/site-i18n'
+import { trackEvent } from '@/lib/analytics'
 import TraditionPicker from '@/app/components/TraditionPicker'
 import { PLAN_CONFIG, PlanId, TraditionId, getLaunchPrice, formatUsd } from '@/lib/plans'
-import { normalizePendingPlan } from '@/lib/billing-flow'
 
 /* ─── Password visibility toggle ─────────────────────────── */
 function EyeIcon({ open }: { open: boolean }) {
@@ -102,8 +102,8 @@ function SignupForm() {
   const [mode, setMode] = useState<'login' | 'signup'>(
     params.get('mode') === 'login' ? 'login' : 'signup'
   )
-  const planParam = params.get('plan')
-  const pendingPlan: PlanId = normalizePendingPlan(planParam)
+  const planParam = params.get('plan') as PlanId | null
+  const pendingPlan: PlanId = (planParam && planParam in PLAN_CONFIG) ? planParam : 'free'
   const source = params.get('source') || ''
 
   const [step, setStep] = useState<'signup' | 'traditions' | 'verify'>(
@@ -130,6 +130,36 @@ function SignupForm() {
     addDebug(msg)
     if (!redirecting.current) setDebugLines([...debugLog])
   }, [])
+
+  const syncSignupLead = useCallback(async () => {
+    const signupSource = source || 'signup-page'
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name,
+          plan: pendingPlan,
+          source: signupSource,
+          context: 'account-signup',
+          metadata: {
+            mode,
+            currentStep: step,
+          },
+        }),
+      })
+
+      if (!res.ok) {
+        pushDebug(`marketing sync failed: status=${res.status}`)
+      } else {
+        pushDebug('marketing sync OK')
+      }
+    } catch (error) {
+      pushDebug(`marketing sync failed: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  }, [email, mode, name, pendingPlan, pushDebug, source, step])
 
   /* ─── Checkout helper ─── */
   const doCheckout = async (accessToken: string, plan: PlanId): Promise<boolean> => {
@@ -236,26 +266,41 @@ function SignupForm() {
     if (password !== confirmPassword) { setError(t({ en: 'Passwords do not match.', tr: 'Şifreler eşleşmiyor.', ru: 'Пароли не совпадают.' })); setLoading(false); inFlight.current = false; return }
 
     pushDebug(`signUp: plan=${pendingPlan}, email=${email}`)
+    trackEvent('signup_submit', {
+      plan: pendingPlan,
+      source: source || 'signup-page',
+      mode,
+    })
 
     try {
       const supabase = getBrowserSupabase()
-      const confirmationRedirect = `${window.location.origin}/api/auth/callback?plan=${encodeURIComponent(pendingPlan)}`
       const { error: signUpError, data: signUpData } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: { full_name: name },
-          emailRedirectTo: confirmationRedirect,
         },
       })
 
       if (signUpError) {
         pushDebug(`signUp error: ${signUpError.message}`)
+        trackEvent('signup_error', {
+          plan: pendingPlan,
+          source: source || 'signup-page',
+          mode,
+        })
         setError(signUpError.message)
         return
       }
 
       pushDebug(`signUp OK: user=${signUpData.user?.id?.substring(0, 8)}, session=${signUpData.session ? 'yes' : 'no'}`)
+      await syncSignupLead()
+      trackEvent('signup_success', {
+        plan: pendingPlan,
+        source: source || 'signup-page',
+        mode,
+        requires_verification: !signUpData.session,
+      })
 
       // If Supabase requires email confirmation, there's no session
       if (!signUpData.session) {
@@ -264,7 +309,7 @@ function SignupForm() {
         return
       }
 
-      // Session exists — sync cookies, then let every new member choose traditions before activation or checkout.
+      // Session exists — sync cookies and proceed
       const accessToken = signUpData.session?.access_token
       const refreshToken = signUpData.session?.refresh_token
 
@@ -280,7 +325,22 @@ function SignupForm() {
       }
 
       await new Promise(r => setTimeout(r, 100))
-      setStep('traditions')
+
+      if (pendingPlan !== 'free') {
+        pushDebug(`Checkout for plan=${pendingPlan}`)
+        trackEvent('signup_checkout_redirect', {
+          plan: pendingPlan,
+          source: source || 'signup-page',
+          mode,
+        })
+        const redirected = await doCheckout(accessToken, pendingPlan)
+        if (redirected) return
+        return
+      }
+
+      pushDebug('Free plan — going to /inquiry')
+      redirecting.current = true
+      router.push('/inquiry')
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       pushDebug(`UNHANDLED: ${msg}`)
@@ -294,10 +354,6 @@ function SignupForm() {
   /* ─── Save traditions + checkout ─── */
   const onSaveAndCheckout = async () => {
     if (inFlight.current || loading) return
-    if (maxSlots !== 99 && selectedTraditions.length === 0) {
-      setError(t({ en: 'Choose at least one tradition before continuing.', tr: 'Devam etmeden önce en az bir gelenek seç.', ru: 'Выберите хотя бы одну традицию, чтобы продолжить.' }))
-      return
-    }
     inFlight.current = true
     setLoading(true)
     setError('')
@@ -306,38 +362,19 @@ function SignupForm() {
       const supabase = getBrowserSupabase()
       const { data: sessionData } = await supabase.auth.getSession()
       const accessToken = sessionData?.session?.access_token
-      if (!accessToken) {
-        setError(t({ en: 'Your session has expired. Please sign in again.', tr: 'Oturumun sona erdi. Lütfen tekrar giriş yap.', ru: 'Сеанс истёк. Пожалуйста, войдите снова.' }))
-        return
-      }
 
-      const traditionsResponse = await fetch('/api/account/traditions', {
+      await fetch('/api/account/traditions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
         },
-        body: JSON.stringify({ traditions: selectedTraditions, pendingPlan }),
+        body: JSON.stringify({ traditions: selectedTraditions }),
       })
-      if (!traditionsResponse.ok) {
-        const data = await traditionsResponse.json().catch(() => ({}))
-        setError((data as { detail?: string }).detail || 'Could not save your traditions. Please try again.')
-        return
-      }
 
-      if (pendingPlan !== 'free') {
+      if (pendingPlan !== 'free' && accessToken) {
         const redirected = await doCheckout(accessToken, pendingPlan)
         if (redirected) return
-        return
-      }
-
-      const freeResponse = await fetch('/api/billing/activate-free', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${accessToken}` },
-      })
-      if (!freeResponse.ok) {
-        const data = await freeResponse.json().catch(() => ({}))
-        setError((data as { detail?: string }).detail || 'Could not activate your free plan. Please try again.')
         return
       }
 
@@ -445,11 +482,7 @@ function SignupForm() {
     <section className="mx-auto max-w-xl px-6 py-20">
       <div className="glass-card p-8 space-y-6">
         <div>
-          <h1 className="font-serif text-4xl text-[var(--text-primary)]">
-            {isFreePlan
-              ? t({ en: 'Create your free Vault', tr: 'Ücretsiz Vault’unu oluştur', ru: 'Создайте своё бесплатное Хранилище' })
-              : t({ en: `Create your ${PLAN_CONFIG[pendingPlan].name} account`, tr: `${PLAN_CONFIG[pendingPlan].name} hesabını oluştur`, ru: `Создайте аккаунт ${PLAN_CONFIG[pendingPlan].name}` })}
-          </h1>
+          <h1 className="font-serif text-4xl text-[var(--text-primary)]">{t({ en: 'Create your free Vault', tr: 'Ücretsiz Vault’unu oluştur', ru: 'Создайте своё бесплатное Хранилище' })}</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">{sourceLabel}</p>
         </div>
         {isFreePlan && (
@@ -502,11 +535,7 @@ function SignupForm() {
             disabled={loading || (!!confirmPassword && password !== confirmPassword)}
             className="w-full rounded-full bg-[var(--primary-gold)] px-5 py-3 text-black font-medium disabled:opacity-50"
           >
-            {loading
-              ? t({ en: 'Opening your Vault — do not close this page…', tr: 'Vault’un açılıyor — bu sayfayı kapatma…', ru: 'Ваше Хранилище открывается — не закрывайте эту страницу…' })
-              : isFreePlan
-                ? t({ en: 'Create free account', tr: 'Ücretsiz hesap oluştur', ru: 'Создать бесплатный аккаунт' })
-                : t({ en: 'Continue to choose traditions', tr: 'Gelenekleri seçmeye devam et', ru: 'Продолжить к выбору традиций' })}
+            {loading ? t({ en: 'Opening your Vault — do not close this page…', tr: 'Vault’un açılıyor — bu sayfayı kapatma…', ru: 'Ваше Хранилище открывается — не закрывайте эту страницу…' }) : isFreePlan ? t({ en: 'Create free account', tr: 'Ücretsiz hesap oluştur', ru: 'Создать бесплатный аккаунт' }) : t('auth.submit')}
           </button>
         </form>
         <div className="text-center space-y-2">

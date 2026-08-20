@@ -4,7 +4,6 @@ import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthProvider'
 import { PLAN_CONFIG, TraditionId } from '@/lib/plans'
-import { subscriptionActivationState } from '@/lib/billing-flow'
 import { useSiteI18n } from '@/lib/site-i18n'
 import Link from 'next/link'
 
@@ -22,38 +21,15 @@ function MembershipContent() {
   const auth = useAuth()
   const { t } = useSiteI18n()
   const params = useSearchParams()
-  const [checkoutState, setCheckoutState] = useState<'idle' | 'pending' | 'active'>('idle')
+  const [checkedOut, setCheckedOut] = useState(false)
 
   useEffect(() => {
-    if (params.get('checkout') !== 'success') return
-
-    let cancelled = false
-    const delays = [0, 1500, 3500, 7000, 12000]
-    const timers: ReturnType<typeof setTimeout>[] = []
-    setCheckoutState('pending')
-
-    const checkActivation = async () => {
-      try {
-        const res = await fetch('/api/account/me', { cache: 'no-store' })
-        if (!res.ok || cancelled) return
-        const account = await res.json()
-        const status = subscriptionActivationState(
-          account.plan,
-          ['seeker', 'adept', 'full'].includes(account.plan) ? 'active' : 'inactive',
-        )
-        if (status === 'active') {
-          setCheckoutState('active')
-          await auth.refresh()
-        }
-      } catch {
-        // Keep the page in the honest pending state; the member can refresh after Stripe finishes.
-      }
-    }
-
-    for (const delay of delays) timers.push(setTimeout(() => void checkActivation(), delay))
-    return () => {
-      cancelled = true
-      timers.forEach(clearTimeout)
+    if (params.get('checkout') === 'success') {
+      setCheckedOut(true)
+      // Refresh auth state multiple times — Stripe webhook may take a few seconds
+      auth.refresh()
+      const timer = setTimeout(() => auth.refresh(), 3000)
+      return () => clearTimeout(timer)
     }
   }, [params, auth])
 
@@ -78,14 +54,9 @@ function MembershipContent() {
 
   return (
     <section className="mx-auto max-w-3xl px-6 py-16 space-y-8">
-      {checkoutState === 'pending' && (
+      {checkedOut && (
         <div className="rounded-2xl border border-[var(--primary-gold)] bg-[var(--primary-gold)]/10 px-6 py-4 text-center text-[var(--primary-gold)]">
-          Payment received — activating your membership now. This can take a few seconds.
-        </div>
-      )}
-      {checkoutState === 'active' && (
-        <div className="rounded-2xl border border-[var(--primary-gold)] bg-[var(--primary-gold)]/10 px-6 py-4 text-center text-[var(--primary-gold)]">
-          ✅ Membership active — welcome to {cfg?.name}!
+          ✅ Payment confirmed — welcome to {cfg?.name}!
         </div>
       )}
 

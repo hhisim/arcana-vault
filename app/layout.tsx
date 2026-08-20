@@ -40,6 +40,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XC46N98LDY');" }} />
       </head>
       <body className="bg-deep text-text-primary font-sans antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': 'https://www.vaultofarcana.com/#org',
+                  name: 'Vault of Arcana',
+                  url: 'https://www.vaultofarcana.com',
+                  logo: { '@type': 'ImageObject', url: 'https://www.vaultofarcana.com/logo.svg' },
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://www.vaultofarcana.com/#website',
+                  url: 'https://www.vaultofarcana.com',
+                  name: 'Vault of Arcana',
+                  description:
+                    'A living mystery school — rare esoteric archives, grounded essays on the Western and Eastern traditions, and a 50-pack digital archive shop.',
+                  publisher: { '@id': 'https://www.vaultofarcana.com/#org' },
+                },
+              ],
+            }),
+          }}
+        />
         <Providers>
           <NavBar />
           <main className="pt-20">{children}</main>
