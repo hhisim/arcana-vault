@@ -4,10 +4,7 @@ import { getAdminSupabase } from '@/lib/supabase/admin'
 import { planFromPriceId, PlanId } from '@/lib/plans'
 import { packFromSku, buildAccessTxt } from '@/lib/shop'
 import { sendAccessEmail } from '@/lib/brevo'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  httpClient: Stripe.createFetchHttpClient(),
-})
+import { getStripe } from '@/lib/stripe'
 
 function resolvePlan(subscription: Stripe.Subscription): PlanId {
   const metadataPlan = subscription.metadata?.plan
@@ -92,6 +89,8 @@ export async function POST(req: Request) {
   if (!signature) {
     return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 })
   }
+
+  const stripe = getStripe()
 
   let event: Stripe.Event
 
