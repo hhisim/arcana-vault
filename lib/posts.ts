@@ -433,6 +433,16 @@ export const posts = [
     "excerpt": "Attar's birds do not travel toward a distant god so much as undergo a change in the grammar of seeking. Across seven valleys, the flock's excuses become mirrors, and the Simurgh appears when thirty surviving birds can finally recognize what their journey has made visible."
   },
   {
+    "slug": "cymatics-language-of-form",
+    "title": "Cymatics and the Language of Form: When Vibration Learns to Spell",
+    "tradition": "sacred-geometry",
+    "publishedAt": "2026-08-15",
+    "readTime": "15 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/cymatics/cover.png",
+    "excerpt": "Hans Jenny's vibrating plate did more than make sand dance — it introduced frequency, medium, and form as one continuum. How cymatics turns the Codex into a language you can actually hear, test, and read."
+  },
+  {
     "slug": "corpus-hermeticum-poimandres-cosmic-human",
     "title": "The Corpus Hermeticum and the Cosmic Human: Why Gnosis Begins as a Change in Attention",
     "tradition": "hermetics",
