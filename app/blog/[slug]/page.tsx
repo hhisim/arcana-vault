@@ -151,6 +151,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: "Cymatics and the Word of God: Hans Jenny's discovery that sound organizes matter into geometry — and what it reveals about the mystical Logos that shapes creation.",
     keywords: ["cymatics", "Hans Jenny", "sound and geometry", "Logos", "word of God", "cymatic patterns"],
   },
+  'cymatics-language-of-form': {
+    description: "Cymatics and the language of form: Hans Jenny's vibrating plate, the Principle of Vibration, and a testable path from sound to geometry to correspondence.",
+    keywords: ["cymatics", "Hans Jenny", "sound and geometry", "vibration", "sacred geometry", "correspondence", "tonoscope"],
+  },
   'enochian-first-contact-protocol-john-dee-seti': {
     description: "Enochian as first-contact protocol: how John Dee and Edward Kelley received a complete angelic language in 1582 — and what SETI's search for non-human communication can learn.",
     keywords: ["Enochian", "John Dee", "Edward Kelley", "angelic language", "SETI", "Enochian Keys"],
