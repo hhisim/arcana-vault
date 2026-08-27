@@ -227,6 +227,18 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: 'The Corpus Hermeticum, Poimandres, and the Secret Sermon on the Mountain: why Hermetic gnosis begins as a change in attention rather than the possession of secret information.',
     keywords: ['Corpus Hermeticum', 'Poimandres', 'Hermes Trismegistus', 'Hermeticism', 'Nous', 'gnosis', 'rebirth', 'cosmic human'],
   },
+  'alchemical-vessel-athanor-technology-of-transformation': {
+    description: 'The alchemical vessel as a technology of sustained attention: Fulcanelli, the Picatrix, Manly P. Hall, and the athanor as a boundary that changes the observer before the substance.',
+    keywords: ['alchemical vessel', 'athanor', 'athenor', 'alchemy', 'Magnum Opus', 'Fulcanelli', 'Picatrix', 'inner transformation', 'sustained attention'],
+  },
+  'cosmic-bio-machine-sumerian-light-science': {
+    description: 'Dr. George Merkl’s Sumer-Tech and the Cosmic Bio-Machine: life crystals, structured water, implosion cosmology, biophotons, and a disciplined reading of a speculative Sumerian science.',
+    keywords: ['George Merkl', 'Sumer-Tech', 'Cosmic Bio-Machine', 'life crystals', 'structured water', 'implosion', 'biophotons', 'Sumerian science', 'sacred geometry'],
+  },
+  'vijnana-bhairava-112-doors-technology-of-attention': {
+    description: 'The Vijnana Bhairava’s 112 teachings read as a grammar of thresholds: breath, sound, touch, desire, and the gaps between thoughts as doorways into non-dual attention.',
+    keywords: ['Vijnana Bhairava', 'Vijnanabhairava', 'Bhairava Tantra', '112 meditations', 'Kashmir Shaivism', 'tantra', 'meditation', 'attention', 'breath awareness', 'Shakti'],
+  },
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {

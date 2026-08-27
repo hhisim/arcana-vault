@@ -451,5 +451,35 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/corpus-hermeticum-poimandres-cosmic-human/cover.png",
     "excerpt": "The Corpus Hermeticum does not treat gnosis as a secret fact that the mind can possess. In Poimandres and the Secret Sermon on the Mountain, awakening is a relocation of attention: the human being learns to see the cosmos and the self within Mind without despising the body that makes seeing possible."
+  },
+  {
+    "slug": "alchemical-vessel-athanor-technology-of-transformation",
+    "title": "The Alchemical Vessel: Why the Athanor Changes the Observer Before It Changes the Substance",
+    "tradition": "alchemy",
+    "publishedAt": "2026-08-22",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/alchemical-vessel-athanor-technology-of-transformation/cover.png",
+    "excerpt": "The athanor is not primarily an image of heat. It is a technology of sustained attention: a vessel that holds unstable material, time, and contradiction long enough for transformation to become legible — changing the observer before it changes the substance."
+  },
+  {
+    "slug": "cosmic-bio-machine-sumerian-light-science",
+    "title": "The Cosmic Bio-Machine: Dr. George Merkl and the Sumerian Science of Light-Born Life",
+    "tradition": "sacred-geometry",
+    "publishedAt": "2026-08-24",
+    "readTime": "21 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/cosmic-bio-machine-sumerian-light-science/cover.png",
+    "excerpt": "A forgotten San Diego researcher claimed he could grow proteins from light, water, and geometry — and traced the method back to Sumer. Inside the Cosmic Bio-Machine: life crystals, scrolls of light, and the most overlooked esoteric-scientific manuscript of the twentieth century."
+  },
+  {
+    "slug": "vijnana-bhairava-112-doors-technology-of-attention",
+    "title": "The 112 Doors of the Vijnana Bhairava: How Attention Becomes a Technology",
+    "tradition": "tantra",
+    "publishedAt": "2026-08-26",
+    "readTime": "18 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/vijnana-bhairava-112-doors-technology-of-attention/cover.png",
+    "excerpt": "The Vijnana Bhairava is often presented as a catalogue of 112 meditations. Read beside its closing verses and translation history, it becomes a grammar of thresholds — breath, sound, touch, desire, and the gaps in between — where attention can change state."
   }
 ];
