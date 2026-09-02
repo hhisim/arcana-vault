@@ -481,5 +481,35 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/vijnana-bhairava-112-doors-technology-of-attention/cover.png",
     "excerpt": "The Vijnana Bhairava is often presented as a catalogue of 112 meditations. Read beside its closing verses and translation history, it becomes a grammar of thresholds — breath, sound, touch, desire, and the gaps in between — where attention can change state."
+  },
+  {
+    "slug": "walter-russell-universal-one-cosmology-of-light",
+    "title": "Walter Russell's The Universal One: When Cosmology Became a Diagram of Light",
+    "tradition": "sacred-geometry",
+    "publishedAt": "2026-08-28",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/walter-russell-universal-one-cosmology-of-light/cover.png",
+    "excerpt": "Walter Russell's The Universal One is not a lost physics textbook. It is an artist's attempt to make spiritual monism measurable-looking: a cosmology of light, wave rhythm, and universal return that reveals how diagrams give metaphysics the authority of science."
+  },
+  {
+    "slug": "rosicrucian-manifestos-public-secret-reformation",
+    "title": "The Rosicrucian Manifestos: How a Secret Brotherhood Turned Absence into a Method of Reform",
+    "tradition": "rosicrucianism",
+    "publishedAt": "2026-08-30",
+    "readTime": "21 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/rosicrucian-manifestos-public-secret-reformation/cover.png",
+    "excerpt": "The Rosicrucian manifestos did not simply hide a secret order. They made secrecy public, turning an absent fraternity into a method for recruiting readers, provoking critics, and testing what reform can mean when it enters history as a text."
+  },
+  {
+    "slug": "taoist-microcosmic-orbit-inner-alchemy",
+    "title": "The Microcosmic Orbit: How Taoist Inner Alchemy Turns the Body into a Practice of Return",
+    "tradition": "taoism",
+    "publishedAt": "2026-09-01",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/taoist-microcosmic-orbit-inner-alchemy/cover.png",
+    "excerpt": "The microcosmic orbit is often marketed as a hidden energy circuit. Read historically and symbolically, it is more exacting: a pedagogy of return that trains attention to circulate through the body rather than escape it."
   }
 ];

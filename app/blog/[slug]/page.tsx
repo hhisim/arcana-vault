@@ -95,6 +95,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: 'Jing, Qi, Shen — the three treasures of Taoist inner alchemy. Sexual energy as the fuel of spiritual transformation.',
     keywords: ['Taoist sexual alchemy', 'Nei Dan', 'Jing Qi Shen', 'three treasures', 'sexual energy', 'Internal Elixir'],
   },
+  'taoist-microcosmic-orbit-inner-alchemy': {
+    description: 'The Taoist microcosmic orbit read as a pedagogy of return: how inner alchemy, the three treasures, breath, and embodied attention turn the body into a practice of circulation rather than escape.',
+    keywords: ['microcosmic orbit', 'Taoist inner alchemy', 'Neidan', 'qi cultivation', 'Jing Qi Shen', 'dantian', 'breath practice', 'Daoist philosophy', 'embodied attention'],
+  },
   'taoism-quantum-physics-real-parallels': {
     description: 'Separating meaningful metaphysical resonance from pop-spirituality — where Tao and quantum mechanics genuinely converge.',
     keywords: ['Taoism', 'quantum physics', 'Fritjof Capra', 'Tao of physics', 'metaphysics', 'pop-spirituality'],
@@ -238,6 +242,14 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
   'vijnana-bhairava-112-doors-technology-of-attention': {
     description: 'The Vijnana Bhairava’s 112 teachings read as a grammar of thresholds: breath, sound, touch, desire, and the gaps between thoughts as doorways into non-dual attention.',
     keywords: ['Vijnana Bhairava', 'Vijnanabhairava', 'Bhairava Tantra', '112 meditations', 'Kashmir Shaivism', 'tantra', 'meditation', 'attention', 'breath awareness', 'Shakti'],
+  },
+  'walter-russell-universal-one-cosmology-of-light': {
+    description: "Walter Russell's The Universal One read as a visual cosmology: light, wave rhythm, polarity, and the history of giving metaphysics the authority of a scientific diagram.",
+    keywords: ['Walter Russell', 'The Universal One', 'Russell cosmology', 'sacred geometry', 'light', 'wave theory', 'science and spirituality', 'electromagnetism', 'consciousness'],
+  },
+  'rosicrucian-manifestos-public-secret-reformation': {
+    description: "The Rosicrucian manifestos read as a public technology of secrecy: how the Fama and Confessio turned an absent fraternity into an invitation to reform religion, knowledge, and the human world.",
+    keywords: ['Rosicrucian manifestos', 'Fama Fraternitatis', 'Confessio Fraternitatis', 'Christian Rosencreutz', 'Rosicrucianism', 'general reformation', 'secret societies', 'Hermeticism', 'Western esotericism'],
   },
 }
 
