@@ -251,6 +251,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: "The Rosicrucian manifestos read as a public technology of secrecy: how the Fama and Confessio turned an absent fraternity into an invitation to reform religion, knowledge, and the human world.",
     keywords: ['Rosicrucian manifestos', 'Fama Fraternitatis', 'Confessio Fraternitatis', 'Christian Rosencreutz', 'Rosicrucianism', 'general reformation', 'secret societies', 'Hermeticism', 'Western esotericism'],
   },
+  'egyptian-book-of-the-dead-heart-scale-maat': {
+    description: 'The Egyptian Book of the Dead and the weighing of the heart read through Spell 125, Chapter 30B, Papyrus Ani, Maat, and the material work of making a deceased person legible.',
+    keywords: ['Egyptian Book of the Dead', 'weighing of the heart', 'Maat', 'Spell 125', 'Papyrus of Ani', 'heart scarab', 'Osiris', 'Thoth', 'ancient Egyptian funerary texts', 'Kemetic studies'],
+  },
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {

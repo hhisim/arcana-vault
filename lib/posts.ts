@@ -511,5 +511,15 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/taoist-microcosmic-orbit-inner-alchemy/cover.png",
     "excerpt": "The microcosmic orbit is often marketed as a hidden energy circuit. Read historically and symbolically, it is more exacting: a pedagogy of return that trains attention to circulate through the body rather than escape it."
+  },
+  {
+    "slug": "egyptian-book-of-the-dead-heart-scale-maat",
+    "title": "The Heart on the Scale: How the Egyptian Book of the Dead Makes a Self Legible",
+    "tradition": "kemet",
+    "publishedAt": "2026-09-05",
+    "readTime": "20 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/egyptian-book-of-the-dead-heart-scale-maat/cover.png",
+    "excerpt": "The weighing of the heart is often reduced to a moral scorecard. Read through Spell 125, the heart spells, and the surviving papyri, it becomes something more exacting: a ritual system that makes a person legible through speech, memory, material, and Maat."
   }
 ];

@@ -65,6 +65,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: 'Sigils, paradigm shifting, and belief as a technology — Chaos Magick as the postmodern operating system.',
     keywords: ['Chaos Magick', 'Austin Osman Spare', 'sigil magick', 'paradigm shifting', 'belief technology', 'postmodern magick', 'magical pragmatism'],
   },
+  'egyptian-book-of-the-dead-heart-scale-maat': {
+    description: 'The Egyptian Book of the Dead and the weighing of the heart read through Spell 125, Chapter 30B, Papyrus Ani, Maat, and the material work of making a deceased person legible.',
+    keywords: ['Egyptian Book of the Dead', 'weighing of the heart', 'Maat', 'Spell 125', 'Papyrus of Ani', 'heart scarab', 'Osiris', 'Thoth', 'ancient Egyptian funerary texts', 'Kemetic studies'],
+  },
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

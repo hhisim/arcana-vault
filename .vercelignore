@@ -1,5 +1,12 @@
+.git
 node_modules
 .next
-.git
+.next-build
+out
+dist
 *.log
-hermes-data
+*.tsbuildinfo
+.env*
+supabase/.temp
+screenshots
+browser-profile
