@@ -15,6 +15,13 @@ export function seoTitle(title: string, maxLength = 48): string {
   return `${candidate || normalized.slice(0, maxLength - 1)}…`
 }
 
+export function seoDescription(description: string, maxLength = 160): string {
+  const normalized = description.replace(/\s+/g, ' ').trim()
+  if (normalized.length <= maxLength) return normalized
+  const candidate = normalized.slice(0, maxLength - 1).replace(/\s+[^\s]*$/, '').trim()
+  return `${candidate || normalized.slice(0, maxLength - 1)}…`
+}
+
 type SeoOptions = {
   type?: 'website' | 'article'
   noIndex?: boolean
@@ -29,6 +36,7 @@ export function buildMetadata(
   options: SeoOptions = {},
 ): Metadata {
   const pageTitle = seoTitle(title)
+  const pageDescription = seoDescription(description)
   const url = absoluteUrl(path)
   const image = absoluteUrl(options.image || DEFAULT_OG_IMAGE)
   const socialTitle = `${pageTitle} | Vault of Arcana`
@@ -42,12 +50,12 @@ export function buildMetadata(
   return {
     metadataBase: new URL(SITE_URL),
     title: pageTitle,
-    description,
+    description: pageDescription,
     alternates: { canonical: url },
     ...(options.noIndex ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       title: socialTitle,
-      description,
+      description: pageDescription,
       url,
       siteName: 'Vault of Arcana',
       type: options.type || 'website',
@@ -56,7 +64,7 @@ export function buildMetadata(
     twitter: {
       card: 'summary_large_image',
       title: socialTitle,
-      description,
+      description: pageDescription,
       images: [image],
     },
   }
