@@ -16,6 +16,38 @@ export default function Footer() {
             <p className="mt-4 max-w-xl leading-8 text-text-secondary">
               {t('footer.tagline', 'A living mystery school built from rare archives, curated datasets, symbolic intelligence, and the evolving collaboration of Hakan Hisim + PRIME.')}
             </p>
+            <div className="mt-6">
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--primary-gold)]">Follow the Vault</p>
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm text-text-secondary">
+                <a
+                  href="https://www.instagram.com/vaultofarcana/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Vault of Arcana on Instagram"
+                  className="transition-colors hover:text-text-primary"
+                >
+                  Instagram ↗
+                </a>
+                <a
+                  href="https://www.youtube.com/@thevaultofarcana"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Vault of Arcana on YouTube"
+                  className="transition-colors hover:text-text-primary"
+                >
+                  YouTube ↗
+                </a>
+                <a
+                  href="https://tr.pinterest.com/hakanhisim/vault-of-arcana-esoterica/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Vault of Arcana on Pinterest"
+                  className="transition-colors hover:text-text-primary"
+                >
+                  Pinterest ↗
+                </a>
+              </div>
+            </div>
           </div>
 
           <div>
