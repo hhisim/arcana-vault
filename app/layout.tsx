@@ -12,6 +12,9 @@ export const metadata: Metadata = {
     default: 'Vault of Arcana — Living Mystery School',
     template: '%s | Vault of Arcana',
   },
+  alternates: {
+    canonical: '/',
+  },
   description: 'A living mystery school built from rare archives, curated datasets, symbolic intelligence, and the collaboration of Hakan Hisim + PRIME.',
   openGraph: {
     title: 'Vault of Arcana — Living Mystery School',

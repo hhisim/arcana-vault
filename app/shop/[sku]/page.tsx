@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import { getPack, PACKS, formatUsd, formatArchiveSalePrice, ARCHIVE_PACK_DISCOUNT_PERCENT, isBestseller } from '@/lib/packs'
 import { getPackRating } from '@/lib/reviews'
@@ -18,12 +19,20 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { sku: string } }) {
   const pack = getPack(params.sku)
-  if (!pack) return { title: 'Archive pack — Vault of Arcana' }
-  return {
-    title: `${pack.title} — Vault of Arcana`,
-    description: `One-time purchase of "${pack.title}" — delivered as Google Drive access, authorized within a few hours.`,
-    alternates: { canonical: `/shop/${pack.sku}` },
+  if (!pack) {
+    return buildMetadata(
+      'Archive Pack Not Found',
+      'The requested Vault of Arcana archive pack could not be found.',
+      `/shop/${params.sku}`,
+      { noIndex: true },
+    )
   }
+  return buildMetadata(
+    pack.title,
+    `One-time purchase of "${pack.title}" — delivered as Google Drive access, authorized within a few hours.`,
+    `/shop/${pack.sku}`,
+    { image: pack.images?.[0], imageAlt: pack.title },
+  )
 }
 
 export default function PackPage({ params }: { params: { sku: string } }) {

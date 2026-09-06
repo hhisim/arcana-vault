@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { useAuth } from '@/components/auth/AuthProvider'
@@ -75,9 +75,6 @@ export default function LibraryPage() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
   const { t } = useSiteI18n()
   const { isAuthenticated, plan } = useAuth()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => { setMounted(true) }, [])
 
   const filteredBooks = BOOKS.filter(book => {
     const matchesFilter = activeFilter === 'All' || book.tradition === activeFilter
@@ -90,8 +87,6 @@ export default function LibraryPage() {
     if (book.access === 'Free') return true
     return plan === 'seeker' || plan === 'full'
   }
-
-  if (!mounted) return <div className="min-h-screen bg-[#0A0A0F]" />
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pb-20">

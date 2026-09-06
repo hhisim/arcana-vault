@@ -1,5 +1,6 @@
-export const dynamic = 'force-dynamic'
+import { buildMetadata } from '@/lib/seo'
 
+export const dynamic = 'force-dynamic'
 import { notFound } from 'next/navigation'
 import { traditions } from '@/lib/tradition-config'
 import TraditionDetailContent from './TraditionDetailContent'
@@ -18,11 +19,19 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const tradition = traditions[slug]
-  if (!tradition) return { title: 'Tradition Not Found' }
-  return {
-    title: `${tradition.name} — Vault of Arcana`,
-    description: tradition.description,
+  if (!tradition) {
+    return buildMetadata(
+      'Tradition Not Found',
+      'The requested Vault of Arcana tradition could not be found.',
+      `/traditions/${slug}`,
+      { noIndex: true },
+    )
   }
+  return buildMetadata(
+    tradition.name,
+    tradition.description,
+    `/traditions/${slug}`,
+  )
 }
 
 export default async function TraditionPage({ params }: Props) {

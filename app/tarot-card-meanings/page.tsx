@@ -1,18 +1,11 @@
-export const metadata = {
-  title: 'Tarot Card Meanings: Complete Esoteric Guide | Vault of Arcana',
-  description:
-    'The complete esoteric guide to tarot card meanings — the 78 cards, major and minor arcana, upright and reversed interpretations, and how to read the tarot as a symbolic language of fate.',
-  alternates: {
-    canonical: 'https://www.vaultofarcana.com/tarot-card-meanings',
-  },
-  openGraph: {
-    title: 'Tarot Card Meanings: Complete Esoteric Guide | Vault of Arcana',
-    description:
-      'The complete esoteric guide to tarot card meanings — the 78 cards, major and minor arcana, upright and reversed interpretations, and how to read the tarot as a symbolic language.',
-    url: 'https://www.vaultofarcana.com/tarot-card-meanings',
-    type: 'article',
-  },
-}
+import { buildMetadata } from '@/lib/seo'
+
+export const metadata = buildMetadata(
+  'Tarot Card Meanings — Complete Guide',
+  'The complete esoteric guide to tarot card meanings — the 78 cards, major and minor arcana, upright and reversed interpretations, and how to read tarot as a symbolic language of fate.',
+  '/tarot-card-meanings',
+  { type: 'article' },
+)
 
 export default function TarotCardMeaningsPage() {
   const faqs = [

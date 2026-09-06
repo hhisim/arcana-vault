@@ -1,10 +1,10 @@
-export const metadata = {
-  title: 'FAQ — Frequently Asked Questions | Vault of Arcana',
-  description: 'Answers to common questions about Vault of Arcana — membership, Oracle access, Codex redemption, traditions, and more.',
-  alternates: {
-    canonical: 'https://www.vaultofarcana.com/faq',
-  },
-}
+import { buildMetadata } from '@/lib/seo'
+
+export const metadata = buildMetadata(
+  'Frequently Asked Questions',
+  'Answers to common questions about Vault of Arcana — membership, Oracle access, Codex redemption, traditions, and more.',
+  '/faq',
+)
 
 export default function FAQPage() {
   const faqs = [

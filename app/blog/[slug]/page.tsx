@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 import { cookies } from 'next/headers';
 import { posts } from '@/lib/posts';
 import BlogContent from '@/components/BlogContent'
+import { buildMetadata } from '@/lib/seo'
 import BlogReturnButton from '@/components/BlogReturnButton'
 import EmailCaptureWrapper from '@/components/EmailCaptureWrapper'
 import BlogShopRecs from '@/components/BlogShopRecs'
@@ -19,31 +20,27 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = posts.find((p) => p.slug === params.slug);
-  if (!post) return {};
-  const meta = essayMeta[params.slug] || {};
-  const title = post.title || params.slug.replace(/-/g, ' ');
+  const post = posts.find((p) => p.slug === params.slug)
+  if (!post) {
+    return buildMetadata(
+      'Article Not Found',
+      'The requested Vault of Arcana article could not be found.',
+      `/blog/${params.slug}`,
+      { noIndex: true },
+    )
+  }
+  const meta = essayMeta[params.slug]
+  const title = post.title || params.slug.replace(/-/g, ' ')
+  const description = meta?.description || post.excerpt || `An essay from the Vault of Arcana on ${title}.`
   return {
-    title,
-    description: meta.description,
-    keywords: meta.keywords,
-    alternates: {
-      canonical: `https://www.vaultofarcana.com/blog/${params.slug}`,
-    },
-    openGraph: {
-      title: `${title} | Vault of Arcana`,
-      description: meta.description,
-      url: `https://www.vaultofarcana.com/blog/${params.slug}`,
-      type: 'article',
-      images: [{ url: `/images/blog/${params.slug}/cover.png`, width: 1200, height: 630 }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${title} | Vault of Arcana`,
-      description: meta.description,
-      images: [{ url: `/images/blog/${params.slug}/cover.png`, width: 1200, height: 630 }],
-    },
-  };
+    ...buildMetadata(
+      title,
+      description,
+      `/blog/${params.slug}`,
+      { type: 'article', image: post.hero, imageAlt: title },
+    ),
+    keywords: meta?.keywords || [],
+  }
 }
 
 const essayMeta: Record<string, { description: string; keywords: string[] }> = {

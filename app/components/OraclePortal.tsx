@@ -165,7 +165,7 @@ function OracleMarkdown({ text }: { text: string }) {
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
-        h1: ({ ...props }) => <h1 className="mb-3 font-cinzel text-2xl text-text-primary" {...props} />,
+        h1: ({ ...props }) => <h2 className="mb-3 font-cinzel text-2xl text-text-primary" {...props} />,
         h2: ({ ...props }) => <h2 className="mb-3 mt-5 font-cinzel text-xl text-text-primary" {...props} />,
         h3: ({ ...props }) => <h3 className="mb-2 mt-4 font-cinzel text-lg text-text-primary" {...props} />,
         p: ({ ...props }) => <p className="mb-3 leading-7 text-[var(--text-primary)]/92" {...props} />,
@@ -570,7 +570,7 @@ export default function OraclePortal() {
         {/* LEFT: Oracle pack selector */}
         <aside className="glass-card voa-scrollbar order-1 hidden h-full overflow-y-auto p-4 lg:block">
           <div className="mb-5">
-            <h1 className="font-cinzel text-xl text-[var(--primary-gold)]">{t(lang, UI_COPY.title)}</h1>
+            <h2 className="font-cinzel text-xl text-[var(--primary-gold)]">{t(lang, UI_COPY.title)}</h2>
             <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{t(lang, UI_COPY.subtitle)}</p>
           </div>
           <div className="mb-4 flex flex-wrap gap-2">

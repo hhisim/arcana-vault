@@ -1,12 +1,8 @@
-.git
 node_modules
 .next
-.next-build
-out
-dist
-*.log
-*.tsbuildinfo
+.next_old
+.git
 .env*
+*.log
+*.rar
 supabase/.temp
-screenshots
-browser-profile

@@ -1,11 +1,12 @@
+import { buildMetadata } from '@/lib/seo'
 import Link from 'next/link'
 import { traditions, liveTraditions, upcomingTraditions, horizonTraditions } from '@/lib/tradition-config'
 
-export const metadata = {
-  title: 'The Traditions — Vault of Arcana',
-  description:
-    'Browse the living traditions of the Vault — each a curated archive, a distinct Oracle voice, and a gateway into a lineage of wisdom.',
-}
+export const metadata = buildMetadata(
+  'The Traditions',
+  'Browse the living traditions of the Vault — each a curated archive, a distinct Oracle voice, and a gateway into a lineage of wisdom.',
+  '/traditions',
+)
 
 export default function TraditionsPage() {
   return (

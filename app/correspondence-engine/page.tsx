@@ -1,10 +1,12 @@
-import CorrespondenceEngine from '../components/CorrespondenceEngine';
-import CorrespondenceGuide from '@/components/correspondence/CorrespondenceGuide';
+import { buildMetadata } from '@/lib/seo'
+import CorrespondenceEngine from '../components/CorrespondenceEngine'
+import CorrespondenceGuide from '@/components/correspondence/CorrespondenceGuide'
 
-export const metadata = {
-  title: 'Correspondence Engine — Vault of Arcana',
-  description: 'A multi-dimensional correspondence engine for symbols, planets, letters, frequencies, chakras, alchemical processes, and more.',
-};
+export const metadata = buildMetadata(
+  'Correspondence Engine',
+  'Explore a multidimensional correspondence engine for symbols, planets, letters, frequencies, chakras, alchemical processes, and more.',
+  '/correspondence-engine',
+)
 
 export default function Page() {
   return (
@@ -12,5 +14,5 @@ export default function Page() {
       <CorrespondenceGuide />
       <CorrespondenceEngine initialSlug="venus" />
     </section>
-  );
+  )
 }

@@ -11,6 +11,7 @@ export default function ChatPage() {
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-8 pt-16">
+      <h1 className="sr-only">Oracle Chat — Sacred Guidance</h1>
       <ArchiveSaleCta
         placement="chat-top"
         compact

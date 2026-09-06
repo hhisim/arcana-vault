@@ -221,7 +221,7 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
 
   // Heading with colored accents
   const H1Component = ({ node, ...props }: any) => (
-    <h1 className="font-cinzel text-4xl md:text-5xl mb-8 pb-4 border-b border-[rgba(201,168,76,0.2)] text-[#E8E0F0]" {...props} />
+    <h2 className="font-cinzel text-4xl md:text-5xl mb-8 pb-4 border-b border-[rgba(201,168,76,0.2)] text-[#E8E0F0]" {...props} />
   )
 
   const H2Component = ({ node, ...props }: any) => (
