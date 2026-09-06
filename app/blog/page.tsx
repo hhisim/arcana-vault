@@ -159,7 +159,7 @@ export default function BlogPage() {
               {others.map((post) => (
                 <article key={post.slug} className="glass-card rounded-2xl overflow-hidden border border-white/10 group">
                   {post.hero ? (
-                    <div className="h-44 overflow-hidden flex items-center justify-center bg-[#0A0A0F] relative">
+                    <div className="aspect-video overflow-hidden flex items-center justify-center bg-[#0A0A0F] relative">
                       <Image
                         src={post.hero}
                         alt={post.title}
