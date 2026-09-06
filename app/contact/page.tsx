@@ -3,7 +3,7 @@ import ContactContent from './ContactContent'
 
 export const metadata = buildMetadata(
   'Contact',
-  'Get in touch with the Vault of Arcana team.',
+  'Contact the Vault of Arcana team about the mystery school, archives, essays, and digital study resources.',
   '/contact',
 )
 
