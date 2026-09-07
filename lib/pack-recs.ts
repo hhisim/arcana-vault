@@ -58,6 +58,7 @@ const SLUG_OVERRIDES: Record<string, string[]> = {
   'cosmic-bio-machine-sumerian-light-science': ['etsy-4543080231', 'etsy-4323025629', 'etsy-4543086125'],
   'walter-russell-universal-one-cosmology-of-light': ['etsy-4543080231', 'etsy-4513179705', 'etsy-4329093346'],
   'rosicrucian-manifestos-public-secret-reformation': ['etsy-1890769318', 'etsy-4543073329', 'etsy-4310056291'],
+  'the-star-and-the-uncarved-block': ['etsy-4311224586', 'etsy-4543082389', 'etsy-4471894787'],
   'corpus-hermeticum-poimandres-cosmic-human': ['etsy-1890769318', 'etsy-4543073329', 'etsy-4310056291'],
   'sefer-yetzirah-32-paths-of-wisdom': ['etsy-4488658060', 'etsy-4302414623', 'etsy-4545842201'],
   'kabbalah-tree-of-life-sefirot-explained': ['etsy-4488658060', 'etsy-4302414623', 'etsy-4545842201'],

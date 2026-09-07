@@ -96,6 +96,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: 'The Taoist microcosmic orbit read as a pedagogy of return: how inner alchemy, the three treasures, breath, and embodied attention turn the body into a practice of circulation rather than escape.',
     keywords: ['microcosmic orbit', 'Taoist inner alchemy', 'Neidan', 'qi cultivation', 'Jing Qi Shen', 'dantian', 'breath practice', 'Daoist philosophy', 'embodied attention'],
   },
+  'the-star-and-the-uncarved-block': {
+    description: "Crowley's True Will and Lao Tzu's wu wei seem opposed until both are taken to their difficult conclusion: disciplined action becomes frictionless only when the borrowed self gives way to a larger pattern.",
+    keywords: ['Thelema', 'Taoism', 'True Will', 'wu wei', 'Aleister Crowley', 'Lao Tzu', 'Tao Te Ching', 'Book of the Law', 'AI alignment', 'artificial agency'],
+  },
   'taoism-quantum-physics-real-parallels': {
     description: 'Separating meaningful metaphysical resonance from pop-spirituality — where Tao and quantum mechanics genuinely converge.',
     keywords: ['Taoism', 'quantum physics', 'Fritjof Capra', 'Tao of physics', 'metaphysics', 'pop-spirituality'],

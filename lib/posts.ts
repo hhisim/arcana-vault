@@ -521,5 +521,15 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/egyptian-book-of-the-dead-heart-scale-maat/cover.png",
     "excerpt": "The weighing of the heart is often reduced to a moral scorecard. Read through Spell 125, the heart spells, and the surviving papyri, it becomes something more exacting: a ritual system that makes a person legible through speech, memory, material, and Maat."
+  },
+  {
+    "slug": "the-star-and-the-uncarved-block",
+    "title": "The Star and the Uncarved Block",
+    "tradition": "thelema",
+    "publishedAt": "2026-09-07",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/the-star-and-the-uncarved-block/cover.png",
+    "excerpt": "Crowley's True Will and Lao Tzu's wu wei look like opposite disciplines: one finds the star's exact orbit, the other returns to the uncarved block. Taken seriously, both warn against confusing a borrowed objective with a life that knows its own shape."
   }
 ];
