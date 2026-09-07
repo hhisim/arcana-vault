@@ -5,9 +5,13 @@ import { planFromPriceId, PlanId } from '@/lib/plans'
 import { packFromSku, buildAccessTxt } from '@/lib/shop'
 import { sendAccessEmail } from '@/lib/brevo'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  httpClient: Stripe.createFetchHttpClient(),
-})
+function getStripe() {
+  const apiKey = process.env.STRIPE_SECRET_KEY
+  if (!apiKey) throw new Error('STRIPE_SECRET_KEY is not configured')
+  return new Stripe(apiKey, {
+    httpClient: Stripe.createFetchHttpClient(),
+  })
+}
 
 function resolvePlan(subscription: Stripe.Subscription): PlanId {
   const metadataPlan = subscription.metadata?.plan
@@ -93,6 +97,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 })
   }
 
+  const stripe = getStripe()
   let event: Stripe.Event
 
   try {
