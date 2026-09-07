@@ -1,22 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { getServerSupabase } from '@/lib/supabase/server'
+import { getAdminSupabase } from '@/lib/supabase/admin'
 
 // Read-only: bypass RLS using service role for public listing
-const _supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 export async function GET(req: NextRequest) {
   try {
+    const supabase = getAdminSupabase()
     const { searchParams } = new URL(req.url)
     const category = searchParams.get('category')
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = (page - 1) * limit
 
-    let query = _supabase
+    let query = supabase
       .from('forum_posts')
       .select('*', { count: 'exact' })
       .eq('is_deleted', false)
