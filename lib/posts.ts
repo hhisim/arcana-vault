@@ -531,5 +531,15 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/the-star-and-the-uncarved-block/cover.png",
     "excerpt": "Crowley's True Will and Lao Tzu's wu wei look like opposite disciplines: one finds the star's exact orbit, the other returns to the uncarved block. Taken seriously, both warn against confusing a borrowed objective with a life that knows its own shape."
+  },
+  {
+    "slug": "hermetic-crater-cup-of-mind",
+    "title": "The Hermetic Crater: The Cup of Mind and the Discipline of Receiving",
+    "tradition": "hermetics",
+    "publishedAt": "2026-09-08",
+    "readTime": "20 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/hermetic-crater-cup-of-mind/cover.png",
+    "excerpt": "In Corpus Hermeticum IV, divine Mind is not handed over as information. It is placed in a mixing-bowl and offered to whoever can enter it. The Hermetic crater is a technology of receiving: a discipline that turns attention from acquisition toward participation."
   }
 ];

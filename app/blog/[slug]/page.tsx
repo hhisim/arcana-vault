@@ -100,6 +100,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: "Crowley's True Will and Lao Tzu's wu wei seem opposed until both are taken to their difficult conclusion: disciplined action becomes frictionless only when the borrowed self gives way to a larger pattern.",
     keywords: ['Thelema', 'Taoism', 'True Will', 'wu wei', 'Aleister Crowley', 'Lao Tzu', 'Tao Te Ching', 'Book of the Law', 'AI alignment', 'artificial agency'],
   },
+  'hermetic-crater-cup-of-mind': {
+    description: 'Corpus Hermeticum IV and the great mixing-bowl of Mind: why the Hermetic crater is a discipline of receiving, proportion, and return rather than a storehouse of secret information.',
+    keywords: ['Hermetic crater', 'Corpus Hermeticum IV', 'mixing bowl', 'krater', 'nous', 'gnosis', 'Hermes Trismegistus', 'Hermeticism', 'attention', 'spiritual transformation'],
+  },
   'taoism-quantum-physics-real-parallels': {
     description: 'Separating meaningful metaphysical resonance from pop-spirituality — where Tao and quantum mechanics genuinely converge.',
     keywords: ['Taoism', 'quantum physics', 'Fritjof Capra', 'Tao of physics', 'metaphysics', 'pop-spirituality'],
