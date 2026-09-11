@@ -541,5 +541,15 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/hermetic-crater-cup-of-mind/cover.png",
     "excerpt": "In Corpus Hermeticum IV, divine Mind is not handed over as information. It is placed in a mixing-bowl and offered to whoever can enter it. The Hermetic crater is a technology of receiving: a discipline that turns attention from acquisition toward participation."
+  },
+  {
+    "slug": "law-of-one-ethics-of-relation",
+    "title": "The Law of One: When Cosmic Unity Becomes an Ethics of Relation",
+    "tradition": "philosophy",
+    "publishedAt": "2026-09-11",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/law-of-one-ethics-of-relation/cover.png",
+    "excerpt": "The Law of One is usually shelved as UFO lore. Read closely, the Ra sessions make unity a discipline of relation: free will that refuses coercion, service measured by how difference is treated, and distortion accepted as the condition of every claim."
   }
 ];

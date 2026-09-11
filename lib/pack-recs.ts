@@ -64,6 +64,7 @@ const SLUG_OVERRIDES: Record<string, string[]> = {
   'sefer-yetzirah-32-paths-of-wisdom': ['etsy-4488658060', 'etsy-4302414623', 'etsy-4545842201'],
   'kabbalah-tree-of-life-sefirot-explained': ['etsy-4488658060', 'etsy-4302414623', 'etsy-4545842201'],
   'vijnana-bhairava-112-doors-technology-of-attention': ['etsy-4543075975', 'etsy-1906631935', 'etsy-4329093346'],
+  'law-of-one-ethics-of-relation': ['etsy-4329093346', 'etsy-4306241391', 'etsy-1906631935'],
 }
 
 /** Resolve packs for a post by slug, then tradition, with a flagSHip fallback. */

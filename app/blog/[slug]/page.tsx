@@ -104,6 +104,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: 'Corpus Hermeticum IV and the great mixing-bowl of Mind: why the Hermetic crater is a discipline of receiving, proportion, and return rather than a storehouse of secret information.',
     keywords: ['Hermetic crater', 'Corpus Hermeticum IV', 'mixing bowl', 'krater', 'nous', 'gnosis', 'Hermes Trismegistus', 'Hermeticism', 'attention', 'spiritual transformation'],
   },
+  'law-of-one-ethics-of-relation': {
+    description: 'The Law of One read as an ethics of relation: how the Ra sessions make cosmic unity a discipline of free will, polarity, service, distortion, and choice in the treatment of difference.',
+    keywords: ['Law of One', 'Ra contact', 'L/L Research', 'service to others', 'service to self', 'polarity', 'free will', 'distortion', 'channeling', 'unity metaphysics'],
+  },
   'taoism-quantum-physics-real-parallels': {
     description: 'Separating meaningful metaphysical resonance from pop-spirituality — where Tao and quantum mechanics genuinely converge.',
     keywords: ['Taoism', 'quantum physics', 'Fritjof Capra', 'Tao of physics', 'metaphysics', 'pop-spirituality'],
