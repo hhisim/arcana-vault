@@ -1,5 +1,15 @@
 export const posts = [
   {
+    "slug": "fasting-of-the-heart-zhuangzi-attention",
+    "title": "The Fasting of the Heart: Zhuangzi's Attention Practice for an Overloaded Age",
+    "tradition": "taoism",
+    "publishedAt": "2026-09-22",
+    "readTime": "21 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/fasting-of-the-heart-zhuangzi-attention/cover.png",
+    "excerpt": "In the Zhuangzi, fasting the heart-mind is not a command to stop thinking. It is a difficult form of receptivity: loosening the self's first claim on experience so that a person can hear, revise, and act without forcing the world into a ready-made conclusion."
+  },
+  {
     "slug": "metatrons-cube-tree-of-life-kabbalah-geometry",
     "title": "Metatron's Cube and the Tree of Life: When Kabbalah and Geometry Share One Blueprint",
     "tradition": "sacred-geometry",

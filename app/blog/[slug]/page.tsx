@@ -44,6 +44,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 const essayMeta: Record<string, { description: string; keywords: string[] }> = {
+  'fasting-of-the-heart-zhuangzi-attention': {
+    description: "Zhuangzi's fasting of the heart-mind is not thought suppression. Read xinzhai and sitting-and-forgetting as a disciplined receptivity that loosens premature interpretation without erasing discernment.",
+    keywords: ['Zhuangzi', 'fasting of the heart', 'xinzhai', 'sitting and forgetting', 'zuowang', 'Daoism', 'Taoism', 'attention practice', 'inner cultivation'],
+  },
   'dmt-hyperbolic-mind': {
     description: 'Explore the geometry of DMT hyperspace — hyperbolic manifolds, entity encounters, and the mathematics of visionary states. A treatise from Vault of Arcana.',
     keywords: ['DMT', 'hyperbolic geometry', 'altered states of consciousness', 'Terence McKenna', 'entheogens'],
