@@ -200,7 +200,7 @@ export default function NavBar() {
             <div className="flex items-center gap-3">
               <Link
                 href="/login"
-                className="text-sm text-[#9B93AB] hover:text-[var(--text-primary)] transition-colors"
+                className="whitespace-nowrap flex-shrink-0 text-sm text-[#9B93AB] hover:text-[var(--text-primary)] transition-colors"
               >
                 {t(SITEDICT.nav.log_in)}
               </Link>

@@ -14,7 +14,7 @@ Vault of Arcana is a serious, research-grade study resource for the Western and 
 - [Traditions](https://www.vaultofarcana.com/traditions)
 - [The Oracle](https://www.vaultofarcana.com/oracle)
 - [Correspondences](https://www.vaultofarcana.com/correspondences)
-- [The Correspondence Codex](https://www.vaultofarcana.com/correspondence-codex)
+- [The Correspondence Engine](https://www.vaultofarcana.com/correspondence-engine)
 - [Tarot Card Meanings guide](https://www.vaultofarcana.com/tarot-card-meanings)
 - [FAQ](https://www.vaultofarcana.com/faq)
 - [Full sitemap](https://www.vaultofarcana.com/sitemap.xml)
@@ -25,4 +25,4 @@ Vault of Arcana is a serious, research-grade study resource for the Western and 
 
 **The Archives (shop)** offers 50 digital study packs: rare esoteric eBook libraries (e.g. the Tarot Mega Bundle, Kabbalah Archive, Alchemy Vault, Gnosticism Digital Library, Grimoire & Occult Archive, Enochian Magick Archive), oracle AI packs, sacred geometry vector collections, meditation and Tantra/Kundalini archives, and the flagship Library of Alexandria (123GB, 23,000+ eBooks across all traditions).
 
-All content is original, grounded in cited primary sources, and curated by Hakan Hisim in collaboration with PRIME.
+Vault of Arcana is curated by Hakan Hisim. See individual essays and product pages for source references, archive contents, and access information.

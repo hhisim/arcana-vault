@@ -4,6 +4,8 @@ import { getAdminSupabase } from '@/lib/supabase/admin'
 import { planFromPriceId, PlanId } from '@/lib/plans'
 import { packFromSku, buildAccessTxt } from '@/lib/shop'
 import { sendAccessEmail } from '@/lib/brevo'
+import { enqueueAkashaAlert, handleAkashaBillingEvent } from '@/lib/akasha-subscription-alerts'
+import { sendAkashaAlertWithOutbox } from '@/lib/akasha-outbox-repository'
 
 function getStripe() {
   const apiKey = process.env.STRIPE_SECRET_KEY
@@ -39,14 +41,27 @@ async function syncSubscriptionToProfile(subscription: Stripe.Subscription) {
 
   const userId = subscription.metadata?.user_id
   if (userId) {
-    const { error } = await admin.from('profiles').update(update).eq('user_id', userId)
-    if (!error) return
-    console.error('Webhook profile update by user_id failed:', error.message)
+    const { data, error } = await admin
+      .from('profiles')
+      .update(update)
+      .eq('user_id', userId)
+      .select('user_id')
+    if (error) {
+      console.error('Webhook profile update by user_id failed:', error.message)
+    } else if (data?.length) {
+      return
+    } else {
+      console.error('Webhook profile update by user_id matched no profile:', userId)
+    }
   }
 
-  const { error } = await admin.from('profiles').update(update).eq('stripe_customer_id', customerId)
-  if (error) {
-    throw new Error(`Webhook profile sync failed: ${error.message}`)
+  const { data, error } = await admin
+    .from('profiles')
+    .update(update)
+    .eq('stripe_customer_id', customerId)
+    .select('user_id')
+  if (error || !data?.length) {
+    throw new Error(`Webhook profile sync failed: ${error?.message || 'no matching profile'}`)
   }
 }
 
@@ -87,6 +102,15 @@ async function handleOneTimePurchase(session: Stripe.Checkout.Session) {
   const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.vaultofarcana.com'
   const txt = buildAccessTxt({ pack, email, accessLink: null, siteUrl: site, status: 'pending_access' })
   await sendAccessEmail({ to: email, packTitle: pack.title, txt }).catch(() => {})
+}
+
+async function queueAkashaBillingAlert(event: Stripe.Event) {
+  const admin = getAdminSupabase()
+  await handleAkashaBillingEvent(
+    event,
+    (alert) => enqueueAkashaAlert(admin, alert),
+    async (_message, alert) => { await sendAkashaAlertWithOutbox(admin, alert) },
+  )
 }
 
 export async function POST(req: Request) {
@@ -138,6 +162,7 @@ export async function POST(req: Request) {
       console.log('Invoice paid:', invoice.id, 'amount:', invoice.amount_paid)
     }
 
+    await queueAkashaBillingAlert(event)
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error('Webhook processing failed:', err instanceof Error ? err.message : String(err))

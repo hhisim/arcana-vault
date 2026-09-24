@@ -18,14 +18,13 @@ export async function POST(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return req.cookies.get(name)?.value
+        getAll() {
+          return req.cookies.getAll()
         },
-        set(name: string, value: string, opts: Record<string, unknown>) {
-          response.cookies.set({ name, value, ...opts })
-        },
-        remove(name: string, opts: Record<string, unknown>) {
-          response.cookies.set({ name, value: '', ...opts })
+        setAll(cookiesToSet) {
+          for (const { name, value, options } of cookiesToSet) {
+            response.cookies.set(name, value, options)
+          }
         },
       },
     },

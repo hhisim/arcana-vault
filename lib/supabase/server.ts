@@ -19,9 +19,18 @@ export async function getServerSupabase() {
   if (!url || !anon) throw new Error('Supabase env vars are missing')
   return createServerClient(url, anon, {
     cookies: {
-      get(name: string) { return cookieStore.get(name)?.value },
-      set() {},
-      remove() {},
+      getAll() {
+        return cookieStore.getAll()
+      },
+      setAll(cookiesToSet) {
+        try {
+          for (const { name, value, options } of cookiesToSet) {
+            cookieStore.set(name, value, options)
+          }
+        } catch {
+          // Server Components cannot set response cookies; middleware handles refreshes there.
+        }
+      },
     },
   })
 }

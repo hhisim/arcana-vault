@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getEntitlement } from '@/lib/account'
+import { accountMeFailureResponse } from '@/lib/account-me-failure'
 
 export async function GET() {
   try {
@@ -30,12 +31,6 @@ export async function GET() {
     })
   } catch (err) {
     console.error('[account/me]', err)
-    return NextResponse.json({
-      isAuthenticated: false, user: null, plan: 'guest',
-      selectedTraditions: ['tao', 'tarot', 'tantra', 'entheogen', 'sufi', 'dreamwalker'],
-      usageUsed: 0, usageLimit: 3, usageRemaining: 3, guestTotalRemaining: 3,
-      isTrial: false, trialEndsAt: null, trialDaysRemaining: null, promoSource: null,
-      isTestMode: false,
-    })
+    return accountMeFailureResponse()
   }
 }

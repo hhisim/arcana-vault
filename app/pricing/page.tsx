@@ -5,16 +5,6 @@ import { useAuth } from '@/components/auth/AuthProvider'
 import { PLAN_CONFIG, PlanId, LAUNCH_DISCOUNT_PERCENT, getLaunchPrice, formatUsd } from '@/lib/plans'
 import { useSiteI18n } from '@/lib/site-i18n'
 
-async function postJson(url: string, body?: unknown) {
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const text = await res.text()
-  try { return JSON.parse(text) } catch { return { detail: text } }
-}
-
 export default function PricingPage() {
   const router = useRouter()
   const auth = useAuth()
@@ -27,33 +17,10 @@ export default function PricingPage() {
       router.push(`/signup?plan=${plan}&returnTo=/pricing`)
       return
     }
-    if (plan === 'free') {
-      console.log('[pricing] activating free plan')
-      await postJson('/api/billing/activate-free')
-      await auth.refresh()
-      router.push('/account')
-      return
-    }
-    console.log('[pricing] calling checkout API for', plan)
-    const res = await fetch('/api/billing/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan }),
-    })
-    const text = await res.text()
-    console.log('[pricing] checkout response status:', res.status, 'body:', text.substring(0, 200))
-    let data: Record<string, unknown> = {}
-    try { data = JSON.parse(text) } catch { data = { raw: text } }
-    if (data?.url) {
-      console.log('[pricing] redirecting to stripe:', data.url)
-      window.location.href = data.url as string
-    } else if (data?.detail) {
-      console.error('[pricing] checkout error:', data.detail)
-      alert(`Error: ${data.detail}`)
-    } else {
-      console.error('[pricing] unexpected response:', data)
-      alert('Checkout failed — please try again.')
-    }
+    // Every plan begins with a tradition choice. For signed-in members this preserves
+    // the selected plan in the URL and avoids sending Stripe customers into a locked account.
+    router.push(`/signup?plan=${plan}&step=traditions`)
+    return
   }
 
   const plans: PlanId[] = ['free', 'seeker', 'adept', 'full']

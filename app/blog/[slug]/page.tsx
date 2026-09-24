@@ -3,6 +3,7 @@ import path from 'path';
 import React from 'react';
 import matter from 'gray-matter';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { posts } from '@/lib/posts';
 import BlogContent from '@/components/BlogContent'
 import { buildMetadata } from '@/lib/seo'
@@ -13,10 +14,19 @@ import ArchiveSaleCta from '@/components/ArchiveSaleCta'
 
 export const dynamic = 'force-static';
 
+// Keep previously published/social URLs alive when an essay receives a clearer slug.
+const SLUG_ALIASES: Record<string, string> = {
+  'as-above-so-below-the-secret-thread-running-through-the-western-mysteries': 'as-above-so-below-secret-thread-western-mysteries',
+  'train-imagination-to-see-ibn-arabis-imaginal-world': 'imaginal-world-ibn-arabi-perception-between-spirit-matter',
+  'the-law-of-one-when-cosmic-unity-becomes-an-ethics-of-relation': 'law-of-one-ethics-of-relation',
+  'kabbalahs-shadow-tree-maps-system-failure': 'qliphoth-error-states-kabbalah-system-failure',
+};
+
 export async function generateStaticParams() {
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  return [
+    ...posts.map((post) => ({ slug: post.slug })),
+    ...Object.keys(SLUG_ALIASES).map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -44,6 +54,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 const essayMeta: Record<string, { description: string; keywords: string[] }> = {
+  'book-of-thoth-egyptian-knowledge-scribe': {
+    description: 'The Egyptian Book of Thoth is not a lost grimoire but a fragmentary Demotic dialogue from the House of Life: a pedagogy of scribal craft, sacred geography, animal knowledge, ritual, and trustworthy knowing.',
+    keywords: ['Book of Thoth', 'Thoth', 'ancient Egypt', 'Demotic papyri', 'House of Life', 'Egyptian scribes', 'Egyptian mysteries', 'Hermeticism', 'writing and knowledge', 'scribal craft'],
+  },
   'fasting-of-the-heart-zhuangzi-attention': {
     description: "Zhuangzi's fasting of the heart-mind is not thought suppression. Read xinzhai and sitting-and-forgetting as a disciplined receptivity that loosens premature interpretation without erasing discernment.",
     keywords: ['Zhuangzi', 'fasting of the heart', 'xinzhai', 'sitting and forgetting', 'zuowang', 'Daoism', 'Taoism', 'attention practice', 'inner cultivation'],
@@ -268,9 +282,18 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: 'The Egyptian Book of the Dead and the weighing of the heart read through Spell 125, Chapter 30B, Papyrus Ani, Maat, and the material work of making a deceased person legible.',
     keywords: ['Egyptian Book of the Dead', 'weighing of the heart', 'Maat', 'Spell 125', 'Papyrus of Ani', 'heart scarab', 'Osiris', 'Thoth', 'ancient Egyptian funerary texts', 'Kemetic studies'],
   },
+  'imaginal-world-ibn-arabi-perception-between-spirit-matter': {
+    description: 'Ibn Arabi and the Alam al-Mithal: the Imaginal World between spirit and matter, and imagination as a disciplined organ of perception — khayal, barzakh, Corbin, and Chittick.',
+    keywords: ['Ibn Arabi', 'Alam al-Mithal', 'imaginal world', 'mundus imaginalis', 'barzakh', 'khayal', 'Henry Corbin', 'William Chittick', 'Sufism', 'creative imagination'],
+  },
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const canonicalSlug = SLUG_ALIASES[params.slug];
+  if (canonicalSlug) {
+    redirect(`/blog/${canonicalSlug}`);
+  }
+
   try {
     const slug = params.slug;
     const baseDir = path.join(process.cwd(), 'content', 'blog');
@@ -315,6 +338,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     const tradition = (frontmatter.tradition as string) || 'Ancient';
     const heroImage = frontmatter.hero as string | undefined;
+    const wideHero = ['as-above-so-below-secret-thread-western-mysteries', 'imaginal-world-ibn-arabi-perception-between-spirit-matter', 'law-of-one-ethics-of-relation', 'qliphoth-error-states-kabbalah-system-failure', 'book-of-thoth-egyptian-knowledge-scribe'].includes(slug);
     const inlineImages = (((frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [])
       .filter((image): image is { src: string; caption?: string; position?: string } => Boolean(image?.src)));
 
@@ -347,7 +371,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       },
       articleSection: post.tradition,
       keywords: meta.keywords.join(', '),
-      image: `https://www.vaultofarcana.com/images/blog/${slug}/cover.png`,
+      image: heroImage ? new URL(heroImage, 'https://www.vaultofarcana.com').toString() : undefined,
     } : null;
 
     return (
@@ -379,11 +403,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         {/* Hero Image */}
         {heroImage && (
-          <div className="w-full h-[520px] overflow-hidden border-b border-white/8 relative bg-[#0A0A0F]">
+          <div className={wideHero ? 'w-full aspect-video overflow-hidden border-b border-white/8 relative bg-[#0A0A0F]' : 'w-full h-[520px] overflow-hidden border-b border-white/8 relative bg-[#0A0A0F]'}>
             <img
               src={heroImage}
               alt={resolvedTitle}
-              className="w-full h-full object-contain"
+              className={wideHero ? 'w-full h-full object-cover' : 'w-full h-full object-contain'}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-transparent to-transparent opacity-30 pointer-events-none" />
           </div>

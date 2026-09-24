@@ -43,81 +43,25 @@ async function writeStore(store: DailyStore): Promise<void> {
   await fs.writeFile(DATA_FILE, JSON.stringify(store, null, 2), 'utf-8')
 }
 
-// ── MiniMax generation ───────────────────────────────────────────────────────
-
 const TRADITIONS = ['tao', 'tarot', 'tantra', 'entheogen'] as const
-
-const GENERATION_PROMPTS: Record<string, string> = {
-  tao: `You are the Tao Oracle, a contemplative intelligence shaped by the Tao Te Ching, Chuang Tzu, and Lieh Tzu.
-Generate today's Tao wisdom contemplation.
-Return ONLY valid JSON with this exact structure, no markdown, no explanation:
-{"title":"<3-6 word evocative title>","teaser":"<2-sentence contemplative teaser, not the full text>","fullText":"<4-6 sentence meditation/contemplation text>"}
-Today's date is {{date}}. Draw from the wisdom of the Taoist canon. Make it alive and resonant for a modern seeker.`,
-
-  tarot: `You are the Tarot Oracle, a deep reader trained on the Rider-Waite, Marseille, and Thoth tarot traditions.
-Draw ONE tarot card randomly (use the date {{date}} as a seed for true randomness: hash the date and take mod 78).
-Return ONLY valid JSON with this exact structure, no markdown, no explanation:
-{"cardName":"<Full card name>","teaser":"<1-sentence hint about the card's energy today>","fullText":"<3-5 sentence reading about what this card offers today>"}
-The card should feel meaningfully relevant to the current moment.`,
-
-  tantra: `You are the Tantra Oracle, trained on classical Tantra, Kashmir Shaivism, kundalini yoga, Vedanta, and Hatha yoga texts.
-Generate today's tantric meditation focus.
-Return ONLY valid JSON with this exact structure, no markdown, no explanation:
-{"title":"<3-6 word evocative title>","teaser":"<2-sentence teaser about today's focus>","fullText":"<4-5 sentence meditation guidance, grounding and safe>"}
-Today's date is {{date}}. Focus on a chakra, energy center, or aspect of embodiment. Make it practical and alive.`,
-
-  entheogen: `You are the Esoteric Entheogen Oracle, trained on the sacred dimensions of plant medicines, psychonautic literature, and shamanic wisdom traditions.
-Generate today's entheogenic reflection — focused on integration, set & setting, and the symbolic dimensions of expanded states.
-Return ONLY valid JSON with this exact structure, no markdown, no explanation:
-{"title":"<3-6 word evocative title>","teaser":"<2-sentence teaser about today's reflection>","fullText":"<4-5 sentence reflection on integration, harm reduction, and the sacred>"}
-Today's date is {{date}}. Ground it in real wisdom tradition, not vague wellness speak.`,
+export function generateForTradition(tradition: string, _date: string): DailyEntry {
+  // Keep the daily route independent of retired external model providers.
+  return getFallbackEntry(tradition)
 }
 
-async function generateForTradition(
-  tradition: string,
-  date: string
-): Promise<DailyEntry> {
-  const apiKey = process.env.MINIMAX_API_KEY
-  if (!apiKey) throw new Error('MINIMAX_API_KEY not set')
-
-  const prompt = GENERATION_PROMPTS[tradition]?.replace('{{date}}', date)
-  if (!prompt) throw new Error(`No prompt for tradition: ${tradition}`)
-
-  const response = await fetch(
-    'https://api.minimax.chat/v1/text/chatcompletion_pro?GroupId=123456789',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'MiniMax-Text-01',
-        max_tokens: 600,
-        temperature: 0.8,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-    }
-  )
-
-  if (!response.ok) {
-    throw new Error(`MiniMax API error: ${response.status} ${response.statusText}`)
+export async function persistDailyContentSafely(
+  store: DailyStore,
+  content: DailyContent,
+  writer: (nextStore: DailyStore) => Promise<void> = writeStore,
+): Promise<DailyContent> {
+  try {
+    await writer(store)
+  } catch (error) {
+    // Vercel's serverless filesystem is read-only/ephemeral. Persistence is only a cache;
+    // it must never turn otherwise-valid daily practice into an empty API response.
+    console.warn('[daily-content] Persistence unavailable; returning generated content.', error instanceof Error ? error.message : 'write failed')
   }
-
-  const data = await response.json() as { choices?: Array<{ messages?: Array<{ content: string }> }> }
-  const raw = data?.choices?.[0]?.messages?.[0]?.content ?? ''
-
-  // Strip any markdown code fences
-  const cleaned = raw.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim()
-
-  const parsed = JSON.parse(cleaned) as Record<string, string>
-  return {
-    title: parsed.title ?? parsed.cardName ?? 'Untitled',
-    teaser: parsed.teaser ?? '',
-    fullText: parsed.fullText ?? parsed.fullReading ?? '',
-    tradition,
-    generated: new Date().toISOString(),
-  }
+  return content
 }
 
 // ── public API ───────────────────────────────────────────────────────────────
@@ -145,7 +89,7 @@ export async function generateTodayContent(): Promise<DailyContent> {
       entries[tradition] = store[date].entries[tradition]
     } else {
       try {
-        const entry = await generateForTradition(tradition, date)
+        const entry = generateForTradition(tradition, date)
         entries[tradition] = entry
       } catch (err) {
         console.error(`[daily-content] Failed to generate ${tradition}:`, err)
@@ -156,12 +100,10 @@ export async function generateTodayContent(): Promise<DailyContent> {
   }
 
   const content: DailyContent = { date, entries }
+  store[date] = content
 
-  // Persist
-  store[date] = { date, entries }
-  await writeStore(store)
-
-  return content
+  // Keep today's practice available even when Vercel's read-only filesystem rejects the cache write.
+  return persistDailyContentSafely(store, content)
 }
 
 function getFallbackEntry(tradition: string): DailyEntry {

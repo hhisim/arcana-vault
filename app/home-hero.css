@@ -1,0 +1,24 @@
+/* Approved Oracle-first home treatment. Existing artwork and motion retained. */
+.voa-home-hero .voa-hero-outer{padding-top:54px;padding-bottom:64px}
+.voa-home-hero .voa-hero-content{max-width:1020px}
+.voa-home-hero h1{line-height:1.08;color:#f1e6f7}
+.voa-home-hero img[src="/images/hero-symbol.png"]{width:136px}
+.voa-home-hero .voa-hero-content>div:first-of-type{justify-content:flex-start;margin-bottom:24px}
+.voa-home-hero .voa-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.voa-home-hero .voa-hero-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border-radius:9px;font-size:14px}
+.voa-home-hero .voa-hero-primary{background:#d4b25e;color:#131017;border:1px solid #d4b25e}
+.voa-home-hero .voa-hero-secondary{background:#ffffff08;color:#e9dff0;border:1px solid #c9a84c50}
+.voa-home-hero .voa-hero-intro{font-size:18px;line-height:1.65;color:#c5b8d2;margin-top:26px;max-width:700px}
+.voa-home-hero .voa-hero-content>p{color:#bdb0cb}
+.voa-home-hero .voa-hero-content>p:last-child{max-width:700px;line-height:1.7}
+.voa-home-hero a:focus-visible{outline:2px solid #dec078;outline-offset:5px}
+@media(max-width:640px){
+ .voa-home-hero .voa-hero-outer{padding-top:30px;padding-bottom:40px}
+ .voa-home-hero h1{font-size:2.3rem}
+ .voa-home-hero img[src="/images/hero-symbol.png"]{width:96px}
+ .voa-home-hero .voa-hero-content>p:first-child{margin-bottom:18px;letter-spacing:.28em}
+ .voa-home-hero .voa-hero-actions{display:grid;gap:9px;margin-top:22px}
+ .voa-home-hero .voa-hero-actions a{width:100%}
+ .voa-home-hero .voa-hero-intro{font-size:16px;line-height:1.7}
+ .voa-home-hero .voa-hero-content>div:first-of-type{margin-bottom:20px}
+}

@@ -1,5 +1,15 @@
 export const posts = [
   {
+    "slug": "book-of-thoth-egyptian-knowledge-scribe",
+    "title": "The Book of Thoth Was Not a Secret: How Egyptian Knowledge Trained the Scribe",
+    "tradition": "kemet",
+    "publishedAt": "2026-09-24",
+    "readTime": "24 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/book-of-thoth-egyptian-knowledge-scribe/cover-gpt-image-2-20260924.png",
+    "excerpt": "The ancient Egyptian Book of Thoth is not a recovered grimoire of hidden facts. Preserved in fragmentary Demotic papyri, it stages knowledge as a dialogue, a temple discipline, and an ethical craft: the scribe must learn how to question, connect, and care for what is entrusted to writing."
+  },
+  {
     "slug": "fasting-of-the-heart-zhuangzi-attention",
     "title": "The Fasting of the Heart: Zhuangzi's Attention Practice for an Overloaded Age",
     "tradition": "taoism",
@@ -36,7 +46,7 @@ export const posts = [
     "publishedAt": "2026-08-05",
     "readTime": "20 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/as-above-so-below-secret-thread-western-mysteries/cover.png",
+    "hero": "/images/blog/as-above-so-below-secret-thread-western-mysteries/cover-pinterest-wide.jpg",
     "excerpt": "Hermeticism, Kabbalah, the Tarot, alchemy, Enochian — underneath them all runs one secret thread: as above, so below, and the human as a lesser world that mirrors the greater."
   },
   {
@@ -307,7 +317,7 @@ export const posts = [
     "publishedAt": "2026-04-01",
     "readTime": "17 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/qliphoth-error-states-kabbalah-system-failure/cover.webp",
+    "hero": "/images/blog/qliphoth-error-states-kabbalah-system-failure/cover-pinterest-wide.jpg",
     "excerpt": "The Qliphoth are not demons. They are corrupted sefirot — divine attributes that collapsed into malfunction when the vessels shattered. Kabbalah produced the first complete taxonomy of how a mind breaks down."
   },
   {
@@ -559,7 +569,17 @@ export const posts = [
     "publishedAt": "2026-09-11",
     "readTime": "22 min",
     "author": "Prime + Hakan",
-    "hero": "/images/blog/law-of-one-ethics-of-relation/cover.png",
+    "hero": "/images/blog/law-of-one-ethics-of-relation/cover-pinterest-wide.jpg",
     "excerpt": "The Law of One is usually shelved as UFO lore. Read closely, the Ra sessions make unity a discipline of relation: free will that refuses coercion, service measured by how difference is treated, and distortion accepted as the condition of every claim."
+  },
+  {
+    "slug": "imaginal-world-ibn-arabi-perception-between-spirit-matter",
+    "title": "The Imaginal World: Ibn Arabi and the Discipline of Perception Between Spirit and Matter",
+    "tradition": "sufism",
+    "publishedAt": "2026-09-12",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/imaginal-world-ibn-arabi-perception-between-spirit-matter/cover-pinterest-wide.jpg",
+    "excerpt": "Ibn Arabi's Alam al-Mithal names a real world between spirit and matter — and imagination, disciplined rather than indulged, is the organ that perceives it. Against fantasy on one side and literalism on the other, the imaginal is a cognitive faculty with its own rigor."
   }
 ];

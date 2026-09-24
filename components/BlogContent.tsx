@@ -8,6 +8,7 @@ import { useSiteI18n } from '@/lib/site-i18n'
 import { posts } from '@/lib/posts'
 import ScrollCTA from '@/components/ScrollCTA'
 import { injectCrossLinks, glossary } from '@/lib/cross-link-injector'
+import { buildYouTubeEmbedUrl, getBlogVideoEmbed } from '@/lib/blog-video-embed'
 
 type FmI18n = {
   tr?: { title?: string; excerpt?: string }
@@ -137,6 +138,8 @@ function injectImages(body: string, images: InlineImage[] = []): string {
 export default function BlogContent({ body, translations, fmI18n, defaultTitle = '', images = [], slug = '' }: BlogContentProps) {
   const { lang } = useSiteI18n()
   const { titleToSlug } = useMemo(() => buildSlugMap(), [])
+  const companionVideo = getBlogVideoEmbed(slug)
+  const companionVideoUrl = companionVideo ? buildYouTubeEmbedUrl(companionVideo.videoId) : null
 
   const langBody = (lang === 'tr' && translations?.tr)
     ? translations.tr
@@ -371,6 +374,25 @@ export default function BlogContent({ body, translations, fmI18n, defaultTitle =
             )}
           </div>
         </div>
+      )}
+
+      {companionVideo && companionVideoUrl && (
+        <section className="mb-10" aria-label="Video companion">
+          <p className="mb-3 text-xs uppercase tracking-widest text-[#9B93AB]">
+            {lang === 'tr' ? 'Eşlikçi videoyu izle' : lang === 'ru' ? 'Смотреть видео по теме' : 'Watch the companion video'}
+          </p>
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+            <iframe
+              src={companionVideoUrl}
+              title={companionVideo.title}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="absolute inset-0 h-full w-full"
+            />
+          </div>
+        </section>
       )}
 
       <div className="prose prose-invert max-w-none

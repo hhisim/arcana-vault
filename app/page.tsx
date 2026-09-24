@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import './home-hero.css'
 import GlitchCycleText from './components/GlitchCycleText'
 import Testimonials from './components/Testimonials'
 import { useSiteI18n } from '@/lib/site-i18n'
@@ -94,9 +95,9 @@ export default function HomePage() {
 
   return (
     <div className="bg-deep text-text-primary">
-      <section className="relative overflow-hidden border-b border-white/5 bg-[radial-gradient(circle_at_top,_rgba(123,94,167,0.25),_transparent_45%),linear-gradient(180deg,#090912_0%,#090912_100%)]">
-        <div className="mx-auto max-w-7xl px-6 py-20 md:px-8 md:py-28">
-          <div className="max-w-4xl">
+      <section className="voa-home-hero relative overflow-hidden border-b border-white/5 bg-[radial-gradient(circle_at_top,_rgba(123,94,167,0.25),_transparent_45%),linear-gradient(180deg,#090912_0%,#090912_100%)]">
+        <div className="voa-hero-outer mx-auto max-w-7xl px-6 py-20 md:px-8 md:py-28">
+          <div className="voa-hero-content max-w-4xl">
             <p className="mb-6 text-xs uppercase tracking-[0.45em] text-text-secondary">Vault of Arcana</p>
             <div className="flex justify-center mb-10">
               <img
@@ -106,13 +107,14 @@ export default function HomePage() {
               />
             </div>
             <GlitchCycleText as="h1" className="max-w-5xl font-serif text-5xl leading-[0.95] text-text-primary md:text-7xl" phrases={heroPhrases[L]} intervalMs={5200} glitchMs={180} />
-            <p className="mt-8 max-w-3xl text-lg leading-8 text-text-secondary md:text-xl">
-              {tt({ en:'A curated intelligence system built from 30 years of esoteric study, rare texts, and carefully structured archives — shaped through the collaboration of Hakan Hisim + THOTH + MAAT + PRIME. This is not a chatbot. It is a living mystery school.', tr:'30 yılı aşkın ezoterik çalışma, nadir metinler ve özenle yapılandırılmış arşivlerden oluşturulmuş seçilmiş bir zeka sistemi — Hakan Hisim, THOTH, MAAT ve PRIME işbirliğiyle şekillendirilmiştir. Bu bir sohbet robotu değildir. Bu yaşayan bir gizem okuludur.', ru:'Курируемая интеллектуальная система, созданная на основе 30 лет эзотерических исследований, редких текстов и тщательно структурированных архивов — сформированная в сотрудничестве Hakan Hisim + THOTH + MAAT + PRIME. Это не чат-бот. Это живая школа тайн.'})}
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link href="/chat" className="rounded-xl bg-gold px-6 py-3 text-sm font-medium text-black transition hover:opacity-90">{tt({ en:'Ask One Powerful Question', tr:'Güçlü Bir Soru Sor', ru:'Задайте один сильный вопрос'})}</Link>
-              <Link href="#gateways" className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-text-primary transition hover:bg-white/10">{tt({ en:'Explore the Traditions', tr:'Gelenekleri Keşfet', ru:'Исследовать традиции'})}</Link>
+            <div className="voa-hero-actions">
+              <Link href="/chat" className="voa-hero-primary transition hover:opacity-90">{tt({ en:'Ask the Oracle', tr:'Kâhine Sor', ru:'Спросить Оракула'})}</Link>
+              <Link href="/shop" className="voa-hero-secondary transition hover:bg-white/10">{tt({ en:'Explore Study Packs', tr:'Çalışma Paketlerini Keşfet', ru:'Изучить подборки'})}</Link>
+              <Link href="#gateways" className="voa-hero-secondary transition hover:bg-white/10">{tt({ en:'Explore the Traditions', tr:'Gelenekleri Keşfet', ru:'Исследовать традиции'})}</Link>
             </div>
+            <p className="voa-hero-intro">
+              {tt({ en:'Explore Tarot, Taoism, dreamwork and symbolic traditions through the Oracle and a curated archive of esoteric study.', tr:'Tarot, Taoizm, rüya çalışması ve sembolik gelenekleri Kâhin ve özenle seçilmiş ezoterik çalışma arşivi üzerinden keşfedin.', ru:'Исследуйте Таро, даосизм, работу со сновидениями и символические традиции через Оракула и тщательно собранный архив эзотерических исследований.'})}
+            </p>
             <p className="mt-5 text-sm text-text-secondary">{tt({ en:'Start with four living gateways. Expand into a growing constellation of twenty-plus traditions, practices, archives, agents, and intelligences.', tr:'Dört yaşayan geçit ile başlayın. Yirmi artı gelenek, pratik, arşiv, ajan ve zekayı büyüyen bir yıldız takımadasına genişletin.', ru:'Начните с четырёх живых вратарей. Расширьтесь в растущее созвездие из более чем двадцати традиций, практик, архивов, агентов и интеллектов.'})}</p>
             <p className="mt-4 text-sm text-text-secondary">{tt({ en:'Try for free. Ask about Tarot, Taoism, Tantra, dreams, symbols, names, or the Correspondence Codex. Feel the magic first — then save your reading and continue daily.', tr:'Ücretsiz deneyin. Tarot, Taoizm, Tantra, rüyalar, semboller, isimler veya Correspondence Codex hakkında sorun. Önce büyüyü hissedin — sonra okumanızı kaydedip her gün devam edin.', ru:'Попробуйте бесплатно. Спросите о Таро, Дао, Тантре, снах, символах, именах или Кодексе Соответствий. Сначала почувствуйте магию — затем сохраните чтение и продолжайте ежедневно.'})}</p>
           </div>

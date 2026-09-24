@@ -9,6 +9,26 @@
   ],
   "redirects": [
     {
+      "source": "/blog/as-above-so-below-the-secret-thread-running-through-the-western-mysteries",
+      "destination": "/blog/as-above-so-below-secret-thread-western-mysteries",
+      "permanent": true
+    },
+    {
+      "source": "/blog/train-imagination-to-see-ibn-arabis-imaginal-world",
+      "destination": "/blog/imaginal-world-ibn-arabi-perception-between-spirit-matter",
+      "permanent": true
+    },
+    {
+      "source": "/blog/the-law-of-one-when-cosmic-unity-becomes-an-ethics-of-relation",
+      "destination": "/blog/law-of-one-ethics-of-relation",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kabbalahs-shadow-tree-maps-system-failure",
+      "destination": "/blog/qliphoth-error-states-kabbalah-system-failure",
+      "permanent": true
+    },
+    {
       "source": "/forum",
       "destination": "/agora",
       "permanent": true

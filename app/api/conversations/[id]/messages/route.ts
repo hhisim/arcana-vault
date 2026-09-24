@@ -4,7 +4,7 @@ import { addMessage, getConversationWithMessages, updateConversation } from '@/l
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export async function GET(_request: NextRequest, context: RouteContext) {
+export async function GET(request: NextRequest, context: RouteContext) {
   const supabase = await getServerSupabase()
 
   // Get authenticated user from session cookie
@@ -20,7 +20,10 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     if (!result || result.conversation.user_id !== user.id) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
-    return NextResponse.json(result.messages)
+    const includeConversation = new URL(request.url).searchParams.get('includeConversation') === '1'
+    return NextResponse.json(includeConversation
+      ? { conversation: result.conversation, messages: result.messages }
+      : result.messages)
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }

@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { applySupabaseCookieBatch } from '@/lib/supabase-cookie-batch'
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request })
@@ -10,18 +11,15 @@ export async function updateSession(request: NextRequest) {
 
   const supabase = createServerClient(url, anon, {
     cookies: {
-      get(name: string) {
-        return request.cookies.get(name)?.value
+      getAll() {
+        return request.cookies.getAll()
       },
-      set(name: string, value: string, options: Record<string, unknown>) {
-        request.cookies.set({ name, value, ...options })
-        response = NextResponse.next({ request })
-        response.cookies.set({ name, value, ...options })
-      },
-      remove(name: string, options: Record<string, unknown>) {
-        request.cookies.set({ name, value: '', ...options })
-        response = NextResponse.next({ request })
-        response.cookies.set({ name, value: '', ...options })
+      setAll(cookiesToSet) {
+        response = applySupabaseCookieBatch(
+          request,
+          (updatedRequest) => NextResponse.next({ request: updatedRequest }),
+          cookiesToSet,
+        )
       },
     },
   })

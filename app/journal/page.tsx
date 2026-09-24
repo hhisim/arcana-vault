@@ -7,7 +7,7 @@ import { getBrowserSupabase } from '@/lib/supabase/client'
 import { useLang } from '@/lib/lang-context'
 import { SITEDICT } from '@/lib/dictionary'
 import CrossRefPanel from '@/components/CrossRefPanel'
-import type { ChatMessage } from '@/lib/oracle-ui'
+import { buildConversationResumeUrl, getJournalAnswer, normalizeJournalMessages, type JournalMessage } from '@/lib/oracle-session-state'
 
 type LocalConversation = {
   id: string
@@ -84,7 +84,7 @@ export default function JournalPage() {
   const [starredOnly, setStarredOnly] = useState(false)
   const [search, setSearch] = useState('')
   const [viewingConv, setViewingConv] = useState<Conversation | null>(null)
-  const [convMessages, setConvMessages] = useState<any[]>([])
+  const [convMessages, setConvMessages] = useState<JournalMessage[]>([])
   const [loadingMessages, setLoadingMessages] = useState(false)
   const [expandedQAs, setExpandedQAs] = useState<Set<number>>(new Set())
   const [rightPanelTab, setRightPanelTab] = useState<'messages' | 'crossref'>('messages')
@@ -160,13 +160,7 @@ export default function JournalPage() {
       const res = await fetch(`/api/conversations/${conv.id}/messages`)
       if (res.ok) {
         const raw = await res.json()
-        // Map 'assistant' → 'oracle' for CrossRefPanel compatibility
-        const mapped: ChatMessage[] = raw.map((m: any) => ({
-          id: m.id,
-          role: m.role === 'assistant' ? 'oracle' : m.role as 'user' | 'oracle' | 'system',
-          text: m.content,
-        }))
-        setConvMessages(mapped.reverse())
+        setConvMessages(normalizeJournalMessages(raw))
       }
     } catch {} finally { setLoadingMessages(false) }
   }
@@ -226,7 +220,7 @@ export default function JournalPage() {
           <div className="flex items-center gap-3">
             {viewingConv.is_starred && <span className="text-[#C9A84C]">★</span>}
             <Link
-              href={`/chat?conversation=${viewingConv.id}`}
+              href={buildConversationResumeUrl(viewingConv)}
               className="px-4 py-2 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-xs uppercase tracking-wider hover:bg-[#B1933E] transition-colors"
             >
               {t(SITEDICT.nav.journal.continue_btn)}
@@ -277,7 +271,10 @@ export default function JournalPage() {
                 <div className="space-y-4">
                   {convMessages.map((msg, i) => {
                     if (msg.role === 'user') {
-                      const answer = convMessages[i + 1]
+                      const answer = getJournalAnswer(convMessages, i)
+                      const answerCards = Array.isArray(answer?.metadata?.cards)
+                        ? answer.metadata.cards.filter((card): card is string => typeof card === 'string')
+                        : []
                       const qaIndex = i
                       const isExpanded = expandedQAs.has(qaIndex)
                       return (
@@ -295,7 +292,7 @@ export default function JournalPage() {
                           >
                             <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#7B5EA7]/20 border border-[#7B5EA7]/30 flex items-center justify-center text-xs text-[#7B5EA7] mt-0.5">Q</span>
                             <div className="flex-1 min-w-0">
-                              <div className="text-xs text-[#9B93AB] mb-1 line-clamp-2">{msg.content}</div>
+                              <div className="text-sm font-semibold text-[#D9B96E] mb-1 line-clamp-2">{msg.content}</div>
                               {answer && !isExpanded && (
                                 <div className="text-[10px] text-[#3A3550] mt-1">Tap to expand answer →</div>
                               )}
@@ -311,9 +308,9 @@ export default function JournalPage() {
                                   </span>
                                   <p className="text-sm text-[#E8E0F0] leading-relaxed whitespace-pre-wrap flex-1">{answer.content}</p>
                                 </div>
-                                {answer.metadata?.cards && (
+                                {answerCards.length > 0 && (
                                   <div className="flex flex-wrap gap-1 ml-10">
-                                    {answer.metadata.cards.map((card: string, ci: number) => (
+                                    {answerCards.map((card, ci) => (
                                       <span key={ci} className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 text-[#9B93AB]">{card}</span>
                                     ))}
                                   </div>
@@ -330,7 +327,7 @@ export default function JournalPage() {
               )}
               <div className="mt-10 text-center">
                 <Link
-                  href={`/chat?conversation=${viewingConv.id}`}
+                  href={buildConversationResumeUrl(viewingConv)}
                   className="inline-block px-8 py-4 rounded-xl bg-[#C9A84C] text-[#0A0A0F] font-bold text-sm uppercase tracking-widest hover:bg-[#B1933E] transition-colors"
                 >
                   {t(SITEDICT.nav.journal.continue_conv)}
@@ -342,7 +339,11 @@ export default function JournalPage() {
           {/* Right: CrossRefPanel */}
           <div className={`w-full md:w-[380px] border-l border-white/8 overflow-hidden flex-shrink-0 ${rightPanelTab === 'crossref' ? '' : 'hidden md:block'}`}>
             <CrossRefPanel
-              messages={convMessages.map((m, index) => ({ id: m.id ?? `journal-${index}`, role: m.role, text: m.content ?? m.text ?? '' }))}
+              messages={convMessages.map((m) => ({
+              id: m.id,
+              role: m.role === 'assistant' ? 'oracle' : m.role,
+              text: m.content,
+            }))}
               indexReady={!loadingMessages && convMessages.length > 0}
             />
           </div>

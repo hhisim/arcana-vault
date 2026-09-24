@@ -40,6 +40,7 @@ const FALLBACK = ['etsy-4329093346', 'etsy-4311828972', 'etsy-1890769318']
 
 // Extra per-slug overrides for posts whose tradition field is too broad.
 const SLUG_OVERRIDES: Record<string, string[]> = {
+  'book-of-thoth-egyptian-knowledge-scribe': ['etsy-4543086125', 'etsy-4323025629', 'etsy-4491083373'],
   'amplituhedron-flower-of-life-sacred-geometry': ['etsy-4543080231', 'etsy-4516425177', 'etsy-4329093346'],
   'cymatics-word-of-god-hans-jenny-logos': ['etsy-4543080231', 'etsy-1886869572', 'etsy-4516425177'],
   'tarot-and-tree-of-life': ['etsy-4545842201', 'etsy-4543079786', 'etsy-4488658060'],

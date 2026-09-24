@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { useSiteI18n } from '@/lib/site-i18n'
 import { useAuth } from '@/components/auth/AuthProvider'
 import BookPreview from '@/components/library/BookPreview'
+import { canAccessLibraryBook } from '@/lib/plans'
 
-// VOA Library — archive.org IDs verified 2026-04-01 (all 22 returned 200)
+// VOA Library — all 26 Archive.org item IDs and readable files checked 2026-09-24
 
 type Tradition = 'Tao' | 'Tarot' | 'Tantra' | 'Entheogens' | 'Sufism' | 'Dream' | 'Qabalah' | 'Spiritual Sovereignty' | 'All'
 
@@ -37,7 +38,7 @@ const BOOKS: Book[] = [
   { id: 'rp', title: 'Pictorial Key to the Tarot', author: 'A.E. Waite', tradition: 'Tarot', access: 'Free', url: 'A.EWaiteThePictorialKeyToTheTarot', source: 'archive', color: '#7B5EA7' },
   
   // Tantra
-  { id: 'osho', title: 'Tantra: The Supreme Understanding', author: 'Osho', tradition: 'Tantra', access: 'Adept+', url: 'oshoYoga', source: 'archive', color: '#C9A84C' },
+  { id: 'osho', title: 'Tantra: The Supreme Understanding', author: 'Osho', tradition: 'Tantra', access: 'Adept+', url: 'tantra-the-supreme-understanding-1', source: 'archive', color: '#C9A84C' },
   { id: 'sp', title: 'The Serpent Power', author: 'Arthur Avalon', tradition: 'Tantra', access: 'Adept+', url: 'TheSerpentPowerByArthurAvalon', source: 'archive', color: '#C9A84C' },
   { id: 'shakti', title: 'Shakti and Shakta', author: 'Sir John Woodroffe', tradition: 'Tantra', access: 'Free', url: 'in.ernet.dli.2015.217317', source: 'archive', color: '#C9A84C' },
   
@@ -54,7 +55,7 @@ const BOOKS: Book[] = [
   // Dream
   { id: 'lucid', title: 'Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Free', url: 'luciddreaming00labe', source: 'archive', color: '#5C8FE0' },
   { id: 'astral', title: 'Projection of the Astral Body', author: 'Muldoon & Carrington', tradition: 'Dream', access: 'Adept+', url: '1929MuldoonCarringtonTheProjectionOfTheAstralBody', source: 'archive', color: '#5C8FE0' },
-  { id: 'exploring', title: 'Exploring the World of Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Adept+', url: 'luciddreamingcon0000labe_v7k4', source: 'archive', color: '#5C8FE0' },
+  { id: 'exploring', title: 'Exploring the World of Lucid Dreaming', author: 'Stephen LaBerge', tradition: 'Dream', access: 'Adept+', url: 'stephan_laberge_-_exploring_the_world_of_lucid_dreaming', source: 'archive', color: '#5C8FE0' },
 
   // Qabalah
   { id: 'unveiled', title: 'The Kabbalah Unveiled', author: 'S.L. MacGregor Mathers', tradition: 'Qabalah', access: 'Free', url: 'The_Kabbalah_Unveiled_-_S_L_Mac_Gregor_Mathers', source: 'archive', color: '#E05CE0' },
@@ -83,10 +84,7 @@ export default function LibraryPage() {
     return matchesFilter && matchesSearch
   })
 
-  const canAccess = (book: Book) => {
-    if (book.access === 'Free') return true
-    return plan === 'seeker' || plan === 'full'
-  }
+  const canAccess = (book: Book) => canAccessLibraryBook(book.access, plan)
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#E8E0F0] font-sans antialiased pb-20">

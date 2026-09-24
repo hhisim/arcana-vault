@@ -5,11 +5,13 @@ import { SiteI18nProvider } from '@/lib/site-i18n'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import TrialBanner from '@/components/subscription/TrialBanner'
 import TestModeBadge from '@/components/subscription/TestModeBadge'
+import AttributionTracker from '@/components/AttributionTracker'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SiteI18nProvider>
       <AuthProvider>
+        <AttributionTracker />
         <TrialBanner />
         {children}
         <TestModeBadge />

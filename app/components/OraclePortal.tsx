@@ -21,6 +21,15 @@ import { getBrowserSupabase } from '@/lib/supabase/client'
 import type { Conversation } from '@/lib/supabase/conversations'
 import CrossRefPanel from '@/components/CrossRefPanel'
 import GrowthFunnelCta from '@/components/GrowthFunnelCta'
+import {
+  buildMessagePersistencePayload,
+  canChangeOracleContext,
+  buildOracleAskPayload,
+  ensureMessagePersisted,
+  normalizeConversationMessages,
+  restoreConversationContext,
+  resolveOracleRouteState,
+} from '@/lib/oracle-session-state'
 
 type VoiceStyle = 'female' | 'male'
 type ContextState = { userVisible: string; prompt: string; answer: string }
@@ -184,9 +193,13 @@ function OracleMarkdown({ text }: { text: string }) {
 }
 
 export default function OraclePortal() {
+  const [initialRoute] = useState(() => resolveOracleRouteState(
+    typeof window === 'undefined' ? '' : window.location.search,
+    ORACLE_CONFIG,
+  ))
   const [lang, setLang] = useState<UiLang>('en')
-  const [pack, setPack] = useState<OraclePack>('tao')
-  const [mode, setMode] = useState<OracleMode>(ORACLE_CONFIG.tao.defaultMode)
+  const [pack, setPack] = useState<OraclePack>(initialRoute.pack as OraclePack)
+  const [mode, setMode] = useState<OracleMode>(initialRoute.mode)
   const [voiceReply, setVoiceReply] = useState(true)
   const [voiceStyle, setVoiceStyle] = useState<VoiceStyle>('female')
   const [input, setInput] = useState('')
@@ -199,7 +212,7 @@ export default function OraclePortal() {
   const [showOlder, setShowOlder] = useState(false)
   const [lastContext, setLastContext] = useState<Partial<Record<OraclePack, ContextState>>>({})
   const [userId, setUserId] = useState<string | null>(null)
-  const [conversationId, setConversationId] = useState<string | null>(null)
+  const [conversationId, setConversationId] = useState<string | null>(initialRoute.conversationId)
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [showHistory, setShowHistory] = useState(false)
   const [rightPanelTab, setRightPanelTab] = useState<'menu' | 'crossref'>('menu')
@@ -290,51 +303,45 @@ export default function OraclePortal() {
     void loadUser()
   }, [pack])
 
-  // ── Load conversation from ?conversation= URL param on mount ────────────────
+  // Restore a shared conversation from the deep link; its stored tradition/mode are authoritative.
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const params = new URLSearchParams(window.location.search)
-    const convId = params.get('conversation')
+    const convId = initialRoute.conversationId
     if (!convId) return
+    let cancelled = false
+
     const loadConversation = async () => {
       try {
-        const res = await fetch(`/api/conversations/${convId}/messages`)
-        if (res.ok) {
-          const data = await res.json()
-          // API returns Message[] with {content} field — map to ChatMessage {text}
-          if (Array.isArray(data)) {
-            const mapped: ChatMessage[] = data.map((m: any) => ({
-              id: m.id,
-              role: m.role === 'assistant' ? 'oracle' : (m.role as 'user' | 'oracle' | 'system'),
-              text: m.content,
-              audioUrl: m.audioUrl ?? null,
-              mode: m.mode as OracleMode | undefined,
-              pack: m.pack as OraclePack | undefined,
-            }))
-            setMessages(mapped)
-          } else if (data?.messages && Array.isArray(data.messages)) {
-            const mapped: ChatMessage[] = data.messages.map((m: any) => ({
-              id: m.id,
-              role: m.role === 'assistant' ? 'oracle' : (m.role as 'user' | 'oracle' | 'system'),
-              text: m.content,
-              audioUrl: m.audioUrl ?? null,
-              mode: m.mode as OracleMode | undefined,
-              pack: m.pack as OraclePack | undefined,
-            }))
-            setMessages(mapped)
-          }
-          setConversationId(convId)
-          // Clean URL param after loading so it doesn't persist in history
-          window.history.replaceState(null, '', window.location.pathname)
-        } else {
-          console.error('[OraclePortal] loadConversation failed:', res.status)
-        }
+        const res = await fetch(`/api/conversations/${convId}/messages?includeConversation=1`, { cache: 'no-store' })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json()
+        if (cancelled) return
+
+        const conversation = data?.conversation
+        const savedPack = conversation?.tradition
+        const restoredPack = savedPack && Object.prototype.hasOwnProperty.call(ORACLE_CONFIG, savedPack)
+          ? savedPack as OraclePack
+          : initialRoute.pack as OraclePack
+        const availableModes = ORACLE_CONFIG[restoredPack].modes.map((entry) => entry.value)
+        const restoredMode = availableModes.includes(conversation?.mode)
+          ? conversation.mode as OracleMode
+          : ORACLE_CONFIG[restoredPack].defaultMode
+        setPack(restoredPack)
+        setMode(restoredMode)
+        const restoredMessages = normalizeConversationMessages(data?.messages ?? data, restoredPack, restoredMode)
+        setMessages(restoredMessages)
+        setConversationId(convId)
+        setLastContext(restoreConversationContext(restoredMessages))
+        setShowOlder(true)
+        window.history.replaceState(null, '', window.location.pathname)
       } catch (e) {
-        console.error('[OraclePortal] loadConversation exception:', e)
+        console.error('[OraclePortal] loadConversation failed:', e)
+        if (!cancelled) setConversationError('This session could not be restored. Your journal is unchanged.')
       }
     }
+
     void loadConversation()
-  }, [pack])
+    return () => { cancelled = true }
+  }, [])
 
   // Load ALL conversations (all traditions) when history panel opens
   const loadAllConversations = async () => {
@@ -430,12 +437,18 @@ export default function OraclePortal() {
     const saveMessage = async (role: 'user' | 'assistant' | 'system', content: string) => {
       if (!userId || !activeConvId) return
       try {
-        await fetch(`/api/conversations/${activeConvId}/messages`, {
+        const response = await fetch(`/api/conversations/${activeConvId}/messages`, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ role, content }),
+          body: JSON.stringify(buildMessagePersistencePayload(role, content, pack, effectiveMode)),
         })
-      } catch {}
+        await ensureMessagePersisted(response)
+        setConversationError(null)
+      } catch (error) {
+        console.error('[OraclePortal] saveMessage failed:', error)
+        setConversationError('One or more messages could not be saved. Keep a copy before leaving this session.')
+        setSystemNotice('Your journal could not save a message. Keep a copy before leaving this session.')
+      }
     }
 
     // Save user message immediately after sending
@@ -447,7 +460,7 @@ export default function OraclePortal() {
       const response = await fetch('/api/oracle/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ q: trimmed, mode: effectiveMode, lang: lang || 'en' }),
+        body: JSON.stringify(buildOracleAskPayload(trimmed, pack, effectiveMode, lang)),
         signal: controller.signal,
       })
       clearTimeout(timeout)
@@ -612,7 +625,15 @@ export default function OraclePortal() {
               const active = pack === item
               const badgeClass = item === 'dreamwalker' ? 'oracle-badge-archive' : 'oracle-badge-live'
               return (
-                <button key={item} type="button" onClick={() => setPack(item)} className={`oracle-card relative w-full rounded-xl border p-3 text-left ${active ? 'is-active animate-sheen border-[var(--primary-purple)]' : 'border-[var(--border-subtle)]'}`}>
+                <button key={item} type="button" disabled={!canChangeOracleContext(busy)} onClick={() => {
+                  if (!canChangeOracleContext(busy) || item === pack) return
+                  setPack(item)
+                  setConversationId(null)
+                  setMessages([])
+                  setLastContext({})
+                  setShowOlder(false)
+                  setConversationError(null)
+                }} className={`oracle-card relative w-full rounded-xl border p-3 text-left ${active ? 'is-active animate-sheen border-[var(--primary-purple)]' : 'border-[var(--border-subtle)]'}`}>
                   <span className={`${badgeClass} text-[10px]`}>{config.onlineLabel[lang]}</span>
                   <div className="pr-12">
                     <div className="font-cinzel text-[1.4rem] leading-none text-text-primary"><span className="mr-1 text-sm">{config.emoji}</span>{config.title[lang]}</div>
@@ -626,7 +647,7 @@ export default function OraclePortal() {
             <div className="mb-2 text-xs font-medium text-text-primary">{t(lang, UI_COPY.mode)}</div>
             <div className="flex flex-col gap-1">
               {currentPack.modes.map((entry) => (
-                <button key={entry.value} type="button" onClick={() => setMode(entry.value)} className={`rounded-lg border px-3 py-1.5 text-xs text-left transition ${mode === entry.value ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{entry.label[lang]}</button>
+                <button key={entry.value} type="button" disabled={!canChangeOracleContext(busy)} onClick={() => setMode(entry.value)} className={`rounded-lg border px-3 py-1.5 text-xs text-left transition ${mode === entry.value ? 'border-[var(--primary-gold)] bg-[rgba(201,168,76,0.12)] text-text-primary' : 'border-white/8 text-[var(--text-secondary)] hover:border-[var(--primary-purple)]/30 hover:text-text-primary'}`}>{entry.label[lang]}</button>
               ))}
             </div>
           </div>
@@ -640,7 +661,7 @@ export default function OraclePortal() {
                 <div className="font-cinzel text-2xl text-text-primary"><span className="mr-2 text-lg">{currentPack.emoji}</span>{currentPack.title[lang]}</div>
                 <div className="mt-0.5 text-xs text-[var(--text-secondary)]">{currentPack.subtitle[lang]}</div>
               </div>
-              <button type="button" onClick={async () => { setMessages([]); setLastContext({}); setConversationId(null); if (userId && conversationId) { try { await fetch(`/api/conversations/${conversationId}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ is_archived: true }) }); setConversations(prev => prev.filter(c => c.id !== conversationId)) } catch {} } }} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
+              <button type="button" disabled={!canChangeOracleContext(busy)} onClick={async () => { if (!canChangeOracleContext(busy)) return; setMessages([]); setLastContext({}); setConversationId(null); if (userId && conversationId) { try { await fetch(`/api/conversations/${conversationId}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ is_archived: true }) }); setConversations(prev => prev.filter(c => c.id !== conversationId)) } catch {} } }} className="rounded-full border border-white/8 px-3 py-1.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--primary-purple)]/30 hover:text-text-primary">{t(lang, UI_COPY.clear)}</button>
               {userId && (
                 <button type="button" onClick={async () => {
                   if (!showHistory) await loadAllConversations()
@@ -678,7 +699,7 @@ export default function OraclePortal() {
               <div className="space-y-4">
                 {visibleMessages.map((message, index) => {
                   if (message.role === 'user') {
-                    return <div key={message.id} className="user-bubble ml-auto max-w-[85%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--primary-gold)]">You</div><div className="whitespace-pre-wrap text-sm text-text-primary">{message.text}</div></div>
+                    return <div key={message.id} className="user-bubble ml-auto max-w-[85%] border border-[#D6B85A]/35 bg-[#D6B85A]/10 p-4 shadow-[0_0_24px_rgba(214,184,90,0.08)]"><div className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#E6C96B]">Your question</div><div className="whitespace-pre-wrap text-sm font-semibold text-[#F2DEA1]">{message.text}</div></div>
                   }
 
                   if (message.role === 'system') {
@@ -689,7 +710,7 @@ export default function OraclePortal() {
 
                   return (
                     <div key={message.id}>
-                      <div className="oracle-bubble max-w-[90%] p-4"><div className="mb-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">{currentPack.title[lang]}</div><OracleMarkdown text={message.text} />{message.audioUrl ? <AudioBubble src={message.audioUrl} /> : null}</div>
+                      <div className="oracle-bubble max-w-[90%] p-4"><div className="mb-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-[var(--text-secondary)]">Oracle response · {currentPack.title[lang]}</div><OracleMarkdown text={message.text} />{message.audioUrl ? <AudioBubble src={message.audioUrl} /> : null}</div>
                       {shouldShowGrowthCta ? <GrowthFunnelCta className="max-w-[90%]" /> : null}
                     </div>
                   )
@@ -766,22 +787,32 @@ export default function OraclePortal() {
                         <div className="flex items-start justify-between gap-1">
                           <button
                             type="button"
+                            disabled={!canChangeOracleContext(busy)}
                             onClick={async () => {
+                              if (!canChangeOracleContext(busy)) return
                               // Load this conversation's messages
                               const res = await fetch(`/api/conversations/${conv.id}/messages`)
                               if (res.ok) {
-                                const msgs = await res.json()
-                                // Map DB messages to ChatMessage format
-                                const loaded: ChatMessage[] = msgs.map((m: { role: string; content: string; created_at: string }) => ({
-                                  id: uid(),
-                                  role: m.role === 'assistant' ? 'oracle' : (m.role as 'user' | 'system'),
-                                  text: m.content,
-                                  pack: conv.tradition as OraclePack,
-                                  mode: conv.mode as OracleMode,
-                                }))
-                                setMessages(loaded.reverse())
+                                const data = await res.json()
+                                const restoredPack = Object.prototype.hasOwnProperty.call(ORACLE_CONFIG, conv.tradition)
+                                  ? conv.tradition as OraclePack
+                                  : pack
+                                const availableModes = ORACLE_CONFIG[restoredPack].modes.map((entry) => entry.value)
+                                const restoredMode = availableModes.includes(conv.mode)
+                                  ? conv.mode as OracleMode
+                                  : ORACLE_CONFIG[restoredPack].defaultMode
+                                const loaded = normalizeConversationMessages(
+                                  Array.isArray(data) ? data : data?.messages,
+                                  restoredPack,
+                                  restoredMode,
+                                ) as ChatMessage[]
+                                setPack(restoredPack)
+                                setMode(restoredMode)
+                                setMessages(loaded)
                                 setConversationId(conv.id)
                                 setLastContext({})
+                                setShowOlder(true)
+                                setConversationError(null)
                                 setShowHistory(false)
                               }
                             }}

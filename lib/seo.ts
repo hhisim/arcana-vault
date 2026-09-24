@@ -8,11 +8,11 @@ export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
 }
 
-export function seoTitle(title: string, maxLength = 42): string {
+export function seoTitle(title: string, maxLength = 60): string {
   const normalized = title.replace(/\s+/g, ' ').trim()
   if (normalized.length <= maxLength) return normalized
   const candidate = normalized.slice(0, maxLength - 1).replace(/\s+[^\s]*$/, '').trim()
-  return `${candidate || normalized.slice(0, maxLength - 1)}…`
+  return candidate || normalized.slice(0, maxLength - 1)
 }
 
 export function seoDescription(description: string, maxLength = 160): string {

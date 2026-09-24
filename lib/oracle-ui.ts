@@ -92,6 +92,7 @@ export const ORACLE_CONFIG: Record<OraclePack, OraclePackConfig> = {
       { value: 'numerology', label: label('Numerology', 'Numeroloji', 'Нумерология'), voiceEnabled: false },
       { value: 'talisman', label: label('Talisman', 'Tılsım', 'Талисман'), voiceEnabled: false },
       { value: 'geomancy', label: label('Geomancy', 'Geomansi', 'Геомантия'), voiceEnabled: false },
+      { value: 'scholar', label: label('Scholar', 'Bilgin', 'Учёный'), voiceEnabled: false },
       { value: 'school_compare', label: label('School Compare', 'Okul Karşılaştır', 'Сравнить школы'), voiceEnabled: false },
       { value: 'quote', label: label('Quote', 'Alıntı', 'Цитата'), voiceEnabled: true },
     ],

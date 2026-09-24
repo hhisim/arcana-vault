@@ -1,6 +1,5 @@
 .vercel
-.env.local
-.env
+.env*
 .next/
 
 # Next.js SWC binaries (platform-specific, too large for GitHub)
@@ -13,3 +12,7 @@ node_modules/@vercel/ncc/
 *.bak
 *.backup*
 *.bck
+
+# Local build artifacts
+node_modules/
+*.tsbuildinfo
