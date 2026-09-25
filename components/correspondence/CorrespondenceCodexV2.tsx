@@ -1,11 +1,30 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { CodexDetail, CodexEntry, CodexIndex } from '@/lib/correspondence-v2'
-import { detailUrl, filterCodexEntries, pickDailyEntry } from '@/lib/correspondence-v2'
+import type { ClassicCatalogEntry, CodexDetail, CodexEntry, CodexIndex } from '@/lib/correspondence-v2'
+import { classicEntryHref, classicOnlyEntries, codexEntryHref, codexFocusHref, codexSystemHref, detailUrl, filterCodexEntries, findMappedEntry, pickDailyEntry, visualForMapping } from '@/lib/correspondence-v2'
 import styles from './CorrespondenceCodexV2.module.css'
 
 const INDEX_URL = '/data/correspondence-v2/index.json'
+
+/** Small, labelled vector cues; text remains the authoritative accessible name. */
+function GeometryGlyph({ symbol }: { symbol: string }) {
+  const shapes: Record<string, React.ReactNode> = {
+    circle: <circle cx="12" cy="12" r="8" />,
+    triangle: <path d="M12 3 22 21H2Z" />,
+    square: <rect x="4" y="4" width="16" height="16" />,
+    hexagon: <path d="M7 3h10l5 9-5 9H7l-5-9Z" />,
+    hexagram: <path d="M12 2 22 19H2ZM12 22 2 5h20Z" />,
+    pentagon: <path d="M12 2 22 9l-4 12H6L2 9Z" />,
+    pentagram: <path d="m12 2 6 19L2 9h20L6 21Z" />,
+    cube: <path d="m12 2 9 5v10l-9 5-9-5V7Zm0 10 9-5m-9 5L3 7m9 5v10" />,
+    tetrahedron: <path d="M12 2 22 21H2Zm0 0v13m0 0 10 6m-10-6L2 21" />,
+    octahedron: <path d="m12 2 10 10-10 10L2 12Zm-10 10h20M12 2v20" />,
+    dodecahedron: <path d="m12 2 8 4 2 9-6 7H8l-6-7 2-9Zm-7 4 7 3 7-3m-7 3 4 6-4 7m0-13-4 6 4 7m-10-7h20" />,
+    icosahedron: <path d="m12 2 10 7v7l-10 6L2 16V9Zm0 0v20M2 9l10 5 10-5M2 16l10-5 10 5" />,
+  }
+  return <svg className={styles.glyph} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinejoin="round" aria-hidden="true" focusable="false">{shapes[symbol]}</svg>
+}
 
 export default function CorrespondenceCodexV2() {
   const [index, setIndex] = useState<CodexIndex | null>(null)
@@ -15,11 +34,17 @@ export default function CorrespondenceCodexV2() {
   const [field, setField] = useState('')
   const [tradition, setTradition] = useState('')
   const [selected, setSelected] = useState('')
+  const [focus, setFocus] = useState<{ system: string; value: string } | null>(null)
   const [detail, setDetail] = useState<CodexDetail | null>(null)
   const [detailError, setDetailError] = useState('')
   const [pinned, setPinned] = useState('')
   const [pinnedDetail, setPinnedDetail] = useState<CodexDetail | null>(null)
   const [visible, setVisible] = useState(36)
+  const [showClassic, setShowClassic] = useState(false)
+  const [classicEntries, setClassicEntries] = useState<ClassicCatalogEntry[] | null>(null)
+  const [classicError, setClassicError] = useState('')
+  const [classicQuery, setClassicQuery] = useState('')
+  const [classicVisible, setClassicVisible] = useState(24)
   const searchRef = useRef<HTMLInputElement>(null)
   const detailCache = useRef(new Map<string, CodexDetail>())
 
@@ -30,12 +55,31 @@ export default function CorrespondenceCodexV2() {
       const parsed = await response.json() as CodexIndex
       if (parsed.schemaVersion !== 'correspondence-codex-v2' || !Array.isArray(parsed.entries)) throw new Error('Invalid Codex index')
       setIndex(parsed)
-      const requested = new URLSearchParams(window.location.search).get('entry')
+      const params = new URLSearchParams(window.location.search)
+      const requested = params.get('entry')
+      const requestedSystem = params.get('system') ?? ''
+      if (params.has('focusSystem') && params.has('focusValue')) setFocus({ system: params.get('focusSystem')!, value: params.get('focusValue')! })
+      if (parsed.facets.sourceSystems.some((facet) => facet.value === requestedSystem)) setSystem(requestedSystem)
       const today = new Date().toISOString().slice(0, 10)
-      setSelected(parsed.entries.find((entry) => entry.id === requested)?.id ?? pickDailyEntry(parsed.entries, today)?.id ?? '')
+      const withinSystem = parsed.entries.filter((entry) => entry.sourceSystem === requestedSystem)
+      setSelected(parsed.entries.find((entry) => entry.id === requested && (!requestedSystem || entry.sourceSystem === requestedSystem))?.id
+        ?? withinSystem[0]?.id ?? pickDailyEntry(parsed.entries, today)?.id ?? '')
     }).catch((error: Error) => { if (!controller.signal.aborted) setLoadError(error.message) })
     return () => controller.abort()
   }, [])
+
+  useEffect(() => {
+    if (!showClassic || !index || classicEntries) return
+    const controller = new AbortController()
+    fetch('/data/correspondence/index.json', { signal: controller.signal }).then(async (response) => {
+      if (!response.ok) throw new Error(`Classic catalog unavailable (${response.status})`)
+      const parsed = await response.json() as { entries: ClassicCatalogEntry[] }
+      if (!Array.isArray(parsed.entries)) throw new Error('Invalid classic catalog')
+      setClassicEntries(classicOnlyEntries(index, parsed.entries))
+      setClassicError('')
+    }).catch((error: Error) => { if (!controller.signal.aborted) setClassicError(error.message) })
+    return () => controller.abort()
+  }, [showClassic, index, classicEntries])
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -81,11 +125,15 @@ export default function CorrespondenceCodexV2() {
   const choose = (entry: CodexEntry | string) => {
     const id = typeof entry === 'string' ? entry : entry.id
     setSelected(id)
+    setFocus(null)
     const url = new URL(window.location.href)
     url.searchParams.set('entry', id)
+    url.searchParams.delete('focusSystem')
+    url.searchParams.delete('focusValue')
     window.history.replaceState(null, '', url.pathname + url.search)
   }
   const results = useMemo(() => index ? filterCodexEntries(index, { query, system, field, tradition }) : [], [index, query, system, field, tradition])
+  const classicResults = useMemo(() => classicEntries?.filter((entry) => `${entry.name} ${entry.kind} ${entry.summary ?? ''}`.toLocaleLowerCase().includes(classicQuery.trim().toLocaleLowerCase())) ?? [], [classicEntries, classicQuery])
   const selectedEntry = index?.entries.find((item) => item.id === selected)
   const chooseDaily = () => {
     if (!index) return
@@ -145,7 +193,20 @@ export default function CorrespondenceCodexV2() {
           <div className={styles.detailIntro}><div><p className={styles.eyebrow}>{detail.sourceSystemLabel} · SOURCE ROW {detail.sourceRow}</p><h2>{detail.label}</h2><p>Mappings in this row are presented as the uploaded matrix states them, without collapsing neighboring traditions into a single definitive lineage.</p></div>
             <div className={styles.detailActions}><button type="button" onClick={() => setPinned((previous) => previous === detail.id ? '' : detail.id)}>{pinned === detail.id ? 'Unpin' : 'Pin for comparison'}</button><button type="button" onClick={() => navigator.clipboard?.writeText(window.location.href)}>Copy link</button></div>
           </div>
-          <div className={styles.mappingGrid}>{detail.mappings.map((mapping) => <section className={styles.mapping} key={mapping.key}><h3>{mapping.label}</h3><div className={styles.values}>{mapping.values.map((value, n) => <span key={`${mapping.key}-${n}`} className={styles.value}>{value.label}{value.traditions.map((tag) => <small key={tag}>{tag}</small>)}</span>)}</div></section>)}</div>
+          {focus && detail.mappings.some((mapping) => mapping.key === focus.system && mapping.values.some((value) => value.label === focus.value)) && <p className={styles.focusNote} role="status"><strong>{focus.value}</strong> appears in this row’s {detail.mappings.find((mapping) => mapping.key === focus.system)?.label} mapping. The matrix has no standalone source row for this value; the original row below is its context.</p>}
+          <div className={styles.mappingGrid}>{detail.mappings.map((mapping) => {
+            const systemHref = codexSystemHref(index, mapping.key)
+            return <section className={styles.mapping} data-system={mapping.key} key={mapping.key}>
+              <h3>{systemHref ? <a className={styles.mappingSystemLink} href={systemHref} aria-label={`Browse ${mapping.label} system`}>{mapping.label} <span aria-hidden="true">↗</span></a> : mapping.label}</h3>
+              <div className={styles.values}>{mapping.values.map((value, n) => {
+                const target = findMappedEntry(index, mapping.key, value.label, value.traditions)
+                const visual = visualForMapping(mapping.key, value.label)
+                const contents = <>{visual.color && <span className={styles.swatch} style={{ backgroundColor: visual.color }} aria-hidden="true" />}{visual.symbol && <GeometryGlyph symbol={visual.symbol} />}{value.label}{value.traditions.map((tag) => <small key={tag}>{tag}</small>)}</>
+                return target ? <a key={`${mapping.key}-${n}`} className={`${styles.value} ${styles.valueLink}`} href={codexEntryHref(target)} aria-label={`Open ${target.label} in ${target.sourceSystemLabel}`}>{contents}</a>
+                  : <a key={`${mapping.key}-${n}`} className={`${styles.value} ${styles.valueLink}`} data-focused={focus?.system === mapping.key && focus.value === value.label ? 'true' : undefined} href={codexFocusHref(detail.id, mapping.key, value.label)} aria-label={`Inspect ${value.label} in this source row; no standalone ${mapping.label} entry`}>{contents}</a>
+              })}</div>
+            </section>
+          })}</div>
           {detail.conflicts.length > 0 && <section className={styles.relatedBlock}><h3>Parallel source assertions</h3><p>Same or normalized name, separate rows. Variants are not silently merged.</p>{detail.conflicts.map((link) => <button key={link.id} type="button" onClick={() => choose(link.id)}>{link.label} · {link.sourceSystemLabel} · row {link.sourceRow} <small>{link.kind === 'mapping-variant' ? `Different fields: ${link.differingFields.join(', ')}` : 'Duplicate source assertion'}</small></button>)}</section>}
           {detail.related.length > 0 && <section className={styles.relatedBlock}><h3>Follow the thread</h3><p>Shared values in the uploaded matrix suggest paths to explore; they do not establish historical influence.</p>{detail.related.map((link) => <button key={link.id} type="button" onClick={() => choose(link.id)}>{link.label} <span>↗</span><small>{link.sourceSystemLabel} · row {link.sourceRow}{link.sharedValues.length ? ` · ${link.sharedValues.slice(0, 2).join(' / ')}` : ''}</small></button>)}</section>}
           <div className={styles.provenance}><strong>THE SOURCE LENS</strong><p>Imported from {detail.source.sourceFile}, row {detail.source.sourceRow}. SHA-256: <code>{detail.source.sourceSha256}</code></p><p>{detail.source.note} Values may encode contested, syncretic, or modern interpretations; check primary sources before treating a mapping as canonical, medical, or causal.</p></div>
@@ -153,6 +214,14 @@ export default function CorrespondenceCodexV2() {
         {pinnedDetail && <section className={styles.pinPanel} aria-label="Pinned correspondence for comparison"><div><span>03 / COMPARE</span><button type="button" onClick={() => setPinned('')} aria-label="Remove pinned entry">✕</button></div><h3>{pinnedDetail.label}</h3><p>{pinnedDetail.sourceSystemLabel} · row {pinnedDetail.sourceRow}</p><div className={styles.pinMappings}>{pinnedDetail.mappings.map((mapping) => <p key={mapping.key}><strong>{mapping.label}</strong> {mapping.values.map((value) => value.label).join(' · ')}</p>)}</div></section>}
       </section>
     </div>}
+    <section className={styles.classicPanel} aria-label="Classic catalog entries not in matrix">
+      <div className={styles.classicIntro}><div><p className={styles.eyebrow}>THE EARLIER ATLAS · DISTINCT SOURCE</p><h2>The Classic catalog still has a voice.</h2><p>The matrix is not the whole library. Discover older profiles—deities, stones and other subjects absent as named source rows in the uploaded CSV—without pretending they came from that matrix. The original Classic filters, summaries, overview, and details remain intact.</p></div><button type="button" aria-expanded={showClassic} aria-controls="codex-classic-extras" onClick={() => setShowClassic((open) => !open)}>{showClassic ? 'Hide Classic-only entries' : 'Browse Classic-only entries ↗'}</button></div>
+      {showClassic && <div id="codex-classic-extras"><label htmlFor="codex-classic-search" className={styles.label}>Search the Classic-only catalog</label><input id="codex-classic-search" className={styles.search} value={classicQuery} onChange={(event) => { setClassicQuery(event.target.value); setClassicVisible(24) }} placeholder="Try Fire Agate, Hephaestus, runes…" autoComplete="off" />
+        {classicError && <p role="alert">{classicError} <button type="button" onClick={() => { setShowClassic(false); setTimeout(() => setShowClassic(true), 0) }}>Retry</button></p>}
+        {!classicEntries && !classicError && <p role="status">Loading the original catalog…</p>}
+        {classicEntries && <><p className={styles.smallNote}>{classicResults.length} matching Classic-only entries · {classicEntries.length} names absent from matrix row labels. This is a name comparison, not a claim that no analogous idea occurs inside a field.</p><div className={styles.classicResults}>{classicResults.slice(0, classicVisible).map((entry) => <a key={entry.slug} href={classicEntryHref(entry.slug)}><strong>{entry.name}</strong><span>{entry.kind} · Classic profile ↗</span></a>)}</div>{classicVisible < classicResults.length && <button type="button" className={styles.more} onClick={() => setClassicVisible((count) => count + 24)}>Show more · {classicResults.length - classicVisible} remain</button>}</>}
+      </div>}
+    </section>
     <footer className={styles.footer}>Source: the uploaded Super Matrix v3 · 824 preserved rows · no vector queries or heavy imagery required to browse. <a href="/oracle">Take a question to the Oracle ↗</a> <a href="/correspondence-engine/classic">Open the classic engine ↗</a></footer>
   </div>
 }

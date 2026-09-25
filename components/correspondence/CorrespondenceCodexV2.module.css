@@ -6,3 +6,25 @@
 @media(max-width:560px){.mappingGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.mapping{padding:12px}.value{font-size:11px}.pinMappings{columns:1}.metrics span{font-size:10px}.detailArea{padding:19px}.resultLine{align-items:flex-start}}
 @media(max-width:380px){.mappingGrid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.mapping{transition:none}.mapping:hover{transform:none}}
+/* A full-card system link, with independent row links on top (never nested anchors). */
+.mapping{position:relative;--mapping-accent:#b695bd;border-top:2px solid var(--mapping-accent)}
+.mapping[data-system="COLORS"]{--mapping-accent:#df8caa}.mapping[data-system="CHAKRAS"]{--mapping-accent:#e0bb69}
+.mapping[data-system="ELEMENTS"]{--mapping-accent:#63b7ab}.mapping[data-system="GEOMETRY"],.mapping[data-system="PLATONIC_SOLIDS"]{--mapping-accent:#86aade}
+.mapping[data-system="ALCHEMY"]{--mapping-accent:#d4ad6f}.mapping[data-system="PLANETS"],.mapping[data-system="ZODIAC"]{--mapping-accent:#ad96d5}
+.mappingSystemLink{color:inherit;text-decoration:none}.mappingSystemLink::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.mappingSystemLink:hover,.mappingSystemLink:focus-visible{color:#fff2d6;text-decoration:underline;text-underline-offset:4px}
+.mapping:focus-within{outline:2px solid var(--mapping-accent);outline-offset:2px}
+.valueLink{position:relative;z-index:1;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px}
+.valueLink:hover,.valueLink:focus-visible{border-color:var(--mapping-accent);background:#423148;color:#fff;outline:2px solid var(--mapping-accent);outline-offset:1px}
+.value:not(.valueLink){pointer-events:none}.swatch{display:inline-block;width:13px;height:13px;border:1px solid #fff7;border-radius:50%;flex:none}
+.glyph{width:20px;height:20px;flex:none;color:var(--mapping-accent)}
+.focusNote{border:1px solid #cda965;border-radius:9px;background:#453627;color:#fff0d4;padding:12px 16px;line-height:1.5}
+.valueLink[data-focused="true"]{outline:2px solid #edc478;outline-offset:2px;background:#523f35}
+.classicPanel{margin:35px auto 12px;max-width:1200px;border:1px solid #86668e88;border-radius:18px;background:linear-gradient(125deg,#251e33,#2d2639 60%,#372737);padding:26px;color:#f2edf4}
+.classicIntro{display:flex;justify-content:space-between;align-items:center;gap:25px}.classicIntro h2{font-family:Georgia,serif;font-size:clamp(23px,3vw,32px);margin:4px 0 10px}.classicIntro p:not(.eyebrow){color:#d1c6d5;line-height:1.6;max-width:750px}
+.classicIntro button{border:1px solid #c6a0ca;background:#633e6c;color:#fff;border-radius:8px;padding:12px 16px;cursor:pointer;min-width:220px}
+.classicIntro button:hover,.classicIntro button:focus-visible{outline:2px solid #e5bfeb;outline-offset:2px;background:#7b4f80}
+.classicPanel .search{margin:10px 0 16px;max-width:520px;display:block}.classicResults{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:9px;margin:17px 0}
+.classicResults a{display:flex;flex-direction:column;gap:5px;padding:12px;border-radius:9px;text-decoration:none;color:#f8f1fb;border:1px solid #8c729a;background:#41314d}
+.classicResults a span{font-size:11px;color:#d5c3de}.classicResults a:hover,.classicResults a:focus-visible{outline:2px solid #e2b7d4;outline-offset:2px;background:#60456b}
+@media(max-width:640px){.classicPanel{margin:20px 10px;padding:20px}.classicIntro{display:block}.classicIntro button{min-width:0;width:100%;margin:12px 0}}
