@@ -1,17 +1,24 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { PACKS, ARCHIVE_PACK_DISCOUNT_PERCENT } from '@/lib/packs'
+import { pickHomePacks } from '@/lib/pack-ordering'
 import { SHOP_RATING } from '@/lib/reviews'
 import ProductCard from '@/components/shop/ProductCard'
 import ShopRating from '@/components/ShopRating'
 
-const featured = [
-  ...PACKS.filter((p) => p.sku === 'etsy-4552205423'),
-  ...PACKS.filter((p) => p.sku !== 'etsy-4552205423').sort((a, b) => (b.views ?? 0) - (a.views ?? 0)),
-].slice(0, 6)
-
 export default function ShopArchives() {
+  // Keep the server render stable, then draw a fresh six-pack selection per visit.
+  const [featured, setFeatured] = useState(() => PACKS.slice(0, 6))
+  useEffect(() => {
+    setFeatured(pickHomePacks(PACKS, 6))
+    const reshuffleOnRestore = (event: PageTransitionEvent) => {
+      if (event.persisted) setFeatured(pickHomePacks(PACKS, 6))
+    }
+    window.addEventListener('pageshow', reshuffleOnRestore)
+    return () => window.removeEventListener('pageshow', reshuffleOnRestore)
+  }, [])
   return (
     <section className="mx-auto max-w-6xl px-4 py-16">
       <div className="mb-8 text-center">

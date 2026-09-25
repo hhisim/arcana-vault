@@ -71,6 +71,15 @@ export default function Footer() {
             <p className="mt-4 leading-8 text-text-secondary">
               {t('footer.vision_text', 'Begin with four living gateways. Grow into a larger constellation of traditions, agents, correspondences, archives, and human–AI dialogue.')}
             </p>
+            <nav className="mt-8" aria-label="Constellation links">
+              <h4 className="text-xs uppercase tracking-[0.2em] text-[var(--primary-gold)]">Constellation</h4>
+              <div className="mt-4 flex flex-col gap-3 text-sm text-text-secondary">
+                <a href="https://www.hakanhisim.com" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary">Hakan Hisim ↗</a>
+                <a href="https://www.universal-transmissions.com" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary">Universal Transmissions ↗</a>
+                <a href="https://codexoracle.org" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary">Codex Oracle ↗</a>
+                <a href="https://shop.hakanhisim.com" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary">Hakan Hisim Shop ↗</a>
+              </div>
+            </nav>
           </div>
         </div>
 

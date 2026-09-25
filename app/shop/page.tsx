@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { PACKS, ARCHIVE_PACK_DISCOUNT_PERCENT } from '@/lib/packs'
 import { SHOP_RATING } from '@/lib/reviews'
-import ProductCard from '@/components/shop/ProductCard'
+import ArchiveGrid from '@/components/shop/ArchiveGrid'
 import ShopRating from '@/components/ShopRating'
 
 export const metadata = buildMetadata(
@@ -11,8 +11,6 @@ export const metadata = buildMetadata(
   '/shop',
 )
 
-// Highest-engagement packs first (the flagship grimoires bundle leads).
-const packs = [...PACKS].sort((a, b) => (b.views ?? 0) - (a.views ?? 0)).slice(0, 60)
 const total = PACKS.length
 
 export default function ShopPage({ searchParams }: { searchParams?: { cancelled?: string } }) {
@@ -46,11 +44,7 @@ export default function ShopPage({ searchParams }: { searchParams?: { cancelled?
         </p>
       </header>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {packs.map((p) => (
-          <ProductCard key={p.sku} pack={p} />
-        ))}
-      </div>
+      <ArchiveGrid />
 
       <p className="text-center text-zinc-500 text-sm mt-12">
         Every purchase is delivered as Google Drive access.{' '}
