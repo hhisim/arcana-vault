@@ -1,5 +1,20 @@
 [
   {
+    "id": "codex-connected-cards-2026-09-25",
+    "publishedAt": "2026-09-25T10:23:25Z",
+    "sourceCommit": "b34b095eca2218e273daf7e73e22a1d936e3b9e7",
+    "status": "shipped",
+    "label": "Correspondence Codex · Connected atlas",
+    "title": "Follow a correspondence into its system, its values, and the Classic catalog",
+    "summary": "Codex cards and their values now open the relevant source system or entry. Color and chakra swatches, restrained geometric vectors, and a separate Classic-only discovery path make the atlas easier to read and explore.",
+    "details": [
+      "Each system card opens the actual filtered Codex system. Values open matching source rows, using the source annotation to resolve qualified entries such as Ares [Greek]; where no standalone row exists, the link highlights that value in its original row rather than inventing an entry.",
+      "Colors and chakras gain curated presentation swatches, while geometry and Platonic-solid values gain small labelled SVG cues. Text remains readable and accessible.",
+      "The earlier Classic engine remains intact. A lazily loaded, searchable Classic-only section now reveals 205 names absent from the 824 matrix source-row labels under a normalized-name comparison. These profiles are explicitly kept distinct from CSV source rows."
+    ],
+    "verification": "Feature revision b34b095 was Ready on both canonical VOA domains at 2026-09-25 10:23 UTC. Live browser checks followed a Colors card and Red value to their target, opened Fire Agate in Classic, and verified the no-standalone-row focus and annotated deity link. Local suite 59/59, TypeScript and production build passed. At 10:32 UTC, 136/136 distinct checked live URLs returned HTTP 200 (133 sitemap entries plus three extra URLs). This is not a measured Oracle speedup claim."
+  },
+  {
     "id": "voa-v2-2026-09-25",
     "publishedAt": "2026-09-25T05:38:36Z",
     "sourceCommit": "77aef1a3ad3226383a50f4d9331b54233f15f24e",
