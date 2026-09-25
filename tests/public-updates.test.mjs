@@ -42,10 +42,22 @@ test('the September website release is tied to its shipped commit and timestamp'
   assert.match(release.verification, /195/)
 })
 
-test('the latest Dreamwalker update is limited to the verified backend behavior', () => {
-  assert.equal(updates[0].id, 'dreamwalker-remote-viewing-2026-09-24')
-  assert.match(updates[0].verification, /live Dreamwalker API/)
-  assert.match(updates[0].details.join(' '), /browser journeys are still under review/)
+test('the shipped v2 entry links the verified production revision without claiming member or AKASHA completion', () => {
+  const release = updates.find((entry) => entry.id === 'voa-v2-2026-09-25')
+  assert.ok(release, 'verified live v2 release belongs in the public timeline')
+  assert.equal(release.sourceCommit, '77aef1a3ad3226383a50f4d9331b54233f15f24e')
+  assert.equal(release.status, 'shipped')
+  assertUtcTimestamp(release.publishedAt)
+  assert.ok(Date.parse(release.publishedAt) >= Date.parse('2026-09-25T05:38:07Z'))
+  assert.match(release.details.join(' '), /824/)
+  assert.match(release.verification, /134\/134/)
+})
+
+test('the Dreamwalker update is limited to the verified backend behavior', () => {
+  const dreamwalker = updates.find((entry) => entry.id === 'dreamwalker-remote-viewing-2026-09-24')
+  assert.ok(dreamwalker)
+  assert.match(dreamwalker.verification, /live Dreamwalker API/)
+  assert.match(dreamwalker.details.join(' '), /browser journeys are still under review/)
 })
 
 test('public copy does not claim unverified member success or external notification delivery', () => {

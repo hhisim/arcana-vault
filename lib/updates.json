@@ -1,5 +1,23 @@
 [
   {
+    "id": "voa-v2-2026-09-25",
+    "publishedAt": "2026-09-25T05:38:36Z",
+    "sourceCommit": "77aef1a3ad3226383a50f4d9331b54233f15f24e",
+    "status": "shipped",
+    "label": "Correspondence Codex v2 · Oracle",
+    "title": "A new correspondence atlas, and an Oracle that begins speaking sooner",
+    "summary": "Correspondence Codex v2 is live alongside the classic engine. The Oracle now reveals text as it arrives, and tradition cards gain lightweight responsive artwork.",
+    "details": [
+      "Codex v2 maps all 824 rows of the supplied 27-system supermatrix into searchable, filterable entries with provenance, related paths, deep links, and side-by-side comparison. It is a navigable study atlas, not an independently verified canon for every correspondence.",
+      "Its compact index loads first; individual entry details load only when opened. The previous correspondence engine remains available under Classic.",
+      "Oracle answers now stream into the conversation without a shorter answer limit. A completed answer is still retained for saving and playback; total generation time varies by question and provider.",
+      "Eight tradition cards reveal existing small artwork on hover and keyboard focus, while touch and reduced-motion visitors receive a static treatment.",
+      "This Updates page is now part of site navigation. The Dreamwalker Remote Viewing menu's Basic protocol prompt completed a full browser answer without the former unsupported-mode error.",
+      "Authenticated member journeys and Stripe-to-AKASHA notification delivery remain under verification; this note does not claim they passed."
+    ],
+    "verification": "Production revision 77aef1a3 was Ready and assigned to both VOA domains. At 2026-09-25 05:38 UTC, 134/134 distinct sitemap URLs plus three extra route/data checks returned HTTP 200; the live Codex index reported 824 entries and 27 systems. A single guest Dreamwalker Remote Viewing browser response completed; this is not a controlled performance benchmark or a paid-member test."
+  },
+  {
     "id": "dreamwalker-remote-viewing-2026-09-24",
     "publishedAt": "2026-09-24T21:29:20Z",
     "sourceCommit": "",
