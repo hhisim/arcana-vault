@@ -1,6 +1,7 @@
 import { buildMetadata } from '@/lib/seo'
 import Link from 'next/link'
 import { traditions, liveTraditions, upcomingTraditions, horizonTraditions } from '@/lib/tradition-config'
+import { TRADITION_ART } from '@/lib/tradition-art'
 
 export const metadata = buildMetadata(
   'The Traditions',
@@ -33,9 +34,13 @@ export default function TraditionsPage() {
               <Link
                 key={tradition.slug}
                 href={`/traditions/${tradition.slug}`}
-                className="group flex flex-col rounded-2xl border border-white/8 bg-white/[0.02] p-6 transition-all duration-200 hover:border-white/15 hover:bg-white/[0.04] hover:shadow-[0_0_30px_rgba(0,0,0,0.3)]"
+                className="tradition-card group relative isolate flex flex-col overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-6 transition-[border-color,background-color,box-shadow] duration-200 hover:border-white/15 hover:bg-white/[0.04] hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9A84C]"
               >
-                <div className="flex items-start justify-between mb-5">
+                {TRADITION_ART[tradition.slug] && <div className="tradition-card__visual absolute inset-0 pointer-events-none" aria-hidden="true">
+                  <img src={TRADITION_ART[tradition.slug].src} alt="" loading="lazy" decoding="async" width="440" height="300" className="h-full w-full object-cover" style={{ objectPosition: TRADITION_ART[tradition.slug].position }} />
+                </div>}
+                <div className="tradition-card__veil absolute inset-0 pointer-events-none" aria-hidden="true" />
+                <div className="relative z-10 flex items-start justify-between mb-5">
                   <span className="text-3xl">{tradition.icon}</span>
                   <span
                     className="mt-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] uppercase tracking-widest text-emerald-400"
@@ -58,7 +63,7 @@ export default function TraditionsPage() {
                   style={{ backgroundColor: tradition.color }}
                 />
 
-                <div className="mt-4 flex items-center gap-1 text-[#C9A84C] text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="mt-4 flex items-center gap-1 text-[#C9A84C] text-sm font-medium opacity-70 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                   Explore the tradition
                   <svg className="w-3.5 h-3.5" viewBox="0 0 12 12" fill="none">
                     <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

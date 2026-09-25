@@ -33,6 +33,7 @@ export default function NavBar() {
     { href: '/chat', label: t(SITEDICT.nav.chat) },
     { href: '/traditions', label: t(SITEDICT.nav.traditions) },
     { href: '/blog', label: t(SITEDICT.nav.scroll) },
+    { href: '/updates', label: 'Updates' },
     { href: '/correspondence-engine', label: 'Codex' },
     { href: '/shop', label: 'Archives' },
     { href: '/pricing', label: t(SITEDICT.nav.pricing) },

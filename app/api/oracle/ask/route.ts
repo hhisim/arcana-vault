@@ -72,10 +72,19 @@ export async function POST(req: NextRequest) {
 
   const params = new URLSearchParams({ q, pack: tradition, mode })
   if (targetLang) params.set('target_lang', targetLang)
+  // Keep JSON compatibility (and a safe fallback if the streaming proxy key is
+  // absent) rather than breaking answers when only one environment is updated.
+  const wantsStream = req.headers.get('accept')?.includes('text/event-stream') ?? false
+  const streamSecret = process.env.VOA_ORACLE_STREAM_SECRET
+  const useStream = wantsStream && Boolean(streamSecret)
 
   try {
-    const upstream = await fetch(`${base.replace(/\/$/, '')}/ask?${params.toString()}`, {
-      method: 'GET',
+    const upstream = await fetch(useStream
+      ? `${base.replace(/\/$/, '')}/ask/stream`
+      : `${base.replace(/\/$/, '')}/ask?${params.toString()}`, {
+      method: useStream ? 'POST' : 'GET',
+      headers: useStream ? { 'Content-Type': 'application/json', 'Accept': 'text/event-stream', 'x-voa-oracle-proxy-secret': streamSecret! } : undefined,
+      body: useStream ? JSON.stringify({ q, pack: tradition, mode, target_lang: targetLang, speed: 'fast' }) : undefined,
       cache: 'no-store',
     })
 
@@ -87,27 +96,8 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // Stream the response body directly to the client
-    const stream = new ReadableStream({
-      async start(controller) {
-        const reader = upstream.body!.getReader()
-        const encoder = new TextEncoder()
-        try {
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) {
-              controller.close()
-              break
-            }
-            controller.enqueue(encoder.encode(new TextDecoder().decode(value)))
-          }
-        } catch (e) {
-          controller.error(e)
-        }
-      },
-    })
-
-    const response = new NextResponse(stream, {
+    // Forward bytes unchanged so SSE token boundaries and Unicode survive proxying.
+    const response = new NextResponse(upstream.body, {
       status: upstream.status,
       headers: {
         ...corsHeaders,

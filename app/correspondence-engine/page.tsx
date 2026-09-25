@@ -1,18 +1,12 @@
 import { buildMetadata } from '@/lib/seo'
-import CorrespondenceEngine from '../components/CorrespondenceEngine'
-import CorrespondenceGuide from '@/components/correspondence/CorrespondenceGuide'
+import CorrespondenceCodexV2 from '@/components/correspondence/CorrespondenceCodexV2'
 
 export const metadata = buildMetadata(
-  'Correspondence Engine',
-  'Explore a multidimensional correspondence engine for symbols, planets, letters, frequencies, chakras, alchemical processes, and more.',
+  'Correspondence Codex V2 · 27 Systems',
+  'Navigate 824 source rows across 27 systems. Follow annotated correspondences, compare parallel assertions, and inspect the provenance of every mapping.',
   '/correspondence-engine',
 )
 
 export default function Page() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-      <CorrespondenceGuide />
-      <CorrespondenceEngine initialSlug="venus" />
-    </section>
-  )
+  return <CorrespondenceCodexV2 />
 }

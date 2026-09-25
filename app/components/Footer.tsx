@@ -59,6 +59,7 @@ export default function Footer() {
               <a href="/journal" className="hover:text-text-primary">{t(SITEDICT.nav.journal)}</a>
               <a href="/inquiry" className="hover:text-text-primary">{t(SITEDICT.nav.inquiry)}</a>
               <a href="/blog" className="hover:text-text-primary">{t('nav.scroll', 'The Scroll')}</a>
+              <a href="/updates" className="hover:text-text-primary">Updates</a>
               <a href="/agora" className="hover:text-text-primary">{t('nav.agora', 'Agora')}</a>
               <a href="/about" className="hover:text-text-primary">{t('nav.about', 'About')}</a>
               <a href="/faq" className="hover:text-text-primary">{t(SITEDICT.nav.faq)}</a>

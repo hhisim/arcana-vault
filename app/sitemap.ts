@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { posts } from '@/lib/posts'
 import { PACKS } from '@/lib/packs'
+import { PUBLIC_UPDATES_LAST_MODIFIED } from '@/lib/updates'
 
 const BASE = 'https://www.vaultofarcana.com'
 
@@ -19,6 +20,7 @@ const staticPages: MetadataRoute.Sitemap = [
 const sections: MetadataRoute.Sitemap = [
   { url: `${BASE}/oracle`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
   { url: `${BASE}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${BASE}/updates`, lastModified: new Date(PUBLIC_UPDATES_LAST_MODIFIED), changeFrequency: 'weekly', priority: 0.7 },
   { url: `${BASE}/traditions`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
   { url: `${BASE}/chat`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.7 },
   { url: `${BASE}/agora`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },

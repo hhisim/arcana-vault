@@ -15,4 +15,5 @@ node_modules/@vercel/ncc/
 
 # Local build artifacts
 node_modules/
+/node_modules
 *.tsbuildinfo

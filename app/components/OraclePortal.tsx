@@ -30,6 +30,7 @@ import {
   restoreConversationContext,
   resolveOracleRouteState,
 } from '@/lib/oracle-session-state'
+import { readOracleSseAnswer } from '@/lib/oracle-stream'
 
 type VoiceStyle = 'female' | 'male'
 type ContextState = { userVisible: string; prompt: string; answer: string }
@@ -455,18 +456,38 @@ export default function OraclePortal() {
     await saveMessage('user', visibleText)
 
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 55000)
+    // Keep the entire answer intact even when generation exceeds the old 55-second limit.
+    const timeout = setTimeout(() => controller.abort(), 115000)
+    const previewId = uid()
+    let previewText = ''
+    let previewShown = false
+    let previewTimer: ReturnType<typeof setTimeout> | null = null
+    const flushPreview = () => {
+      previewTimer = null
+      if (previewShown) setMessages((prev) => prev.map((item) => item.id === previewId ? { ...item, text: previewText } : item))
+    }
     try {
       const response = await fetch('/api/oracle/ask', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
         body: JSON.stringify(buildOracleAskPayload(trimmed, pack, effectiveMode, lang)),
         signal: controller.signal,
       })
-      clearTimeout(timeout)
       if (!response.ok) throw new Error(await response.text())
-      const data = await response.json() as AskResponse
-      const oracleMessage: ChatMessage = { id: uid(), role: 'oracle', text: data.answer, pack, mode: effectiveMode }
+      const streamed = response.headers.get('content-type')?.includes('text/event-stream')
+      const data: AskResponse = streamed
+        ? { ...(await readOracleSseAnswer(response, (chunk) => {
+          previewText += chunk
+          if (!previewShown) {
+            previewShown = true
+            setMessages((prev) => [{ id: previewId, role: 'oracle', text: previewText, pack, mode: effectiveMode }, ...prev])
+          } else if (!previewTimer) {
+            previewTimer = setTimeout(flushPreview, 70)
+          }
+        })), pack, mode: effectiveMode }
+        : await response.json() as AskResponse
+      if (previewTimer) { clearTimeout(previewTimer); previewTimer = null }
+      const oracleMessage: ChatMessage = { id: previewShown ? previewId : uid(), role: 'oracle', text: data.answer, pack, mode: effectiveMode }
       if (voiceReply && voiceEnabledForMode) {
         try {
           const tts = await fetch('/api/oracle/tts', {
@@ -479,16 +500,20 @@ export default function OraclePortal() {
           }
         } catch {}
       }
-      setMessages((prev) => [oracleMessage, ...prev])
+      setMessages((prev) => previewShown
+        ? prev.map((item) => item.id === previewId ? oracleMessage : item)
+        : [oracleMessage, ...prev])
       setLastContext((prev) => ({ ...prev, [pack]: { userVisible: visibleText, prompt: trimmed, answer: data.answer } }))
-      // Save oracle response
+      // Persist only the complete response; partial streams are never journaled as finished.
       await saveMessage('assistant', data.answer)
     } catch (error: any) {
-      clearTimeout(timeout)
+      if (previewTimer) clearTimeout(previewTimer)
+      if (previewShown) setMessages((prev) => prev.filter((item) => item.id !== previewId))
       const isTimeout = error?.name === 'AbortError' || error?.message?.includes('aborted')
       setMessages((prev) => [{ id: uid(), role: 'system', text: normalizeError(isTimeout ? 'The oracle is taking longer than usual. Please try again.' : error?.message || '') }, ...prev])
       await saveMessage('system', normalizeError(isTimeout ? 'Request timed out.' : error?.message || ''))
     } finally {
+      clearTimeout(timeout)
       setBusy(false)
     }
   }

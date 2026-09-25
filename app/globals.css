@@ -271,3 +271,37 @@ html {
   flex: 1;
   line-height: 1.3;
 }
+
+/* Tradition gateway artwork uses existing small editorial WebP files.
+   Static on touch; restrained reveal on hover and keyboard focus. */
+.tradition-card__visual {
+  z-index: 0;
+  opacity: 0.12;
+  transition: opacity 220ms ease, transform 300ms ease;
+}
+.tradition-card__visual img { filter: saturate(.82); }
+.tradition-card__veil {
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(10,10,16,.62), rgba(10,10,16,.91));
+}
+.tradition-card > :not(.tradition-card__visual):not(.tradition-card__veil) {
+  position: relative;
+  z-index: 2;
+}
+.tradition-card:hover .tradition-card__visual,
+.tradition-card:focus-visible .tradition-card__visual {
+  opacity: .62;
+  transform: scale(1.035);
+}
+.tradition-card:hover .tradition-card__veil,
+.tradition-card:focus-visible .tradition-card__veil {
+  background: linear-gradient(180deg, rgba(10,10,16,.45), rgba(10,10,16,.89));
+}
+@media (hover: none), (max-width: 767px) {
+  .tradition-card__visual { opacity: 0.45; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tradition-card__visual { transition: none; transform: none; }
+  .tradition-card:hover .tradition-card__visual,
+  .tradition-card:focus-visible .tradition-card__visual { transform: none; }
+}

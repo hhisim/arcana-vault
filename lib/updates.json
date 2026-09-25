@@ -1,0 +1,147 @@
+[
+  {
+    "id": "dreamwalker-remote-viewing-2026-09-24",
+    "publishedAt": "2026-09-24T21:29:20Z",
+    "sourceCommit": "",
+    "status": "shipped",
+    "label": "Dreamwalker · API repair",
+    "title": "Remote Viewing questions can reach the Dreamwalker again",
+    "summary": "The Dreamwalker menu’s Remote Viewing prompts no longer hit an unsupported-mode error at the Oracle API.",
+    "details": [
+      "The API now recognizes the dedicated Dreamwalker modes already defined in its prompts, including lucid dreaming, dream yoga, astral practice, and remote viewing.",
+      "The repair keeps each question in its intended mode instead of silently substituting a generic answer.",
+      "A representative Remote Viewing request completed with five source passages and a full answer. Broader logged-in browser journeys are still under review."
+    ],
+    "verification": "Verified against the live Dreamwalker API with a single source-backed Remote Viewing request and a healthy service check on September 24; not a blanket guarantee for every question."
+  },
+  {
+    "id": "release-2026-09-24",
+    "publishedAt": "2026-09-24T20:05:43Z",
+    "sourceCommit": "0aaec29ae20896b3f0172143a920354c9abad280",
+    "status": "shipped",
+    "label": "Release 0aaec29",
+    "title": "A steadier Oracle release",
+    "summary": "The September release tightened the path from question to saved reading, repaired Daily fallback behavior, corrected Library records, and added new Scroll material.",
+    "details": [
+      "Daily now returns built-in practice entries when a serverless cache cannot be written; the release smoke check found four nonempty gateway keys.",
+      "Oracle and Journal state now carry the selected tradition, mode, conversation, and assistant replies through restore and continue paths.",
+      "Two Library source records were corrected, and the release includes the updated plan-based entitlement rules.",
+      "The Scroll gained Book of Thoth: Egyptian Knowledge as Scribe and The Imaginal World of Ibn Arabi, with identified video embeds and cross-links added in the released code.",
+      "Account and billing error paths were hardened, including retryable account-service failures instead of a false guest snapshot.",
+      "Subscription-event alert plumbing shipped in the release. No external notification delivery is claimed here; end-to-end delivery remains under verification."
+    ],
+    "verification": "Release commit 0aaec29 was deployed as the current release; the release test run passed 35/35 and the production build generated 195 static pages. Public-route and sitemap smoke checks passed. Authenticated member paths and client-side interactions were outside that smoke-check scope."
+  },
+  {
+    "id": "scroll-fasting-of-the-heart",
+    "publishedAt": "2026-09-22T09:10:02Z",
+    "sourceCommit": "832785377df3e47bdad1f425c56c290249789f01",
+    "status": "shipped",
+    "label": "The Scroll",
+    "title": "Fasting of the Heart joins the library of essays",
+    "summary": "A new long-form essay explores Zhuangzi’s fasting of the heart as a practice of attention, receptivity, and inner reorientation.",
+    "details": [
+      "The essay is published as a full Scroll entry rather than a short announcement.",
+      "A dedicated cover treatment accompanies the article, and the post is registered in the public essay index."
+    ],
+    "verification": "Source commit 8327853 added the essay, its cover artwork, and its post registration."
+  },
+  {
+    "id": "scroll-ethics-of-relation",
+    "publishedAt": "2026-09-11T10:07:15Z",
+    "sourceCommit": "04633478dad9d106b3e54ada353bb2f7d8e5bd77",
+    "status": "shipped",
+    "label": "The Scroll",
+    "title": "Ethics of Relation is now available",
+    "summary": "A new Scroll essay examines relation, responsibility, and the ethics of meeting another intelligence without reducing the encounter to extraction.",
+    "details": [
+      "The article was published as a paired long-form opus with its own cover image.",
+      "The post is connected to relevant archive recommendations so readers can continue the study."
+    ],
+    "verification": "Source commit 0463347 added the essay, cover, post registration, and archive recommendation mapping."
+  },
+  {
+    "id": "hermetic-crater-visuals",
+    "publishedAt": "2026-09-10T17:33:19Z",
+    "sourceCommit": "fbac01c7d6a95f69b5e4c8972dd1052e4e8a7ed2",
+    "status": "shipped",
+    "label": "The Scroll",
+    "title": "Hermetic Crater receives a visual companion",
+    "summary": "The Hermetic Crater essay now includes a set of in-body images for the vessel, proportion, and return-with-form passages.",
+    "details": [
+      "The visual sequence adds more deliberate pauses and reference points inside the reading experience.",
+      "The existing cover was refreshed alongside the new article imagery."
+    ],
+    "verification": "Source commit fbac01c added the in-body artwork, supporting images, and the refreshed cover."
+  },
+  {
+    "id": "scroll-hermetic-crater",
+    "publishedAt": "2026-09-08T06:50:01Z",
+    "sourceCommit": "43bf70da5118c4cccececfbee9244b0ebf9907a3",
+    "status": "shipped",
+    "label": "The Scroll",
+    "title": "Hermetic Crater opens a new study path",
+    "summary": "The Scroll added a long-form meditation on the Hermetic crater as a vessel for mind, form, and transformation.",
+    "details": [
+      "The essay is indexed as a first-class public article with a dedicated cover treatment.",
+      "Archive recommendations connect the reading to adjacent study material."
+    ],
+    "verification": "Source commit 43bf70d added the article, cover, post registration, and archive recommendation mapping."
+  },
+  {
+    "id": "forum-lazy-init",
+    "publishedAt": "2026-09-07T12:32:42Z",
+    "sourceCommit": "b3c15ddc1db22070ebb43215ebaa61a2bd90dc7f",
+    "status": "shipped",
+    "label": "Reliability",
+    "title": "The Agora initializes only when needed",
+    "summary": "Forum routes now create their database client on request instead of initializing it during every module load.",
+    "details": [
+      "This keeps public route loading independent from forum-only configuration until a forum action is requested.",
+      "The change reduces avoidable startup work for the rest of the site."
+    ],
+    "verification": "Source commit b3c15dd changed both forum thread route handlers to lazy initialization."
+  },
+  {
+    "id": "billing-lazy-init",
+    "publishedAt": "2026-09-07T12:18:00Z",
+    "sourceCommit": "3e0d592fd631cbcbd106f793a6810d40c1391f15",
+    "status": "shipped",
+    "label": "Reliability",
+    "title": "Billing webhook startup is lighter",
+    "summary": "The billing webhook now initializes its Stripe client only when a webhook request needs it.",
+    "details": [
+      "Public pages no longer need to construct the webhook client as part of unrelated module loading.",
+      "The change makes configuration boundaries clearer and keeps webhook concerns inside the webhook route."
+    ],
+    "verification": "Source commit 3e0d592 changed the billing webhook route to lazy initialization."
+  },
+  {
+    "id": "metadata-title-limits",
+    "publishedAt": "2026-09-06T23:22:28Z",
+    "sourceCommit": "69db7b01743bd6571e47322c7e6430b22b63146c",
+    "status": "shipped",
+    "label": "Search visibility",
+    "title": "Search titles stay within useful limits",
+    "summary": "Page-title handling now trims long titles cleanly so search previews remain readable instead of ending mid-word.",
+    "details": [
+      "The shared SEO helper now enforces a practical title length for pages that use it.",
+      "The contact page was brought onto the same bounded title behavior."
+    ],
+    "verification": "Source commit 69db7b0 tightened the shared title helper and the contact-page metadata."
+  },
+  {
+    "id": "metadata-description-limits",
+    "publishedAt": "2026-09-06T23:14:51Z",
+    "sourceCommit": "0f83ee8047e5425d398196f1c4fdc34bf2744525",
+    "status": "shipped",
+    "label": "Search visibility",
+    "title": "Search descriptions stay concise",
+    "summary": "Shared description handling now bounds long metadata while preserving a complete final thought where possible.",
+    "details": [
+      "Long descriptions are normalized before they are emitted into page metadata.",
+      "The helper adds an ellipsis only when content must be shortened."
+    ],
+    "verification": "Source commit 0f83ee8 added the bounded description behavior to the shared SEO helper."
+  }
+]
