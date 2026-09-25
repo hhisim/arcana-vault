@@ -1,10 +1,11 @@
 import { SHOP_PACKS, PACK_BY_SKU, ShopPack } from './shop-catalog'
+import { isExcludedShopSku } from './shop-exclusions'
 
 export { SHOP_PACKS, PACK_BY_SKU }
 export type { ShopPack }
 
 export function packFromSku(sku?: string | null): ShopPack | undefined {
-  if (!sku) return undefined
+  if (!sku || isExcludedShopSku(sku)) return undefined
   return PACK_BY_SKU[sku]
 }
 

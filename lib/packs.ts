@@ -1,4 +1,5 @@
 import packsJson from './shop-packs-enriched.json'
+import { isExcludedShopSku } from './shop-exclusions'
 import { SHOP_PACKS, packFromSku, formatUsd, ARCHIVE_PACK_DISCOUNT_PERCENT, archivePackSalePrice, archivePackSaleUnitAmountCents, formatArchiveSalePrice } from './shop'
 
 export type ShopPack = {
@@ -13,17 +14,12 @@ export type ShopPack = {
   images?: string[]
 }
 
-// Packs intentionally excluded from the Vault shop (kept out of the catalog,
-// but images/data remain on disk so the exclusion is fully reversible).
-const EXCLUDED_SKUS: string[] = [
-  'etsy-634858175', // Sacred Geometry VJ Loop Pack — a VJ video-loops product, not an esoteric study pack
-]
 
 // Enriched data (description + images from Etsy) merged over the base catalog.
 function loadPacks(): ShopPack[] {
   const enriched = Array.isArray(packsJson) ? (packsJson as ShopPack[]) : []
   const source = enriched.length > 0 ? enriched : SHOP_PACKS.map((p) => ({ ...p }))
-  return source.filter((p) => !EXCLUDED_SKUS.includes(p.sku))
+  return source.filter((p) => !isExcludedShopSku(p.sku))
 }
 
 export const PACKS: ShopPack[] = loadPacks()
