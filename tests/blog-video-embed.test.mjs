@@ -20,11 +20,16 @@ test('official VOA videos map to their matching editorial articles', () => {
     videoId: 'Ik3RlJljE8Q',
     title: "How to Read the Tarot: A Beginner's Map of the 78 Cards",
   })
+  assert.deepEqual(videoState.getBlogVideoEmbed('emerald-tablet-proto-quantum-physics'), {
+    videoId: 'YMVbbIWQTtA',
+    title: 'What Does “As Above, So Below” Mean? The Emerald Tablet',
+  })
   assert.equal(videoState.getBlogVideoEmbed('unrelated-post'), null)
 })
 
 test('embed URL only accepts exact YouTube video IDs', () => {
   assert.equal(videoState.buildYouTubeEmbedUrl('_0SF7g2ljEE'), 'https://www.youtube-nocookie.com/embed/_0SF7g2ljEE?rel=0')
+  assert.equal(videoState.buildYouTubeEmbedUrl('YMVbbIWQTtA'), 'https://www.youtube-nocookie.com/embed/YMVbbIWQTtA?rel=0')
   assert.equal(videoState.buildYouTubeEmbedUrl('bad id'), null)
   assert.equal(videoState.buildYouTubeEmbedUrl('https://evil.test/embed/_0SF7g2ljEE'), null)
 })

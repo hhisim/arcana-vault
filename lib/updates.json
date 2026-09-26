@@ -1,5 +1,19 @@
 [
   {
+    "id": "voa-12-archive-additions-2026-09-25",
+    "publishedAt": "2026-09-25T19:46:20Z",
+    "sourceCommit": "12f5ee0fdd7b8f6bbf36eb1c20823d37cdfe4e54",
+    "status": "shipped",
+    "label": "The Archives",
+    "title": "Twelve new digital collections join the Vault",
+    "summary": "Twelve requested archive collections now have dedicated VOA product pages, listing-image galleries, and a direct route into the existing Stripe checkout.",
+    "details": [
+      "The new studies span Jung’s Red Book; ESP, telepathy, and remote viewing; Higher Balance; Angelic Realities; dowsing; phosphenism; deprogramming; Alan Watts; and three Tantra-related collections.",
+      "Each collection has its own archive page and listing-specific image gallery. Purchase buttons route through VOA’s existing one-time Stripe Checkout endpoint."
+    ],
+    "verification": "Production deployment dpl_HynG2J92XAZCVkfbUAT15JQSDLMQ reached READY at 2026-09-25 19:46 UTC; readback confirmed vaultofarcana.com and www.vaultofarcana.com both pointed to it. At 19:52 UTC, 12/12 requested product routes returned HTTP 200 and 71/71 gallery images returned HTTP 200 with image content types. All 12 products appeared on /shop. A live checkout smoke test for etsy-4561328273 returned a Stripe-hosted URL; no payment was made. The 12 product pages checked did not contain the previously requested 30-day guarantee copy."
+  },
+  {
     "id": "codex-connected-cards-2026-09-25",
     "publishedAt": "2026-09-25T10:23:25Z",
     "sourceCommit": "b34b095eca2218e273daf7e73e22a1d936e3b9e7",

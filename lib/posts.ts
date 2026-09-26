@@ -1,5 +1,25 @@
 export const posts = [
   {
+    "slug": "red-book-active-imagination-ethics-image",
+    "title": "The Red Book Is Not an Oracle: Jung's Active Imagination and the Ethics of Meeting an Image",
+    "tradition": "psychology",
+    "publishedAt": "2026-09-26",
+    "readTime": "22 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/red-book-active-imagination/thumbnail.png",
+    "excerpt": "Jung's Red Book is not a secret oracle. Its active imagination shows how an image can interrupt the ego without becoming a command: attention, reply, embodiment, and a return to ordinary responsibility."
+  },
+  {
+    "slug": "the-shape-before-the-world",
+    "title": "The Shape Before the World",
+    "tradition": "philosophy",
+    "publishedAt": "2026-09-25",
+    "readTime": "13 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/the-shape-before-the-world/thumbnail.png",
+    "excerpt": "Could visible form arise from a deeper order? This sourced comparison places Sefer Yetzirah, Hermetic cosmology, cymatics, temple interpretation, Walter Russell, emergent-spacetime physics, and a DMT-geometry hypothesis side by side—without treating resemblance as proof."
+  },
+  {
     "slug": "book-of-thoth-egyptian-knowledge-scribe",
     "title": "The Book of Thoth Was Not a Secret: How Egyptian Knowledge Trained the Scribe",
     "tradition": "kemet",
