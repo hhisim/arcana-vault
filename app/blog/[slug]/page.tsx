@@ -345,11 +345,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     // Look up post and meta for JSON-LD
     const post = posts.find((p) => p.slug === slug);
     const meta = essayMeta[slug];
-    const jsonLd = post && meta ? {
+    const jsonLd = post ? {
       '@context': 'https://schema.org',
       '@type': 'Article',
       headline: post.title,
-      description: meta.description,
+      description: meta?.description || post.excerpt || `An essay from the Vault of Arcana on ${post.title}.`,
       datePublished: post.publishedAt,
       dateModified: post.publishedAt,
       author: {
@@ -370,7 +370,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         '@id': `https://www.vaultofarcana.com/blog/${slug}`,
       },
       articleSection: post.tradition,
-      keywords: meta.keywords.join(', '),
+      keywords: meta?.keywords.join(', '),
       image: heroImage ? new URL(heroImage, 'https://www.vaultofarcana.com').toString() : undefined,
     } : null;
 
