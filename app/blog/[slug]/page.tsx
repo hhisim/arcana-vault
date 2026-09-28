@@ -54,6 +54,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 const essayMeta: Record<string, { description: string; keywords: string[] }> = {
+  'do-what-thou-wilt-thelema-liber-al': {
+    description: 'What does “Do what thou wilt” mean in Thelema? Read Liber AL beside Crowley’s later commentaries, Rabelais, and modern scholarship without reducing the Law to impulse or certainty.',
+    keywords: ['Do what thou wilt', 'Thelema', 'Liber AL vel Legis', 'The Book of the Law', 'Aleister Crowley', 'True Will', 'Rabelais', 'love under will', 'Thelema ethics', 'Western esotericism'],
+  },
   'book-of-thoth-egyptian-knowledge-scribe': {
     description: 'The Egyptian Book of Thoth is not a lost grimoire but a fragmentary Demotic dialogue from the House of Life: a pedagogy of scribal craft, sacred geography, animal knowledge, ritual, and trustworthy knowing.',
     keywords: ['Book of Thoth', 'Thoth', 'ancient Egypt', 'Demotic papyri', 'House of Life', 'Egyptian scribes', 'Egyptian mysteries', 'Hermeticism', 'writing and knowledge', 'scribal craft'],
@@ -338,7 +342,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     const tradition = (frontmatter.tradition as string) || 'Ancient';
     const heroImage = frontmatter.hero as string | undefined;
-    const wideHero = ['as-above-so-below-secret-thread-western-mysteries', 'imaginal-world-ibn-arabi-perception-between-spirit-matter', 'law-of-one-ethics-of-relation', 'qliphoth-error-states-kabbalah-system-failure', 'book-of-thoth-egyptian-knowledge-scribe'].includes(slug);
+    const wideHero = ['as-above-so-below-secret-thread-western-mysteries', 'imaginal-world-ibn-arabi-perception-between-spirit-matter', 'law-of-one-ethics-of-relation', 'qliphoth-error-states-kabbalah-system-failure', 'book-of-thoth-egyptian-knowledge-scribe', 'do-what-thou-wilt-thelema-liber-al'].includes(slug);
     const inlineImages = (((frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [])
       .filter((image): image is { src: string; caption?: string; position?: string } => Boolean(image?.src)));
 

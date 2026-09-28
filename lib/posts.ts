@@ -1,5 +1,15 @@
 export const posts = [
   {
+    "slug": "do-what-thou-wilt-thelema-liber-al",
+    "title": "Do What Thou Wilt in Thelema: What Liber AL Actually Says",
+    "tradition": "thelema",
+    "publishedAt": "2026-09-28",
+    "readTime": "24 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/do-what-thou-wilt-thelema-liber-al/hero-wide.png",
+    "excerpt": "Thelema's most famous sentence is not a permission slip for impulse. Read beside Liber AL and Crowley's later commentaries, it becomes a difficult problem of will, freedom, love, discipline, and responsibility."
+  },
+  {
     "slug": "red-book-active-imagination-ethics-image",
     "title": "The Red Book Is Not an Oracle: Jung's Active Imagination and the Ethics of Meeting an Image",
     "tradition": "psychology",
