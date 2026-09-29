@@ -22,6 +22,7 @@ const sections: MetadataRoute.Sitemap = [
   { url: `${BASE}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
   { url: `${BASE}/updates`, lastModified: new Date(PUBLIC_UPDATES_LAST_MODIFIED), changeFrequency: 'weekly', priority: 0.7 },
   { url: `${BASE}/traditions`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${BASE}/free-grimoire`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
   { url: `${BASE}/chat`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.7 },
   { url: `${BASE}/agora`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
   { url: `${BASE}/correspondences`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },

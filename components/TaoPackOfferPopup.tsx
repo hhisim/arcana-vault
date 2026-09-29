@@ -75,7 +75,9 @@ export default function TaoPackOfferPopup() {
       // Only reveal once we know they aren't already a member.
       if (!loading && isAuthenticated) return
       setVisible(true)
-      writeStored({ lastSeenAt: Date.now() })
+      // NOTE: lastSeenAt is deliberately NOT written here. The suppression
+      // window starts when the reader dismisses or claims, not when the dialog
+      // happens to paint - otherwise missing one glimpse silences it for 3 days.
       // Temporary diagnostic beacon: confirms the timer actually fired in a real
       // browser, which is the difference between "logic is wrong" and "CSS is
       // hiding it". Remove once the popup is confirmed visible.
@@ -101,7 +103,11 @@ export default function TaoPackOfferPopup() {
   if (isAuthenticated && !preview) return null
   if (!visible) return null
 
-  const close = () => setVisible(false)
+  const close = () => {
+    // A deliberate dismissal starts the suppression window - unlike a render.
+    writeStored({ lastSeenAt: Date.now() })
+    setVisible(false)
+  }
 
   return (
     <div className="fixed inset-0 z-[120] flex items-end justify-center p-4 sm:items-center">
