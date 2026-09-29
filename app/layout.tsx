@@ -4,6 +4,7 @@ import Providers from './providers'
 import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 import StickyCTA from './components/StickyCTA'
+import TaoPackOfferPopup from '@/components/TaoPackOfferPopup'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="pt-20">{children}</main>
           <Footer />
           <StickyCTA />
+          <TaoPackOfferPopup />
         </Providers>
         <Analytics />
       </body>
