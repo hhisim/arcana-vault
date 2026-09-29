@@ -581,5 +581,25 @@ export const posts = [
     "author": "Prime + Hakan",
     "hero": "/images/blog/imaginal-world-ibn-arabi-perception-between-spirit-matter/cover-pinterest-wide.jpg",
     "excerpt": "Ibn Arabi's Alam al-Mithal names a real world between spirit and matter — and imagination, disciplined rather than indulged, is the organ that perceives it. Against fantasy on one side and literalism on the other, the imaginal is a cognitive faculty with its own rigor."
-  }
-];
+  },
+  {
+    "slug": 'john-dee-enochian-angelic-diaries',
+    "title": 'John Dee\'s Enochian Angelic Diaries: The Lost Cryptographic Language of Angels',
+    "tradition": 'enochian',
+    "publishedAt": '2026-04-01',
+    "readTime": '12 min',
+    "author": 'Prime + Hakan',
+    "hero": '/images/blog/john-dee-enochian-angelic-diaries/cover.png',
+    "excerpt": 'In 1581, a scryer named Edward Kelley and a mathematician named John Dee claimed to receive direct transmissions from angels — in a language that had never existed on Earth. The diaries they left behind are among the most mysterious documents in Western esotericism.'
+  },
+  {
+    "slug": 'necronomicon-myth-fiction-arabic-grimoire',
+    "title": 'The Necronomicon Myth: Fiction vs. Arabic Grimoire Traditions',
+    "tradition": 'horror-esotericism',
+    "publishedAt": '2026-04-01',
+    "readTime": '11 min',
+    "author": 'Maat + Hakan',
+    "hero": '/images/blog/necronomicon-myth-fiction-arabic-grimoire/cover.png',
+    "excerpt": 'Lovecraft\'s Necronomicon is fiction — except hundreds of people believe it exists as a real grimoire. Where did the myth come from, and what does it reveal about our hunger for forbidden knowledge?'
+  },
+]

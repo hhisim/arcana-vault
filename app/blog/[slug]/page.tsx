@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { posts } from '@/lib/posts';
 import BlogContent from '@/components/BlogContent'
 import { buildMetadata } from '@/lib/seo'
+import { curatedEssayTitle } from '@/lib/essay-seo'
 import BlogReturnButton from '@/components/BlogReturnButton'
 import EmailCaptureWrapper from '@/components/EmailCaptureWrapper'
 import BlogShopRecs from '@/components/BlogShopRecs'
@@ -30,7 +31,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = posts.find((p) => p.slug === params.slug)
+  // An aliased (renamed) slug must resolve to its canonical post BEFORE metadata is built,
+  // otherwise the prerendered <title> is "Article Not Found" even though the body redirects.
+  const canonicalSlug = SLUG_ALIASES[params.slug];
+  const lookupSlug = canonicalSlug || params.slug;
+  const post = posts.find((p) => p.slug === lookupSlug)
   if (!post) {
     return buildMetadata(
       'Article Not Found',
@@ -39,14 +44,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       { noIndex: true },
     )
   }
-  const meta = essayMeta[params.slug]
-  const title = post.title || params.slug.replace(/-/g, ' ')
+  const meta = essayMeta[lookupSlug]
+  const registryTitle = post.title || params.slug.replace(/-/g, ' ')
+  // Curated SEO titles rescue essays whose distinctive term sits past the SERP budget.
+  // Falls through to the registry title, which seoTitle() then cuts on a clause boundary.
+  const title = curatedEssayTitle(registryTitle) || registryTitle
   const description = meta?.description || post.excerpt || `An essay from the Vault of Arcana on ${title}.`
   return {
     ...buildMetadata(
       title,
       description,
-      `/blog/${params.slug}`,
+      // Canonical path: an alias must not compete with the URL it redirects to.
+      `/blog/${lookupSlug}`,
       { type: 'article', image: post.hero, imageAlt: title },
     ),
     keywords: meta?.keywords || [],
@@ -54,6 +63,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 const essayMeta: Record<string, { description: string; keywords: string[] }> = {
+  'necronomicon-myth-fiction-arabic-grimoire': {
+    description: 'Lovecraft\'s Necronomicon was never real — but the belief that it was persists. Where the myth began, how the Simon Necronomicon faked antiquity, and what the hunger for a forbidden book actually reveals.',
+    keywords: ['Necronomicon', 'H. P. Lovecraft', 'grimoire', 'Arabic grimoire tradition', 'Simon Necronomicon', 'forbidden knowledge', 'occult myth', 'pseudo-documentary', 'weird fiction'],
+  },
+  'john-dee-enochian-angelic-diaries': {
+    description: 'In 1581 John Dee and Edward Kelley recorded what they claimed were angelic transmissions in a language that never existed on Earth. What the Enochian diaries actually contain, and why they read like a cryptographic system.',
+    keywords: ['John Dee', 'Edward Kelley', 'Enochian', 'Enochian Angelic Diaries', 'angelic language', 'scrying', 'Louvain', 'Elizabethan England', 'Western esotericism', 'angelic cryptography'],
+  },
   'book-of-thoth-egyptian-knowledge-scribe': {
     description: 'The Egyptian Book of Thoth is not a lost grimoire but a fragmentary Demotic dialogue from the House of Life: a pedagogy of scribal craft, sacred geography, animal knowledge, ritual, and trustworthy knowing.',
     keywords: ['Book of Thoth', 'Thoth', 'ancient Egypt', 'Demotic papyri', 'House of Life', 'Egyptian scribes', 'Egyptian mysteries', 'Hermeticism', 'writing and knowledge', 'scribal craft'],
