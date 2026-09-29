@@ -179,12 +179,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
               <span className="text-emerald-300">✓ Instant digital delivery</span>
               <span className="text-emerald-300">✓ Lifetime access to your archive</span>
-              <span className="text-emerald-300">✓ 30-day guarantee</span>
             </div>
-            <p className="mt-2 leading-6 text-zinc-400">
-              Not the right fit? You have <strong className="text-zinc-200">30 days</strong> to ask for a
-              replacement or a full refund — no questions asked. Your archive stays yours.
-            </p>
           </div>
         </div>
       </div>

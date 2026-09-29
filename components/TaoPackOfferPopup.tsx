@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/auth/AuthProvider'
 
@@ -11,7 +11,11 @@ import { useAuth } from '@/components/auth/AuthProvider'
  * signing up, it returns after that window so an interested reader who got distracted
  * still gets one more chance. Signed-in users never see it.
  *
- * Mounted once in the root layout. The CTA target (/redeem/tao) is unchanged.
+ * Timing note: the countdown starts on mount, NOT after auth resolves, because
+ * /api/account/me can take up to 6s. Gating on loading before starting the timer
+ * made the "4 second" delay up to 10s, and a late auth refresh could reset the
+ * timer a second time. So: start the clock immediately, and simply hide the popup
+ * if the visitor turns out to be signed in.
  */
 
 const STORAGE_KEY = 'voa:tao-pack-offer:v1'
@@ -44,10 +48,12 @@ function writeStored(value: Stored) {
 export default function TaoPackOfferPopup() {
   const { isAuthenticated, loading } = useAuth()
   const [visible, setVisible] = useState(false)
+  // Guards against scheduling a second timer if the effect re-runs for any reason.
+  const armed = useRef(false)
 
   useEffect(() => {
-    // Never interrupt an existing member mid-session.
-    if (loading || isAuthenticated) return
+    if (armed.current) return
+    if (typeof window === 'undefined') return
     // Don't pile a popup on top of a redemption flow the visitor chose deliberately.
     if (window.location.pathname.startsWith('/redeem/')) return
 
@@ -57,14 +63,25 @@ export default function TaoPackOfferPopup() {
       if (Date.now() - stored.lastSeenAt < REPEAT_AFTER_MS) return
     }
 
+    armed.current = true
     const timer = window.setTimeout(() => {
+      // Only reveal once we know they aren't already a member.
+      if (!loading && isAuthenticated) return
       setVisible(true)
-      writeStored({ lastSeenAt: Date.now(), ...(stored?.signedUpAt ? { signedUpAt: stored.signedUpAt } : {}) })
+      writeStored({ lastSeenAt: Date.now() })
     }, DELAY_MS)
 
-    return () => window.clearTimeout(timer)
-  }, [loading, isAuthenticated])
+    return () => {
+      armed.current = false
+      window.clearTimeout(timer)
+    }
+    // Intentionally not depending on loading/isAuthenticated: the timer must not
+    // restart when auth state settles. Auth is re-checked inside the timer instead.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  // A signed-in member never sees it, even if the timer already fired.
+  if (isAuthenticated) return null
   if (!visible) return null
 
   const close = () => setVisible(false)
@@ -110,12 +127,7 @@ export default function TaoPackOfferPopup() {
           <Link
             href="/redeem/tao"
             onClick={() => {
-              try {
-                const stored = readStored()
-                writeStored({ lastSeenAt: Date.now(), signedUpAt: Date.now() })
-              } catch {
-                /* non-fatal */
-              }
+              writeStored({ lastSeenAt: Date.now(), signedUpAt: Date.now() })
               setVisible(false)
             }}
             className="rounded-full bg-amber-300 px-6 py-2.5 font-medium text-black transition-colors hover:bg-amber-200"

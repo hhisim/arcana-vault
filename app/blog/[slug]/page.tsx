@@ -71,6 +71,10 @@ const essayMeta: Record<string, { description: string; keywords: string[] }> = {
     description: 'In 1581 John Dee and Edward Kelley recorded what they claimed were angelic transmissions in a language that never existed on Earth. What the Enochian diaries actually contain, and why they read like a cryptographic system.',
     keywords: ['John Dee', 'Edward Kelley', 'Enochian', 'Enochian Angelic Diaries', 'angelic language', 'scrying', 'Louvain', 'Elizabethan England', 'Western esotericism', 'angelic cryptography'],
   },
+  'do-what-thou-wilt-thelema-liber-al': {
+    description: 'What does “Do what thou wilt” mean in Thelema? Read Liber AL beside Crowley’s later commentaries, Rabelais, and modern scholarship without reducing the Law to impulse or certainty.',
+    keywords: ['Do what thou wilt', 'Thelema', 'Liber AL vel Legis', 'The Book of the Law', 'Aleister Crowley', 'True Will', 'Rabelais', 'love under will', 'Thelema ethics', 'Western esotericism'],
+  },
   'book-of-thoth-egyptian-knowledge-scribe': {
     description: 'The Egyptian Book of Thoth is not a lost grimoire but a fragmentary Demotic dialogue from the House of Life: a pedagogy of scribal craft, sacred geography, animal knowledge, ritual, and trustworthy knowing.',
     keywords: ['Book of Thoth', 'Thoth', 'ancient Egypt', 'Demotic papyri', 'House of Life', 'Egyptian scribes', 'Egyptian mysteries', 'Hermeticism', 'writing and knowledge', 'scribal craft'],
@@ -355,18 +359,18 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     const tradition = (frontmatter.tradition as string) || 'Ancient';
     const heroImage = frontmatter.hero as string | undefined;
-    const wideHero = ['as-above-so-below-secret-thread-western-mysteries', 'imaginal-world-ibn-arabi-perception-between-spirit-matter', 'law-of-one-ethics-of-relation', 'qliphoth-error-states-kabbalah-system-failure', 'book-of-thoth-egyptian-knowledge-scribe'].includes(slug);
+    const wideHero = ['as-above-so-below-secret-thread-western-mysteries', 'imaginal-world-ibn-arabi-perception-between-spirit-matter', 'law-of-one-ethics-of-relation', 'qliphoth-error-states-kabbalah-system-failure', 'book-of-thoth-egyptian-knowledge-scribe', 'do-what-thou-wilt-thelema-liber-al'].includes(slug);
     const inlineImages = (((frontmatter.images as Array<{src?: string; caption?: string; position?: string}>) || [])
       .filter((image): image is { src: string; caption?: string; position?: string } => Boolean(image?.src)));
 
     // Look up post and meta for JSON-LD
     const post = posts.find((p) => p.slug === slug);
     const meta = essayMeta[slug];
-    const jsonLd = post && meta ? {
+    const jsonLd = post ? {
       '@context': 'https://schema.org',
       '@type': 'Article',
       headline: post.title,
-      description: meta.description,
+      description: meta?.description || post.excerpt || `An essay from the Vault of Arcana on ${post.title}.`,
       datePublished: post.publishedAt,
       dateModified: post.publishedAt,
       author: {
@@ -387,7 +391,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         '@id': `https://www.vaultofarcana.com/blog/${slug}`,
       },
       articleSection: post.tradition,
-      keywords: meta.keywords.join(', '),
+      keywords: meta?.keywords.join(', '),
       image: heroImage ? new URL(heroImage, 'https://www.vaultofarcana.com').toString() : undefined,
     } : null;
 

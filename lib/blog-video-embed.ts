@@ -5,6 +5,10 @@ const BLOG_VIDEO_EMBEDS: Record<string, BlogVideoEmbed> = {
     videoId: '_0SF7g2ljEE',
     title: "The Ten Sefirot Explained: A Beginner's Map of the Tree of Life",
   },
+  'emerald-tablet-proto-quantum-physics': {
+    videoId: 'YMVbbIWQTtA',
+    title: 'What Does “As Above, So Below” Mean? The Emerald Tablet',
+  },
   'enochian-angelic-language-modern-occultism': {
     videoId: 'ajeYduMeONk',
     title: 'Enochian Explained: John Dee, Edward Kelley & the Angelic Language',

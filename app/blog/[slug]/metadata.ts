@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 
 const essayMeta: Record<string, { description: string; keywords: string[] }> = {
+  'do-what-thou-wilt-thelema-liber-al': {
+    description: 'What does “Do what thou wilt” mean in Thelema? Read Liber AL beside Crowley’s later commentaries, Rabelais, and modern scholarship without reducing the Law to impulse or certainty.',
+    keywords: ['Do what thou wilt', 'Thelema', 'Liber AL vel Legis', 'The Book of the Law', 'Aleister Crowley', 'True Will', 'Rabelais', 'love under will', 'Thelema ethics', 'Western esotericism'],
+  },
   'dmt-hyperbolic-mind': {
     description: 'Explore the geometry of DMT hyperspace — hyperbolic manifolds, entity encounters, and the mathematics of visionary states. A treatise from Vault of Arcana.',
     keywords: ['DMT', 'hyperbolic geometry', 'altered states of consciousness', 'Terence McKenna', 'entheogens', 'psychedelic geometry', 'visionary states'],
