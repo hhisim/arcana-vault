@@ -87,7 +87,7 @@ export default function TaoPackOfferPopup() {
   const close = () => setVisible(false)
 
   return (
-    <div className="fixed inset-0 z-[120] flex items-end justify-center p-4 animate-fade-in sm:items-center">
+    <div className="fixed inset-0 z-[120] flex items-end justify-center p-4 sm:items-center">
       <button
         aria-label="Close offer"
         onClick={close}
@@ -97,7 +97,7 @@ export default function TaoPackOfferPopup() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="tao-offer-title"
-        className="relative w-full max-w-lg rounded-2xl border border-amber-300/25 bg-[#181421] p-7 shadow-2xl animate-fade-in-up"
+        className="relative w-full max-w-lg rounded-2xl border border-amber-300/25 bg-[#181421] p-7 shadow-2xl"
       >
         <button
           onClick={close}
