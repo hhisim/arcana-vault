@@ -1,5 +1,23 @@
 [
   {
+    "id": "tao-free-pack-2026-09-29",
+    "publishedAt": "2026-09-29T18:05:00Z",
+    "sourceCommit": "PENDING",
+    "status": "shipped",
+    "label": "Free Tao Oracle Pack · Newsletter & search repairs",
+    "title": "Claim the 3GB Taoist archive free with a new account, and 17 cut-off essay titles are repaired",
+    "summary": "The Tao Oracle Pack can now be claimed free with a new account: the full 3GB Taoist archive plus 30 days of Seeker access, with no card and no purchase. Separately, essay titles that were being severed mid-sentence in search results are now written to read cleanly, and Vault of Arcana newsletter signups reach a dedicated list instead of being mixed into a shared one.",
+    "details": [
+      "Claiming takes one step. A new account created at /redeem/tao is credited with the 3GB Tao Oracle archive and a 30-day Seeker trial, then we email the archive download link once the claim is confirmed. There is no card step, nothing to cancel, and no change to existing accounts or paid plans.",
+      "The same offer is offered on the Tao Oracle Pack product page, so anyone who was about to pay can take it free instead. It runs through the same redemption path the Etsy orders already use, so the trial entitlement behaves identically to the existing one.",
+      "17 blog titles were being truncated mid-phrase at 60 characters, so search results showed dangling half-sentences such as “The Kybalion: The 7 Principles of Hermetic Philosophy That”. Titles are now written for their full length and the hard cut has been removed.",
+      "Four older posts were serving an “Article Not Found” page to search engines. They now resolve correctly, carry their intended titles, and are indexable.",
+      "Two complete essays that had been written but never reachable are now live and indexable: an essay on John Dee's Enochian diaries and one on the Necronomicon and the Arabic grimoire tradition.",
+      "Newsletter signups were falling back to a shared list. Signups now land on a dedicated Vault of Arcana list, keeping the traditions separate and the reporting readable."
+    ],
+    "verification": "The title and alias repairs were verified on the live site across 60 real blog pages: dangling truncated titles went from 17 to 0, with 0 “Article Not Found” pages and 0 noindex pages among them. TypeScript and a production build passed before release. The newsletter list change was confirmed in the deployed environment, and the new list was left empty rather than being seeded with a test address. This entry does not claim any search-ranking or click-through improvement yet; that is not yet measured."
+  },
+  {
     "id": "codex-connected-cards-2026-09-25",
     "publishedAt": "2026-09-25T10:23:25Z",
     "sourceCommit": "b34b095eca2218e273daf7e73e22a1d936e3b9e7",

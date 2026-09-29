@@ -48,6 +48,7 @@ export function createFirstTouchAttribution(url: URL, referrer = ''): FirstTouch
   const landingPath = safePathname(url.pathname)
   if (landingPath) attribution.landing_path = landingPath
   if (!attribution.source && landingPath === '/redeem/etsy') attribution.source = 'etsy'
+  if (!attribution.source && landingPath === '/redeem/tao') attribution.source = 'tao-pack'
   if (!attribution.source && landingPath === '/initiation') attribution.source = 'arcana-initiation'
 
   const referrerOrigin = safeOrigin(referrer)

@@ -141,6 +141,23 @@ export default function PackPage({ params }: { params: { sku: string } }) {
             <span className="text-xs text-zinc-500">One-time purchase · delivered as Google Drive access</span>
           </div>
 
+          {/* Free-with-signup alternative: the Tao Oracle Pack on the Tao pack only. */}
+          {pack.sku === 'etsy-4471894787' && (
+            <div className="mt-4 rounded-xl border border-amber-400/25 bg-amber-400/[0.04] p-4 text-sm">
+              <h2 className="font-serif text-amber-200">Not ready to buy?</h2>
+              <p className="mt-2 leading-6 text-zinc-300">
+                Create a free account and this pack is yours to claim — the 3GB Taoist
+                archive plus 30 days of Seeker access. No card, no purchase.
+              </p>
+              <Link
+                href="/redeem/tao"
+                className="mt-3 inline-block rounded-full bg-amber-300 px-5 py-2 font-medium text-black transition-colors hover:bg-amber-200"
+              >
+                Claim the free pack
+              </Link>
+            </div>
+          )}
+
           {/* Delivery card */}
           <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.02] p-4 text-sm text-zinc-300">
             <h2 className="font-serif text-amber-200 mb-2">What happens after purchase</h2>
