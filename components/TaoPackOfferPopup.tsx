@@ -52,8 +52,15 @@ export default function TaoPackOfferPopup() {
   const armed = useRef(false)
 
   useEffect(() => {
-    if (armed.current) return
     if (typeof window === 'undefined') return
+    // Preview hatch: ?preview=1 forces the popup open regardless of storage/auth,
+    // so the dialog can be verified visually without waiting out the 3-day window.
+    const forced = new URLSearchParams(window.location.search).get('preview') === '1'
+    if (forced) {
+      setVisible(true)
+      return
+    }
+    if (armed.current) return
     // Don't pile a popup on top of a redemption flow the visitor chose deliberately.
     if (window.location.pathname.startsWith('/redeem/')) return
 
@@ -69,6 +76,13 @@ export default function TaoPackOfferPopup() {
       if (!loading && isAuthenticated) return
       setVisible(true)
       writeStored({ lastSeenAt: Date.now() })
+      // Temporary diagnostic beacon: confirms the timer actually fired in a real
+      // browser, which is the difference between "logic is wrong" and "CSS is
+      // hiding it". Remove once the popup is confirmed visible.
+      window.dispatchEvent(
+        new CustomEvent('voa:tao-offer-shown', { detail: { at: Date.now() } })
+      )
+      ;(window as unknown as { __voaTaoOfferShown?: number }).__voaTaoOfferShown = Date.now()
     }, DELAY_MS)
 
     return () => {
@@ -80,8 +94,11 @@ export default function TaoPackOfferPopup() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // A signed-in member never sees it, even if the timer already fired.
-  if (isAuthenticated) return null
+  // A signed-in member never sees it, except in the explicit preview hatch.
+  const preview =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('preview') === '1'
+  if (isAuthenticated && !preview) return null
   if (!visible) return null
 
   const close = () => setVisible(false)
