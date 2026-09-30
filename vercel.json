@@ -40,7 +40,7 @@
     },
     {
       "source": "/traditions/hermeticism",
-      "destination": "/blog?tradition=hermeticism",
+      "destination": "/blog?tradition=hermetics",
       "permanent": true
     },
     {

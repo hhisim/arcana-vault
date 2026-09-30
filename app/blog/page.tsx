@@ -1,17 +1,23 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { useSiteI18n } from '@/lib/site-i18n';
 import { posts } from '@/lib/posts';
 import { postsI18n } from '@/lib/posts-i18n';
 import AdinkraIcon from '@/components/AdinkraIcon';
 
-const CATEGORY_KEYS = ['all', 'tao', 'tarot', 'tantra', 'entheogens', 'alchemy', 'hermetics', 'philosophy', 'yoga', 'sufism', 'gnosticism', 'dreamwalker', 'science', 'linguistics'] as const;
+const CATEGORY_KEYS = ['all', 'alchemy', 'hermetics', 'sacred-geometry', 'kabbalah', 'kemet', 'tao', 'tarot', 'tantra', 'entheogens', 'philosophy', 'yoga', 'sufism', 'gnosticism', 'dreamwalker', 'science', 'thelema', 'enochian', 'vedic', 'tibetan', 'rosicrucianism', 'chaos-magick'] as const;
 
 export default function BlogPage() {
   const { t, lang } = useSiteI18n();
   const [filter, setFilter] = useState('all');
+
+  // Honour ?tradition= deep links so filtered URLs actually filter.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('tradition');
+    if (q && (CATEGORY_KEYS as readonly string[]).includes(q)) setFilter(q);
+  }, []);
 
   const categoryLabel = (key: string) => {
     const labels: Record<string, { en: string; tr: string; ru: string }> = {
@@ -28,6 +34,15 @@ export default function BlogPage() {
       gnosticism: { en: 'Gnosticism', tr: 'Gnostik', ru: 'Гностицизм' },
       dreamwalker: { en: 'Dreamwalker', tr: 'Rüya Gezgini', ru: 'Сновидец' },
       science: { en: 'Science', tr: 'Bilim', ru: 'Наука' },
+      'sacred-geometry': { en: 'Sacred Geometry', tr: 'Kutsal Geometri', ru: 'Сакральная геометрия' },
+      kabbalah: { en: 'Kabbalah', tr: 'Kabbala', ru: 'Каббала' },
+      kemet: { en: 'Kemet', tr: 'Kemet', ru: 'Кемет' },
+      thelema: { en: 'Thelema', tr: 'Thelema', ru: 'Телема' },
+      enochian: { en: 'Enochian', tr: 'Enokhi', ru: 'Енохиан' },
+      vedic: { en: 'Vedic', tr: 'Veda', ru: 'Ведическая' },
+      tibetan: { en: 'Tibetan', tr: 'Tibet', ru: 'Тибетская' },
+      rosicrucianism: { en: 'Rosicrucian', tr: 'Rozikrucian', ru: 'Розенкрейцерство' },
+      'chaos-magick': { en: 'Chaos Magick', tr: 'Chaos Magick', ru: 'Хаос-магия' },
       linguistics: { en: 'Linguistics', tr: 'Dilbilim', ru: 'Лингвистика' },
     };
     return labels[key]?.[lang] ?? labels[key]?.en ?? key;
