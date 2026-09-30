@@ -85,7 +85,11 @@ async function upsertBrevoContact(email: string, listKey: string) {
     }),
   })
 
-  const data = await response.json()
+  // Brevo returns 204 No Content for an existing contact when updateEnabled is true.
+  // Calling .json() on an empty body throws and was surfacing as a 500 to the visitor.
+  const data = response.status === 204 || !response.headers.get('content-length')
+    ? {}
+    : await response.json().catch(() => ({}))
 
   if (!response.ok) {
     console.error('[subscribe] Brevo API error:', data)
