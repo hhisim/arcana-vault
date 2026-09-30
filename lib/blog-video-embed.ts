@@ -21,6 +21,10 @@ const BLOG_VIDEO_EMBEDS: Record<string, BlogVideoEmbed> = {
     videoId: 'Ik3RlJljE8Q',
     title: "How to Read the Tarot: A Beginner's Map of the 78 Cards",
   },
+  'metatrons-cube-tree-of-life-kabbalah-geometry': {
+    videoId: 'MOJK7cz0Mz8',
+    title: "Metatron's Cube: How Sacred Geometry Becomes Form",
+  },
 }
 
 const VIDEO_ID_PATTERN = /^[A-Za-z0-9_-]{11}$/
