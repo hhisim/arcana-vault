@@ -32,6 +32,31 @@
       "source": "/forum",
       "destination": "/agora",
       "permanent": true
+    },
+    {
+      "source": "/traditions/alchemy",
+      "destination": "/blog?tradition=alchemy",
+      "permanent": true
+    },
+    {
+      "source": "/traditions/hermeticism",
+      "destination": "/blog?tradition=hermeticism",
+      "permanent": true
+    },
+    {
+      "source": "/traditions/sacred-geometry",
+      "destination": "/blog?tradition=sacred-geometry",
+      "permanent": true
+    },
+    {
+      "source": "/traditions/taoism",
+      "destination": "/traditions/tao",
+      "permanent": true
+    },
+    {
+      "source": "/traditions/sufism",
+      "destination": "/traditions/sufi",
+      "permanent": true
     }
   ]
 }
