@@ -72,6 +72,52 @@ export default function PackPage({ params }: { params: { sku: string } }) {
         }
       : {}),
   }
+  // Buyer questions. Answers stay grounded in policies the page already states
+  // (Stripe checkout, immediate access file, admin authorisation of Google Drive
+  // access within a few hours, lifetime access, contact page). No invented
+  // refund or licensing promises.
+  const faqs = [
+    {
+      q: `What exactly is in the ${pack.title} archive?`,
+      a: pack.description
+        ? pack.description.replace(/\s+/g, ' ').slice(0, 320).trim() + (pack.description.length > 320 ? '\u2026' : '')
+        : 'A curated digital archive of esoteric source texts, delivered as a downloadable collection. See the full description above for the contents.',
+    },
+    {
+      q: 'How is this delivered after I pay?',
+      a: 'Your payment is processed securely by Stripe. You receive an access file with the link immediately, and an administrator authorises your Google Drive access within a few hours at the most. You can track everything from your locker at any time.',
+    },
+    {
+      q: 'Do I keep access permanently?',
+      a: 'Yes \u2014 every archive is a one-time purchase with lifetime access. There is no subscription, no renewal, and nothing to cancel.',
+    },
+    {
+      q: 'What format are the files in?',
+      a: 'The archive is delivered as digital files through Google Drive, optimised for reading on desktop and mobile. Individual items are predominantly PDFs.',
+    },
+    {
+      q: 'Is this a physical product that ships to me?',
+      a: 'No. This is a digital archive. Nothing is posted and there is no delivery address needed \u2014 you receive access electronically.',
+    },
+    {
+      q: 'What if something is wrong with my purchase?',
+      a: 'Get in touch through the contact page and we will sort it out. If an administrator cannot authorise your access, you are not left paying for something unusable.',
+    },
+    {
+      q: 'Can I try the Vault before buying?',
+      a: 'Yes. Free accounts get 12 questions per day and full access to the Correspondence Codex, and the Oracle demo on the homepage needs no signup at all.',
+    },
+  ]
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  }
+
   const breadcrumbLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -90,6 +136,10 @@ export default function PackPage({ params }: { params: { sku: string } }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-zinc-500">
@@ -222,6 +272,35 @@ export default function PackPage({ params }: { params: { sku: string } }) {
           </div>
         </section>
       )}
+
+      {/* Buyer FAQ — also emitted as FAQPage structured data above */}
+      <section className="mt-14 max-w-3xl">
+        <h2 className="font-serif text-xl text-[#EBE4F2] mb-1">Questions before you buy</h2>
+        <p className="text-sm text-zinc-400 mb-5">
+          Delivery, format and access — answered plainly.
+        </p>
+        <div className="space-y-2">
+          {faqs.map((f) => (
+            <details
+              key={f.q}
+              className="group rounded-lg border border-white/10 bg-white/[0.02] px-4 py-3 open:border-amber-300/30"
+            >
+              <summary className="cursor-pointer list-none text-[15px] font-medium text-[#EBE4F2] marker:hidden">
+                <span className="flex items-start justify-between gap-4">
+                  <span>{f.q}</span>
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 shrink-0 text-amber-300 transition-transform group-open:rotate-45"
+                  >
+                    +
+                  </span>
+                </span>
+              </summary>
+              <p className="mt-3 text-sm leading-6 text-zinc-300">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
       <div className="mt-12 border-t border-white/10 pt-6 text-sm text-zinc-500">
         Questions about this pack?{' '}
