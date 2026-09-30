@@ -22,6 +22,12 @@ export type Entitlement = {
   promoSource: string | null
   // Reserved for internal diagnostics; always false in production.
   isTestMode: boolean
+  // Win-back (added 2026-09-30): true when this account has a Stripe
+  // subscription on record but none is currently active — i.e. a former
+  // paying member. Lets /account offer a return path without inventing
+  // history that isn't in the database.
+  isLapsedMember: boolean
+  hasBillingHistory: boolean
 }
 
 const PLAN_ALIASES: Record<string, PlanId> = {
@@ -106,6 +112,7 @@ export async function getEntitlement(): Promise<Entitlement> {
       guestTotalRemaining: Math.max(0, 3 - guestUsed),
       isTrial: false, trialEndsAt: null, trialDaysRemaining: null, promoSource: null,
       isTestMode: false,
+      isLapsedMember: false, hasBillingHistory: false,
     }
   }
 
@@ -170,6 +177,9 @@ export async function getEntitlement(): Promise<Entitlement> {
     trialDaysRemaining,
     promoSource,
     isTestMode: false,
+    isLapsedMember:
+      Boolean(profile.stripe_subscription_id) && profile.subscription_status !== 'active',
+    hasBillingHistory: Boolean(profile.stripe_customer_id || profile.stripe_subscription_id),
   }
 }
 

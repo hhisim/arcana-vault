@@ -26,6 +26,8 @@ export async function GET() {
       trialEndsAt: entitlement.trialEndsAt,
       trialDaysRemaining: entitlement.trialDaysRemaining,
       promoSource: entitlement.promoSource,
+      isLapsedMember: entitlement.isLapsedMember,
+      hasBillingHistory: entitlement.hasBillingHistory,
       // Test mode
       isTestMode: entitlement.isTestMode,
     })

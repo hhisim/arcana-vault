@@ -21,6 +21,9 @@ export type AuthState = {
   promoSource: string | null
   // Test mode
   isTestMode: boolean
+  // Win-back: account has a Stripe subscription on record but none is active.
+  isLapsedMember: boolean
+  hasBillingHistory: boolean
 }
 
 type Ctx = AuthState & {
@@ -42,6 +45,8 @@ const defaultState: Ctx = {
   trialEndsAt: null,
   trialDaysRemaining: null,
   promoSource: null,
+  isLapsedMember: false,
+  hasBillingHistory: false,
   isTestMode: false,
   refresh: async () => {},
   logout: async () => {},
@@ -80,6 +85,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         trialDaysRemaining: data.trialDaysRemaining ?? null,
         promoSource: data.promoSource ?? null,
         isTestMode: data.isTestMode ?? false,
+        isLapsedMember: data.isLapsedMember ?? false,
+        hasBillingHistory: data.hasBillingHistory ?? false,
       }))
     } catch {
       setState((prev) => ({ ...prev, loading: false }))

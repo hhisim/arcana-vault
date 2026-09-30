@@ -135,6 +135,43 @@ export default function AccountClient() {
               <button onClick={activateFree} className="rounded-full bg-[var(--primary-gold)] px-4 py-2 text-black">{t('pricing.free.activate')}</button>
             )}
             <button onClick={() => router.push('/pricing')} className="rounded-full border border-white/10 px-4 py-2 text-[var(--text-primary)]">{t('nav.pricing')}</button>
+            {/*
+              Win-back (added 2026-09-30). A lapsed member — someone with a
+              Stripe subscription on record that is no longer active — used to
+              land here looking identical to a brand-new free user, with no
+              reason to return. This only renders when the database actually
+              shows billing history, so we never imply a past payment that
+              didn't happen.
+            */}
+            {auth.isLapsedMember && (
+              <div className="mt-6 w-full rounded-2xl border border-[var(--primary-gold)]/30 bg-[var(--primary-gold)]/[0.05] p-6">
+                <h2 className="font-serif text-xl text-[var(--primary-gold)]">
+                  Your tradition access is still here
+                </h2>
+                <p className="mt-2 max-w-prose text-sm leading-6 text-[var(--text-secondary)]">
+                  Your membership has ended, so your account is back on the free
+                  plan. Every tradition you chose is saved — reactivate and your
+                  selections come straight back.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    onClick={() => router.push('/pricing')}
+                    className="rounded-full bg-[var(--primary-gold)] px-5 py-2.5 text-sm text-black"
+                  >
+                    Reactivate my membership
+                  </button>
+                  {auth.hasBillingHistory && (
+                    <button
+                      onClick={openPortal}
+                      className="rounded-full border border-white/10 px-5 py-2.5 text-sm text-[var(--text-primary)]"
+                    >
+                      Manage billing
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
             {(auth.plan === 'seeker' || auth.plan === 'adept' || auth.plan === 'full') && (
               <button onClick={openPortal} className="rounded-full border border-white/10 px-4 py-2 text-[var(--text-primary)]">{t('account.portal')}</button>
             )}
