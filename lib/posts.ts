@@ -1,5 +1,15 @@
 export const posts = [
   {
+    "slug": "the-alphabet-was-invented-once",
+    "title": "The Alphabet Was Invented Once",
+    "tradition": "kemet",
+    "publishedAt": "2026-10-25",
+    "readTime": "13 min",
+    "author": "Prime + Hakan",
+    "hero": "/images/blog/the-alphabet-was-invented-once/hero-wide.png",
+    "excerpt": "Nearly every alphabet in use today descends from a single invention made by Semitic-speaking miners in a Sinai turquoise mine around 1800 BCE. The real history of acrophony — and what the mystics did with it afterward."
+  },
+  {
     "slug": "do-what-thou-wilt-thelema-liber-al",
     "title": "Do What Thou Wilt in Thelema: What Liber AL Actually Says",
     "tradition": "thelema",
