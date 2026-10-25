@@ -183,3 +183,46 @@ test('outbox insertion claims pending retries but suppresses alerts already sent
   assert.equal(rows[0].dedupe_key, 'free-activation:user-123')
   assert.equal(rows[0].payload.kind, 'initial_free_activation')
 })
+
+test('a failed invoice alerts the amount actually owed, not amount_paid', () => {
+  // Real Stripe invoices always include amount_paid: 0 on failure, which used to
+  // win the fallback chain and render "Payment failed: 0.00 USD".
+  const failed = mapStripeEventToAkashaAlert(event('evt_failed_real', 'invoice.payment_failed', {
+    id: 'in_real_failed',
+    amount_due: 560,
+    amount_paid: 0,
+    amount_remaining: 560,
+    total: 560,
+    subtotal: 800,
+    currency: 'usd',
+    status: 'open',
+  }))
+
+  assert.equal(failed?.kind, 'payment_failed')
+  assert.match(failed?.text ?? '', /Payment failed: 5\.60 USD/)
+  assert.doesNotMatch(failed?.text ?? '', /0\.00/)
+  assert.equal(failed?.payload?.amount, 560)
+})
+
+test('a genuinely zero-cost failed invoice still reports 0.00', () => {
+  const failed = mapStripeEventToAkashaAlert(event('evt_failed_zero', 'invoice.payment_failed', {
+    id: 'in_zero', amount_due: 0, amount_paid: 0, total: 0, currency: 'usd', status: 'open',
+  }))
+  assert.match(failed?.text ?? '', /Payment failed: 0\.00 USD/)
+})
+
+test('a paid invoice still reports the amount actually paid', () => {
+  const paid = mapStripeEventToAkashaAlert(event('evt_paid_real', 'invoice.payment_succeeded', {
+    id: 'in_real_paid', amount_due: 0, amount_paid: 800, total: 800, currency: 'usd', status: 'paid',
+  }))
+  assert.match(paid?.text ?? '', /Paid invoice: 8\.00 USD/)
+})
+
+test('unpaid subscription alert uses a real newline, not an escaped backslash-n', () => {
+  const alert = mapStripeEventToAkashaAlert(event(
+    'evt_sub_unpaid', 'customer.subscription.updated', { ...subscription, id: 'sub_unpaid', status: 'unpaid' },
+  ))
+  assert.equal(alert?.kind, 'payment_unpaid')
+  assert.ok(!(alert?.text ?? '').includes('\\n'), 'text must not contain a literal backslash-n')
+  assert.match(alert?.text ?? '', /^VOA billing alert\nSubscription unpaid$/)
+})

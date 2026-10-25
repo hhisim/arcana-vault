@@ -87,8 +87,13 @@ function priceAmount(value: unknown): number | null {
   return null
 }
 
-function invoiceAmount(value: JsonObject): number | null {
-  const candidates = [value.amount_paid, value.amount_due, value.total]
+function invoiceAmount(value: JsonObject, kind: AkashaAlertKind): number | null {
+  // A failed or unpaid invoice always reports amount_paid as 0, so preferring it
+  // made the alert read "Payment failed: 0.00 USD" while money was still owed.
+  const owesMoney = kind === 'payment_failed' || kind === 'payment_unpaid'
+  const candidates = owesMoney
+    ? [value.amount_due, value.amount_remaining, value.total, value.amount_paid]
+    : [value.amount_paid, value.amount_due, value.total]
   for (const candidate of candidates) {
     if (typeof candidate === 'number' && Number.isFinite(candidate)) return candidate
   }
@@ -199,7 +204,7 @@ function mapCheckoutCompleted(event: StripeLikeEvent, session: JsonObject): Akas
 function mapInvoice(event: StripeLikeEvent, invoice: JsonObject, kind: AkashaAlertKind, label: string): AkashaAlert | null {
   const invoiceId = nonEmptyString(invoice.id)
   if (!invoiceId) return null
-  const amount = invoiceAmount(invoice)
+  const amount = invoiceAmount(invoice, kind)
   const currency = currencyLabel(invoice.currency)
   const textAmount = formatAmount(amount, currency, label)
 
@@ -242,7 +247,7 @@ function mapSubscriptionUnpaid(event: StripeLikeEvent, subscription: JsonObject)
   return makeAlert({
     kind: 'payment_unpaid',
     dedupeKey: `subscription:${subscriptionId}:unpaid`,
-    text: 'VOA billing alert\\nSubscription unpaid',
+    text: 'VOA billing alert\nSubscription unpaid',
     event,
     payload: {
       kind: 'payment_unpaid',
