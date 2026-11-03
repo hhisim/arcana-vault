@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import StickyCTA from './components/StickyCTA'
 import TaoPackOfferPopup from '@/components/TaoPackOfferPopup'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.vaultofarcana.com'),
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <TaoPackOfferPopup />
         </Providers>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
